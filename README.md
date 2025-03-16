@@ -1,2 +1,3 @@
-# tedxuttroyes
-Repo github pour stocker le site internet du TEDxUTTroyes : tedxuttroyes.fr
+# 🌐 tedxuttroyes
+Repo github pour stocker le site internet du [tedxuttroyes.fr](TEDxUTTroyes)
+Site fait sur webflow 
