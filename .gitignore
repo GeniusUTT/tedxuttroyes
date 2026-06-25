@@ -1,0 +1,20 @@
+# Outils / IDE
+.claude/
+.vscode/
+.idea/
+
+# Système
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Dépendances / build (au cas où un outillage serait ajouté plus tard)
+node_modules/
+dist/
+.cache/
+
+# Fichiers temporaires
+*.log
+*.tmp
+*~
+*.bak
