@@ -1,5 +1,5 @@
 # ============================================================
-#  TEDxUTTroyes — Configuration Apache (OVH mutualisé)
+#  TEDxUTTroyes - Configuration Apache (OVH mutualisé)
 # ============================================================
 
 RewriteEngine On
