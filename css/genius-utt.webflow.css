@@ -48,7 +48,7 @@
   background-position: 0 0, 50%;
   background-size: auto, cover;
   background-attachment: scroll, scroll;
-  min-width: 100vw;
+  min-width: 100%;
   min-height: 100vh;
   display: block;
 }
@@ -151,7 +151,7 @@
 }
 
 .section-3 {
-  width: 100vw;
+  width: 100%;
   height: 100vw;
 }
 
@@ -334,7 +334,7 @@
 }
 
 .container-3 {
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   margin-top: -100vh;
 }
@@ -371,7 +371,7 @@
   background-image: linear-gradient(#0000 69%, #1b1a1a), linear-gradient(#451c1c6b 30%, #0000), url('../images/edition-2026/fond_ted2025.jpg');
   background-position: 0 0, 0 0, 50% 0;
   background-size: auto, auto, cover;
-  width: 100vw;
+  width: 100%;
   height: auto;
   display: block;
   overflow: visible;
@@ -572,7 +572,7 @@
   background-position: 50% 100%, 0 0;
   background-repeat: repeat-x, repeat;
   background-size: contain, auto;
-  width: 100vw;
+  width: 100%;
   height: auto;
   display: block;
 }
@@ -739,7 +739,7 @@
   background-image: url('../images/Rectangle-11.png');
   background-position: 0 0;
   background-size: cover;
-  width: 100vw;
+  width: 100%;
   height: auto;
   display: none;
 }
@@ -787,7 +787,7 @@
   background-position: 50% 0;
   background-repeat: no-repeat;
   background-size: cover;
-  width: 100vw;
+  width: 100%;
   height: auto;
   display: block;
 }
@@ -922,7 +922,7 @@
   background-image: url('../images/bg_noir.png');
   background-position: 0 0;
   background-size: cover;
-  width: 100vw;
+  width: 100%;
 }
 
 .section-9.section-tickets {
@@ -1849,7 +1849,7 @@
   background-image: radial-gradient(circle, #0000004d, #000c), url('../images/ted.jpg');
   background-position: 0 0, 50%;
   background-size: auto, auto;
-  width: 100vw;
+  width: 100%;
   padding-top: 100px;
   padding-bottom: 100px;
 }
@@ -1918,7 +1918,7 @@
 .section-14 {
   color: #053d57;
   background-color: #053d57;
-  width: 100vw;
+  width: 100%;
   height: 100vh;
   display: none;
 }
