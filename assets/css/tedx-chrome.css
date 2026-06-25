@@ -1,0 +1,78 @@
+/* ============================================================
+   TEDxUTTroyes - Header + Footer harmonises (pages archives)
+   Composants scopes en .t27- : n'affectent ni le body
+   ni les styles Webflow existants du contenu des pages.
+   ============================================================ */
+
+.t27-nav,.t27-footer{
+  --t27-encre:#080808;
+  --t27-rouge:#EB0028;
+  --t27-beige:#E8DCC8;
+  --t27-blanc:#F4F1EC;
+  --t27-fumee:#9A9692;
+  --t27-ligne:rgba(244,241,236,.12);
+  --t27-corps:'Montserrat',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --t27-display:'Bebas Neue',Impact,sans-serif;
+  box-sizing:border-box;
+  font-family:var(--t27-corps);
+}
+.t27-nav *,.t27-footer *{box-sizing:border-box}
+
+/* ---------- Header ---------- */
+.t27-nav{
+  position:relative;z-index:50;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+  flex-wrap:wrap;
+  background:var(--t27-encre);
+  border-bottom:1px solid var(--t27-ligne);
+  padding:14px clamp(18px,5vw,56px);
+}
+.t27-brand{display:inline-flex;align-items:center;flex-shrink:0}
+.t27-brand img{height:28px;width:auto;display:block}
+.t27-links{display:flex;align-items:center;gap:clamp(14px,2vw,26px);flex-wrap:wrap}
+.t27-links a{
+  color:var(--t27-blanc);text-decoration:none;
+  font-size:.78rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  position:relative;padding:4px 0;transition:color .2s ease;
+}
+.t27-links a:hover{color:var(--t27-beige)}
+.t27-links a:not(.t27-cta)::after{content:"";position:absolute;left:0;bottom:-3px;width:0;height:2px;background:var(--t27-rouge);transition:width .25s ease}
+.t27-links a:not(.t27-cta):hover::after{width:100%}
+.t27-links .t27-cta{
+  background:var(--t27-rouge);color:#fff;border-radius:999px;
+  padding:9px 20px;letter-spacing:.04em;
+}
+.t27-links .t27-cta::after{display:none}
+.t27-links .t27-cta:hover{color:#fff;background:#ff0b34}
+.t27-burger{display:none;background:none;border:0;cursor:pointer;flex-direction:column;gap:5px;padding:8px}
+.t27-burger span{display:block;width:24px;height:2px;background:var(--t27-blanc)}
+
+.t27-nav :focus-visible,.t27-footer :focus-visible{outline:2px solid var(--t27-rouge);outline-offset:3px}
+
+/* ---------- Footer ---------- */
+.t27-footer{background:#050505;border-top:1px solid var(--t27-ligne);padding:clamp(48px,7vw,84px) 0 28px;color:var(--t27-blanc)}
+.t27-foot-wrap{max-width:1180px;margin:0 auto;padding-inline:clamp(18px,5vw,56px)}
+.t27-foot-top{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:38px}
+.t27-foot-brand img{height:32px;margin-bottom:16px}
+.t27-foot-brand p{color:var(--t27-fumee);font-size:.9rem;line-height:1.6;max-width:34ch;margin:0}
+.t27-foot-social{display:flex;gap:12px;margin-top:20px}
+.t27-foot-social a{width:38px;height:38px;border-radius:50%;border:1px solid var(--t27-ligne);display:flex;align-items:center;justify-content:center;transition:border-color .25s ease,background .25s ease}
+.t27-foot-social a:hover{border-color:var(--t27-rouge);background:rgba(235,0,40,.16)}
+.t27-foot-social img{width:17px;height:17px;filter:brightness(0) invert(1)}
+.t27-foot-col h4{font-family:var(--t27-display);font-size:1.2rem;letter-spacing:.04em;text-transform:uppercase;color:var(--t27-beige);margin:0 0 14px}
+.t27-foot-col a{display:block;color:var(--t27-fumee);text-decoration:none;font-size:.88rem;padding:5px 0;transition:color .2s ease}
+.t27-foot-col a:hover{color:var(--t27-blanc)}
+.t27-foot-bottom{margin-top:clamp(36px,5vw,56px);padding-top:22px;border-top:1px solid var(--t27-ligne);
+  display:flex;flex-wrap:wrap;gap:12px 28px;justify-content:space-between;align-items:center}
+.t27-foot-bottom p{margin:0;font-size:.78rem;color:var(--t27-fumee)}
+
+@media (max-width:1024px){.t27-foot-top{grid-template-columns:1fr 1fr}.t27-foot-brand{grid-column:1/-1}}
+@media (max-width:760px){
+  .t27-burger{display:flex;order:3}
+  .t27-links{display:none;order:4;width:100%;flex-direction:column;align-items:flex-start;gap:0}
+  .t27-nav.t27-open .t27-links{display:flex}
+  .t27-links a{width:100%;padding:13px 2px;border-bottom:1px solid var(--t27-ligne)}
+  .t27-links a:not(.t27-cta)::after{display:none}
+  .t27-links .t27-cta{margin-top:12px;align-self:flex-start}
+}
+@media (max-width:560px){.t27-foot-top{grid-template-columns:1fr}}
