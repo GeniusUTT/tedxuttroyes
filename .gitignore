@@ -18,3 +18,5 @@ dist/
 *.tmp
 *~
 *.bak
+.agents/skills/writing-guidelines/SKILL.md
+skills-lock.json
