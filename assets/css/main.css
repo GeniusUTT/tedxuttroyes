@@ -2067,6 +2067,190 @@ details.faq[open] summary .icon {
   box-shadow: 0 0 0 4px rgba(235, 0, 40, 0.12);
 }
 
+/* 20c. Pages d'edition (archives du registre)
+   Fiche, grilles de portraits, galerie et navigation entre editions.
+   Meme matiere que le registre : documents en noir et blanc ; la couleur
+   ne revient qu'au survol, comme une archive qu'on ressort du carton. */
+
+.ed-meta {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--encre-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin-bottom: 20px;
+}
+
+.ed-meta .sep {
+  color: var(--rouge-vif);
+}
+
+.ed-fiche {
+  display: grid;
+  gap: 36px;
+}
+
+.ed-affiche {
+  margin: 0;
+  max-width: 420px;
+}
+
+.ed-affiche img,
+.ppl-card img,
+.gal img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--filet);
+  filter: grayscale(1) sepia(0.06) contrast(1.04);
+  transition: filter 0.35s var(--ease-out);
+}
+
+.ed-affiche img:hover,
+.ppl-card:hover img,
+.gal img:hover {
+  filter: none;
+}
+
+.ed-affiche figcaption,
+.gal-credit {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--encre-2);
+  margin-top: 12px;
+}
+
+.ed-fiche-body > p {
+  margin-bottom: 16px;
+}
+
+.ed-fiche-body .facts {
+  margin-top: 24px;
+}
+
+@media (min-width: 900px) {
+  .ed-fiche {
+    grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+    gap: 52px;
+    align-items: start;
+  }
+}
+
+.ppl {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 28px 20px;
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 1px solid var(--filet);
+}
+
+.ppl--sm {
+  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+}
+
+.ppl-name {
+  display: block;
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: 1.05rem;
+  line-height: 1.15;
+  color: var(--papier);
+  margin-top: 12px;
+}
+
+.ppl-name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ppl-name a:hover,
+.ppl-name a:focus-visible {
+  text-decoration: underline;
+  text-decoration-color: var(--rouge-vif);
+  text-underline-offset: 3px;
+}
+
+.ppl-role {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--encre-2);
+  margin-top: 6px;
+}
+
+.gal {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 14px;
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 1px solid var(--filet);
+}
+
+.gal img {
+  height: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+.ed-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 14px 32px;
+  border-top: 1px solid var(--filet);
+  padding-top: 24px;
+}
+
+.ed-nav-void {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--encre-2);
+  align-self: center;
+}
+
+/* 20d. Bande d'archives (accueil, moment dix ans)
+   Six photos sorties des cartons 2023 et 2024, posees sous la frise. */
+
+.arch {
+  margin: 36px 0 10px;
+}
+
+.arch-strip {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+.arch-strip img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border: 1px solid var(--filet);
+  filter: grayscale(1) sepia(0.06) contrast(1.04);
+}
+
+.arch figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--encre-2);
+  margin-top: 10px;
+}
+
+@media (min-width: 700px) {
+  .arch-strip {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
 /* 21. Animations et reduced motion
    Une seule sequence orchestree : la ligne se trace, le hero entre,
    le telescripteur s'allume. Rien d'autre ne bouge au scroll,

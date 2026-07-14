@@ -55,7 +55,7 @@ Tous les emplacements variables sont marqués par un commentaire `PLACEHOLDER` d
 
 | Quoi | Où | Comment |
 |---|---|---|
-| Lien billetterie HelloAsso | toutes les pages + JSON-LD de `index.html` | remplacer partout `https://www.helloasso.com/PLACEHOLDER-BILLETTERIE` |
+| Lien billetterie HelloAsso | toutes les pages + JSON-LD de `index.html` | remplacer partout `https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition` |
 | Lien newsletter HelloAsso | `index.html`, footers | remplacer partout `https://www.helloasso.com/PLACEHOLDER-NEWSLETTER` |
 | Chiffres (talks, intervenants) | `index.html`, section « En chiffres » | remplacer les `XX` des lignes de données |
 | Annonce d'un speaker | `speakers.html` | suivre le gabarit commenté : la fiche sous embargo devient nom + sujet + photo optionnelle (dossier `assets/img/speakers/` à créer) |
