@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="640" viewBox="0 0 960 640" role="img" aria-label="Photo du Centre de Congrès de l'Aube à venir">
+  <rect width="960" height="640" fill="#0E0D0C"/>
+  <text x="48" y="80" font-family="'Space Mono', 'Courier New', monospace" font-size="17" letter-spacing="4" fill="#7E7A73">TROYES, QUAI DAMPIERRE</text>
+  <rect x="0" y="380" width="960" height="2" fill="#EB0028"/>
+  <text x="480" y="428" text-anchor="middle" font-family="'Courier New', monospace" font-weight="bold" font-size="72" letter-spacing="3" fill="#221F1B">CENTRE DE CONGRÈS DE L'AUBE</text>
+  <text x="48" y="584" font-family="'Space Mono', 'Courier New', monospace" font-size="15" fill="#55524C">photo à remplacer</text>
+</svg>

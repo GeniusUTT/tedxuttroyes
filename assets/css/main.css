@@ -1,0 +1,2147 @@
+/* ==========================================================================
+   TEDxUTTroyes 2027 - "Le releve"
+   Direction artistique : le site comme releve technique du franchissement.
+   Une ligne de cote rouge verticale structure chaque page : marge technique
+   en mono a sa gauche, contenu a sa droite, seule la typographie display
+   a le droit de la franchir.
+
+   Sommaire :
+   01. Polices locales
+   02. Tokens
+   03. Reset, base, grain
+   04. Structure : la ligne, la marge, les sections
+   05. Typographie : display, cote, donnees mono
+   06. Boutons, liens, icones
+   07. Header et navigation
+   08. Hero et telescripteur
+   09. Diptyque franchir / s'adapter
+   10. Frise des dix ans (sur la marge)
+   11. Le dix en batons (tally) et lignes de donnees
+   12. Lieu
+   13. Registre des editions
+   14. Fiches sous embargo (speakers)
+   15. Feuille de salle (programme)
+   16. Partenaires
+   17. FAQ
+   18. Bandeau constat
+   19. Footer
+   20. Prose, notices, 404
+   21. Animations et reduced motion
+   ========================================================================== */
+
+/* 01. Polices locales */
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("../fonts/bricolage-var-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("../fonts/bricolage-var-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/space-mono-400-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/space-mono-400-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/space-mono-700-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/space-mono-700-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+  src: url("../fonts/dm-sans-var-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+  src: url("../fonts/dm-sans-var-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* 02. Tokens
+   Neutres chauds, cote papier et archive : jamais de gris bleute. */
+
+:root {
+  --noir: #080808;
+  --surface: #0e0d0c;
+  --surface-2: #141210;
+  --papier: #edeae4;      /* titres, texte fort */
+  --encre: #b7b2a9;       /* corps de texte, 9:1 sur noir */
+  --encre-2: #7e7a73;     /* secondaire, marge technique, 4,9:1 */
+  --rouge: #eb0028;       /* encre d'annotation : ligne, cotes, aplats. Jamais en halo. */
+  --rouge-2: #c50022;
+  --rouge-vif: #ff2e4d;   /* petits textes rouges, 5,5:1 */
+  --filet: rgba(237, 234, 228, 0.10);
+  --caviardage: #262320;  /* barres d'embargo */
+
+  --font-disp: "Bricolage Grotesque", "Arial Black", Arial, sans-serif;
+  --font-body: "DM Sans", "Segoe UI", Arial, sans-serif;
+  --font-mono: "Space Mono", "Courier New", monospace;
+
+  --header-h: 64px;
+
+  /* La geometrie du document : marge gauche, rail technique, ligne de cote */
+  --m-left: clamp(16px, 5vw, 96px);
+  --m-right: clamp(20px, 4vw, 72px);
+  --rail-w: 0px;
+  --line-x: calc(var(--m-left) + var(--rail-w));
+  --body-pad: 20px;   /* distance ligne > contenu (mobile) */
+
+  --z-menu: 150;
+  --z-header: 200;
+  --z-skip: 300;
+  --z-grain: 400;
+
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@media (min-width: 900px) {
+  :root {
+    --header-h: 72px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --rail-w: 212px;
+    --body-pad: 44px;
+  }
+}
+
+/* 03. Reset, base, grain */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+html,
+body {
+  overflow-x: clip;
+}
+
+body {
+  background-color: var(--noir);
+  color: var(--encre);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@media (min-width: 900px) {
+  body {
+    font-size: 1.0625rem;
+  }
+}
+
+/* Grain global : un voile de matiere sur tout le site, header compris */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-grain);
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+ul[class],
+ol[class] {
+  list-style: none;
+  padding: 0;
+}
+
+h1, h2, h3, h4 {
+  color: var(--papier);
+  line-height: 1.15;
+  overflow-wrap: break-word;
+}
+
+p {
+  overflow-wrap: break-word;
+}
+
+a {
+  color: var(--rouge-vif);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--papier);
+}
+
+a,
+button,
+summary {
+  touch-action: manipulation;
+}
+
+:focus-visible {
+  outline: 2px solid var(--papier);
+  outline-offset: 3px;
+}
+
+::selection {
+  background-color: var(--rouge);
+  color: var(--papier);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: var(--z-skip);
+  padding: 12px 20px;
+  background-color: var(--rouge);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+  color: #fff;
+}
+
+/* 04. Structure : la ligne, la marge, les sections */
+
+main {
+  position: relative;
+}
+
+/* La ligne de cote : un seul trait rouge, du haut en bas de chaque page.
+   z-index 1 : au-dessus des fonds de section, sous le contenu (.inner). */
+main::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--line-x);
+  width: 2px;
+  z-index: 1;
+  background-color: var(--rouge);
+  transform-origin: top;
+  animation: lineDraw 0.9s var(--ease-out) 0.05s both;
+}
+
+.sec {
+  position: relative;
+  padding-block: clamp(56px, 9vw, 104px);
+}
+
+.sec--head {
+  padding-top: calc(var(--header-h) + clamp(48px, 9vw, 88px));
+  padding-bottom: clamp(24px, 5vw, 48px);
+}
+
+.sec--alt {
+  background-color: var(--surface);
+  border-top: 1px solid var(--filet);
+  border-bottom: 1px solid var(--filet);
+}
+
+.sec--alt + .sec--alt,
+.sec--alt + .band {
+  border-top: 0;
+}
+
+main .sec--alt:last-child {
+  border-bottom: 0;
+}
+
+.inner {
+  position: relative;
+  z-index: 2;
+  margin-left: calc(var(--line-x) + var(--body-pad));
+  margin-right: var(--m-right);
+  max-width: 1080px;
+}
+
+.cote {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+  margin-bottom: 20px;
+}
+
+.cote::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 2px;
+  background-color: var(--rouge);
+  vertical-align: 0.28em;
+  margin-right: 12px;
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    margin-left: var(--m-left);
+    max-width: calc(var(--rail-w) + 1080px);
+    display: grid;
+    grid-template-columns: var(--rail-w) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .cote {
+    grid-column: 1;
+    text-align: right;
+    padding-right: 26px;
+    margin: 0.5em 0 0;
+  }
+
+  .cote::before {
+    content: none;
+  }
+
+  .cote::after {
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 2px;
+    background-color: var(--rouge);
+    vertical-align: 0.28em;
+    margin-left: 12px;
+  }
+
+  .sec-body {
+    grid-column: 2;
+    padding-left: var(--body-pad);
+    min-width: 0;
+  }
+}
+
+/* 05. Typographie */
+
+.page-title {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(2.6rem, 8vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+
+.h-md {
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: clamp(1.55rem, 3.6vw, 2.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin-bottom: 16px;
+}
+
+.lead {
+  max-width: 62ch;
+  color: var(--encre);
+}
+
+.lead + .lead {
+  margin-top: 12px;
+}
+
+.data {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--encre-2);
+}
+
+.data strong {
+  color: var(--papier);
+  font-weight: 700;
+}
+
+/* 06. Boutons, liens, icones */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px 26px;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--papier);
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.btn:hover {
+  color: #fff;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--primary {
+  background-color: var(--rouge);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background-color: var(--rouge-2);
+}
+
+.btn--ghost {
+  border-color: rgba(237, 234, 228, 0.3);
+}
+
+.btn--ghost:hover {
+  border-color: var(--papier);
+}
+
+.btn--sm {
+  min-height: 42px;
+  padding: 8px 18px;
+  font-size: 0.8125rem;
+}
+
+.link-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  color: var(--rouge-vif);
+  text-decoration: none;
+}
+
+.link-more:hover {
+  color: var(--papier);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  flex: none;
+}
+
+/* 07. Header et navigation */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-header);
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  background-color: rgba(8, 8, 8, 0.6);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header {
+    background-color: rgba(8, 8, 8, 0.95);
+  }
+}
+
+.site-header.is-scrolled {
+  background-color: rgba(8, 8, 8, 0.88);
+  border-bottom-color: var(--filet);
+}
+
+.header-inner {
+  width: 100%;
+  padding-left: var(--m-left);
+  padding-right: var(--m-right);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+
+.brand img {
+  height: 26px;
+  width: auto;
+}
+
+.nav-desktop {
+  display: none;
+}
+
+.nav-toggle {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 12px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.nav-toggle .bar {
+  width: 22px;
+  height: 2px;
+  background-color: var(--papier);
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.nav-toggle[aria-expanded="true"] .bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] .bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-menu);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: calc(var(--header-h) + 24px) var(--m-right) 40px calc(var(--line-x) + var(--body-pad));
+  background-color: #0b0a09;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.mobile-menu[hidden] {
+  display: none;
+}
+
+.mobile-menu.is-open {
+  opacity: 1;
+}
+
+.mobile-menu-list a {
+  display: block;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--filet);
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(1.9rem, 7.5vw, 2.7rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  text-decoration: none;
+  color: var(--papier);
+}
+
+.mobile-menu-list a:hover,
+.mobile-menu-list a[aria-current="page"] {
+  color: var(--rouge-vif);
+}
+
+.mobile-menu.is-open .mobile-menu-list li {
+  animation: aIn 0.4s var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+
+.mobile-menu-foot {
+  margin-top: auto;
+  padding-top: 32px;
+}
+
+.mobile-menu-foot .btn {
+  width: 100%;
+}
+
+.mobile-menu-date {
+  margin-top: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--encre-2);
+  text-align: center;
+}
+
+body.nav-open {
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .nav-toggle,
+  .mobile-menu {
+    display: none;
+  }
+
+  .nav-desktop {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .nav-desktop a:not(.btn) {
+    position: relative;
+    padding: 8px 2px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--encre);
+    text-decoration: none;
+  }
+
+  .nav-desktop a:not(.btn):hover {
+    color: var(--papier);
+  }
+
+  .nav-desktop a:not(.btn)[aria-current="page"] {
+    color: var(--papier);
+  }
+
+  .nav-desktop a:not(.btn)[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--rouge);
+  }
+}
+
+/* 08. Hero et telescripteur */
+
+.hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding-top: calc(var(--header-h) + 40px);
+  padding-bottom: 56px;
+  overflow: clip;
+  position: relative;
+}
+
+/* Vignette cinema, sans halo colore */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(130% 105% at 32% 24%, transparent 52%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+.hero .inner {
+  z-index: 2;
+  width: 100%;
+}
+
+.hero-title {
+  margin-bottom: clamp(20px, 3.5vw, 32px);
+}
+
+/* Le mot qui franchit : il demarre dans la marge, traverse la ligne,
+   et peut deborder de la colonne a droite. */
+.hero-word {
+  display: block;
+  position: relative;
+  width: max-content;
+  max-width: none;
+  margin-left: calc(-1 * var(--body-pad) - 6px);
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(3.8rem, 15vw, 13.5rem);
+  line-height: 0.85;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--papier);
+}
+
+@media (min-width: 1024px) {
+  .hero-word {
+    margin-left: calc(-1 * (var(--rail-w) + var(--body-pad)) + 6px);
+  }
+}
+
+/* Le second membre du titre se range dans la colonne : il s'adapte. */
+.hero-sub {
+  display: block;
+  font-family: var(--font-disp);
+  font-weight: 640;
+  font-size: clamp(1.65rem, 5.2vw, 4.1rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--papier);
+  margin-top: 0.18em;
+}
+
+.hero-fig {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--encre-2);
+  max-width: 52ch;
+  margin-bottom: clamp(20px, 3vw, 28px);
+}
+
+.hero-fig .fig-id {
+  color: var(--rouge-vif);
+}
+
+.hero-meta {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--papier);
+  margin-bottom: clamp(24px, 4vw, 36px);
+}
+
+.hero-meta .sep {
+  color: var(--rouge-vif);
+}
+
+.ticker {
+  display: none;
+}
+
+.js .ticker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 28px;
+  margin-top: clamp(36px, 6vh, 64px);
+  padding-top: 16px;
+  border-top: 1px solid var(--filet);
+}
+
+.ticker-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+}
+
+.ticker-value {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 3vw, 1.9rem);
+  color: var(--papier);
+  white-space: nowrap;
+}
+
+.ticker-value .u {
+  color: var(--rouge-vif);
+}
+
+/* 09 et 10 : le diptyque et l'ancienne frise en marge ont ete dissous
+   dans le parcours de la ligne continue (section 20b). */
+
+/* 12. Lieu */
+
+.lieu-grid {
+  display: grid;
+  gap: clamp(24px, 4vw, 48px);
+  align-items: start;
+}
+
+@media (min-width: 1100px) {
+  .lieu-grid {
+    grid-template-columns: 1fr 0.92fr;
+  }
+}
+
+.lieu-media img {
+  width: 100%;
+  border: 1px solid var(--filet);
+}
+
+.lieu-media figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+  margin-top: 10px;
+}
+
+.facts {
+  margin-top: 20px;
+}
+
+.facts li {
+  position: relative;
+  padding: 12px 0 12px 30px;
+  border-bottom: 1px solid var(--filet);
+  font-size: 0.95rem;
+}
+
+.facts li:first-child {
+  border-top: 1px solid var(--filet);
+}
+
+.facts li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.45em;
+  width: 14px;
+  height: 2px;
+  background-color: var(--rouge);
+}
+
+.facts strong {
+  color: var(--papier);
+  font-weight: 500;
+}
+
+.facts .data {
+  display: block;
+}
+
+/* 13. Registre des editions */
+
+.reg {
+  border-top: 1px solid var(--filet);
+}
+
+.reg-row {
+  display: grid;
+  gap: 8px 24px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--filet);
+}
+
+.reg-row:hover {
+  background-color: rgba(237, 234, 228, 0.02);
+}
+
+.reg-year {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--rouge-vif);
+}
+
+.reg-main h3 {
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: clamp(1.35rem, 2.8vw, 1.9rem);
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  margin-bottom: 8px;
+}
+
+.reg-media {
+  order: -1;
+}
+
+.reg-media img {
+  width: 100%;
+  border: 1px solid var(--filet);
+  /* Traitement prescrit pour les futures vraies photos :
+     noir et blanc legerement rechauffe, pour que neuf epoques
+     differentes forment une seule matiere. */
+  filter: grayscale(1) sepia(0.06) contrast(1.04);
+}
+
+@media (min-width: 900px) {
+  .reg-row {
+    grid-template-columns: 84px minmax(0, 1fr) 230px;
+    align-items: center;
+  }
+
+  .reg-media {
+    order: 0;
+  }
+}
+
+/* 14. Fiches sous embargo (speakers) */
+
+.emb {
+  border-top: 1px solid var(--filet);
+}
+
+.emb-row {
+  display: grid;
+  gap: 6px 24px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--filet);
+}
+
+.emb-id {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+}
+
+.emb-name {
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  line-height: 1;
+  color: var(--papier);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35em;
+  align-items: center;
+}
+
+.redact {
+  display: inline-block;
+  height: 0.82em;
+  background-color: var(--caviardage);
+}
+
+.emb-sub {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--encre-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4em;
+  align-items: center;
+}
+
+.emb-sub .redact {
+  height: 0.9em;
+}
+
+.emb-status {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--rouge-vif);
+}
+
+@media (min-width: 900px) {
+  .emb-row {
+    grid-template-columns: 190px minmax(0, 1fr) 180px;
+    align-items: center;
+  }
+
+  .emb-status {
+    text-align: right;
+  }
+}
+
+.emb-row--photo img {
+  width: 100%;
+  max-width: 180px;
+  border: 1px solid var(--filet);
+  filter: grayscale(1) sepia(0.06) contrast(1.04);
+}
+
+/* 15. Feuille de salle (programme) */
+
+.sheet {
+  border-top: 1px solid var(--filet);
+  max-width: 780px;
+}
+
+.sheet-row {
+  display: grid;
+  gap: 4px 28px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--filet);
+}
+
+.sheet-time {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--papier);
+}
+
+.sheet-title {
+  font-weight: 600;
+  color: var(--papier);
+}
+
+.sheet-desc {
+  color: var(--encre-2);
+  font-size: 0.95rem;
+  max-width: 56ch;
+}
+
+@media (min-width: 700px) {
+  .sheet-row {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .sheet-time {
+    padding-top: 2px;
+  }
+}
+
+/* 16. Partenaires */
+
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .partners-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1100px) {
+  .partners-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.partner-tile {
+  aspect-ratio: 3 / 2;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  text-align: center;
+  border: 1px dashed rgba(237, 234, 228, 0.18);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--encre-2);
+}
+
+/* Regle TEDx : un logo partenaire reste plus petit que le logo de
+   l'evenement (26px de haut dans le header). Plafonds ci-dessous. */
+.partner-tile img {
+  max-width: min(72%, 150px);
+  max-height: 52px;
+  width: auto;
+  height: auto;
+}
+
+/* 17. FAQ */
+
+.faq-group {
+  max-width: 820px;
+  margin-bottom: clamp(36px, 6vw, 56px);
+}
+
+.faq-group:last-child {
+  margin-bottom: 0;
+}
+
+details.faq {
+  border-bottom: 1px solid var(--filet);
+}
+
+details.faq:first-of-type {
+  border-top: 1px solid var(--filet);
+}
+
+.faq summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 56px;
+  padding: 16px 4px;
+  cursor: pointer;
+  color: var(--papier);
+  font-weight: 500;
+  font-size: 1.0625rem;
+  list-style: none;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary:hover {
+  background-color: rgba(237, 234, 228, 0.02);
+}
+
+.faq summary .icon {
+  color: var(--rouge-vif);
+  transition: transform 0.25s ease;
+}
+
+details.faq[open] summary .icon {
+  transform: rotate(180deg);
+}
+
+.faq-a {
+  padding: 0 4px 22px;
+  max-width: 68ch;
+}
+
+.faq-a p + p {
+  margin-top: 10px;
+}
+
+/* 18. Bandeau constat */
+
+.band {
+  position: relative;
+  background-color: var(--surface);
+  border-top: 1px solid var(--filet);
+  border-bottom: 1px solid var(--filet);
+  padding-block: clamp(56px, 9vw, 96px);
+}
+
+.band-title {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(1.7rem, 4.2vw, 3rem);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  max-width: 24ch;
+  margin-bottom: 14px;
+}
+
+.band-note {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--encre-2);
+  margin-top: 18px;
+}
+
+.band .lead {
+  margin-bottom: 24px;
+}
+
+/* 19. Footer */
+
+.site-footer {
+  background-color: #0a0908;
+  border-top: 1px solid var(--filet);
+  padding-top: clamp(44px, 7vw, 64px);
+}
+
+.site-footer .finner {
+  margin-left: var(--m-left);
+  margin-right: var(--m-right);
+  max-width: calc(var(--rail-w) + 1080px);
+}
+
+.footer-grid {
+  display: grid;
+  gap: clamp(28px, 5vw, 44px);
+}
+
+@media (min-width: 700px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: 1.5fr 1fr 1fr 1.1fr;
+  }
+}
+
+.footer-brand img {
+  height: 24px;
+  width: auto;
+}
+
+.footer-licence {
+  margin-top: 16px;
+  max-width: 340px;
+  color: var(--encre-2);
+  font-size: 0.9rem;
+}
+
+.footer-title {
+  margin-bottom: 14px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+}
+
+.footer-list li a {
+  display: inline-block;
+  padding: 5px 0;
+  color: var(--encre);
+  text-decoration: none;
+}
+
+.footer-list li a:hover {
+  color: var(--papier);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer-contact p {
+  color: var(--encre-2);
+  font-size: 0.95rem;
+}
+
+.footer-contact .btn {
+  margin-top: 16px;
+}
+
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: clamp(36px, 6vw, 48px);
+  padding: 18px 0 26px;
+  border-top: 1px solid var(--filet);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--encre-2);
+}
+
+.footer-bottom a {
+  color: var(--encre-2);
+}
+
+.footer-bottom a:hover {
+  color: var(--papier);
+}
+
+/* 20. Prose, notices, 404 */
+
+.prose {
+  max-width: 720px;
+}
+
+.prose h2 {
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: clamp(1.5rem, 3.4vw, 2rem);
+  letter-spacing: -0.015em;
+  margin: 44px 0 14px;
+}
+
+.prose h2:first-child {
+  margin-top: 0;
+}
+
+.prose p + p {
+  margin-top: 12px;
+}
+
+.prose ul {
+  margin: 12px 0;
+  padding-left: 20px;
+}
+
+.prose strong {
+  color: var(--papier);
+  font-weight: 500;
+}
+
+.notice {
+  max-width: 760px;
+  margin-top: 32px;
+  padding: 14px 18px;
+  border: 1px dashed rgba(237, 234, 228, 0.2);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--encre-2);
+}
+
+.error-hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.error-code {
+  position: relative;
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(6.5rem, 30vw, 16rem);
+  line-height: 0.85;
+  letter-spacing: -0.03em;
+  color: rgba(237, 234, 228, 0.08);
+  width: max-content;
+  margin-left: calc(-1 * var(--body-pad) - 6px);
+}
+
+@media (min-width: 1024px) {
+  .error-code {
+    margin-left: calc(-1 * (var(--rail-w) + var(--body-pad)) + 6px);
+  }
+}
+
+.error-hero h1 {
+  margin: 20px 0 8px;
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: clamp(1.4rem, 3.5vw, 2rem);
+}
+
+.error-hero .lead {
+  margin-bottom: 28px;
+}
+
+/* 20b. La ligne continue (accueil uniquement, body.journey)
+   Un seul chemin SVG, construit par main.js a partir du vrai layout,
+   parcourt la page : seuil, traversee, pliure autour du lieu, frise,
+   diagonale du dixieme baton, prise dans le bouton Reserver.
+   Sans JavaScript : retour a la ligne verticale statique (main::before). */
+
+:root {
+  --axis-b: var(--line-x);
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --axis-b: calc(var(--line-x) + clamp(420px, 38vw, 560px));
+  }
+}
+
+.js .journey main::before {
+  content: none;
+}
+
+/* Si le trace echoue, la ligne statique reprend son poste */
+.jline-fail .journey main::before {
+  content: "";
+}
+
+/* Le SVG de la ligne couvre tout le document, footer compris */
+.journey {
+  position: relative;
+}
+
+.jline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.jline path {
+  stroke: var(--rouge);
+  stroke-width: 2.5;
+  fill: none;
+}
+
+/* L'epilogue : trait fin vers la mention de licence */
+.jline .jtail {
+  stroke-width: 1.25;
+}
+
+.probe {
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 0;
+}
+
+#probe-a {
+  left: var(--line-x);
+}
+
+#probe-b {
+  left: var(--axis-b);
+}
+
+/* Sur l'accueil, les cotes restent en style compact partout :
+   le contenu se place par rapport a la ligne, pas dans un rail fixe. */
+@media (min-width: 1024px) {
+  .journey .cote {
+    text-align: left;
+    padding-right: 0;
+    margin: 0 0 20px;
+  }
+
+  .journey .cote::after {
+    content: none;
+  }
+
+  .journey .cote::before {
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 2px;
+    background-color: var(--rouge);
+    vertical-align: 0.28em;
+    margin-right: 12px;
+  }
+}
+
+.mwrap {
+  position: relative;
+  z-index: 2;
+  margin-left: calc(var(--line-x) + var(--body-pad));
+  margin-right: var(--m-right);
+}
+
+@media (min-width: 1024px) {
+  .mwrap {
+    margin-left: var(--m-left);
+    max-width: 1360px;
+  }
+
+  /* Colonne de gauche : le contenu vit avant la limite */
+  .colL {
+    width: calc(var(--axis-b) - var(--m-left) - 48px);
+    min-width: 0;
+  }
+}
+
+/* Moment 1 : le seuil. La question se coupe en deux sur la ligne :
+   Franchir s'arrete au bord, ou s'adapter ? commence de l'autre cote.
+   Tout le reste (date, actions, compte a rebours) se range avant. */
+
+.journey .hero {
+  padding-bottom: 72px;
+}
+
+.journey .hero .mwrap {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .journey .hero-word {
+    display: flex;
+    justify-content: flex-end;
+    width: calc(var(--axis-b) - var(--m-left) - 24px);
+    max-width: none;
+    margin-left: 0;
+    font-size: clamp(3.4rem, 8.1vw, 7rem);
+  }
+
+  .journey .hero-sub {
+    margin-left: calc(var(--axis-b) - var(--m-left) + 26px);
+    margin-top: 0.4em;
+  }
+
+  .journey .hero-fig,
+  .journey .hero-meta,
+  .journey .hero .actions,
+  .js .journey .hero .ticker {
+    margin-left: 0;
+    max-width: calc(var(--axis-b) - var(--m-left) - 48px);
+  }
+}
+
+/* Moments 2, 3, 4 : blocs du parcours */
+
+.mom {
+  position: relative;
+  padding-block: clamp(88px, 13vw, 170px);
+}
+
+.mom-title {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 6.5vw, 4.6rem);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  color: var(--papier);
+  margin-bottom: 24px;
+}
+
+/* Le mot qui traverse (moment 2) : pousse par le defilement */
+.cross-track {
+  margin-bottom: 28px;
+}
+
+@media (min-width: 1024px) {
+  .cross-track {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 44px;
+  }
+}
+
+.cross-word {
+  display: inline-block;
+  width: max-content;
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(2.6rem, 8.5vw, 7rem);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--papier);
+  transform: translateX(calc((var(--cross-p, 1) - 1) * var(--cross-dist, 0px)));
+  will-change: transform;
+}
+
+@media (max-width: 1023px) {
+  .cross-word {
+    margin-left: calc(-1 * var(--body-pad) - 6px);
+  }
+}
+
+/* La file d'attente des speakers : des points sur la ligne */
+
+.queue {
+  margin-top: 40px;
+}
+
+.q-row {
+  position: relative;
+  padding: 16px 0 16px 26px;
+  border-bottom: 1px solid var(--filet);
+}
+
+.q-row:first-child {
+  border-top: 1px solid var(--filet);
+}
+
+.q-dot {
+  position: absolute;
+  top: 50%;
+  left: calc(-1 * var(--body-pad));
+  width: 12px;
+  height: 12px;
+  margin-top: -6px;
+  margin-left: -5px;
+  border-radius: 50%;
+  background-color: var(--rouge);
+  box-shadow: 0 0 0 4px rgba(235, 0, 40, 0.14);
+  z-index: 2;
+}
+
+.q-id {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+}
+
+.q-name {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
+  align-items: center;
+  margin: 4px 0;
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.q-status {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--rouge-vif);
+}
+
+@media (min-width: 1024px) {
+  .queue {
+    width: calc(var(--axis-b) - var(--m-left) - 40px);
+  }
+
+  .q-row {
+    padding: 16px 40px 16px 0;
+    text-align: right;
+  }
+
+  .q-name {
+    justify-content: flex-end;
+  }
+
+  .q-dot {
+    left: auto;
+    right: -40px;
+    margin-left: 0;
+    margin-right: -6px;
+  }
+}
+
+/* Moment 3 : le bloc du lieu, l'obstacle que la ligne contourne */
+
+.m3-lieu {
+  position: relative;
+  z-index: 2;
+  margin-block: clamp(72px, 9vw, 120px);
+}
+
+.m3-lieu img {
+  width: 100%;
+  border: 1px solid var(--filet);
+}
+
+.m3-lieu figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+  margin-top: 10px;
+}
+
+.m3-body {
+  padding: 20px 0 0;
+}
+
+.m3-body .h-md {
+  margin-bottom: 10px;
+}
+
+@media (min-width: 1024px) {
+  .m3-lieu {
+    width: min(640px, 60vw);
+    margin-left: calc(var(--axis-b) - var(--m-left) - min(640px, 60vw) * 0.5);
+  }
+}
+
+.prog-peek {
+  margin-top: 28px;
+}
+
+.prog-peek li {
+  display: flex;
+  gap: 14px;
+  padding: 8px 0;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--encre-2);
+}
+
+.prog-peek strong {
+  color: var(--papier);
+  font-weight: 700;
+}
+
+.peek-title {
+  margin: 34px 0 6px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+}
+
+.more-row {
+  margin-top: 28px;
+}
+
+/* Les chiffres de la dixieme : lignes de donnees sous la frise */
+
+.data-lines {
+  margin-top: clamp(40px, 6vw, 64px);
+  border-top: 1px solid var(--filet);
+}
+
+.data-lines li {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--filet);
+  font-size: 0.95rem;
+  color: var(--encre-2);
+}
+
+.data-lines strong {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--papier);
+  margin-right: 10px;
+}
+
+/* Moment 4 : la frise horizontale (desktop) ou verticale (mobile) */
+
+.fr-caption {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+  margin-bottom: 36px;
+}
+
+.fr-item {
+  position: relative;
+  padding: 0 0 26px 26px;
+}
+
+.fr-item::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--body-pad));
+  top: 0.5em;
+  width: 12px;
+  height: 12px;
+  margin-left: -5px;
+  border-radius: 50%;
+  background-color: var(--rouge);
+  box-shadow: 0 0 0 4px rgba(235, 0, 40, 0.12);
+}
+
+.fr-y {
+  display: block;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--encre-2);
+}
+
+.fr-t {
+  display: block;
+  font-family: var(--font-disp);
+  font-weight: 700;
+  font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  color: var(--papier);
+}
+
+.fr-item--gap::before {
+  content: "";
+  background-color: var(--noir);
+  border-radius: 0;
+  width: 10px;
+  height: 22px;
+  top: 0.1em;
+  margin-left: -4px;
+  box-shadow: none;
+  z-index: 2;
+}
+
+.fr-item--gap .fr-t {
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.8125rem;
+  color: var(--encre-2);
+}
+
+@media (min-width: 1024px) {
+  /* margin-top : la place du retour a 2016 (le trait redescend a gauche
+     avant de tourner) ; margin-left : de l'air pour l'etiquette 2016 ;
+     margin-right : la reserve du terminus 2027. */
+  .fr-band {
+    position: relative;
+    height: 250px;
+    margin-top: 130px;
+    margin-left: 75px;
+    margin-right: clamp(220px, 24vw, 340px);
+  }
+
+  .fr-item {
+    position: absolute;
+    left: var(--fx);
+    top: 50%;
+    width: 150px;
+    margin-left: -75px;
+    padding: 0;
+    text-align: center;
+  }
+
+  .fr-item::before {
+    left: 50%;
+    top: 0;
+    margin-left: -6px;
+    margin-top: -6px;
+  }
+
+  .fr-item:nth-child(odd) .fr-lbl {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 22px;
+  }
+
+  .fr-item:nth-child(even) .fr-lbl {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 22px;
+  }
+
+  .fr-item--gap::before {
+    width: 26px;
+    height: 10px;
+    margin-left: -13px;
+    margin-top: -5px;
+  }
+}
+
+/* Le terminus : 2027, point vivant au bout du fil. Le trait qui en
+   redescend forme le 1 du grand 10 ; le 0 est pose juste a cote. */
+
+.fr-end {
+  position: relative;
+  margin-top: 12px;
+  padding: 6px 0 0 26px;
+  min-height: 170px;
+}
+
+.fr-end-dot {
+  position: absolute;
+  left: calc(-1 * var(--body-pad));
+  top: 0.9em;
+  width: 14px;
+  height: 14px;
+  margin-left: -6px;
+  border-radius: 50%;
+  background-color: var(--rouge-vif);
+  box-shadow: 0 0 0 5px rgba(235, 0, 40, 0.16);
+  z-index: 2;
+}
+
+.fr-end-dot::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(235, 0, 40, 0.55);
+  animation: pulse27 2.6s ease-out infinite;
+}
+
+@keyframes pulse27 {
+  from {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  to {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  .fr-end {
+    position: absolute;
+    left: 100%;
+    top: 50%;
+    width: clamp(200px, 22vw, 320px);
+    margin: 0;
+    padding: 20px 0 0 28px;
+    min-height: 0;
+  }
+
+  .fr-end-dot {
+    left: 0;
+    top: 0;
+    margin: -7px 0 0 -7px;
+  }
+
+  /* La reserve du terminus deborde sous la bande : de l'air en bas */
+  .mom--frise {
+    padding-bottom: clamp(200px, 24vw, 300px);
+  }
+}
+
+.ten-mark {
+  position: absolute;
+  z-index: 0;
+  left: 6px;
+  top: 44px;
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(7.5rem, 30vw, 10rem);
+  line-height: 0.78;
+  letter-spacing: -0.02em;
+  color: rgba(237, 234, 228, 0.055);
+  pointer-events: none;
+  user-select: none;
+}
+
+@media (min-width: 1024px) {
+  .ten-mark {
+    left: 30px;
+    top: 112px;
+    font-size: clamp(9rem, 15vw, 13rem);
+  }
+}
+
+.fr-end-label {
+  position: relative;
+  z-index: 2;
+}
+
+.fr-end-label .fr-y {
+  color: var(--rouge-vif);
+  font-size: 1.05rem;
+}
+
+.fr-end-label .fr-t {
+  font-size: clamp(1.5rem, 3vw, 1.9rem);
+}
+
+.fr-end-note {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--encre-2);
+  margin-top: 6px;
+}
+
+/* La prise : la ligne se branche dans le bouton */
+
+.final-cta {
+  position: relative;
+  z-index: 2;
+  margin-top: clamp(150px, 20vw, 240px);
+  padding-bottom: clamp(64px, 9vw, 104px);
+  text-align: center;
+}
+
+.final-cta .btn {
+  min-height: 56px;
+  padding: 16px 40px;
+}
+
+.final-title {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(1.7rem, 4.2vw, 3rem);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--papier);
+  max-width: 24ch;
+  margin: 0 auto 28px;
+}
+
+.final-cta .actions {
+  justify-content: center;
+}
+
+.final-note {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--encre-2);
+  margin-top: 18px;
+}
+
+.final-alt {
+  margin-top: 14px;
+}
+
+@media (min-width: 1024px) {
+  .final-cta {
+    text-align: right;
+    padding-right: clamp(24px, 6vw, 96px);
+  }
+
+  /* Le constat reste a gauche de la ligne qui descend vers la prise */
+  .final-cta .final-title {
+    margin: 0 0 36px;
+    text-align: left;
+  }
+
+  .final-cta .actions {
+    justify-content: flex-end;
+  }
+}
+
+/* Le pied de page laisse passer l'epilogue sous son contenu */
+.journey .site-footer .finner {
+  position: relative;
+  z-index: 2;
+}
+
+/* Points d'attente sur la page speakers (ligne au repos) */
+
+.emb .emb-row {
+  position: relative;
+}
+
+.emb .emb-row::before {
+  content: "";
+  position: absolute;
+  left: calc(-1 * var(--body-pad));
+  top: 50%;
+  width: 10px;
+  height: 10px;
+  margin-top: -5px;
+  margin-left: -4px;
+  border-radius: 50%;
+  background-color: var(--rouge);
+  box-shadow: 0 0 0 4px rgba(235, 0, 40, 0.12);
+}
+
+/* 21. Animations et reduced motion
+   Une seule sequence orchestree : la ligne se trace, le hero entre,
+   le telescripteur s'allume. Rien d'autre ne bouge au scroll,
+   a l'exception du dixieme baton. */
+
+@keyframes lineDraw {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes aIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.a {
+  opacity: 0;
+  animation: aIn 0.65s var(--ease-out) forwards;
+}
+
+.a1 { animation-delay: 0.15s; }
+.a2 { animation-delay: 0.3s; }
+.a3 { animation-delay: 0.45s; }
+.a4 { animation-delay: 0.6s; }
+.a5 { animation-delay: 0.72s; }
+.a6 { animation-delay: 0.84s; }
+.a7 { animation-delay: 1s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  main::before {
+    animation: none;
+    transform: none;
+  }
+
+  .a {
+    animation: none;
+    opacity: 1;
+  }
+
+  /* La ligne continue : entierement tracee, immobile. La pliure,
+     le virage et la frise restent lisibles puisqu'ils sont dans
+     la geometrie du trait, pas dans son animation. */
+  .jline path {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+
+  .cross-word {
+    transform: none;
+  }
+
+  .fr-end-dot::after {
+    animation: none;
+    opacity: 0;
+  }
+}

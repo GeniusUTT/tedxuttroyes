@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500" role="img" aria-label="Photo de l'édition 2021 à venir">
+  <rect width="800" height="500" fill="#0E0D0C"/>
+  <text x="48" y="72" font-family="'Space Mono', 'Courier New', monospace" font-size="17" letter-spacing="4" fill="#7E7A73">TEDxUTTroyes 2021</text>
+  <rect x="0" y="296" width="800" height="2" fill="#EB0028"/>
+  <text x="400" y="352" text-anchor="middle" font-family="'Courier New', monospace" font-weight="bold" font-size="200" letter-spacing="6" fill="#191714">2021</text>
+  <text x="48" y="452" font-family="'Space Mono', 'Courier New', monospace" font-size="15" fill="#55524C">photo à remplacer</text>
+</svg>
