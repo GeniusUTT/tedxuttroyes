@@ -20,3 +20,4 @@ dist/
 *.bak
 .agents/skills/writing-guidelines/SKILL.md
 skills-lock.json
+/migration
