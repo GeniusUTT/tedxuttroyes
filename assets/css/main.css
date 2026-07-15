@@ -308,7 +308,7 @@ main::before {
 
 .sec {
   position: relative;
-  padding-block: clamp(56px, 9vw, 104px);
+  padding-block: clamp(40px, 6vw, 72px);
 }
 
 .sec--head {
@@ -481,6 +481,28 @@ main .sec--alt:last-child {
 
 .btn--primary:hover {
   background-color: var(--rouge-2);
+}
+
+/* La prise (accueil) : tant que la ligne n'a pas rejoint le bouton
+   Reserver, il attend en noir ; line.js pose plug-armed au depart et
+   plug-on quand le trait s'y branche. Sans JS, en cas d'echec ou en
+   reduced motion (trait complet d'emblee) : aucune classe, bouton rouge. */
+.btn--primary.plug-armed {
+  background-color: var(--noir);
+  color: var(--papier);
+  border-color: var(--filet);
+  transition: background-color 0.35s var(--ease-out), border-color 0.35s var(--ease-out), color 0.35s var(--ease-out);
+}
+
+.btn--primary.plug-armed:not(.plug-on):hover {
+  background-color: var(--noir);
+  border-color: rgba(237, 234, 228, 0.5);
+}
+
+.btn--primary.plug-armed.plug-on {
+  background-color: var(--rouge);
+  color: #fff;
+  border-color: transparent;
 }
 
 .btn--ghost {
@@ -728,6 +750,32 @@ body.nav-open {
   padding-bottom: 56px;
   overflow: clip;
   position: relative;
+}
+
+/* Le fond du seuil : une archive de la scene, noir et blanc rechauffe,
+   sous un voile noir plus dense a gauche (titre, date, actions) et
+   fondu vers le noir en bas pour enchainer sur la suite. */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(1) sepia(0.06) contrast(1.04) brightness(0.62);
+}
+
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(8, 8, 8, 0.9) 0%, rgba(8, 8, 8, 0.72) 44%, rgba(8, 8, 8, 0.42) 100%),
+    linear-gradient(180deg, rgba(8, 8, 8, 0.6) 0%, rgba(8, 8, 8, 0.1) 32%, rgba(8, 8, 8, 0.05) 62%, var(--noir) 100%);
 }
 
 /* Vignette cinema, sans halo colore */
@@ -1190,7 +1238,7 @@ details.faq[open] summary .icon {
   background-color: var(--surface);
   border-top: 1px solid var(--filet);
   border-bottom: 1px solid var(--filet);
-  padding-block: clamp(56px, 9vw, 96px);
+  padding-block: clamp(40px, 6vw, 64px);
 }
 
 .band-title {
@@ -1540,7 +1588,7 @@ details.faq[open] summary .icon {
 
 .mom {
   position: relative;
-  padding-block: clamp(88px, 13vw, 170px);
+  padding-block: clamp(48px, 7vw, 88px);
 }
 
 .mom-title {
@@ -1670,7 +1718,7 @@ details.faq[open] summary .icon {
 .m3-lieu {
   position: relative;
   z-index: 2;
-  margin-block: clamp(72px, 9vw, 120px);
+  margin-block: clamp(40px, 5vw, 64px);
 }
 
 .m3-lieu img {
@@ -2054,13 +2102,16 @@ details.faq[open] summary .icon {
 }
 
 @media (min-width: 1024px) {
-  /* margin-top : la place du retour a 2016 (le trait redescend a gauche
-     avant de tourner) ; margin-left : de l'air pour l'etiquette 2016 ;
-     margin-right : la reserve du terminus 2027. */
+  /* L'escalier des editions : une marche par annee, le trait descend
+     de 2016 a 2027 contremarche apres contremarche (chaque point est
+     pose au bord gauche de sa marche, a --fx ; --fy est le rang).
+     margin-top : la place du retour a 2016 (le trait redescend a gauche
+     avant de tourner) ; margin-right : la reserve du terminus 2027. */
   .fr-band {
+    --fr-step: clamp(56px, 7vh, 72px);
     position: relative;
-    height: 250px;
-    margin-top: 130px;
+    height: calc(11 * var(--fr-step));
+    margin-top: 90px;
     margin-left: 75px;
     margin-right: clamp(220px, 24vw, 340px);
   }
@@ -2068,32 +2119,31 @@ details.faq[open] summary .icon {
   .fr-item {
     position: absolute;
     left: var(--fx);
-    top: 50%;
-    width: 150px;
-    margin-left: -75px;
+    top: calc(var(--fy) * var(--fr-step));
+    width: 200px;
+    margin-left: 0;
     padding: 0;
-    text-align: center;
+    text-align: left;
   }
 
   .fr-item::before {
-    left: 50%;
+    left: 0;
     top: 0;
     margin-left: -6px;
     margin-top: -6px;
   }
 
-  .fr-item:nth-child(odd) .fr-lbl {
+  /* L'etiquette se pose au-dessus de sa marche, a droite du point :
+     l'espace y est toujours libre puisque l'escalier descend. */
+  .fr-item .fr-lbl {
     position: absolute;
-    left: 0;
+    left: 16px;
     right: 0;
-    bottom: 22px;
+    bottom: 10px;
   }
 
-  .fr-item:nth-child(even) .fr-lbl {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 22px;
+  .fr-item .fr-t {
+    font-size: 1.2rem;
   }
 
   .fr-item--gap::before {
@@ -2148,10 +2198,11 @@ details.faq[open] summary .icon {
 }
 
 @media (min-width: 1024px) {
+  /* Le terminus prend la derniere marche, en bas a droite de l'escalier */
   .fr-end {
     position: absolute;
     left: 100%;
-    top: 50%;
+    top: calc(11 * var(--fr-step));
     width: clamp(200px, 22vw, 320px);
     margin: 0;
     padding: 20px 0 0 28px;
@@ -2164,10 +2215,7 @@ details.faq[open] summary .icon {
     margin: -7px 0 0 -7px;
   }
 
-  /* La reserve du terminus deborde sous la bande : de l'air en bas */
-  .mom--frise {
-    padding-bottom: clamp(200px, 24vw, 300px);
-  }
+  
 }
 
 .ten-mark {
@@ -2217,9 +2265,9 @@ details.faq[open] summary .icon {
 /* La prise : la ligne se branche dans le bouton */
 
 .final-cta {
-  position: relative;
+  position: relative; 
   z-index: 2;
-  margin-top: clamp(150px, 20vw, 240px);
+  margin-top: clamp(40px, 5vw, 65px);
   padding-bottom: clamp(64px, 9vw, 104px);
   text-align: center;
 }
@@ -2448,7 +2496,7 @@ details.faq[open] summary .icon {
    Six photos sorties des cartons 2023 et 2024, posees sous la frise. */
 
 .arch {
-  margin: 36px 0 10px;
+  margin: 200px 0 10px;
 }
 
 .arch-strip {

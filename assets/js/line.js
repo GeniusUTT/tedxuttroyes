@@ -43,6 +43,7 @@
   var tailFrom = 0;     /* fenetre de scroll ou l'epilogue se trace */
   var tailTo = 1;
   var cross = null;     /* etat du mot qui franchit (desktop seulement) */
+  var plugEl = null;    /* le bouton Reserver : noir tant que la ligne n'y est pas */
   var lastCrossP = 1;
   var lastDist = 0;
   var cs = window.scrollY;
@@ -235,27 +236,51 @@
       pts.push([axB, r.top - m], [ex, r.top - m], [ex, r.bottom + m], [axB, r.bottom + m]);
     }
 
-    /* Moment 4 : retour a 2016, virage, frise horizontale (desktop).
+    /* Moment 4 : retour a 2016, virage, puis l'escalier des editions
+       (desktop) : une marche par annee, le point de chaque edition pose
+       sur sa marche, la contremarche a mi-chemin entre deux points.
        Sur mobile la frise reste une echelle verticale sur la ligne. */
     var dropX = axB;
     var band = main.querySelector('[data-line="turn"]');
     var dot = main.querySelector('[data-line="drop"]');
     if (band && horiz) {
-      r = absRect(band, sx, sy);
-      var midY = r.top + r.height / 2;
-      var jogY = r.top - 56;
-      pts.push([axB, jogY], [r.left, jogY], [r.left, midY]);
+      var items = band.querySelectorAll(".fr-item");
+      var steps = [];
+      var k;
+      for (k = 0; k < items.length; k++) {
+        var ir = absRect(items[k], sx, sy);
+        steps.push([ir.left, ir.top]);
+      }
       if (dot) {
         var dr = absRect(dot, sx, sy);
         dropX = dr.left + dr.width / 2;
-        pts.push([dropX, midY]);
+        steps.push([dropX, dr.top + dr.height / 2]);
+      }
+      if (steps.length > 1) {
+        var jogY = steps[0][1] - 64;
+        var entryX = Math.max(4, steps[0][0] - 44);
+        pts.push([axB, jogY], [entryX, jogY], [entryX, steps[0][1]]);
+        for (k = 0; k < steps.length - 1; k++) {
+          var mx = (steps[k][0] + steps[k + 1][0]) / 2;
+          pts.push([mx, steps[k][1]], [mx, steps[k + 1][1]]);
+        }
+        pts.push([steps[steps.length - 1][0], steps[steps.length - 1][1]]);
       }
     }
 
-    /* La prise : le trait descend (le 1 du 10) et se branche au bouton */
+    /* La prise : le trait descend (le 1 du 10) et se branche au bouton.
+       Le bouton attend en noir (plug-armed) et s'allume en rouge quand
+       le trait le rejoint (plug-on, pose par apply). En reduced motion
+       le trait est complet d'emblee : le bouton reste rouge. */
     var plug = main.querySelector('[data-line="plug"]');
     var plugRect = null;
+    plugEl = plug;
     if (plug) {
+      if (reduce.matches) {
+        plug.classList.remove("plug-armed", "plug-on");
+      } else {
+        plug.classList.add("plug-armed");
+      }
       plugRect = absRect(plug, sx, sy);
       var bx = plugRect.left + plugRect.width / 2;
       if (Math.abs(dropX - bx) > 12) {
@@ -269,22 +294,7 @@
     /* Epilogue : trait fin jusqu'a la mention de licence TED */
     var tailPts = null;
     el = doc.querySelector('[data-line="finale"]');
-    if (el && plugRect) {
-      /* Le trait fin ressort par le flanc gauche du bouton, descend dans
-         la marge, puis vient souligner la mention de licence TED. */
-      var lic = absRect(el, sx, sy);
-      var midYBtn = plugRect.top + plugRect.height / 2;
-      var descX = Math.max(6, lic.left - 16);
-      var underY = lic.bottom + 5;
-      if (underY > midYBtn + 40 && descX < plugRect.left - 20) {
-        tailPts = [
-          [plugRect.left - 2, midYBtn],
-          [descX, midYBtn],
-          [descX, underY],
-          [lic.right, underY]
-        ];
-      }
-    }
+    
 
     /* Phase 2 : ecritures */
     if (!svg) {
@@ -308,7 +318,7 @@
     var maxScroll = Math.max(1, H - vh);
     tailFrom = tableM.length ? tableM[tableM.length - 1].t + 30 : 0;
     tailFrom = Math.min(tailFrom, maxScroll - 60);
-    tailTo = maxScroll;
+    tailTo = Math.max(1, maxScroll - Math.max(120, Math.round(vh * 0.45)));
     if (tailTo - tailFrom < 40) {
       tailFrom = Math.max(0, tailTo - 40);
     }
@@ -329,6 +339,9 @@
   function apply(scroll) {
     var pM = interp(tableM, scroll);
     pathMain.style.strokeDashoffset = (LEN * (1 - pM)).toFixed(2);
+    if (plugEl) {
+      plugEl.classList.toggle("plug-on", pM >= 0.995);
+    }
     var pT = clamp01((scroll - tailFrom) / Math.max(1, tailTo - tailFrom));
     pathTail.style.strokeDashoffset = (LEN * (1 - pT)).toFixed(2);
     if (cross) {
@@ -366,6 +379,10 @@
 
   function fail() {
     doc.documentElement.classList.add("jline-fail");
+    if (plugEl) {
+      plugEl.classList.remove("plug-armed", "plug-on");
+      plugEl = null;
+    }
     if (svg && svg.parentNode) {
       svg.parentNode.removeChild(svg);
     }
