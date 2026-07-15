@@ -29,6 +29,9 @@ assets/
   js/line.js             La ligne continue de l'accueil : construit le tracé SVG
                          en mesurant les ancres data-line, le dessine au scroll,
                          pilote le mot qui franchit. Sans JS : dorsale CSS.
+  js/map.js              Carte Mapbox du lieu (accueil) : chargée paresseusement
+                         à l'approche du bloc, elle remplace le plan SVG qui
+                         reste la version par défaut (sans JS, sans WebGL).
   fonts/                 Bricolage Grotesque (variable), Space Mono 400 et 700,
                          DM Sans (variable), hébergées en local
   img/                   Logo, favicon, OG, placeholders éditions et lieu
@@ -59,9 +62,8 @@ Tous les emplacements variables sont marqués par un commentaire `PLACEHOLDER` d
 | Lien newsletter HelloAsso | `index.html`, footers | remplacer partout `https://www.helloasso.com/PLACEHOLDER-NEWSLETTER` |
 | Chiffres (talks, intervenants) | `index.html`, section « En chiffres » | remplacer les `XX` des lignes de données |
 | Annonce d'un speaker | `speakers.html` | suivre le gabarit commenté : la fiche sous embargo devient nom + sujet + photo optionnelle (dossier `assets/img/speakers/` à créer) |
-| Photos des 9 éditions | `assets/img/editions/*.svg` | déposer les vraies photos (jpg ou webp, environ 800x500), changer le `src` et renseigner l'`alt` ; le noir et blanc est appliqué automatiquement par le CSS |
-| Liens YouTube par édition | `editions.html` | remplacer les liens de recherche YouTube par les playlists exactes |
-| Photo du lieu | `index.html`, section « Le lieu » | remplacer `assets/img/lieu/centre-congres.svg` par une vraie photo |
+| Liens YouTube par édition | `editions.html` et pages `editions/` | remplacer les liens de recherche YouTube par les playlists exactes |
+| Jeton Mapbox | `assets/js/map.js` | le jeton public et le style rouge proviennent du compte personnel `solene-drnx` (ancien site) ; créer un jeton sur un compte Mapbox de l'association, restreint au domaine tedxuttroyes.fr, et y transférer le style |
 | Image de partage (Open Graph) | `assets/img/og/og-default.jpg` | placeholder généré aux couleurs du site, à remplacer par un visuel conçu (1200x630) |
 | Logos partenaires | `partenaires.html` | suivre le gabarit commenté ; ne pas retirer les limites de taille CSS (règle TEDx) |
 | Mentions légales | `mentions-legales.html` | compléter les champs entre crochets |

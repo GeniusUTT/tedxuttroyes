@@ -1687,6 +1687,237 @@ details.faq[open] summary .icon {
   margin-top: 10px;
 }
 
+.m3-lieu .fig-id {
+  color: var(--rouge-vif);
+}
+
+/* Le releve de terrain : la photo sert de fond, le plan de situation rouge
+   et la fiche d'adresse sont epingles dessus, comme sur une table de travail.
+   Le plan est un SVG local trace a la main : aucun service de cartes. */
+
+.lieu-scene {
+  position: relative;
+  border: 1px solid var(--filet);
+}
+
+.lieu-scene img {
+  display: block;
+  border: 0;
+}
+
+.lieu-mot {
+  position: absolute;
+  top: clamp(6px, 2%, 14px);
+  right: clamp(10px, 3%, 20px);
+  z-index: 1;
+  margin: 0;
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 8vw, 4.6rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: rgba(237, 234, 228, 0.22);
+  pointer-events: none;
+}
+
+.lieu-plan {
+  position: absolute;
+  top: clamp(12px, 6%, 30px);
+  left: clamp(12px, 4%, 26px);
+  z-index: 2;
+  width: clamp(140px, 34%, 220px);
+  height: auto;
+  border: 1px solid rgba(8, 8, 8, 0.4);
+}
+
+.lieu-plan .pl-bg {
+  fill: var(--rouge);
+}
+
+.lieu-plan .pl-rue {
+  fill: none;
+  stroke: rgba(8, 8, 8, 0.24);
+  stroke-width: 8;
+  stroke-linecap: round;
+}
+
+.lieu-plan .pl-rue--fine {
+  stroke-width: 3.5;
+  stroke: rgba(8, 8, 8, 0.18);
+}
+
+.lieu-plan .pl-canal {
+  fill: none;
+  stroke: rgba(8, 8, 8, 0.34);
+  stroke-width: 12;
+}
+
+.lieu-plan .pl-txt {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  fill: rgba(255, 255, 255, 0.82);
+}
+
+.lieu-plan .pl-txt--poi {
+  font-size: 8px;
+  fill: rgba(255, 255, 255, 0.6);
+}
+
+.lieu-plan .pl-txt--ici {
+  font-weight: 700;
+  fill: #ffffff;
+}
+
+.lieu-plan .pl-ici-dot {
+  fill: var(--noir);
+  stroke: var(--papier);
+  stroke-width: 2.5;
+}
+
+.lieu-plan .pl-fig {
+  fill: rgba(8, 8, 8, 0.5);
+}
+
+.lieu-fiche {
+  position: absolute;
+  right: clamp(12px, 4%, 26px);
+  bottom: clamp(12px, 6%, 30px);
+  z-index: 2;
+  width: min(320px, 56%);
+  padding: clamp(14px, 3vw, 22px);
+  background-color: rgba(8, 8, 8, 0.55);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--filet);
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .lieu-fiche {
+    background-color: rgba(8, 8, 8, 0.92);
+  }
+}
+
+.lieu-fiche-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+  margin-bottom: 10px;
+}
+
+.lieu-fiche-kicker::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 2px;
+  background-color: var(--rouge);
+  vertical-align: 0.28em;
+  margin-right: 10px;
+}
+
+.lieu-fiche-nom {
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  line-height: 1.1;
+  color: var(--papier);
+}
+
+.lieu-fiche-adresse {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--encre);
+  margin-top: 8px;
+}
+
+.lieu-fiche .link-more {
+  margin-top: 14px;
+}
+
+/* La carte interactive : chargee paresseusement par map.js, elle prend
+   exactement le gabarit du plan de situation et fond par-dessus.
+   Le plan SVG reste la version par defaut tant que la carte n'est pas la.
+   Le selecteur est double car mapbox-gl.css, charge apres ce fichier,
+   pose position: relative sur .mapboxgl-map a specificite simple. */
+.lieu-scene .lieu-map {
+  position: absolute;
+  top: clamp(12px, 6%, 30px);
+  left: clamp(12px, 4%, 26px);
+  z-index: 3;
+  width: clamp(140px, 34%, 220px);
+  aspect-ratio: 240 / 330;
+  border: 1px solid rgba(8, 8, 8, 0.4);
+  background-color: var(--rouge);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease;
+}
+
+.lieu-scene.map-live .lieu-map {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lieu-scene.map-live .lieu-plan {
+  visibility: hidden;
+}
+
+.lieu-ici {
+  position: relative;
+  width: 13px;
+  height: 13px;
+}
+
+.lieu-ici-dot {
+  display: block;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background-color: var(--noir);
+  border: 2.5px solid var(--papier);
+}
+
+.lieu-ici-lbl {
+  position: absolute;
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  white-space: nowrap;
+  text-shadow: 0 0 4px rgba(8, 8, 8, 0.35);
+}
+
+/* Sur petit ecran, la fiche quitte la photo et se pose dessous,
+   toujours dans le meme document borde. */
+@media (max-width: 639px) {
+  .lieu-mot {
+    font-size: 2rem;
+  }
+
+  .lieu-plan,
+  .lieu-scene .lieu-map {
+    width: 44%;
+    max-width: 180px;
+  }
+
+  .lieu-fiche {
+    position: static;
+    width: auto;
+    background-color: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border: 0;
+    border-top: 1px solid var(--filet);
+  }
+}
+
 .m3-body {
   padding: 20px 0 0;
 }

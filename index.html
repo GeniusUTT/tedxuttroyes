@@ -33,6 +33,7 @@
   <script>document.documentElement.classList.add("js");</script>
   <script src="assets/js/main.js" defer></script>
   <script src="assets/js/line.js" defer></script>
+  <script src="assets/js/map.js" defer></script>
 
   <script type="application/ld+json">
   {
@@ -53,6 +54,11 @@
         "addressLocality": "Troyes",
         "postalCode": "10000",
         "addressCountry": "FR"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 48.298433,
+        "longitude": 4.077912
       }
     },
     "image": ["https://tedxuttroyes.fr/assets/img/og/og-default.jpg"],
@@ -233,17 +239,57 @@
           <p class="lead">Le corps compose avec la maladie, la ville avec sa rivière, l'ingénieur avec la matière. S'adapter, c'est faire de la ligne un appui. La soirée aussi compose avec son réel : une date, une salle, huit cents fauteuils. Ici, la ligne plie.</p>
         </div>
         <figure class="m3-lieu" data-line="avoid" data-line-margin="28" data-line-margin-m="14">
-          <img src="assets/img/lieu/centre-congres.webp" alt="Le Centre de Congrès de l'Aube, à Troyes" width="1280" height="957" loading="lazy">
-          <figcaption>Document : le Centre de Congrès de l'Aube</figcaption>
+          <!-- Le releve de terrain : la photo du lieu sert de fond, le plan de
+               situation et la fiche d'adresse sont epingles par-dessus.
+               Le plan SVG local est la version par defaut (sans JS, sans
+               WebGL) ; quand le bloc approche de l'ecran, map.js charge
+               Mapbox GL et la carte interactive prend sa place. -->
+          <div class="lieu-scene">
+            <img src="assets/img/lieu/centre-congres.webp" alt="La foule devant le Centre de Congrès de l'Aube, à Troyes" width="1280" height="957" loading="lazy">
+            <p class="lieu-mot" aria-hidden="true">Le lieu</p>
+            <svg class="lieu-plan" viewBox="0 0 240 330" aria-hidden="true" focusable="false">
+              <rect class="pl-bg" width="240" height="330"/>
+              <g class="pl-rue pl-rue--fine">
+                <path d="M96 0 L150 92"/>
+                <path d="M150 0 L204 62"/>
+                <path d="M104 118 L96 330"/>
+                <path d="M0 290 L240 268"/>
+              </g>
+              <g class="pl-rue">
+                <path d="M0 52 L240 30"/>
+                <path d="M34 0 L58 330"/>
+                <path d="M0 232 L240 210"/>
+              </g>
+              <path class="pl-canal" d="M168 0 C158 60 176 120 164 190 C156 240 174 290 168 330"/>
+              <text class="pl-txt" x="66" y="42" transform="rotate(-5 66 42)">bd danton</text>
+              <text class="pl-txt" x="40" y="96" transform="rotate(86 40 96)">rue de la paix</text>
+              <text class="pl-txt" x="64" y="226" transform="rotate(-5 64 226)">rue charles gros</text>
+              <text class="pl-txt" x="92" y="206" transform="rotate(88 92 206)">rue louis ulbach</text>
+              <text class="pl-txt pl-txt--poi" x="14" y="140">théâtre de</text>
+              <text class="pl-txt pl-txt--poi" x="14" y="151">champagne</text>
+              <text class="pl-txt pl-txt--poi" x="188" y="98">cathédrale</text>
+              <text class="pl-txt pl-txt--poi" x="186" y="158" transform="rotate(84 186 158)">le canal</text>
+              <circle class="pl-ici-dot" cx="146" cy="178" r="6"/>
+              <text class="pl-txt pl-txt--ici" x="58" y="182">vous êtes ici</text>
+              <rect class="pl-fig" y="306" width="240" height="24"/>
+              <text class="pl-txt" x="10" y="321">fig. 02 · plan de situation</text>
+            </svg>
+            <div class="lieu-map" id="lieu-map" aria-label="Carte interactive du quartier : Centre de Congrès de l'Aube, 2 rue Pierre Labonde, 10000 Troyes"></div>
+            <div class="lieu-fiche">
+              <p class="lieu-fiche-kicker">Adresse relevée</p>
+              <p class="lieu-fiche-nom">Centre de Congrès de l'Aube</p>
+              <p class="lieu-fiche-adresse">2 rue Pierre Labonde<br>10000 Troyes</p>
+              <a class="link-more" href="https://www.google.com/maps/search/?api=1&amp;query=Centre+de+Congr%C3%A8s+de+l%27Aube+Troyes" target="_blank" rel="noopener">Voir sur la carte<span class="visually-hidden"> (nouvelle fenêtre)</span>
+                <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+              </a>
+            </div>
+          </div>
+          <figcaption><span class="fig-id">fig. 02</span> : le Centre de Congrès de l'Aube, photo et plan de situation</figcaption>
         </figure>
         <div class="m3-body colL">
           <h3 class="h-md">Centre de Congrès de l'Aube</h3>
           <p class="lead">Un auditorium au bord du canal, à un quart d'heure à pied de la gare, au ras du centre ancien. Une scène unique, une acoustique dessinée pour la voix, 800 fauteuils pour la dixième édition.</p>
           <ul class="facts">
-            <li>
-              <strong>2 rue Pierre Labonde, 10000 Troyes</strong>
-              <span class="data">quais de Seine, centre-ville</span>
-            </li>
             <li>
               <strong>Jusqu'à 800 personnes</strong>
               <span class="data">configuration auditorium</span>
@@ -253,11 +299,6 @@
               <span class="data">bus TCAT et parkings publics à proximité</span>
             </li>
           </ul>
-          <p class="more-row">
-            <a class="link-more" href="https://www.google.com/maps/search/?api=1&amp;query=Centre+de+Congr%C3%A8s+de+l%27Aube+Troyes" target="_blank" rel="noopener">Voir sur la carte<span class="visually-hidden"> (nouvelle fenêtre)</span>
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
-            </a>
-          </p>
           <h3 class="peek-title">La soirée, réglée au quart d'heure</h3>
           <ol class="prog-peek">
             <li><strong>19h00</strong> Ouverture des portes</li>
