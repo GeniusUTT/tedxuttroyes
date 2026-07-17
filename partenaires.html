@@ -75,9 +75,8 @@
       </ul>
     </nav>
     <div class="mobile-menu-foot">
-      <!-- PLACEHOLDER : remplacer par le vrai lien HelloAsso de billetterie -->
       <a class="btn btn--primary" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition">Réserver ma place</a>
-      <p class="mobile-menu-date">Jeudi 18 mars 2027 · 19h30 · Centre de Congrès de l'Aube, Troyes</p>
+      <p class="mobile-menu-date">Jeudi 18 mars 2027 · 18h00 · Centre de Congrès de l'Aube, Troyes</p>
     </div>
   </div>
 
@@ -99,25 +98,68 @@
         <div class="sec-body">
           <h2 class="visually-hidden" id="titre-partenaires">Les partenaires de l'édition 2027</h2>
 
-          <!-- GABARIT : pour afficher un partenaire confirme, remplacez une tuile par :
+          <!-- GABARIT : une tuile partenaire = un logo enveloppe d'un lien vers
+               le site du partenaire :
 
           <li class="partner-tile">
-            <img src="assets/img/partenaires/nom-du-partenaire.png" alt="Nom du partenaire" width="300" height="120" loading="lazy">
+            <a href="https://exemple.fr" target="_blank" rel="noopener">
+              <img src="assets/img/partenaires/nom-du-partenaire.webp" alt="Nom du partenaire" width="300" height="120" loading="lazy">
+              <span class="visually-hidden"> (nouvelle fenêtre)</span>
+            </a>
           </li>
 
-          (creez le dossier assets/img/partenaires/ au premier ajout)
           Regle TEDx : le CSS plafonne la taille des logos pour qu'ils restent
           plus petits que le logo TEDxUTTroyes. Ne retirez pas ces limites. -->
 
+          <!-- PLACEHOLDER : partenaires repris de l'edition 2026 en attendant la
+               liste 2027 ; remplacer chaque href="#" par l'URL du site officiel
+               du partenaire (et retirer les partenaires non reconduits). -->
           <ul class="partners-grid">
-            <li class="partner-tile"><span>partenaire à confirmer</span></li>
-            <li class="partner-tile"><span>partenaire à confirmer</span></li>
-            <li class="partner-tile"><span>partenaire à confirmer</span></li>
-            <li class="partner-tile"><span>partenaire à confirmer</span></li>
-            <li class="partner-tile"><span>partenaire à confirmer</span></li>
-            <li class="partner-tile"><span>partenaire à confirmer</span></li>
-            <li class="partner-tile"><span>partenaire à confirmer</span></li>
-            <li class="partner-tile"><span>partenaire à confirmer</span></li>
+            <li class="partner-tile">
+              <a href="https://www.utt.fr/" target="_blank" rel="noopener noreferrer"><img src="assets/img/partenaires/logo-utt.webp" alt="Université de Technologie de Troyes" width="233" height="240" loading="lazy"></a>
+            </li>
+            <li class="partner-tile">
+              <a href="https://fondation-utt.odoo.com/" target="_blank" rel="noopener noreferrer"><img src="assets/img/partenaires/logo-fondation-utt.webp" alt="Fondation UTT" width="600" height="169" loading="lazy"></a>
+            </li>
+            <li class="partner-tile">
+              <a href="https://www.instagram.com/geniusutt/" target="_blank" rel="noopener noreferrer"><img src="assets/img/partenaires/logo-genius-utt.webp" alt="Genius UTT" width="240" height="240" loading="lazy"></a>
+            </li>
+            <li class="partner-tile">
+              <a href="https://bde.utt.fr/" target="_blank" rel="noopener noreferrer"><img src="assets/img/partenaires/logo-bde.webp" alt="BDE Genius UTT" width="240" height="240" loading="lazy"></a>
+            </li>
+            <li class="partner-tile">
+              <a href="https://troyes-champagne-metropole.fr/" target="_blank" rel="noopener noreferrer"><img src="assets/img/partenaires/logo-troyes.webp" alt="Troyes Champagne Métropole" width="500" height="196" loading="lazy"></a>
+            </li>
+            <li class="partner-tile">
+              <a href="https://www.aubassadeurs.fr/" target="_blank" rel="noopener noreferrer"><img src="assets/img/partenaires/logo-aube.webp" alt="Les Aubassadeurs, l'Aube puissance dix" width="406" height="240" loading="lazy"></a>
+            </li>
+            <li class="partner-tile">
+              <a href="https://tcat.fr/" target="_blank" rel="noopener noreferrer"><img src="assets/img/partenaires/logo-tcat.webp" alt="TCAT, transports en commun de l'agglomération troyenne" width="240" height="240" loading="lazy"></a>
+            </li>
+            <li class="partner-tile">
+              <a href="https://www.crous-reims.fr/" target="_blank" rel="noopener noreferrer"><img src="assets/img/partenaires/logo-crous-reims.webp" alt="Crous de Reims" width="200" height="200" loading="lazy"></a>
+            </li>
+            <li class="partner-tile">
+              <a href="https://www.etudiant.gouv.fr/fr/cvec-une-demarche-de-rentree-incontournable-955" target="_blank" rel="noopener noreferrer"><img src="assets/img/partenaires/logo-cvec.webp" alt="CVEC, contribution de vie étudiante et de campus" width="240" height="240" loading="lazy"></a>
+            </li>
+            <li class="partner-tile">
+              <a href="https://www.jcdecaux.fr/" target="_blank" rel="noopener noreferrer"><img src="assets/img/partenaires/logo-jcdecaux.webp" alt="JCDecaux" width="240" height="240" loading="lazy"></a>
+            </li>
+            <li class="partner-tile">
+              <a href="https://volvocars-concessions.com/troyes" target="_blank" rel="noopener noreferrer"><img src="assets/img/partenaires/logo-volvo.webp" alt="Volvo" width="485" height="240" loading="lazy"></a>
+            </li>
+            <li class="partner-tile">
+              <a href="https://www.amplitude-auto.com/" target="_blank" rel="noopener noreferrer"><img src="assets/img/partenaires/logo-amplitude.webp" alt="Amplitude" width="450" height="112" loading="lazy"></a>
+            </li>
+            <li class="partner-tile">
+              <a href="https://www.instagram.com/cheersutt/" target="_blank" rel="noopener noreferrer"><img src="assets/img/partenaires/logo-cheers.webp" alt="Cheers" width="240" height="240" loading="lazy"></a>
+            </li>
+            <li class="partner-tile">
+              <a href="https://www.instagram.com/argentiqueutt/" target="_blank" rel="noopener noreferrer"><img src="assets/img/partenaires/logo-argentique.webp" alt="Argentique, club photo de l'UTT" width="200" height="200" loading="lazy"></a>
+            </li>
+            <li class="partner-tile">
+              <a href="https://www.instagram.com/mediautt/" target="_blank" rel="noopener noreferrer"><img src="assets/img/partenaires/logo-media.webp" alt="Média UTT" width="248" height="240" loading="lazy"></a>
+            </li>
           </ul>
         </div>
       </div>
@@ -161,6 +203,7 @@
           <ul class="footer-list">
             
             <li><a href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition">Réserver ma place</a></li>
+            <li><a href="devenir-speaker.html">Devenir speaker</a></li>
             
             <li><a href="https://www.ted.com/tedx" target="_blank" rel="noopener">Le programme TEDx<span class="visually-hidden"> (nouvelle fenêtre)</span></a></li>
             <li><a href="https://www.youtube.com/@TEDx" target="_blank" rel="noopener">Chaîne TEDx Talks<span class="visually-hidden"> (nouvelle fenêtre)</span></a></li>

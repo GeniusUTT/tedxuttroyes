@@ -22,7 +22,7 @@ Le déploiement est fait par Baptiste via Git/SSH sur OVH mutualisé. Attention 
 - **Zéro framework, zéro tracker, zéro cookie.** Polices hébergées en local (`assets/fonts/`). Seule exception aux requêtes externes : la carte Mapbox de l'accueil (chargée paresseusement, plan SVG local en fallback), documentée dans les mentions légales.
 - **Conformité TEDx** : aucun partenaire sur l'accueil ; texte officiel « Qu'est-ce que TEDx ? » et lien ted.com/tedx sur l'accueil ; mention « Cet événement TEDx indépendant est organisé sous licence de TED. » dans chaque footer ; toujours « TEDxUTTroyes » en entier, jamais en capitales forcées ; logos partenaires plafonnés en CSS sous la taille du logo de l'événement.
 - **Jamais d'email personnel** des membres de l'équipe sur le site (nom, rôle et LinkedIn uniquement).
-- **DA « le relevé »** : zéro border-radius, zéro ombre portée ou halo, photos d'archives en noir et blanc réchauffé via `filter` CSS. Les speakers non annoncés sont des fiches sous embargo (barres de caviardage), les éditions un registre, le compte à rebours un téléscripteur mono d'une ligne.
+- **DA « le relevé »** : zéro border-radius, zéro ombre portée ou halo. Les photos sont affichées en couleur (le noir et blanc a été retiré à la demande de Baptiste le 2026-07-17 ; seul le fond du hero reste assombri). Les speakers non annoncés sont des fiches sous embargo (barres de caviardage), les éditions un registre, le compte à rebours un téléscripteur mono d'une ligne.
 - Les emplacements à compléter portent un commentaire `PLACEHOLDER` : en ajouter sur toute donnée inventée ou provisoire, ne pas en retirer sans la vraie valeur.
 
 Baptiste préfère valider un plan avant l'écriture du code pour tout changement non trivial.
