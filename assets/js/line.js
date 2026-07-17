@@ -1,9 +1,10 @@
 /* TEDxUTTroyes 2027 - la ligne continue (accueil uniquement)
    Un seul trait rouge parcourt la page : il nait au seuil sous le titre,
-   reste droit quand le mot le franchit, plie autour du bloc du lieu,
-   redescend a 2016, deroule la frise des dix ans, forme le 1 du grand 10,
-   se branche dans le bouton Reserver, puis file en trait fin souligner
-   la mention de licence TED au pied de page.
+   reste droit quand les mots le franchissent (ancres cross, sens ltr ou
+   rtl), plie autour des blocs qui portent l'ancre avoid (grille des
+   speakers, lieu, a gauche ou a droite), redescend a 2016, deroule la
+   frise des dix ans, forme le 1 du grand 10, et se branche dans le
+   bouton Reserver.
    Principe : le CSS place les contenus, ce script mesure et relie.
    Le chemin SVG est reconstruit a chaque changement de geometrie.
    Sans JavaScript ou en cas d'echec : ligne verticale statique en CSS. */
@@ -42,12 +43,22 @@
   var tableM = [];      /* etapes [scroll, fraction] du trait principal */
   var tailFrom = 0;     /* fenetre de scroll ou l'epilogue se trace */
   var tailTo = 1;
-  var cross = null;     /* etat du mot qui franchit (desktop seulement) */
+  var crosses = [];     /* mots qui franchissent, actifs ce build (desktop) */
+  var crossStates = []; /* etat persistant par ancre cross : {el, p, dist} */
   var plugEl = null;    /* le bouton Reserver : noir tant que la ligne n'y est pas */
-  var lastCrossP = 1;
-  var lastDist = 0;
   var cs = window.scrollY;
   var rafId = 0;
+
+  function crossStateFor(el) {
+    for (var i = 0; i < crossStates.length; i++) {
+      if (crossStates[i].el === el) {
+        return crossStates[i];
+      }
+    }
+    var st = { el: el, p: 1, dist: 0 };
+    crossStates.push(st);
+    return st;
+  }
 
   /* ------------------------------------------------------------------
      Outils de geometrie
@@ -198,42 +209,78 @@
     var el;
     var r;
 
-    /* Moment 2 : le mot franchit, la ligne reste droite */
-    el = main.querySelector('[data-line="cross"]');
-    cross = null;
-    if (el) {
+    /* Les mots qui franchissent : la ligne reste droite, seul le mot
+       bouge. Sens par defaut : le mot part de la marge et traverse vers
+       la droite. data-cross-dir="rtl" : le mot arrive du bord droit du
+       viewport et vient buter contre la ligne sans la franchir. */
+    var crossEls = main.querySelectorAll('[data-line="cross"]');
+    crosses = [];
+    var c;
+    for (c = 0; c < crossEls.length; c++) {
+      el = crossEls[c];
       var word = el.querySelector(".cross-word");
+      var st = crossStateFor(el);
+      var active = false;
       if (word && horiz && !reduce.matches) {
         r = absRect(el, sx, sy);
         var wr = absRect(word, sx, sy);
-        var layoutRight = wr.right - (lastCrossP - 1) * lastDist;
-        var dist = Math.round(layoutRight - (axB - 28));
+        var rtl = el.getAttribute("data-cross-dir") === "rtl";
+        var dist;
+        if (rtl) {
+          var layoutRightR = wr.right - (1 - st.p) * st.dist;
+          dist = Math.round((W - 24) - layoutRightR);
+        } else {
+          var layoutRight = wr.right - (st.p - 1) * st.dist;
+          dist = Math.round(layoutRight - (axB - 28));
+        }
         if (dist > 40) {
-          lastDist = dist;
+          st.dist = dist;
           el.style.setProperty("--cross-dist", dist + "px");
-          cross = { el: el, top: r.top, h: r.height };
+          crosses.push({ el: el, st: st, top: r.top, h: r.height });
+          active = true;
         }
       }
-      if (!cross) {
+      if (!active) {
         el.style.removeProperty("--cross-dist");
         el.style.removeProperty("--cross-p");
-        lastCrossP = 1;
-        lastDist = 0;
+        st.p = 1;
+        st.dist = 0;
       }
     }
 
-    /* Moment 3 : la pliure autour du bloc du lieu */
-    el = main.querySelector('[data-line="avoid"]');
-    if (el) {
-      r = absRect(el, sx, sy);
+    /* Les pliures : la ligne plie autour de chaque bloc data-line="avoid",
+       vers la gauche par defaut, vers la droite avec data-line-side="right".
+       Les blocs qui se chevaucheraient sont ignores (le trace doit rester
+       monotone du haut vers le bas). */
+    var avoidEls = main.querySelectorAll('[data-line="avoid"]');
+    var avoids = [];
+    for (c = 0; c < avoidEls.length; c++) {
+      avoids.push({ el: avoidEls[c], r: absRect(avoidEls[c], sx, sy) });
+    }
+    avoids.sort(function (a, b) {
+      return a.r.top - b.r.top;
+    });
+    var lastY = 0;
+    for (c = 0; c < avoids.length; c++) {
+      el = avoids[c].el;
+      r = avoids[c].r;
       var m = parseFloat(el.getAttribute(horiz ? "data-line-margin" : "data-line-margin-m"));
       if (!m || m < 0) {
         m = horiz ? 28 : 14;
       }
-      var ex = horiz
-        ? Math.max(4, r.left - m)
-        : Math.max(4, Math.min(r.left - m, axA - 10));
+      if (r.top - m < lastY + 12) {
+        continue;
+      }
+      var ex;
+      if (el.getAttribute("data-line-side") === "right") {
+        ex = Math.min(W - 4, r.right + m);
+      } else {
+        ex = horiz
+          ? Math.max(4, r.left - m)
+          : Math.max(4, Math.min(r.left - m, axA - 10));
+      }
       pts.push([axB, r.top - m], [ex, r.top - m], [ex, r.bottom + m], [axB, r.bottom + m]);
+      lastY = r.bottom + m;
     }
 
     /* Moment 4 : retour a 2016, virage, puis l'escalier des editions
@@ -291,10 +338,8 @@
       pts.push([dropX, H]);
     }
 
-    /* Epilogue : trait fin jusqu'a la mention de licence TED */
+    /* Epilogue : trait fin (non trace pour l'instant) */
     var tailPts = null;
-    el = doc.querySelector('[data-line="finale"]');
-    
 
     /* Phase 2 : ecritures */
     if (!svg) {
@@ -344,12 +389,13 @@
     }
     var pT = clamp01((scroll - tailFrom) / Math.max(1, tailTo - tailFrom));
     pathTail.style.strokeDashoffset = (LEN * (1 - pT)).toFixed(2);
-    if (cross) {
-      var cp = clamp01((scroll + vh * 0.85 - cross.top) / Math.max(1, cross.h * 0.75));
+    for (var i = 0; i < crosses.length; i++) {
+      var cr = crosses[i];
+      var cp = clamp01((scroll + vh * 0.85 - cr.top) / Math.max(1, cr.h * 0.75));
       cp = 1 - Math.pow(1 - cp, 3);
-      if (Math.abs(cp - lastCrossP) > 0.001) {
-        lastCrossP = cp;
-        cross.el.style.setProperty("--cross-p", cp.toFixed(3));
+      if (Math.abs(cp - cr.st.p) > 0.001) {
+        cr.st.p = cp;
+        cr.el.style.setProperty("--cross-p", cp.toFixed(3));
       }
     }
   }

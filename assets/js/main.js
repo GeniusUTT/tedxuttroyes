@@ -1,8 +1,8 @@
 /* TEDxUTTroyes 2027 - script principal ("Le releve")
    Zero dependance, charge en defer.
    Modules : etat du header, menu mobile accessible, telescripteur
-   du compte a rebours, trace du dixieme baton. Les reveals au scroll
-   ont ete retires volontairement : une seule sequence d'entree suffit. */
+   du compte a rebours, trace du dixieme baton, allumage progressif
+   de la feuille de salle (accueil). */
 
 (function () {
   "use strict";
@@ -179,6 +179,46 @@
         { threshold: 0.6 }
       );
       tallyObserver.observe(tally);
+    }
+  }
+
+  /* ------------------------------------------------------------------
+     La feuille de salle vivante (accueil) : chaque creneau du programme
+     s'allume quand il atteint le centre du viewport, et le reste.
+     Sans IntersectionObserver ou en reduced motion : tout est allume.
+     ------------------------------------------------------------------ */
+  var tlRows = doc.querySelectorAll(".tl-row");
+  if (tlRows.length) {
+    var tlLightAll = function () {
+      for (var i = 0; i < tlRows.length; i++) {
+        tlRows[i].classList.add("is-on");
+      }
+    };
+    if (!("IntersectionObserver" in window) || reduceMotion.matches) {
+      tlLightAll();
+    } else {
+      var tlObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-on");
+              tlObserver.unobserve(entry.target);
+            }
+          });
+        },
+        { rootMargin: "-42% 0px -42% 0px", threshold: 0 }
+      );
+      for (var r = 0; r < tlRows.length; r++) {
+        tlObserver.observe(tlRows[r]);
+      }
+      if (reduceMotion.addEventListener) {
+        reduceMotion.addEventListener("change", function () {
+          if (reduceMotion.matches) {
+            tlObserver.disconnect();
+            tlLightAll();
+          }
+        });
+      }
     }
   }
 })();

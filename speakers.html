@@ -50,6 +50,7 @@
         <a href="partenaires.html">Partenaires</a>
         <a href="a-propos.html">À propos</a>
         <a href="faq.html">FAQ</a>
+        <a class="btn btn--ghost btn--sm" href="devenir-speaker.html">Postuler</a>
         <!-- PLACEHOLDER : remplacer par le vrai lien HelloAsso de billetterie -->
         <a class="btn btn--primary btn--sm" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition">Réserver</a>
       </nav>
@@ -75,6 +76,7 @@
       </ul>
     </nav>
     <div class="mobile-menu-foot">
+      <a class="btn btn--ghost" href="devenir-speaker.html">Postuler comme speaker</a>
       <!-- PLACEHOLDER : remplacer par le vrai lien HelloAsso de billetterie -->
       <a class="btn btn--primary" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition">Réserver ma place</a>
       <p class="mobile-menu-date">Jeudi 18 mars 2027 · 18h00 · Centre de Congrès de l'Aube, Troyes</p>
@@ -99,57 +101,78 @@
         <div class="sec-body">
           <h2 class="visually-hidden" id="titre-speakers">Les six intervenants de l'édition 2027</h2>
 
-          <!-- GABARIT : pour annoncer un speaker, remplacez une fiche sous embargo par celle-ci
-               (creez le dossier assets/img/speakers/ au premier ajout ; la photo est optionnelle) :
+          <!-- GABARIT : pour annoncer un speaker, remplacer une carte sous
+               embargo par celle-ci (creer le dossier assets/img/speakers/
+               au premier ajout ; meme gabarit sur l'accueil) :
 
-          <li class="emb-row emb-row--photo">
-            <span class="emb-id">Intervenant·e 01</span>
-            <div>
-              <p class="emb-name">Prénom Nom</p>
-              <p class="emb-sub">sujet : l'angle du talk en une ligne</p>
+          <li class="sp-card sp-card--live">
+            <div class="sp-photo">
+              <img src="assets/img/speakers/prenom-nom.jpg" alt="Portrait de Prénom Nom" width="600" height="750" loading="lazy">
             </div>
-            <img src="assets/img/speakers/prenom-nom.jpg" alt="Portrait de Prénom Nom" width="600" height="750" loading="lazy">
+            <span class="sp-id">Intervenant·e 01</span>
+            <p class="sp-name">Prénom Nom</p>
+            <p class="sp-bio">Mini bio en une ou deux phrases : qui parle, depuis quelle expérience.</p>
+            <p class="sp-talk"><span class="sp-talk-k">Talk</span> Le titre du talk</p>
+            <span class="sp-status sp-status--live">annoncé·e</span>
           </li>
           -->
 
-          <ul class="emb">
-            <li class="emb-row">
-              <span class="emb-id">Intervenant·e 01</span>
-              <span class="emb-name" aria-hidden="true"><span class="redact" style="width: 4.5ch"></span><span class="redact" style="width: 7ch"></span></span>
+          <ol class="sgrid">
+            <li class="sp-card">
+              <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+              <span class="sp-id">Intervenant·e 01</span>
+              <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 4.5ch"></span><span class="redact" style="width: 7ch"></span></p>
               <span class="visually-hidden">Nom sous embargo</span>
-              <span class="emb-status">annonce : à venir</span>
+              <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 100%"></span><span class="redact" style="width: 88%"></span><span class="redact" style="width: 61%"></span></p>
+              <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 13ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
+              <span class="sp-status">annonce : à venir</span>
             </li>
-            <li class="emb-row">
-              <span class="emb-id">Intervenant·e 02</span>
-              <span class="emb-name" aria-hidden="true"><span class="redact" style="width: 6ch"></span><span class="redact" style="width: 5ch"></span></span>
+            <li class="sp-card">
+              <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+              <span class="sp-id">Intervenant·e 02</span>
+              <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 6ch"></span><span class="redact" style="width: 5ch"></span></p>
               <span class="visually-hidden">Nom sous embargo</span>
-              <span class="emb-status">annonce : à venir</span>
+              <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 94%"></span><span class="redact" style="width: 100%"></span><span class="redact" style="width: 47%"></span></p>
+              <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 10ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
+              <span class="sp-status">annonce : à venir</span>
             </li>
-            <li class="emb-row">
-              <span class="emb-id">Intervenant·e 03</span>
-              <span class="emb-name" aria-hidden="true"><span class="redact" style="width: 5ch"></span><span class="redact" style="width: 8.5ch"></span></span>
+            <li class="sp-card">
+              <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+              <span class="sp-id">Intervenant·e 03</span>
+              <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 5ch"></span><span class="redact" style="width: 8.5ch"></span></p>
               <span class="visually-hidden">Nom sous embargo</span>
-              <span class="emb-status">annonce : à venir</span>
+              <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 100%"></span><span class="redact" style="width: 72%"></span><span class="redact" style="width: 84%"></span></p>
+              <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 15ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
+              <span class="sp-status">annonce : à venir</span>
             </li>
-            <li class="emb-row">
-              <span class="emb-id">Intervenant·e 04</span>
-              <span class="emb-name" aria-hidden="true"><span class="redact" style="width: 7ch"></span><span class="redact" style="width: 4ch"></span></span>
+            <li class="sp-card">
+              <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+              <span class="sp-id">Intervenant·e 04</span>
+              <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 7ch"></span><span class="redact" style="width: 4ch"></span></p>
               <span class="visually-hidden">Nom sous embargo</span>
-              <span class="emb-status">annonce : à venir</span>
+              <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 86%"></span><span class="redact" style="width: 100%"></span><span class="redact" style="width: 55%"></span></p>
+              <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 11ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
+              <span class="sp-status">annonce : à venir</span>
             </li>
-            <li class="emb-row">
-              <span class="emb-id">Intervenant·e 05</span>
-              <span class="emb-name" aria-hidden="true"><span class="redact" style="width: 5.5ch"></span><span class="redact" style="width: 6.5ch"></span></span>
+            <li class="sp-card">
+              <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+              <span class="sp-id">Intervenant·e 05</span>
+              <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 5.5ch"></span><span class="redact" style="width: 6.5ch"></span></p>
               <span class="visually-hidden">Nom sous embargo</span>
-              <span class="emb-status">annonce : à venir</span>
+              <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 100%"></span><span class="redact" style="width: 91%"></span><span class="redact" style="width: 38%"></span></p>
+              <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 14ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
+              <span class="sp-status">annonce : à venir</span>
             </li>
-            <li class="emb-row">
-              <span class="emb-id">Intervenant·e 06</span>
-              <span class="emb-name" aria-hidden="true"><span class="redact" style="width: 4ch"></span><span class="redact" style="width: 9ch"></span></span>
+            <li class="sp-card">
+              <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+              <span class="sp-id">Intervenant·e 06</span>
+              <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 4ch"></span><span class="redact" style="width: 9ch"></span></p>
               <span class="visually-hidden">Nom sous embargo</span>
-              <span class="emb-status">annonce : à venir</span>
+              <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 96%"></span><span class="redact" style="width: 79%"></span><span class="redact" style="width: 66%"></span></p>
+              <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 12ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
+              <span class="sp-status">annonce : à venir</span>
             </li>
-          </ul>
+          </ol>
 
           <p class="notice">Pour être prévenu à chaque levée d'embargo : la newsletter, depuis la page d'accueil.</p>
         </div>

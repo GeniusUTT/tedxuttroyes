@@ -99,6 +99,7 @@
         <a href="partenaires.html">Partenaires</a>
         <a href="a-propos.html">À propos</a>
         <a href="faq.html">FAQ</a>
+        <a class="btn btn--ghost btn--sm" href="devenir-speaker.html">Postuler</a>
         <!-- PLACEHOLDER : remplacer par le vrai lien HelloAsso de billetterie -->
         <a class="btn btn--primary btn--sm" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition">Réserver</a>
       </nav>
@@ -124,6 +125,7 @@
       </ul>
     </nav>
     <div class="mobile-menu-foot">
+      <a class="btn btn--ghost" href="devenir-speaker.html">Postuler comme speaker</a>
       <!-- PLACEHOLDER : remplacer par le vrai lien HelloAsso de billetterie -->
       <a class="btn btn--primary" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition">Réserver ma place</a>
       <p class="mobile-menu-date">Jeudi 18 mars 2027 · 18h00 · Centre de Congrès de l'Aube, Troyes</p>
@@ -185,20 +187,25 @@
       </div>
     </section>
 
-    <!-- Moment 3 : s'adapter. Le second versant du theme. -->
-    <section class="mom" id="s-adapter">
+    <!-- Moment 3 : s'adapter. Le second versant du theme, installe de
+         l'autre cote de la ligne : le mot arrive du bord droit et vient
+         buter contre elle sans la franchir. -->
+    <section class="mom mom--droite" id="s-adapter" data-line="cross" data-cross-dir="rtl">
       <div class="mwrap">
         <p class="cote">S'adapter</p>
-        <div class="colL">
+        <div class="cross-track cross-track--rtl" aria-hidden="true">
+          <span class="cross-word">Jusqu'ici</span>
+        </div>
+        <div class="colR">
           <h2 class="mom-title">Ce qui ne se franchit pas</h2>
           <p class="lead">Le corps compose avec la maladie, la ville avec sa rivière, l'ingénieur avec la matière. S'adapter, c'est faire de la ligne un appui : plier sans rompre, transformer la contrainte en méthode. C'est le second versant du thème : certaines limites ne se dépassent pas, elles s'apprivoisent, et ce renoncement apparent demande autant de courage que le saut.</p>
         </div>
       </div>
     </section>
 
-    <!-- Moment 4 : les speakers. Six noms attendent leur tour, points poses
-         sur la ligne, cote non franchi. Pas d'ancre data-line : la ligne
-         passe droit, les points s'y accrochent par le CSS. -->
+    <!-- Moment 4 : les speakers. Six fiches sous embargo en grille de
+         deux lignes sur trois colonnes ; le bloc coupe la route de la
+         ligne, qui plie autour comme au lieu (ancre avoid). -->
     <section class="mom" id="speakers">
       <div class="mwrap">
         <p class="cote">Speakers</p>
@@ -206,48 +213,75 @@
           <h2 class="mom-title">Six noms s'apprêtent à franchir</h2>
           <p class="lead">Le 18 mars, six talks racontent la limite depuis la scène troyenne : dix-huit minutes chacun, pas une de plus. Les annonces tomberont une par une d'ici mars.</p>
         </div>
-        <ol class="queue" aria-label="Les six intervenantes et intervenants de 2027, annonces à venir">
-          <li class="q-row">
-            <span class="q-dot" aria-hidden="true"></span>
-            <span class="q-id">Intervenant·e 01</span>
-            <span class="q-name" aria-hidden="true"><span class="redact" style="width: 4.5ch"></span><span class="redact" style="width: 7ch"></span></span>
+        <!-- GABARIT : pour annoncer un speaker, remplacer une carte sous
+             embargo par celle-ci (creer le dossier assets/img/speakers/
+             au premier ajout ; sur speakers.html le chemin est le meme) :
+
+        <li class="sp-card sp-card--live">
+          <div class="sp-photo">
+            <img src="assets/img/speakers/prenom-nom.jpg" alt="Portrait de Prénom Nom" width="600" height="750" loading="lazy">
+          </div>
+          <span class="sp-id">Intervenant·e 01</span>
+          <p class="sp-name">Prénom Nom</p>
+          <p class="sp-bio">Mini bio en une ou deux phrases : qui parle, depuis quelle expérience.</p>
+          <p class="sp-talk"><span class="sp-talk-k">Talk</span> Le titre du talk</p>
+          <span class="sp-status sp-status--live">annoncé·e</span>
+        </li>
+        -->
+        <ol class="sgrid" data-line="avoid" data-line-margin="28" data-line-margin-m="14" aria-label="Les six intervenantes et intervenants de 2027, annonces à venir">
+          <li class="sp-card">
+            <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+            <span class="sp-id">Intervenant·e 01</span>
+            <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 4.5ch"></span><span class="redact" style="width: 7ch"></span></p>
             <span class="visually-hidden">Nom sous embargo</span>
-            <span class="q-status">annonce : à venir</span>
+            <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 100%"></span><span class="redact" style="width: 88%"></span><span class="redact" style="width: 61%"></span></p>
+            <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 13ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
+            <span class="sp-status">annonce : à venir</span>
           </li>
-          <li class="q-row">
-            <span class="q-dot" aria-hidden="true"></span>
-            <span class="q-id">Intervenant·e 02</span>
-            <span class="q-name" aria-hidden="true"><span class="redact" style="width: 6ch"></span><span class="redact" style="width: 5ch"></span></span>
+          <li class="sp-card">
+            <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+            <span class="sp-id">Intervenant·e 02</span>
+            <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 6ch"></span><span class="redact" style="width: 5ch"></span></p>
             <span class="visually-hidden">Nom sous embargo</span>
-            <span class="q-status">annonce : à venir</span>
+            <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 94%"></span><span class="redact" style="width: 100%"></span><span class="redact" style="width: 47%"></span></p>
+            <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 10ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
+            <span class="sp-status">annonce : à venir</span>
           </li>
-          <li class="q-row">
-            <span class="q-dot" aria-hidden="true"></span>
-            <span class="q-id">Intervenant·e 03</span>
-            <span class="q-name" aria-hidden="true"><span class="redact" style="width: 5ch"></span><span class="redact" style="width: 8.5ch"></span></span>
+          <li class="sp-card">
+            <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+            <span class="sp-id">Intervenant·e 03</span>
+            <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 5ch"></span><span class="redact" style="width: 8.5ch"></span></p>
             <span class="visually-hidden">Nom sous embargo</span>
-            <span class="q-status">annonce : à venir</span>
+            <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 100%"></span><span class="redact" style="width: 72%"></span><span class="redact" style="width: 84%"></span></p>
+            <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 15ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
+            <span class="sp-status">annonce : à venir</span>
           </li>
-          <li class="q-row">
-            <span class="q-dot" aria-hidden="true"></span>
-            <span class="q-id">Intervenant·e 04</span>
-            <span class="q-name" aria-hidden="true"><span class="redact" style="width: 7.5ch"></span><span class="redact" style="width: 4ch"></span></span>
+          <li class="sp-card">
+            <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+            <span class="sp-id">Intervenant·e 04</span>
+            <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 7.5ch"></span><span class="redact" style="width: 4ch"></span></p>
             <span class="visually-hidden">Nom sous embargo</span>
-            <span class="q-status">annonce : à venir</span>
+            <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 86%"></span><span class="redact" style="width: 100%"></span><span class="redact" style="width: 55%"></span></p>
+            <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 11ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
+            <span class="sp-status">annonce : à venir</span>
           </li>
-          <li class="q-row">
-            <span class="q-dot" aria-hidden="true"></span>
-            <span class="q-id">Intervenant·e 05</span>
-            <span class="q-name" aria-hidden="true"><span class="redact" style="width: 5.5ch"></span><span class="redact" style="width: 6.5ch"></span></span>
+          <li class="sp-card">
+            <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+            <span class="sp-id">Intervenant·e 05</span>
+            <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 5.5ch"></span><span class="redact" style="width: 6.5ch"></span></p>
             <span class="visually-hidden">Nom sous embargo</span>
-            <span class="q-status">annonce : à venir</span>
+            <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 100%"></span><span class="redact" style="width: 91%"></span><span class="redact" style="width: 38%"></span></p>
+            <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 14ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
+            <span class="sp-status">annonce : à venir</span>
           </li>
-          <li class="q-row">
-            <span class="q-dot" aria-hidden="true"></span>
-            <span class="q-id">Intervenant·e 06</span>
-            <span class="q-name" aria-hidden="true"><span class="redact" style="width: 4ch"></span><span class="redact" style="width: 9ch"></span></span>
+          <li class="sp-card">
+            <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+            <span class="sp-id">Intervenant·e 06</span>
+            <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 4ch"></span><span class="redact" style="width: 9ch"></span></p>
             <span class="visually-hidden">Nom sous embargo</span>
-            <span class="q-status">annonce : à venir</span>
+            <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 96%"></span><span class="redact" style="width: 79%"></span><span class="redact" style="width: 66%"></span></p>
+            <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 12ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
+            <span class="sp-status">annonce : à venir</span>
           </li>
         </ol>
         <div class="colL more-row actions">
@@ -270,16 +304,17 @@
           <p class="lead">La soirée compose avec son réel : une date, une salle, huit cents fauteuils. Le Centre de Congrès de l'Aube, à un quart d'heure à pied de la gare et au ras du centre ancien, offre une scène unique et une acoustique dessinée pour la voix. Ici, la ligne plie.</p>
         </div>
         <figure class="m3-lieu" data-line="avoid" data-line-margin="28" data-line-margin-m="14">
-          <!-- Le releve de terrain : la photo du lieu en bandeau, puis la
-               carte et la fiche d'identite du batiment cote a cote.
-               Le plan SVG local est la version par defaut (sans JS, sans
-               WebGL) ; quand le bloc approche de l'ecran, map.js charge
-               Mapbox GL et la carte interactive prend sa place. -->
-          <div class="lieu-photo">
-            <img src="assets/img/lieu/centre-congres.webp" alt="La foule devant le Centre de Congrès de l'Aube, à Troyes" width="1280" height="957" loading="lazy">
-            <p class="lieu-mot" aria-hidden="true">Le lieu</p>
-          </div>
-          <div class="lieu-duo">
+          <!-- Le releve de terrain : la photo du lieu, la carte et la
+               fiche d'identite du batiment au meme niveau, trois pieces
+               d'un meme dossier. Le plan SVG local est la version par
+               defaut (sans JS, sans WebGL) ; quand le bloc approche de
+               l'ecran, map.js charge Mapbox GL et la carte interactive
+               prend sa place. -->
+          <div class="lieu-trio">
+            <div class="lieu-photo">
+              <img src="assets/img/lieu/centre-congres.webp" alt="La foule devant le Centre de Congrès de l'Aube, à Troyes" width="1280" height="957" loading="lazy">
+              <p class="lieu-mot" aria-hidden="true">Le lieu</p>
+            </div>
             <div class="lieu-scene">
             <svg class="lieu-plan" viewBox="0 0 240 330" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
               <rect class="pl-bg" width="240" height="330"/>
@@ -336,7 +371,9 @@
       </div>
     </section>
 
-    <!-- Moment 6 : le programme. La feuille de salle complete, en grand. -->
+    <!-- Moment 6 : le programme. La feuille de salle vivante : la ligne
+         continue sert de rail, l'heure reste collee au milieu de l'ecran
+         et chaque creneau s'allume quand il atteint le centre. -->
     <section class="mom" id="programme">
       <div class="mwrap">
         <p class="cote">Programme</p>
@@ -344,54 +381,61 @@
           <h2 class="mom-title">La soirée, réglée au quart d'heure</h2>
           <p class="lead">Portes à 18h00 avec un mini forum de recrutement, première voix à 19h30, dernière question vers 22h40. La feuille de salle tient en sept temps.</p>
         </div>
-        <ol class="sheet sheet--wide" aria-label="Le déroulé de la soirée du 18 mars 2027">
-          <li class="sheet-row">
-            <span class="sheet-time">18h00</span>
-            <div>
-              <p class="sheet-title">Ouverture des portes et mini forum de recrutement</p>
-              <p class="sheet-desc">Dans le hall, les entreprises partenaires et les associations rencontrent le public : stages, alternances, premiers emplois. CV bienvenus.</p>
+        <ol class="tl" aria-label="Le déroulé de la soirée du 18 mars 2027">
+          <li class="tl-row">
+            <span class="tl-time">18h00</span>
+            <span class="tl-dot" aria-hidden="true"></span>
+            <div class="tl-body">
+              <p class="tl-title">Ouverture des portes et mini forum de recrutement</p>
+              <p class="tl-desc">Dans le hall, les entreprises partenaires et les associations rencontrent le public : stages, alternances, premiers emplois. CV bienvenus.</p>
             </div>
           </li>
-          <li class="sheet-row">
-            <span class="sheet-time">19h30</span>
-            <div>
-              <p class="sheet-title">Ouverture de la soirée</p>
-              <p class="sheet-desc">Le thème est posé : franchir ou s'adapter&nbsp;?</p>
+          <li class="tl-row">
+            <span class="tl-time">19h30</span>
+            <span class="tl-dot" aria-hidden="true"></span>
+            <div class="tl-body">
+              <p class="tl-title">Ouverture de la soirée</p>
+              <p class="tl-desc">Le thème est posé : franchir ou s'adapter&nbsp;?</p>
             </div>
           </li>
-          <li class="sheet-row">
-            <span class="sheet-time">19h45</span>
-            <div>
-              <p class="sheet-title">Première session de talks</p>
-              <p class="sheet-desc">Trois prises de parole en direct, une vidéo de conférence TED.</p>
+          <li class="tl-row">
+            <span class="tl-time">19h45</span>
+            <span class="tl-dot" aria-hidden="true"></span>
+            <div class="tl-body">
+              <p class="tl-title">Première session de talks</p>
+              <p class="tl-desc">Trois prises de parole en direct, une vidéo de conférence TED.</p>
             </div>
           </li>
-          <li class="sheet-row">
-            <span class="sheet-time">20h50</span>
-            <div>
-              <p class="sheet-title">Entracte</p>
-              <p class="sheet-desc">Trente minutes pour confronter les premières idées, un verre à la main.</p>
+          <li class="tl-row">
+            <span class="tl-time">20h50</span>
+            <span class="tl-dot" aria-hidden="true"></span>
+            <div class="tl-body">
+              <p class="tl-title">Entracte</p>
+              <p class="tl-desc">Trente minutes pour confronter les premières idées, un verre à la main.</p>
             </div>
           </li>
-          <li class="sheet-row">
-            <span class="sheet-time">21h20</span>
-            <div>
-              <p class="sheet-title">Seconde session de talks</p>
-              <p class="sheet-desc">Trois prises de parole pour finir de faire le tour de la ligne.</p>
+          <li class="tl-row">
+            <span class="tl-time">21h20</span>
+            <span class="tl-dot" aria-hidden="true"></span>
+            <div class="tl-body">
+              <p class="tl-title">Seconde session de talks</p>
+              <p class="tl-desc">Trois prises de parole pour finir de faire le tour de la ligne.</p>
             </div>
           </li>
-          <li class="sheet-row">
-            <span class="sheet-time">22h30</span>
-            <div>
-              <p class="sheet-title">Clôture</p>
-              <p class="sheet-desc">Le mot de la fin par l'équipe de Genius UTT.</p>
+          <li class="tl-row">
+            <span class="tl-time">22h30</span>
+            <span class="tl-dot" aria-hidden="true"></span>
+            <div class="tl-body">
+              <p class="tl-title">Clôture</p>
+              <p class="tl-desc">Le mot de la fin par l'équipe de Genius UTT.</p>
             </div>
           </li>
-          <li class="sheet-row">
-            <span class="sheet-time">22h40</span>
-            <div>
-              <p class="sheet-title">Moment d'échange</p>
-              <p class="sheet-desc">Les intervenantes et intervenants restent dans le hall : venez discuter.</p>
+          <li class="tl-row">
+            <span class="tl-time">22h40</span>
+            <span class="tl-dot" aria-hidden="true"></span>
+            <div class="tl-body">
+              <p class="tl-title">Moment d'échange</p>
+              <p class="tl-desc">Les intervenantes et intervenants restent dans le hall : venez discuter.</p>
             </div>
           </li>
         </ol>
@@ -501,17 +545,20 @@
       </div>
     </section>
 
-    <!-- La prise : la ligne descend des dix ans et se branche dans le bouton. -->
+    <!-- La prise : la ligne descend des dix ans ; le constat se range a
+         gauche, le bouton attend a droite dans la continuite du trait,
+         qui vient s'y brancher. -->
     <section class="final-cta" id="billetterie">
       <div class="mwrap">
         <p class="cote">Billetterie</p>
         <div class="colL">
           <h2 class="final-title">La salle s'arrête à 800 fauteuils. C'est la seule limite de la soirée que personne ne franchira.</h2>
         </div>
-        <div class="actions">
+        <div class="final-plug">
+          <!-- PLACEHOLDER : remplacer par le vrai lien HelloAsso de billetterie -->
           <a class="btn btn--primary" data-line="plug" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition">Réserver ma place</a>
+          <p class="final-note">Billetterie hébergée sur HelloAsso. Aucune donnée n'est collectée sur ce site.</p>
         </div>
-        <p class="final-note">Billetterie hébergée sur HelloAsso. Aucune donnée n'est collectée sur ce site.</p>
       </div>
     </section>
 

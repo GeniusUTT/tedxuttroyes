@@ -687,6 +687,10 @@ main .sec--alt:last-child {
   width: 100%;
 }
 
+.mobile-menu-foot .btn + .btn {
+  margin-top: 10px;
+}
+
 .mobile-menu-date {
   margin-top: 16px;
   font-family: var(--font-mono);
@@ -895,32 +899,6 @@ body.nav-open {
 
 /* 12. Lieu */
 
-.lieu-grid {
-  display: grid;
-  gap: clamp(24px, 4vw, 48px);
-  align-items: start;
-}
-
-@media (min-width: 1100px) {
-  .lieu-grid {
-    grid-template-columns: 1fr 0.92fr;
-  }
-}
-
-.lieu-media img {
-  width: 100%;
-  border: 1px solid var(--filet);
-}
-
-.lieu-media figcaption {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--encre-2);
-  margin-top: 10px;
-}
-
 .facts {
   margin-top: 20px;
 }
@@ -1008,38 +986,11 @@ body.nav-open {
   }
 }
 
-/* 14. Fiches sous embargo (speakers) */
-
-.emb {
-  border-top: 1px solid var(--filet);
-}
-
-.emb-row {
-  display: grid;
-  gap: 6px 24px;
-  padding: 24px 0;
-  border-bottom: 1px solid var(--filet);
-}
-
-.emb-id {
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--encre-2);
-}
-
-.emb-name {
-  font-family: var(--font-disp);
-  font-weight: 750;
-  font-size: clamp(1.4rem, 3vw, 1.9rem);
-  line-height: 1;
-  color: var(--papier);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35em;
-  align-items: center;
-}
+/* 14. Fiches sous embargo (speakers) : la grille des six
+   Deux lignes sur trois colonnes en desktop, partagee entre l'accueil
+   et la page speakers. Les cartes sont cadrees par un filet (gap de
+   1px sur fond filet), la zone portrait reste caviardee tant que
+   l'annonce n'est pas tombee. */
 
 .redact {
   display: inline-block;
@@ -1047,41 +998,131 @@ body.nav-open {
   background-color: var(--caviardage);
 }
 
-.emb-sub {
-  font-family: var(--font-mono);
-  font-size: 0.8125rem;
-  color: var(--encre-2);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4em;
-  align-items: center;
+.sgrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1px;
+  margin-top: 40px;
+  border: 1px solid var(--filet);
+  background-color: var(--filet);
 }
 
-.emb-sub .redact {
+.sp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: clamp(16px, 2.5vw, 26px);
+  background-color: var(--noir);
+}
+
+.sp-photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: repeating-linear-gradient(-45deg, var(--caviardage) 0 12px, var(--surface) 12px 16px);
+}
+
+.sp-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+}
+
+.sp-photo-mark {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+  background-color: var(--noir);
+  padding: 6px 12px;
+}
+
+.sp-id {
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+}
+
+.sp-name {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
+  align-items: center;
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: clamp(1.3rem, 2vw, 1.6rem);
+  line-height: 1.05;
+  color: var(--papier);
+}
+
+.sp-bio {
+  font-size: 0.95rem;
+  color: var(--encre);
+  max-width: 46ch;
+}
+
+.sp-bio .redact {
+  display: block;
+  height: 0.6em;
+}
+
+.sp-bio .redact + .redact {
+  margin-top: 8px;
+}
+
+.sp-talk {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--encre);
+}
+
+.sp-talk-k {
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+}
+
+.sp-talk .redact {
   height: 0.9em;
 }
 
-.emb-status {
+.sp-status {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--filet);
   font-family: var(--font-mono);
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   color: var(--rouge-vif);
 }
 
-@media (min-width: 900px) {
-  .emb-row {
-    grid-template-columns: 190px minmax(0, 1fr) 180px;
-    align-items: center;
-  }
+.sp-status--live {
+  color: var(--papier);
+}
 
-  .emb-status {
-    text-align: right;
+@media (min-width: 640px) {
+  .sgrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
-.emb-row--photo img {
-  width: 100%;
-  max-width: 180px;
-  border: 1px solid var(--filet);
+@media (min-width: 1024px) {
+  .sgrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 /* 15. Feuille de salle (programme) */
@@ -1123,34 +1164,6 @@ body.nav-open {
 
   .sheet-time {
     padding-top: 2px;
-  }
-}
-
-/* Version accueil : la feuille de salle prend ses aises */
-.sheet--wide {
-  max-width: 980px;
-}
-
-.sheet--wide .sheet-row {
-  padding: 22px 0;
-}
-
-.sheet--wide .sheet-time {
-  font-size: 1.125rem;
-}
-
-.sheet--wide .sheet-title {
-  font-size: 1.125rem;
-}
-
-.sheet--wide .sheet-desc {
-  font-size: 1rem;
-  max-width: 64ch;
-}
-
-@media (min-width: 700px) {
-  .sheet--wide .sheet-row {
-    grid-template-columns: 120px minmax(0, 1fr);
   }
 }
 
@@ -1665,88 +1678,37 @@ details.faq[open] summary .icon {
   will-change: transform;
 }
 
+/* Variante miroir (s'adapter) : le mot arrive du bord droit du viewport
+   et vient buter contre la ligne sans la franchir. Position layout :
+   cale contre la ligne, cote droit. */
+.cross-track--rtl .cross-word {
+  transform: translateX(calc((1 - var(--cross-p, 1)) * var(--cross-dist, 0px)));
+}
+
 @media (max-width: 1023px) {
   .cross-word {
     margin-left: calc(-1 * var(--body-pad) - 6px);
   }
 }
 
-/* La file d'attente des speakers : des points sur la ligne */
-
-.queue {
-  margin-top: 40px;
-}
-
-.q-row {
-  position: relative;
-  padding: 16px 0 16px 26px;
-  border-bottom: 1px solid var(--filet);
-}
-
-.q-row:first-child {
-  border-top: 1px solid var(--filet);
-}
-
-.q-dot {
-  position: absolute;
-  top: 50%;
-  left: calc(-1 * var(--body-pad));
-  width: 12px;
-  height: 12px;
-  margin-top: -6px;
-  margin-left: -5px;
-  border-radius: 50%;
-  background-color: var(--rouge);
-  box-shadow: 0 0 0 4px rgba(235, 0, 40, 0.14);
-  z-index: 2;
-}
-
-.q-id {
-  display: block;
-  font-family: var(--font-mono);
-  font-size: 0.6875rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--encre-2);
-}
-
-.q-name {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3em;
-  align-items: center;
-  margin: 4px 0;
-  font-family: var(--font-disp);
-  font-weight: 750;
-  font-size: 1.35rem;
-  line-height: 1;
-}
-
-.q-status {
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--rouge-vif);
-}
-
+/* Le moment installe a droite de la ligne : cote, mot et colonne de
+   texte vivent apres la limite (desktop seulement, la dorsale mobile
+   reste a gauche). */
 @media (min-width: 1024px) {
-  .queue {
-    width: calc(var(--axis-b) - var(--m-left) - 40px);
+  .cross-track--rtl {
+    justify-content: flex-start;
+    padding-right: 0;
+    padding-left: calc(var(--axis-b) - var(--m-left) + 44px);
   }
 
-  .q-row {
-    padding: 16px 40px 16px 0;
-    text-align: right;
+  .colR {
+    margin-left: calc(var(--axis-b) - var(--m-left) + var(--body-pad));
+    min-width: 0;
+    max-width: calc(100% - (var(--axis-b) - var(--m-left)) - var(--body-pad));
   }
 
-  .q-name {
-    justify-content: flex-end;
-  }
-
-  .q-dot {
-    left: auto;
-    right: -40px;
-    margin-left: 0;
-    margin-right: -6px;
+  .mom--droite .cote {
+    margin-left: calc(var(--axis-b) - var(--m-left) + var(--body-pad));
   }
 }
 
@@ -1776,9 +1738,10 @@ details.faq[open] summary .icon {
   color: var(--rouge-vif);
 }
 
-/* Le releve de terrain : la photo du lieu en bandeau, puis le duo
-   carte + presentation cote a cote. Le plan est un SVG local trace
-   a la main : aucun service de cartes avant que map.js ne s'en mele. */
+/* Le releve de terrain : la photo du lieu, la carte et la presentation
+   du batiment au meme niveau (trois colonnes sur grand ecran). Le plan
+   est un SVG local trace a la main : aucun service de cartes avant que
+   map.js ne s'en mele. */
 
 .lieu-photo {
   position: relative;
@@ -1790,17 +1753,36 @@ details.faq[open] summary .icon {
   border: 0;
 }
 
-/* Le duo : la carte a gauche, la presentation du batiment a droite */
-.lieu-duo {
+.lieu-trio {
   display: grid;
   gap: 14px;
-  margin-top: 14px;
   align-items: stretch;
 }
 
 @media (min-width: 768px) {
-  .lieu-duo {
+  .lieu-trio {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  /* Tablette : la photo reste en bandeau au-dessus du duo */
+  .lieu-trio .lieu-photo {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lieu-trio {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 0.85fr);
+  }
+
+  .lieu-trio .lieu-photo {
+    grid-column: auto;
+  }
+
+  .lieu-trio .lieu-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
 
@@ -2007,7 +1989,7 @@ details.faq[open] summary .icon {
 
 @media (min-width: 1024px) {
   .m3-lieu {
-    width: min(960px, 100%);
+    width: 100%;
   }
 }
 
@@ -2104,25 +2086,32 @@ details.faq[open] summary .icon {
 }
 
 @media (min-width: 1024px) {
+  /* Sur la frise et la prise finale, le releve occupe toute la largeur
+     de la page : le plafond du mwrap saute. */
+  .mom--frise .mwrap,
+  .final-cta .mwrap {
+    max-width: none;
+  }
+
   /* L'escalier des editions : une marche par annee, le trait descend
      de 2016 a 2027 contremarche apres contremarche (chaque point est
      pose au bord gauche de sa marche, a --fx ; --fy est le rang).
      margin-top : la place du retour a 2016 (le trait redescend a gauche
      avant de tourner) ; margin-right : la reserve du terminus 2027. */
   .fr-band {
-    --fr-step: clamp(56px, 7vh, 72px);
+    --fr-step: clamp(60px, 8vh, 84px);
     position: relative;
     height: calc(11 * var(--fr-step));
     margin-top: 90px;
-    margin-left: 75px;
-    margin-right: clamp(220px, 24vw, 340px);
+    margin-left: 56px;
+    margin-right: clamp(200px, 18vw, 300px);
   }
 
   .fr-item {
     position: absolute;
     left: var(--fx);
     top: calc(var(--fy) * var(--fr-step));
-    width: 200px;
+    width: clamp(180px, 16vw, 260px);
     margin-left: 0;
     padding: 0;
     text-align: left;
@@ -2145,7 +2134,7 @@ details.faq[open] summary .icon {
   }
 
   .fr-item .fr-t {
-    font-size: 1.2rem;
+    font-size: clamp(1.2rem, 1.4vw, 1.5rem);
   }
 
   .fr-item--gap::before {
@@ -2205,7 +2194,7 @@ details.faq[open] summary .icon {
     position: absolute;
     left: 100%;
     top: calc(11 * var(--fr-step));
-    width: clamp(200px, 22vw, 320px);
+    width: clamp(180px, 17vw, 280px);
     margin: 0;
     padding: 20px 0 0 28px;
     min-height: 0;
@@ -2264,14 +2253,14 @@ details.faq[open] summary .icon {
   margin-top: 6px;
 }
 
-/* La prise : la ligne se branche dans le bouton */
+/* La prise : le constat se range a gauche, le bouton attend a droite
+   dans la continuite du trait qui descend des dix ans. */
 
 .final-cta {
-  position: relative; 
+  position: relative;
   z-index: 2;
   margin-top: clamp(40px, 5vw, 65px);
   padding-bottom: clamp(64px, 9vw, 104px);
-  text-align: center;
 }
 
 .final-cta .btn {
@@ -2287,51 +2276,41 @@ details.faq[open] summary .icon {
   line-height: 1.05;
   color: var(--papier);
   max-width: 24ch;
-  margin: 0 auto 28px;
+  margin: 0 0 36px;
 }
 
-.final-cta .actions {
-  justify-content: center;
+.final-plug {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
 }
 
 .final-note {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--encre-2);
-  margin-top: 18px;
 }
 
-.final-alt {
-  margin-top: 14px;
-}
+/* Desktop : le bouton se place dans le couloir de descente du trait,
+   sous le terminus 2027 ; line.js branche la ligne dans le bouton. */
+@media (min-width: 1024px) {
+  .final-plug {
+    align-items: flex-end;
+    margin-top: 56px;
+    margin-right: clamp(140px, 13vw, 220px);
+  }
 
-/* Sur grand ecran comme sur petit, le constat et le bouton restent
-   centres : la ligne descend des dix ans et vient se brancher au milieu. */
+  .final-note {
+    text-align: right;
+    max-width: 44ch;
+  }
+}
 
 /* Le pied de page laisse passer l'epilogue sous son contenu */
 .journey .site-footer .finner {
   position: relative;
   z-index: 2;
-}
-
-/* Points d'attente sur la page speakers (ligne au repos) */
-
-.emb .emb-row {
-  position: relative;
-}
-
-.emb .emb-row::before {
-  content: "";
-  position: absolute;
-  left: calc(-1 * var(--body-pad));
-  top: 50%;
-  width: 10px;
-  height: 10px;
-  margin-top: -5px;
-  margin-left: -4px;
-  border-radius: 50%;
-  background-color: var(--rouge);
-  box-shadow: 0 0 0 4px rgba(235, 0, 40, 0.12);
 }
 
 /* 20c. Pages d'edition (archives du registre)
@@ -2455,6 +2434,25 @@ details.faq[open] summary .icon {
   object-fit: cover;
 }
 
+/* Le talk en video : lecteur YouTube en mode confidentialite renforcee,
+   charge en differe (loading lazy), cadre 16/9 responsive. */
+.talk-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  max-width: 860px;
+  margin-top: 24px;
+  border: 1px solid var(--filet);
+  background-color: var(--surface);
+}
+
+.talk-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
 .ed-nav {
   display: flex;
   flex-wrap: wrap;
@@ -2504,7 +2502,119 @@ details.faq[open] summary .icon {
 
 @media (min-width: 700px) {
   .arch-strip {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 12px;
+  }
+}
+
+/* Desktop : trois colonnes sur deux lignes, photos en grand, et un
+   couloir a droite pour laisser descendre le trait du 2027 vers la
+   prise finale. */
+@media (min-width: 1024px) {
+  .arch {
+    margin-right: clamp(240px, 20vw, 340px);
+  }
+}
+
+/* 20e. La feuille de salle vivante (accueil, moment programme)
+   La timeline s'appuie sur la ligne continue : l'heure reste collee au
+   milieu de l'ecran (sticky), la pastille posee sur l'axe s'allume et
+   chaque creneau passe d'attenue a plein quand il atteint le centre du
+   viewport (classe is-on posee par main.js). Sans JavaScript ou en
+   reduced motion : tout est visible d'emblee. */
+
+.tl {
+  margin-top: 48px;
+}
+
+.tl-row {
+  position: relative;
+  padding: 24px 0 24px 26px;
+  border-bottom: 1px solid var(--filet);
+}
+
+.tl-row:first-child {
+  border-top: 1px solid var(--filet);
+}
+
+.tl-dot {
+  position: absolute;
+  left: calc(-1 * var(--body-pad) - 6px);
+  top: 1.7em;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--noir);
+  border: 2px solid var(--rouge);
+  z-index: 2;
+  transition: background-color 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out);
+}
+
+.tl-row.is-on .tl-dot {
+  background-color: var(--rouge);
+  box-shadow: 0 0 0 4px rgba(235, 0, 40, 0.14);
+}
+
+.tl-time {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--papier);
+}
+
+.tl-title {
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: var(--papier);
+}
+
+.tl-desc {
+  margin-top: 4px;
+  font-size: 1rem;
+  color: var(--encre-2);
+  max-width: 56ch;
+}
+
+/* L'allumage progressif, seulement quand le JS est la pour le piloter */
+.js .journey .tl-row {
+  opacity: 0.22;
+  transition: opacity 0.5s var(--ease-out);
+}
+
+.js .journey .tl-row.is-on {
+  opacity: 1;
+}
+
+@media (min-width: 1024px) {
+  .tl {
+    margin-top: 64px;
+  }
+
+  .tl-row {
+    display: grid;
+    grid-template-columns: calc(var(--axis-b) - var(--m-left) - 48px) minmax(0, 1fr);
+    gap: 0 96px;
+    min-height: clamp(140px, 18vh, 200px);
+    padding: 34px 0;
+    border-bottom: 0;
+  }
+
+  .tl-row:first-child {
+    border-top: 0;
+  }
+
+  /* L'heure vit a gauche de la ligne et reste collee au milieu de
+     l'ecran pendant que son creneau defile. */
+  .tl-time {
+    text-align: right;
+    align-self: start;
+    position: sticky;
+    top: calc(50vh - 0.7em);
+    font-size: clamp(1.3rem, 2vw, 1.8rem);
+  }
+
+  .tl-dot {
+    left: calc(var(--axis-b) - var(--m-left) - 6px);
+    top: 42px;
   }
 }
 
@@ -2584,5 +2694,14 @@ details.faq[open] summary .icon {
   .fr-end-dot::after {
     animation: none;
     opacity: 0;
+  }
+
+  /* La feuille de salle vivante : tout est allume d'emblee */
+  .js .journey .tl-row {
+    opacity: 1;
+  }
+
+  .tl-dot {
+    background-color: var(--rouge);
   }
 }
