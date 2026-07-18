@@ -334,7 +334,8 @@
        vers la gauche par defaut, vers la droite avec data-line-side="right".
        Les blocs qui se chevaucheraient sont ignores (le trace doit rester
        monotone du haut vers le bas). */
-    var avoidEls = main.querySelectorAll('[data-line="avoid"]');
+    /* En mobile la dorsale reste parfaitement droite : aucune pliure. */
+    var avoidEls = horiz ? main.querySelectorAll('[data-line="avoid"]') : [];
     var avoids = [];
     var lateAvoids = [];
     for (c = 0; c < avoidEls.length; c++) {
@@ -347,6 +348,9 @@
     for (c = 0; c < avoids.length; c++) {
       el = avoids[c].el;
       r = avoids[c].r;
+      if (r.width < 2 || r.height < 2) {
+        continue;
+      }
       var m = parseFloat(el.getAttribute(horiz ? "data-line-margin" : "data-line-margin-m"));
       if (!m || m < 0) {
         m = horiz ? 28 : 14;
@@ -431,47 +435,54 @@
         plug.classList.add("plug-armed");
       }
       plugRect = relRect(plug);
-      var bx = plugRect.left + plugRect.width / 2;
-      if (Math.abs(dropX - bx) > 12) {
-        /* Le coude se fait tout en haut, juste sous l'album : la
-           descente arrive droite dans le bouton, sans courbe finale. */
-        var jogY2 = bandBottom ? bandBottom + 44 : plugRect.top - 18;
-        pts.push([dropX, jogY2], [bx, jogY2]);
-      }
-      /* La descente contourne les blocs d'avoid situes sous la frise
-         (les chiffres, le logo TEDx) : memes regles que sur l'axe B,
-         autour de la verticale du bouton. */
-      var lastY2 = pts[pts.length - 1][1];
-      for (c = 0; c < lateAvoids.length; c++) {
-        el = lateAvoids[c].el;
-        r = lateAvoids[c].r;
-        var m2 = lateAvoids[c].m;
-        if (r.top - m2 < lastY2 + 12 || r.bottom + m2 > plugRect.top - 12) {
-          continue;
+      if (!horiz) {
+        /* Mobile : la dorsale descend droite jusqu'au centre vertical du
+           bouton (centre dans la page), puis la ligne entre par la gauche. */
+        var py = plugRect.top + plugRect.height / 2;
+        pts.push([axB, py], [plugRect.left + 8, py]);
+      } else {
+        var bx = plugRect.left + plugRect.width / 2;
+        if (Math.abs(dropX - bx) > 12) {
+          /* Le coude se fait tout en haut, juste sous l'album : la
+             descente arrive droite dans le bouton, sans courbe finale. */
+          var jogY2 = bandBottom ? bandBottom + 44 : plugRect.top - 18;
+          pts.push([dropX, jogY2], [bx, jogY2]);
         }
-        var ex2;
-        if (el.getAttribute("data-line-side") === "right") {
-          ex2 = Math.min(W - 4, r.right + m2);
-        } else {
-          ex2 = Math.max(4, r.left - m2);
-        }
-        /* data-line-exit="tight" : le retour se fait a la meme distance
-           sous le bloc qu'au-dessus (cadre symetrique), au lieu d'etre
-           repousse a la frontiere de la section. */
-        var exitY2 = r.bottom + m2;
-        if (el.getAttribute("data-line-exit") !== "tight") {
-          var sec2 = el.closest("section");
-          if (sec2) {
-            var secBottom2 = relRect(sec2).bottom;
-            if (secBottom2 > exitY2) {
-              exitY2 = secBottom2;
+        /* La descente contourne les blocs d'avoid situes sous la frise
+           (les chiffres, le logo TEDx) : memes regles que sur l'axe B,
+           autour de la verticale du bouton. */
+        var lastY2 = pts[pts.length - 1][1];
+        for (c = 0; c < lateAvoids.length; c++) {
+          el = lateAvoids[c].el;
+          r = lateAvoids[c].r;
+          var m2 = lateAvoids[c].m;
+          if (r.top - m2 < lastY2 + 12 || r.bottom + m2 > plugRect.top - 12) {
+            continue;
+          }
+          var ex2;
+          if (el.getAttribute("data-line-side") === "right") {
+            ex2 = Math.min(W - 4, r.right + m2);
+          } else {
+            ex2 = Math.max(4, r.left - m2);
+          }
+          /* data-line-exit="tight" : le retour se fait a la meme distance
+             sous le bloc qu'au-dessus (cadre symetrique), au lieu d'etre
+             repousse a la frontiere de la section. */
+          var exitY2 = r.bottom + m2;
+          if (el.getAttribute("data-line-exit") !== "tight") {
+            var sec2 = el.closest("section");
+            if (sec2) {
+              var secBottom2 = relRect(sec2).bottom;
+              if (secBottom2 > exitY2) {
+                exitY2 = secBottom2;
+              }
             }
           }
+          pts.push([bx, r.top - m2], [ex2, r.top - m2], [ex2, exitY2], [bx, exitY2]);
+          lastY2 = exitY2;
         }
-        pts.push([bx, r.top - m2], [ex2, r.top - m2], [ex2, exitY2], [bx, exitY2]);
-        lastY2 = exitY2;
+        pts.push([bx, plugRect.top + 8]);
       }
-      pts.push([bx, plugRect.top + 8]);
     } else {
       pts.push([dropX, H]);
     }

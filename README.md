@@ -17,15 +17,17 @@ index.html               Accueil (le parcours de la ligne : seuil, franchir,
                          s'adapter, speakers, lieu, programme, frise des dix
                          ans, prise, épilogue)
 speakers/                Les 6 fiches sous embargo + appel à candidatures
-speakers/<annee>/<nom>/  Une page par speaker passé (47 pages, générées depuis
+speakers/<annee>/<nom>/  Une page par speaker passé (61 pages, générées depuis
                          les archives de l'ancien site ; les anciennes URL
-                         en .html sont redirigées en 301)
-devenir-speaker/         Candidature speaker (CTA mailto)
+                         en .html sont redirigées en 301 ; bio 2016-2017 en
+                         PLACEHOLDER, seuls nom et talk sont documentés)
+devenir-speaker/         Candidature speaker (CTA Google Forms)
 programme/               Feuille de salle du 18 mars (portes 18h00, forum)
 editions/                Le registre des 9 éditions
 editions/edition-XXXX/   Une page par édition, speakers cliquables
-hall-of-fame/            Toutes les voix passées (47 cartes, 2019 à 2026 ;
-                         speakers 2016-2017 à consigner, PLACEHOLDER)
+hall-of-fame/            Toutes les voix passées (61 cartes, 2016 à 2026 ;
+                         portrait et nom cliquables vers la bio, titre
+                         d'année cliquable vers l'édition)
 partenaires/             Partenaires (page dédiée, jamais sur l'accueil)
 a-propos/                About TED / About TEDx / About TEDxUTTroyes
 faq/                     FAQ pratique (accordéons natifs)

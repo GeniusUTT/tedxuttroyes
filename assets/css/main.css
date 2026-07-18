@@ -592,6 +592,25 @@ main .sec--alt:last-child {
   flex: none;
 }
 
+/* Mobile : le logo au centre de la barre, le burger reste a droite. */
+@media (max-width: 1023px) {
+  .header-inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+  }
+
+  .brand {
+    grid-column: 2;
+    justify-self: center;
+  }
+
+  .nav-toggle {
+    grid-column: 3;
+    justify-self: end;
+  }
+}
+
 .brand img {
   height: 26px;
   width: auto;
@@ -801,13 +820,14 @@ body.nav-open {
 }
 
 /* Le mot qui franchit : il demarre dans la marge, traverse la ligne,
-   et peut deborder de la colonne a droite. */
+   et peut deborder de la colonne a droite. En mobile il reste en
+   retrait a droite de la dorsale (il ne la touche pas). */
 .hero-word {
   display: block;
   position: relative;
   width: max-content;
   max-width: none;
-  margin-left: calc(-1 * var(--body-pad) - 6px);
+  margin-left: calc(-1 * var(--body-pad) + 10px);
   font-family: var(--font-disp);
   font-weight: 800;
   font-size: clamp(3.8rem, 15vw, 13.5rem);
@@ -987,9 +1007,9 @@ body.nav-open {
 }
 
 /* 13b. Hall of Fame : toutes les voix passees par la scene.
-   Une grille de cartes par annee : portrait carre en couleur, nom,
-   annee (lien vers l'edition) et lien vers la bio. Filets, zero
-   border-radius, zero ombre : le releve. */
+   Une grille de cartes par annee : la carte entiere (portrait + nom)
+   est un lien vers la bio, le titre d'annee un lien vers l'edition.
+   Filets, zero border-radius, zero ombre : le releve. */
 
 .hof-year {
   margin-top: clamp(40px, 6vw, 64px);
@@ -1001,6 +1021,16 @@ body.nav-open {
 
 .hof-year .h-md {
   margin-bottom: 18px;
+}
+
+.hof-year-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.hof-year-link:hover,
+.hof-year-link:focus-visible {
+  color: var(--rouge-vif);
 }
 
 /* Les filets sont portes par les cartes (bord droit et bas) : une
@@ -1015,11 +1045,25 @@ body.nav-open {
 .hof-card {
   display: flex;
   flex-direction: column;
-  gap: 8px;
   padding: clamp(12px, 1.6vw, 18px);
   background-color: var(--noir);
   border-right: 1px solid var(--filet);
   border-bottom: 1px solid var(--filet);
+}
+
+/* Toute la carte est cliquable : le lien enveloppe portrait et nom. */
+.hof-link {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.hof-link:hover .hof-name,
+.hof-link:focus-visible .hof-name {
+  color: var(--rouge-vif);
 }
 
 .hof-card .hof-photo {
@@ -1040,32 +1084,6 @@ body.nav-open {
   font-size: clamp(1.05rem, 1.5vw, 1.25rem);
   line-height: 1.1;
   color: var(--papier);
-}
-
-.hof-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 14px;
-  margin-top: auto;
-  padding-top: 10px;
-  border-top: 1px solid var(--filet);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-}
-
-.hof-meta a {
-  color: var(--encre-2);
-  text-decoration: none;
-}
-
-.hof-meta a:hover,
-.hof-meta a:focus-visible {
-  color: var(--rouge-vif);
-}
-
-.hof-meta .hof-bio {
-  color: var(--rouge-vif);
 }
 
 @media (min-width: 700px) {
@@ -1552,6 +1570,24 @@ details.faq[open] summary .icon {
   margin-top: 16px;
 }
 
+/* L'adresse en clair sous le bouton : mono, discrete, soulignee au
+   survol. */
+.footer-mail {
+  display: block;
+  width: fit-content;
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--encre);
+  text-decoration: none;
+}
+
+.footer-mail:hover,
+.footer-mail:focus-visible {
+  color: var(--rouge-vif);
+  text-decoration: underline;
+}
+
 .footer-bottom {
   display: flex;
   flex-wrap: wrap;
@@ -1875,9 +1911,10 @@ details.faq[open] summary .icon {
   transform: translateX(calc((1 - var(--cross-p, 1)) * var(--cross-dist, 0px)));
 }
 
+/* Mobile : les mots restent en retrait a droite de la dorsale. */
 @media (max-width: 1023px) {
   .cross-word {
-    margin-left: calc(-1 * var(--body-pad) - 6px);
+    margin-left: calc(-1 * var(--body-pad) + 10px);
   }
 }
 
@@ -2320,8 +2357,58 @@ details.faq[open] summary .icon {
    l'horizontale et sert de fil : chaque affiche pend au-dessus de sa
    pastille, le theme juste en dessous. La revelation suit la pointe du
    trait : line.js publie --sweep (0 a 1) sur .album, chaque piece porte
-   son seuil --th. Sur mobile : album vertical le long de la dorsale,
-   tout est visible d'emblee. */
+   son seuil --th. Sur mobile : la section se resume au titre et a un
+   carrousel d'affiches balayable (.ed-slider), l'album, la bande
+   d'archives et les chiffres sont masques. */
+
+/* Le carrousel mobile des affiches : scroll-snap pur CSS. */
+.ed-slider {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .mom--frise .fr-caption,
+  .mom--frise .album,
+  .mom--frise .arch,
+  .mom--frise .data-lines {
+    display: none;
+  }
+
+  .ed-slider {
+    display: block;
+    margin-top: 8px;
+  }
+
+  .ed-slides {
+    list-style: none;
+    margin: 0;
+    padding: 0 4px 8px;
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .ed-slides::-webkit-scrollbar {
+    display: none;
+  }
+
+  .ed-slides li {
+    flex: 0 0 min(72%, 300px);
+    scroll-snap-align: center;
+  }
+
+  .ed-slides img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    border: 1px solid var(--filet);
+  }
+}
 
 .fr-caption {
   font-family: var(--font-mono);
@@ -2545,6 +2632,28 @@ details.faq[open] summary .icon {
   font-family: var(--font-mono);
   font-size: 0.75rem;
   color: var(--encre-2);
+}
+
+/* Mobile : la prise et son texte se centrent dans la page (les marges
+   asymetriques du mwrap sont annulees) et la ligne vient toucher le
+   bouton par la gauche. */
+@media (max-width: 1023px) {
+  .final-cta .cote,
+  .final-cta .colL,
+  .final-plug {
+    margin-left: calc(-1 * (var(--line-x) + var(--body-pad)));
+    margin-right: calc(-1 * var(--m-right));
+    padding-inline: 16px;
+    text-align: center;
+  }
+
+  .final-plug {
+    align-items: center;
+  }
+
+  .final-title {
+    margin-inline: auto;
+  }
 }
 
 /* Desktop : le constat a gauche, la prise a droite, au meme niveau.
@@ -2806,13 +2915,18 @@ details.faq[open] summary .icon {
 /* La photo du creneau : a gauche du point, une piece du dossier */
 .tl-ph {
   margin: 0 0 14px;
-  max-width: 340px;
+  max-width: 260px;
 }
 
 .tl-ph img {
   display: block;
   width: 100%;
   height: auto;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+  /* Exception DA (demande de Baptiste, 2026-07-18) : seul arrondi du
+     site, les photos du planning sont de simples illustrations. */
+  border-radius: 8px;
   border: 1px solid var(--filet);
 }
 
@@ -2895,9 +3009,9 @@ details.faq[open] summary .icon {
   }
 
   .tl-left .tl-ph {
-    flex: 1;
+    flex: 0 1 300px;
     min-width: 0;
-    max-width: none;
+    max-width: 300px;
     margin: 0;
   }
 
