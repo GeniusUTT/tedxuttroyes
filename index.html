@@ -23,17 +23,17 @@
   <meta name="twitter:description" content="La dixième édition de TEDxUTTroyes explore la limite. Jeudi 18 mars 2027, 18h00, Centre de Congrès de l'Aube, Troyes.">
   <meta name="twitter:image" content="https://tedxuttroyes.fr/assets/img/og/og-default.jpg">
 
-  <link rel="icon" type="image/png" href="assets/img/favicon.png">
-  <link rel="apple-touch-icon" href="assets/img/webclip.png">
+  <link rel="icon" type="image/png" href="/assets/img/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/img/webclip.png">
 
-  <link rel="preload" href="assets/fonts/bricolage-var-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/dm-sans-var-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="preload" href="assets/fonts/space-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="preload" href="/assets/fonts/bricolage-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/dm-sans-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/space-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/main.css">
   <script>document.documentElement.classList.add("js");</script>
-  <script src="assets/js/main.js" defer></script>
-  <script src="assets/js/line.js" defer></script>
-  <script src="assets/js/map.js" defer></script>
+  <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/line.js" defer></script>
+  <script src="/assets/js/map.js" defer></script>
 
   <script type="application/ld+json">
   {
@@ -78,7 +78,7 @@
       "priceCurrency": "EUR",
       "availability": "https://schema.org/PreOrder"
     },
-    "maximumAttendeeCapacity": 800
+    "maximumAttendeeCapacity": 750
   }
   </script>
 </head>
@@ -87,21 +87,22 @@
 
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="index.html" aria-label="TEDxUTTroyes, retour à l'accueil">
-        <img src="assets/img/logo-white.png" alt="TEDxUTTroyes" width="500" height="105">
+      <a class="brand" href="/" aria-label="TEDxUTTroyes, retour à l'accueil">
+        <img src="/assets/img/logo-white.png" alt="TEDxUTTroyes" width="500" height="105">
       </a>
 
       <nav class="nav-desktop" aria-label="Navigation principale">
-        <a href="index.html" aria-current="page">Accueil</a>
-        <a href="speakers.html">Speakers</a>
-        <a href="programme.html">Programme</a>
-        <a href="editions.html">Éditions</a>
-        <a href="partenaires.html">Partenaires</a>
-        <a href="a-propos.html">À propos</a>
-        <a href="faq.html">FAQ</a>
-        <a class="btn btn--ghost btn--sm" href="devenir-speaker.html">Postuler</a>
+        <a href="/" aria-current="page">Accueil</a>
+        <a href="/speakers/">Speakers</a>
+        <a href="/programme/">Programme</a>
+        <a href="/editions/">Éditions</a>
+        <a href="/hall-of-fame/">Hall of Fame</a>
+        <a href="/partenaires/">Partenaires</a>
+        <a href="/a-propos/">À propos</a>
+        <a href="/faq/">FAQ</a>
+        <a class="btn btn--ghost btn--sm" href="/devenir-speaker/">Postuler</a>
         <!-- PLACEHOLDER : remplacer par le vrai lien HelloAsso de billetterie -->
-        <a class="btn btn--primary btn--sm" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition">Réserver</a>
+        <a class="btn btn--primary btn--sm" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition" target="_blank" rel="noopener">Réserver</a>
       </nav>
 
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-mobile" aria-label="Menu">
@@ -115,23 +116,29 @@
   <div class="mobile-menu" id="menu-mobile" role="dialog" aria-modal="true" aria-label="Menu de navigation" hidden>
     <nav aria-label="Navigation mobile">
       <ul class="mobile-menu-list">
-        <li style="--i: 0"><a href="index.html" aria-current="page">Accueil</a></li>
-        <li style="--i: 1"><a href="speakers.html">Speakers</a></li>
-        <li style="--i: 2"><a href="programme.html">Programme</a></li>
-        <li style="--i: 3"><a href="editions.html">Éditions</a></li>
-        <li style="--i: 4"><a href="partenaires.html">Partenaires</a></li>
-        <li style="--i: 5"><a href="a-propos.html">À propos</a></li>
-        <li style="--i: 6"><a href="faq.html">FAQ</a></li>
+        <li style="--i: 0"><a href="/" aria-current="page">Accueil</a></li>
+        <li style="--i: 1"><a href="/speakers/">Speakers</a></li>
+        <li style="--i: 2"><a href="/programme/">Programme</a></li>
+        <li style="--i: 3"><a href="/editions/">Éditions</a></li>
+        <li style="--i: 4"><a href="/hall-of-fame/">Hall of Fame</a></li>
+        <li style="--i: 5"><a href="/partenaires/">Partenaires</a></li>
+        <li style="--i: 6"><a href="/a-propos/">À propos</a></li>
+        <li style="--i: 7"><a href="/faq/">FAQ</a></li>
       </ul>
     </nav>
     <div class="mobile-menu-foot">
-      <a class="btn btn--ghost" href="devenir-speaker.html">Postuler comme speaker</a>
+      <a class="btn btn--ghost" href="/devenir-speaker/">Postuler comme speaker</a>
       <!-- PLACEHOLDER : remplacer par le vrai lien HelloAsso de billetterie -->
-      <a class="btn btn--primary" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition">Réserver ma place</a>
+      <a class="btn btn--primary" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition" target="_blank" rel="noopener">Réserver ma place</a>
       <p class="mobile-menu-date">Jeudi 18 mars 2027 · 18h00 · Centre de Congrès de l'Aube, Troyes</p>
     </div>
   </div>
 
+  <!-- Le defilement virtuel : line.js fixe ce wrapper (main + footer) et
+       le translate selon le scroll d'un spacer, pour figer l'ecran
+       pendant les deplacements horizontaux de la ligne. Sans JS, en
+       mobile ou en reduced motion : flux normal. -->
+  <div class="jscroll">
   <main id="contenu">
     <!-- Sondes de mesure : le JS y lit la position des deux axes de la ligne -->
     <span class="probe" id="probe-a" aria-hidden="true"></span>
@@ -143,7 +150,7 @@
       <!-- Le fond du seuil : une archive de la scene (edition 2024), en
            couleur sous un voile sombre, la typo reste reine. -->
       <div class="hero-bg" aria-hidden="true">
-        <img src="assets/img/editions/2024/galerie/05.webp" alt="" width="1400" height="933" fetchpriority="high">
+        <img src="/assets/img/editions/2024/galerie/05.webp" alt="" width="1400" height="933" fetchpriority="high">
       </div>
       <div class="mwrap">
         <p class="cote a a1">Dixième édition</p>
@@ -161,8 +168,8 @@
         </p>
         <div class="actions a a6">
           <!-- PLACEHOLDER : remplacer par le vrai lien HelloAsso de billetterie -->
-          <a class="btn btn--primary" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition">Réserver ma place</a>
-          <a class="btn btn--ghost" href="programme.html">Voir le programme</a>
+          <a class="btn btn--primary" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition" target="_blank" rel="noopener">Réserver ma place</a>
+          <a class="btn btn--ghost" href="/programme/">Voir le programme</a>
         </div>
         <p class="visually-hidden">Le compte à rebours est lancé : l'événement commence le jeudi 18 mars 2027 à 18h00.</p>
         <div class="ticker a a7" aria-hidden="true">
@@ -180,9 +187,14 @@
         <div class="cross-track" aria-hidden="true">
           <span class="cross-word">Au-delà</span>
         </div>
-        <div class="colL">
-          <h2 class="mom-title">Décider que la ligne était provisoire</h2>
-          <p class="lead">Le record tombe, le prototype décolle, une voix s'élève là où personne ne parlait. Franchir, c'est regarder la limite en face et passer outre : le mur devient une marche, la frontière un point de départ. C'est le premier versant du thème 2027 : l'audace d'aller de l'autre côté, et ce que ce geste coûte à celles et ceux qui le font.</p>
+        <div class="mom-duo">
+          <div class="colL">
+            <h2 class="mom-title">Décider que la ligne était provisoire</h2>
+            <p class="lead">Le record tombe, le prototype décolle, une voix s'élève là où personne ne parlait. Franchir, c'est regarder la limite en face et passer outre : le mur devient une marche, la frontière un point de départ. C'est le premier versant du thème 2027 : l'audace d'aller de l'autre côté, et ce que ce geste coûte à celles et ceux qui le font.</p>
+          </div>
+          <figure class="mom-photo">
+            <img src="/assets/img/2.jpg" alt="Le public de TEDxUTTroyes dans l'auditorium du Centre de Congrès de l'Aube" width="3200" height="2133" loading="lazy">
+          </figure>
         </div>
       </div>
     </section>
@@ -196,9 +208,14 @@
         <div class="cross-track cross-track--rtl" aria-hidden="true">
           <span class="cross-word">Jusqu'ici</span>
         </div>
-        <div class="colR">
-          <h2 class="mom-title">Ce qui ne se franchit pas</h2>
-          <p class="lead">Le corps compose avec la maladie, la ville avec sa rivière, l'ingénieur avec la matière. S'adapter, c'est faire de la ligne un appui : plier sans rompre, transformer la contrainte en méthode. C'est le second versant du thème : certaines limites ne se dépassent pas, elles s'apprivoisent, et ce renoncement apparent demande autant de courage que le saut.</p>
+        <div class="mom-duo mom-duo--rtl">
+          <figure class="mom-photo">
+            <img src="/assets/img/1.png" alt="Jamy Gourmaud sur la scène de TEDxUTTroyes, devant les lettres rouges" width="2560" height="1440" loading="lazy">
+          </figure>
+          <div class="colR">
+            <h2 class="mom-title">Ce qui ne se franchit pas</h2>
+            <p class="lead">Le corps compose avec la maladie, la ville avec sa rivière, l'ingénieur avec la matière. S'adapter, c'est faire de la ligne un appui : plier sans rompre, transformer la contrainte en méthode. C'est le second versant du thème : certaines limites ne se dépassent pas, elles s'apprivoisent, et ce renoncement apparent demande autant de courage que le saut.</p>
+          </div>
         </div>
       </div>
     </section>
@@ -213,80 +230,64 @@
           <h2 class="mom-title">Six noms s'apprêtent à franchir</h2>
           <p class="lead">Le 18 mars, six talks racontent la limite depuis la scène troyenne : dix-huit minutes chacun, pas une de plus. Les annonces tomberont une par une d'ici mars.</p>
         </div>
-        <!-- GABARIT : pour annoncer un speaker, remplacer une carte sous
-             embargo par celle-ci (creer le dossier assets/img/speakers/
-             au premier ajout ; sur speakers.html le chemin est le meme) :
+        <!-- GABARIT : pour annoncer un speaker sur l'accueil, remplacer
+             une ligne sous embargo par celle-ci (la fiche complete, avec
+             photo et bio, vit sur la page speakers, gabarit sur place) :
 
-        <li class="sp-card sp-card--live">
-          <div class="sp-photo">
-            <img src="assets/img/speakers/prenom-nom.jpg" alt="Portrait de Prénom Nom" width="600" height="750" loading="lazy">
-          </div>
+        <li class="sl-row sl-row--live">
+          <span class="sl-photo"><img src="/assets/img/speakers/prenom-nom.webp" alt="" width="120" height="120" loading="lazy"></span>
           <span class="sp-id">Intervenant·e 01</span>
-          <p class="sp-name">Prénom Nom</p>
-          <p class="sp-bio">Mini bio en une ou deux phrases : qui parle, depuis quelle expérience.</p>
-          <p class="sp-talk"><span class="sp-talk-k">Talk</span> Le titre du talk</p>
+          <span class="sl-name">Prénom Nom</span>
           <span class="sp-status sp-status--live">annoncé·e</span>
         </li>
         -->
-        <ol class="sgrid" data-line="avoid" data-line-margin="28" data-line-margin-m="14" aria-label="Les six intervenantes et intervenants de 2027, annonces à venir">
-          <li class="sp-card">
-            <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+        <ol class="slist" data-line="avoid" data-line-margin="28" data-line-margin-m="14" aria-label="Les six intervenantes et intervenants de 2027, annonces à venir">
+          <li class="sl-row">
+            <span class="sl-photo" aria-hidden="true"></span>
             <span class="sp-id">Intervenant·e 01</span>
-            <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 4.5ch"></span><span class="redact" style="width: 7ch"></span></p>
+            <span class="sl-name" aria-hidden="true"><span class="redact" style="width: 4.5ch"></span><span class="redact" style="width: 7ch"></span></span>
             <span class="visually-hidden">Nom sous embargo</span>
-            <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 100%"></span><span class="redact" style="width: 88%"></span><span class="redact" style="width: 61%"></span></p>
-            <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 13ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
             <span class="sp-status">annonce : à venir</span>
           </li>
-          <li class="sp-card">
-            <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+          <li class="sl-row">
+            <span class="sl-photo" aria-hidden="true"></span>
             <span class="sp-id">Intervenant·e 02</span>
-            <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 6ch"></span><span class="redact" style="width: 5ch"></span></p>
+            <span class="sl-name" aria-hidden="true"><span class="redact" style="width: 6ch"></span><span class="redact" style="width: 5ch"></span></span>
             <span class="visually-hidden">Nom sous embargo</span>
-            <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 94%"></span><span class="redact" style="width: 100%"></span><span class="redact" style="width: 47%"></span></p>
-            <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 10ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
             <span class="sp-status">annonce : à venir</span>
           </li>
-          <li class="sp-card">
-            <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+          <li class="sl-row">
+            <span class="sl-photo" aria-hidden="true"></span>
             <span class="sp-id">Intervenant·e 03</span>
-            <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 5ch"></span><span class="redact" style="width: 8.5ch"></span></p>
+            <span class="sl-name" aria-hidden="true"><span class="redact" style="width: 5ch"></span><span class="redact" style="width: 8.5ch"></span></span>
             <span class="visually-hidden">Nom sous embargo</span>
-            <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 100%"></span><span class="redact" style="width: 72%"></span><span class="redact" style="width: 84%"></span></p>
-            <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 15ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
             <span class="sp-status">annonce : à venir</span>
           </li>
-          <li class="sp-card">
-            <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+          <li class="sl-row">
+            <span class="sl-photo" aria-hidden="true"></span>
             <span class="sp-id">Intervenant·e 04</span>
-            <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 7.5ch"></span><span class="redact" style="width: 4ch"></span></p>
+            <span class="sl-name" aria-hidden="true"><span class="redact" style="width: 7.5ch"></span><span class="redact" style="width: 4ch"></span></span>
             <span class="visually-hidden">Nom sous embargo</span>
-            <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 86%"></span><span class="redact" style="width: 100%"></span><span class="redact" style="width: 55%"></span></p>
-            <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 11ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
             <span class="sp-status">annonce : à venir</span>
           </li>
-          <li class="sp-card">
-            <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+          <li class="sl-row">
+            <span class="sl-photo" aria-hidden="true"></span>
             <span class="sp-id">Intervenant·e 05</span>
-            <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 5.5ch"></span><span class="redact" style="width: 6.5ch"></span></p>
+            <span class="sl-name" aria-hidden="true"><span class="redact" style="width: 5.5ch"></span><span class="redact" style="width: 6.5ch"></span></span>
             <span class="visually-hidden">Nom sous embargo</span>
-            <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 100%"></span><span class="redact" style="width: 91%"></span><span class="redact" style="width: 38%"></span></p>
-            <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 14ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
             <span class="sp-status">annonce : à venir</span>
           </li>
-          <li class="sp-card">
-            <div class="sp-photo" aria-hidden="true"><span class="sp-photo-mark">portrait sous embargo</span></div>
+          <li class="sl-row">
+            <span class="sl-photo" aria-hidden="true"></span>
             <span class="sp-id">Intervenant·e 06</span>
-            <p class="sp-name" aria-hidden="true"><span class="redact" style="width: 4ch"></span><span class="redact" style="width: 9ch"></span></p>
+            <span class="sl-name" aria-hidden="true"><span class="redact" style="width: 4ch"></span><span class="redact" style="width: 9ch"></span></span>
             <span class="visually-hidden">Nom sous embargo</span>
-            <p class="sp-bio" aria-hidden="true"><span class="redact" style="width: 96%"></span><span class="redact" style="width: 79%"></span><span class="redact" style="width: 66%"></span></p>
-            <p class="sp-talk"><span class="sp-talk-k">Talk</span> <span class="redact" style="width: 12ch" aria-hidden="true"></span><span class="visually-hidden">titre sous embargo</span></p>
             <span class="sp-status">annonce : à venir</span>
           </li>
         </ol>
         <div class="colL more-row actions">
-          <a class="btn btn--ghost" href="devenir-speaker.html">Postuler comme speaker</a>
-          <a class="link-more" href="speakers.html">Ouvrir les six fiches
+          <a class="btn btn--ghost" href="/devenir-speaker/">Postuler comme speaker</a>
+          <a class="link-more" href="/speakers/">Ouvrir les six fiches
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
           </a>
         </div>
@@ -312,7 +313,7 @@
                prend sa place. -->
           <div class="lieu-trio">
             <div class="lieu-photo">
-              <img src="assets/img/lieu/centre-congres.webp" alt="La foule devant le Centre de Congrès de l'Aube, à Troyes" width="1280" height="957" loading="lazy">
+              <img src="/assets/img/lieu/centre-congres.webp" alt="La foule devant le Centre de Congrès de l'Aube, à Troyes" width="1280" height="957" loading="lazy">
               <p class="lieu-mot" aria-hidden="true">Le lieu</p>
             </div>
             <div class="lieu-scene">
@@ -348,7 +349,7 @@
             <div class="lieu-info">
               <ul class="facts">
                 <li>
-                  <strong>Jusqu'à 800 personnes</strong>
+                  <strong>Jusqu'à 750 personnes</strong>
                   <span class="data">configuration auditorium</span>
                 </li>
                 <li>
@@ -383,7 +384,12 @@
         </div>
         <ol class="tl" aria-label="Le déroulé de la soirée du 18 mars 2027">
           <li class="tl-row">
-            <span class="tl-time">18h00</span>
+            <div class="tl-left">
+              <figure class="tl-ph" aria-hidden="true">
+                <img src="/assets/img/recrutement.webp" alt="" width="980" height="667" loading="lazy">
+              </figure>
+              <span class="tl-time">18h00</span>
+            </div>
             <span class="tl-dot" aria-hidden="true"></span>
             <div class="tl-body">
               <p class="tl-title">Ouverture des portes et mini forum de recrutement</p>
@@ -391,7 +397,12 @@
             </div>
           </li>
           <li class="tl-row">
-            <span class="tl-time">19h30</span>
+            <div class="tl-left">
+              <figure class="tl-ph" aria-hidden="true">
+                <img src="/assets/img/ouverture.png" alt="" width="2600" height="1529" loading="lazy">
+              </figure>
+              <span class="tl-time">19h30</span>
+            </div>
             <span class="tl-dot" aria-hidden="true"></span>
             <div class="tl-body">
               <p class="tl-title">Ouverture de la soirée</p>
@@ -399,7 +410,12 @@
             </div>
           </li>
           <li class="tl-row">
-            <span class="tl-time">19h45</span>
+            <div class="tl-left">
+              <figure class="tl-ph" aria-hidden="true">
+                <img src="/assets/img/talk1.png" alt="" width="1600" height="800" loading="lazy">
+              </figure>
+              <span class="tl-time">19h45</span>
+            </div>
             <span class="tl-dot" aria-hidden="true"></span>
             <div class="tl-body">
               <p class="tl-title">Première session de talks</p>
@@ -407,7 +423,12 @@
             </div>
           </li>
           <li class="tl-row">
-            <span class="tl-time">20h50</span>
+            <div class="tl-left">
+              <figure class="tl-ph" aria-hidden="true">
+                <img src="/assets/img/entracte.png" alt="" width="1200" height="600" loading="lazy">
+              </figure>
+              <span class="tl-time">20h50</span>
+            </div>
             <span class="tl-dot" aria-hidden="true"></span>
             <div class="tl-body">
               <p class="tl-title">Entracte</p>
@@ -415,7 +436,12 @@
             </div>
           </li>
           <li class="tl-row">
-            <span class="tl-time">21h20</span>
+            <div class="tl-left">
+              <figure class="tl-ph" aria-hidden="true">
+                <img src="/assets/img/talk2.png" alt="" width="1600" height="1066" loading="lazy">
+              </figure>
+              <span class="tl-time">21h20</span>
+            </div>
             <span class="tl-dot" aria-hidden="true"></span>
             <div class="tl-body">
               <p class="tl-title">Seconde session de talks</p>
@@ -423,7 +449,12 @@
             </div>
           </li>
           <li class="tl-row">
-            <span class="tl-time">22h30</span>
+            <div class="tl-left">
+              <figure class="tl-ph" aria-hidden="true">
+                <img src="/assets/img/cocktail.png" alt="" width="1200" height="600" loading="lazy">
+              </figure>
+              <span class="tl-time">22h30</span>
+            </div>
             <span class="tl-dot" aria-hidden="true"></span>
             <div class="tl-body">
               <p class="tl-title">Pôt VIP</p>
@@ -432,88 +463,119 @@
           </li>
         </ol>
         <p class="more-row">
-          <a class="link-more" href="programme.html">Lire la feuille de salle complète
+          <a class="link-more" href="/programme/">Lire la feuille de salle complète
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
           </a>
         </p>
       </div>
     </section>
 
-    <!-- Moment 7 : la frise des dix ans. La ligne redescend a 2016, tourne,
-         se deploie a l'horizontale et devient la chronologie. 2018 et 2020
-         l'interrompent ; 2027 est le point final, et le trait qui en
-         redescend forme le 1 du grand 10. -->
+    <!-- Moment 7 : l'album des dix ans. La ligne redescend a 2016, tourne,
+         et traverse l'ecran a l'horizontale : les affiches des editions
+         pendent sur le fil comme un album photo, le theme sous chacune.
+         2027 est le point final, d'ou le trait redescend vers la prise.
+         Les affiches se revelent au passage de la pointe (variable
+         --sweep posee par line.js). -->
     <section class="mom mom--frise" id="dix-ans">
       <div class="mwrap">
         <p class="cote">Dix ans</p>
         <div class="colL">
           <h2 class="mom-title">La ligne vient de loin</h2>
-          <p class="lead">Neuf éditions, deux années blanches, une seule scène. En 2017, le thème s'appelait déjà <span lang="en">To the Limits and Beyond</span> : dix ans plus tard, la question revient, et cette fois il faudra choisir.</p>
+          <p class="lead">Neuf éditions, une seule scène. En 2017, le thème s'appelait déjà <span lang="en">To the Limits and Beyond</span> : dix ans plus tard, la question revient, et cette fois il faudra choisir.</p>
         </div>
-        <p class="fr-caption">Relevé des éditions · 2016 à 2027 · un intervalle par année</p>
-        <ol class="fr-band" data-line="turn" aria-label="Chronologie des éditions TEDxUTTroyes, de 2016 à 2027">
-          <li class="fr-item" style="--fx: 0%; --fy: 0">
-            <span class="fr-lbl"><span class="fr-y">2016</span><span class="fr-t" lang="en">Shape the future</span></span>
+        <p class="fr-caption">L'album des éditions · 2016 à 2027 · les affiches au fil de la ligne</p>
+        <ol class="album" data-line="turn" aria-label="L'album des éditions TEDxUTTroyes, de 2016 à 2027">
+          <li class="alb-item" style="--c: 1; --th: 0">
+            <figure class="alb-img">
+              <img src="/assets/img/editions/2016/visuel.webp" alt="Affiche de l'édition 2016 : Shape the future" width="840" height="840" loading="lazy">
+            </figure>
+            <span class="alb-dot" aria-hidden="true"></span>
+            <span class="alb-lbl"><span class="fr-y">2016</span><span class="fr-t" lang="en">Shape the future</span></span>
           </li>
-          <li class="fr-item" style="--fx: 9.09%; --fy: 1">
-            <span class="fr-lbl"><span class="fr-y">2017</span><span class="fr-t" lang="en">To the Limits and Beyond</span></span>
+          <li class="alb-item" style="--c: 2; --th: 0.08">
+            <figure class="alb-img">
+              <img src="/assets/img/editions/2017/visuel.webp" alt="Affiche de l'édition 2017 : To the Limits and Beyond" width="840" height="840" loading="lazy">
+            </figure>
+            <span class="alb-dot" aria-hidden="true"></span>
+            <span class="alb-lbl"><span class="fr-y">2017</span><span class="fr-t" lang="en">To the Limits and Beyond</span></span>
           </li>
-          <li class="fr-item fr-item--gap" style="--fx: 18.18%; --fy: 2">
-            <span class="fr-lbl"><span class="fr-y">2018</span><span class="fr-t">année blanche</span></span>
+          <li class="alb-item" style="--c: 3; --th: 0.16">
+            <figure class="alb-img">
+              <img src="/assets/img/editions/2019/affiche.webp" alt="Affiche de l'édition 2019 : Thinking outside the box" width="595" height="842" loading="lazy">
+            </figure>
+            <span class="alb-dot" aria-hidden="true"></span>
+            <span class="alb-lbl"><span class="fr-y">2019</span><span class="fr-t" lang="en">Thinking outside the box</span></span>
           </li>
-          <li class="fr-item" style="--fx: 27.27%; --fy: 3">
-            <span class="fr-lbl"><span class="fr-y">2019</span><span class="fr-t" lang="en">Thinking outside the box</span></span>
+          <li class="alb-item" style="--c: 4; --th: 0.24">
+            <figure class="alb-img">
+              <img src="/assets/img/editions/2021/affiche.webp" alt="Affiche de l'édition 2021 : Changing codes" width="840" height="840" loading="lazy">
+            </figure>
+            <span class="alb-dot" aria-hidden="true"></span>
+            <span class="alb-lbl"><span class="fr-y">2021</span><span class="fr-t" lang="en">Changing codes</span></span>
           </li>
-          <li class="fr-item fr-item--gap" style="--fx: 36.36%; --fy: 4">
-            <span class="fr-lbl"><span class="fr-y">2020</span><span class="fr-t">année blanche</span></span>
+          <li class="alb-item" style="--c: 5; --th: 0.32">
+            <figure class="alb-img">
+              <img src="/assets/img/editions/2022/affiche.webp" alt="Affiche de l'édition 2022 : Circulation" width="840" height="1188" loading="lazy">
+            </figure>
+            <span class="alb-dot" aria-hidden="true"></span>
+            <span class="alb-lbl"><span class="fr-y">2022</span><span class="fr-t">Circulation</span></span>
           </li>
-          <li class="fr-item" style="--fx: 45.45%; --fy: 5">
-            <span class="fr-lbl"><span class="fr-y">2021</span><span class="fr-t" lang="en">Changing codes</span></span>
+          <li class="alb-item" style="--c: 6; --th: 0.40">
+            <figure class="alb-img">
+              <img src="/assets/img/editions/2023/affiche.webp" alt="Affiche de l'édition 2023 : Impacting our world" width="840" height="1188" loading="lazy">
+            </figure>
+            <span class="alb-dot" aria-hidden="true"></span>
+            <span class="alb-lbl"><span class="fr-y">2023</span><span class="fr-t" lang="en">Impacting our world</span></span>
           </li>
-          <li class="fr-item" style="--fx: 54.55%; --fy: 6">
-            <span class="fr-lbl"><span class="fr-y">2022</span><span class="fr-t">Circulation</span></span>
+          <li class="alb-item" style="--c: 7; --th: 0.48">
+            <figure class="alb-img">
+              <img src="/assets/img/editions/2024/affiche.webp" alt="Affiche de l'édition 2024 : Le monde de demain" width="840" height="1188" loading="lazy">
+            </figure>
+            <span class="alb-dot" aria-hidden="true"></span>
+            <span class="alb-lbl"><span class="fr-y">2024</span><span class="fr-t">Le monde de demain</span></span>
           </li>
-          <li class="fr-item" style="--fx: 63.64%; --fy: 7">
-            <span class="fr-lbl"><span class="fr-y">2023</span><span class="fr-t" lang="en">Impacting our world</span></span>
+          <li class="alb-item" style="--c: 8; --th: 0.56">
+            <figure class="alb-img">
+              <img src="/assets/img/editions/2025/affiche.webp" alt="Affiche de l'édition 2025 : Réveiller l'avenir" width="840" height="1188" loading="lazy">
+            </figure>
+            <span class="alb-dot" aria-hidden="true"></span>
+            <span class="alb-lbl"><span class="fr-y">2025</span><span class="fr-t">Réveiller l'avenir</span></span>
           </li>
-          <li class="fr-item" style="--fx: 72.73%; --fy: 8">
-            <span class="fr-lbl"><span class="fr-y">2024</span><span class="fr-t">Le monde de demain</span></span>
+          <li class="alb-item" style="--c: 9; --th: 0.64">
+            <figure class="alb-img">
+              <img src="/assets/img/editions/2026/affiche.webp" alt="Affiche de l'édition 2026 : Un futur à bâtir" width="840" height="1233" loading="lazy">
+            </figure>
+            <span class="alb-dot" aria-hidden="true"></span>
+            <span class="alb-lbl"><span class="fr-y">2026</span><span class="fr-t">Un futur à bâtir</span></span>
           </li>
-          <li class="fr-item" style="--fx: 81.82%; --fy: 9">
-            <span class="fr-lbl"><span class="fr-y">2025</span><span class="fr-t">Réveiller l'avenir</span></span>
-          </li>
-          <li class="fr-item" style="--fx: 90.91%; --fy: 10">
-            <span class="fr-lbl"><span class="fr-y">2026</span><span class="fr-t">Un futur à bâtir</span></span>
-          </li>
-          <li class="fr-end">
-            <span class="fr-end-dot" data-line="drop" aria-hidden="true"></span>
-            
-            <span class="fr-end-label">
+          <li class="alb-item alb-item--end" style="--c: 10; --th: 0.72">
+            <span class="alb-end-label">
               <span class="fr-y">2027</span>
               <span class="fr-t">Franchir ou s'adapter&nbsp;?</span>
               <span class="fr-end-note">Dixième édition · 18 mars 2027 · vous êtes ici</span>
             </span>
+            <span class="alb-dot alb-dot--end" data-line="drop" aria-hidden="true"></span>
           </li>
         </ol>
         <figure class="arch">
           <ul class="arch-strip">
-            <li><img src="assets/img/editions/2024/galerie/01.webp" alt="La scène du TEDxUTTroyes 2024" width="1400" height="933" loading="lazy"></li>
-            <li><img src="assets/img/editions/2023/galerie/04.webp" alt="Le public de l'édition 2023" width="1400" height="933" loading="lazy"></li>
-            <li><img src="assets/img/editions/2024/galerie/03.webp" alt="Un talk de l'édition 2024" width="1400" height="933" loading="lazy"></li>
-            <li><img src="assets/img/editions/2023/galerie/07.webp" alt="Karim Hechmi sur la scène de l'édition 2023" width="1400" height="933" loading="lazy"></li>
-            <li><img src="assets/img/editions/2024/galerie/06.webp" alt="Un moment de l'édition 2024" width="1400" height="933" loading="lazy"></li>
-            <li><img src="assets/img/editions/2023/galerie/09.webp" alt="L'équipe organisatrice de l'édition 2023" width="1400" height="933" loading="lazy"></li>
+            <li><img src="/assets/img/editions/2024/galerie/01.webp" alt="La scène du TEDxUTTroyes 2024" width="1400" height="933" loading="lazy"></li>
+            <li><img src="/assets/img/editions/2023/galerie/04.webp" alt="Le public de l'édition 2023" width="1400" height="933" loading="lazy"></li>
+            <li><img src="/assets/img/editions/2024/galerie/03.webp" alt="Un talk de l'édition 2024" width="1400" height="933" loading="lazy"></li>
+            <li><img src="/assets/img/editions/2023/galerie/07.webp" alt="Karim Hechmi sur la scène de l'édition 2023" width="1400" height="933" loading="lazy"></li>
+            <li><img src="/assets/img/editions/2024/galerie/06.webp" alt="Un moment de l'édition 2024" width="1400" height="933" loading="lazy"></li>
+            <li><img src="/assets/img/editions/2023/galerie/09.webp" alt="L'équipe organisatrice de l'édition 2023" width="1400" height="933" loading="lazy"></li>
           </ul>
           <figcaption>Pièces versées au dossier : les éditions 2023 et 2024 · photographies ©argentique utt</figcaption>
         </figure>
-        <ul class="data-lines colL" aria-label="La dixième édition en chiffres">
-          <!-- PLACEHOLDER : remplacer XX par les chiffres réels -->
-          <li><strong>61</strong> talks partagés sur la scène troyenne depuis 2016</li>
-          <li><strong>61</strong> intervenantes et intervenants passés par le plateau</li>
-          <li><strong>800</strong> fauteuils le 18 mars 2027, pas un de plus</li>
+        <ul class="data-lines" data-line="avoid" data-line-side="right" data-line-margin="28" data-line-margin-m="14" aria-label="La dixième édition en chiffres">
+          <!-- PLACEHOLDER : remplacer par les chiffres réels si besoin -->
+          <li><strong>61</strong><span>talks partagés sur la scène troyenne depuis 2016</span></li>
+          <li><strong>2500</strong><span>intervenantes et intervenants passés par le plateau</span></li>
+          <li><strong>750</strong><span>fauteuils le 18 mars 2027, pas un de plus</span></li>
         </ul>
         <p class="colL more-row">
-          <a class="link-more" href="editions.html">Ouvrir le registre des éditions
+          <a class="link-more" href="/editions/">Ouvrir le registre des éditions
             <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
           </a>
         </p>
@@ -534,6 +596,13 @@
             </a>
           </div>
         </div>
+        <!-- Le logo de l'evenement, a droite du texte sur le chemin de la
+             descente : la ligne le contourne par la droite, a egale
+             distance au-dessus et au-dessous (exit tight : pas de retour
+             repousse a la frontiere de section). -->
+        <figure class="tedx-logo" data-line="avoid" data-line-side="right" data-line-exit="tight" data-line-margin="28" data-line-margin-m="14">
+          <img src="/assets/img/logo-white.png" alt="TEDxUTTroyes" width="500" height="105" loading="lazy">
+        </figure>
       </div>
     </section>
 
@@ -544,11 +613,11 @@
       <div class="mwrap">
         <p class="cote">Billetterie</p>
         <div class="colL">
-          <h2 class="final-title">La salle s'arrête à 800 fauteuils. C'est la seule limite de la soirée que personne ne franchira.</h2>
+          <h2 class="final-title">La salle s'arrête à 750 fauteuils. C'est la seule limite de la soirée que personne ne franchira.</h2>
         </div>
         <div class="final-plug">
           <!-- PLACEHOLDER : remplacer par le vrai lien HelloAsso de billetterie -->
-          <a class="btn btn--primary" data-line="plug" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition">Réserver ma place</a>
+          <a class="btn btn--primary" data-line="plug" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition" target="_blank" rel="noopener">Réserver ma place</a>
           <p class="final-note">Billetterie hébergée sur HelloAsso. Aucune donnée n'est collectée sur ce site.</p>
         </div>
       </div>
@@ -560,26 +629,27 @@
     <div class="finner">
       <div class="footer-grid">
         <div class="footer-brand">
-          <img src="assets/img/logo-white.png" alt="TEDxUTTroyes" width="500" height="105">
+          <img src="/assets/img/logo-white.png" alt="TEDxUTTroyes" width="500" height="105">
           <p class="footer-licence" data-line="finale">Cet événement TEDx indépendant est organisé sous licence de TED.</p>
         </div>
         <nav aria-label="Navigation de pied de page">
           <h2 class="footer-title">Explorer</h2>
           <ul class="footer-list">
-            <li><a href="speakers.html">Speakers</a></li>
-            <li><a href="programme.html">Programme</a></li>
-            <li><a href="editions.html">Éditions passées</a></li>
-            <li><a href="partenaires.html">Partenaires</a></li>
-            <li><a href="a-propos.html">À propos</a></li>
-            <li><a href="faq.html">FAQ pratique</a></li>
+            <li><a href="/speakers/">Speakers</a></li>
+            <li><a href="/programme/">Programme</a></li>
+            <li><a href="/editions/">Éditions passées</a></li>
+            <li><a href="/hall-of-fame/">Hall of Fame</a></li>
+            <li><a href="/partenaires/">Partenaires</a></li>
+            <li><a href="/a-propos/">À propos</a></li>
+            <li><a href="/faq/">FAQ pratique</a></li>
           </ul>
         </nav>
         <div>
           <h2 class="footer-title">L'événement</h2>
           <ul class="footer-list">
             
-            <li><a href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition">Réserver ma place</a></li>
-            <li><a href="devenir-speaker.html">Devenir speaker</a></li>
+            <li><a href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition" target="_blank" rel="noopener">Réserver ma place</a></li>
+            <li><a href="/devenir-speaker/">Devenir speaker</a></li>
             <li><a href="https://www.ted.com/tedx" target="_blank" rel="noopener">Le programme TEDx<span class="visually-hidden"> (nouvelle fenêtre)</span></a></li>
             <li><a href="https://www.youtube.com/@TEDx" target="_blank" rel="noopener">Chaîne TEDx Talks<span class="visually-hidden"> (nouvelle fenêtre)</span></a></li>
           </ul>
@@ -601,10 +671,11 @@
       </div>
       <div class="footer-bottom">
         <span>&copy; 2027 TEDxUTTroyes · Genius UTT, Université de Technologie de Troyes</span>
-        <a href="mentions-legales.html">Mentions légales</a>
+        <a href="/mentions-legales/">Mentions légales</a>
         <span>Site statique, sans cookies ni traceurs</span>
       </div>
     </div>
   </footer>
+  </div>
 </body>
 </html>

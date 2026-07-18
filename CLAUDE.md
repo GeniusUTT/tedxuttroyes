@@ -8,7 +8,7 @@ Site statique de TEDxUTTroyes 2027 (dixième édition, jeudi 18 mars 2027, Centr
 
 ## Commandes
 
-Pas de build ni de lint. Pour tester en local (nécessaire pour la page 404 et les chemins absolus) :
+Pas de build ni de lint. Pour tester en local (indispensable : tous les liens et chemins d'assets sont absolus depuis la racine, ouvrir les fichiers directement ne fonctionne pas) :
 
 ```
 python -m http.server 8000
@@ -31,7 +31,9 @@ Baptiste préfère valider un plan avant l'écriture du code pour tout changemen
 
 ### La ligne continue (index.html + assets/js/line.js)
 
-Le concept directeur de l'accueil : un seul trait SVG rouge parcourt toute la page (`body.journey`). **Le CSS place les contenus, line.js mesure et relie** : le script lit les ancres `data-line` (`cross`, `avoid`, `turn`, `drop`, `plug`, `finale`) et deux sondes CSS (`#probe-a` donne `--line-x`, `#probe-b` donne `--axis-b`), reconstruit le path à chaque changement de géométrie (ResizeObserver), et le dessine au fil du scroll (pathLength normalisé à 1000, pointe à 62 % du viewport). Sans JavaScript ou en cas d'échec de build (classe `.jline-fail`) : dorsale verticale statique en pur CSS (`main::before`).
+Le concept directeur de l'accueil : un seul trait SVG rouge parcourt toute la page (`body.journey`). **Le CSS place les contenus, line.js mesure et relie** : le script lit les ancres `data-line` (`cross`, `avoid`, `turn`, `drop`, `plug`, `finale`) et deux sondes CSS (`#probe-a` donne `--line-x`, `#probe-b` donne `--axis-b`), reconstruit le path à chaque changement de géométrie (ResizeObserver), et le dessine au fil du scroll (pathLength normalisé à 1000, pointe au centre du viewport).
+
+En desktop, l'accueil est en **défilement virtuel à scrollbar native** : `main` + footer vivent dans un wrapper `.jscroll` que line.js passe en `position: fixed` (classe `jscroll-run` sur `html`) et translate selon le scroll d'un spacer ; chaque segment horizontal du tracé reçoit une fenêtre de gel (translation constante) pendant laquelle l'écran est figé et la pointe balaie l'horizontale (contournements, virages, traversée de la frise), jusqu'à la prise (bouton Réserver) où la règle s'arrête. Toutes les mesures de line.js sont en repère contenu (relatives au wrapper). Conséquence : `position: sticky` ne fonctionne plus à l'intérieur de `main` sur l'accueil (ancêtre transformé), et le scroll natif (`window.scrollY`) continue d'avancer normalement (le header, main.js et les IntersectionObserver ne sont pas affectés). Sans JavaScript, sous 1024 px, en reduced motion ou en cas d'échec de build (classe `.jline-fail`) : flux normal, dorsale verticale statique en pur CSS (`main::before`).
 
 Conséquence : déplacer, redimensionner ou supprimer un bloc porteur de `data-line` sur l'accueil change le tracé de la ligne. Vérifier le rendu au scroll après toute retouche de layout de l'accueil. Sous 1024 px la ligne devient une dorsale gauche simplifiée (pas de traversée animée).
 
@@ -47,9 +49,10 @@ Conséquence : déplacer, redimensionner ou supprimer un bloc porteur de `data-l
 
 ### Pages et contenus
 
-- 9 pages à la racine + `editions/edition-XXXX.html` (2016 à 2026, ni 2018 ni 2020 : deux années sans édition, ce qui fait de 2027 la dixième). Les URL sous `editions/` reprennent celles de l'ancien site (SEO) : ne pas les renommer.
+- Chaque page vit dans son dossier sous le nom `index.html` et se sert en URL sans extension : `/editions/`, `/editions/edition-2016/`, `/speakers/2019/alexandre-dana/`. Seuls `index.html` (l'accueil) et `404.html` (cible du `ErrorDocument`) restent à la racine. Les anciennes URL en `.html` (celles de l'ancien site comprises) sont redirigées en 301 par le `.htaccess` : ne pas retirer ces règles. Tous les liens internes sont absolus depuis la racine (`/editions/`, `/assets/...`), jamais relatifs.
+- Éditions : 2016 à 2026, ni 2018 ni 2020 (deux années sans édition, ce qui fait de 2027 la dixième). Ces deux années blanches ne figurent plus dans la frise de l'accueil (retirées le 2026-07-18), seule `editions/index.html` les mentionne dans le texte.
 - `migration/` : extraction brute de l'ancien site (contenus, tableaux speakers/équipe, photos haute résolution). C'est la matière source, jamais servie ni liée depuis les pages ; les images optimisées vivent dans `assets/img/editions/` (WebP, produites via Pillow).
-- Toute nouvelle page doit être ajoutée à `sitemap.xml` et reprendre le gabarit commun (header, footer avec mention de licence, ligne dorsale).
+- Toute nouvelle page est créée dans son dossier (`nouvelle-page/index.html`), ajoutée à `sitemap.xml` (URL sans extension) et reprend le gabarit commun (header, footer avec mention de licence, ligne dorsale).
 
 ## Pièges de test connus
 

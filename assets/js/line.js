@@ -1,34 +1,49 @@
 /* TEDxUTTroyes 2027 - la ligne continue (accueil uniquement)
    Un seul trait rouge parcourt la page : il nait au seuil sous le titre,
    reste droit quand les mots le franchissent (ancres cross, sens ltr ou
-   rtl), plie autour des blocs qui portent l'ancre avoid (grille des
-   speakers, lieu, a gauche ou a droite), redescend a 2016, deroule la
-   frise des dix ans, forme le 1 du grand 10, et se branche dans le
-   bouton Reserver.
-   Principe : le CSS place les contenus, ce script mesure et relie.
-   Le chemin SVG est reconstruit a chaque changement de geometrie.
-   Sans JavaScript ou en cas d'echec : ligne verticale statique en CSS. */
+   rtl), plie autour des blocs qui portent l'ancre avoid (liste des
+   speakers, lieu) en revenant pile entre deux sections, allume la
+   feuille de salle pastille apres pastille, traverse l'album des dix
+   ans a l'horizontale (variable --sweep : les affiches se revelent au
+   passage de la pointe), et se branche dans le bouton Reserver.
+
+   Regime desktop : defilement virtuel a scrollbar native. Le contenu
+   (main + footer, wrapper .jscroll) est fixe et translate par ce script
+   selon le scroll d'un spacer ; chaque segment horizontal du trace
+   recoit une fenetre de gel pendant laquelle la translation est
+   constante : l'ecran se fige, la pointe balaie l'horizontale, puis le
+   defilement reprend. La pointe vit ainsi toujours au centre de
+   l'ecran. La regle s'arrete a la prise (bouton Reserver) : l'epilogue
+   se trace au fil du defilement normal.
+
+   Principe inchange : le CSS place les contenus, ce script mesure et
+   relie, le chemin est reconstruit a chaque changement de geometrie.
+   Sans JavaScript, sous 1024 px, en reduced motion ou en cas d'echec :
+   pas de defilement virtuel (flux normal) et les fallbacks CSS
+   habituels (dorsale statique, contenu entierement visible). */
 
 (function () {
   "use strict";
 
   var doc = document;
   var body = doc.body;
+  var html = doc.documentElement;
 
   if (!body.classList.contains("journey") || !("ResizeObserver" in window)) {
     return;
   }
 
   var main = doc.getElementById("contenu");
+  var wrap = doc.querySelector(".jscroll");
   var probeA = doc.getElementById("probe-a");
   var probeB = doc.getElementById("probe-b");
-  if (!main || !probeA || !probeB) {
+  if (!main || !wrap || !probeA || !probeB) {
     return;
   }
 
   var SVG_NS = "http://www.w3.org/2000/svg";
   var LEN = 1000;   /* pathLength normalise : dashoffset independant de la geometrie */
-  var TIP = 0.62;   /* la pointe du trait vit a 62 % de la hauteur du viewport */
+  var TIP = 0.5;    /* la pointe du trait vit au centre de la hauteur du viewport */
 
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
   var wide = window.matchMedia("(min-width: 1024px)");
@@ -36,16 +51,26 @@
   var svg = null;
   var pathMain = null;
   var pathTail = null;
+  var spacer = null;    /* porte la hauteur de scroll en regime virtuel */
   var svgW = 0;
   var svgH = 0;
 
   var vh = window.innerHeight;
+  var wrapRect = null;  /* rect du wrapper au moment du build (repere contenu) */
+  var contentH = 0;
+  var virtualOn = false;
   var tableM = [];      /* etapes [scroll, fraction] du trait principal */
+  var freezes = [];     /* fenetres de gel [debut, fin] en scroll */
   var tailFrom = 0;     /* fenetre de scroll ou l'epilogue se trace */
   var tailTo = 1;
   var crosses = [];     /* mots qui franchissent, actifs ce build (desktop) */
   var crossStates = []; /* etat persistant par ancre cross : {el, p, dist} */
   var plugEl = null;    /* le bouton Reserver : noir tant que la ligne n'y est pas */
+  var sweepEl = null;   /* l'album des editions : recoit --sweep (0 a 1) */
+  var sweepP0 = 0;      /* fenetre du balayage en fractions du trace */
+  var sweepP1 = 0;
+  var lastSweep = -1;
+  var tlMarks = [];     /* creneaux du programme : {el, p (fraction), on} */
   var cs = window.scrollY;
   var rafId = 0;
 
@@ -61,16 +86,17 @@
   }
 
   /* ------------------------------------------------------------------
-     Outils de geometrie
+     Outils de geometrie (repere contenu : relatif au wrapper, donc
+     invariant a la translation du defilement virtuel)
      ------------------------------------------------------------------ */
 
-  function absRect(el, sx, sy) {
+  function relRect(el) {
     var r = el.getBoundingClientRect();
     return {
-      left: r.left + sx,
-      right: r.right + sx,
-      top: r.top + sy,
-      bottom: r.bottom + sy,
+      left: r.left - wrapRect.left,
+      right: r.right - wrapRect.left,
+      top: r.top - wrapRect.top,
+      bottom: r.bottom - wrapRect.top,
       width: r.width,
       height: r.height
     };
@@ -110,10 +136,14 @@
   }
 
   /* Table scroll vers fraction tracee : la pointe suit la lecture.
-     Les segments verticaux se declenchent quand leur sommet atteint
-     TIP du viewport ; les segments horizontaux (frise, pliure, virage)
-     recoivent une plage de scroll dediee pour que le balayage se voie. */
-  function buildTable(pts) {
+     Les segments verticaux se declenchent quand leur sommet atteint le
+     centre du viewport, decale des gels accumules. En regime virtuel,
+     chaque segment horizontal recoit une fenetre de gel (budget de
+     scroll pendant lequel la page est figee) ; hors regime virtuel,
+     l'ancienne petite plage de scroll est conservee. budgets : plage
+     dediee par indice de point (la traversee de la frise). */
+  function buildTable(pts, virtual, budgets) {
+    freezes = [];
     var lens = [0];
     var total = 0;
     var i;
@@ -125,20 +155,52 @@
       tableM = [];
       return;
     }
+    var acc = 0;
     var t = [pts[0][1] - TIP * vh];
     for (i = 1; i < pts.length; i++) {
       var dx = Math.abs(pts[i][0] - pts[i - 1][0]);
       var dy = Math.abs(pts[i][1] - pts[i - 1][1]);
       if (dy < 3 && dx > 3) {
-        t.push(t[i - 1] + Math.min(Math.max(dx * 0.35, 48), vh * 0.35));
+        if (virtual) {
+          var F = budgets && budgets[i]
+            ? budgets[i]
+            : Math.min(Math.max(dx * 0.5, 200), vh * 0.6);
+          F = Math.round(F);
+          t.push(t[i - 1] + F);
+          freezes.push([t[i - 1], t[i - 1] + F]);
+          acc += F;
+        } else {
+          t.push(t[i - 1] + Math.min(Math.max(dx * 0.35, 48), vh * 0.35));
+        }
       } else {
-        t.push(Math.max(t[i - 1] + 2, pts[i][1] - TIP * vh));
+        t.push(Math.max(t[i - 1] + 2, pts[i][1] - TIP * vh + acc));
       }
     }
     tableM = [];
     for (i = 0; i < pts.length; i++) {
       tableM.push({ t: t[i], p: lens[i] / total });
     }
+  }
+
+  /* Scroll vers translation du contenu : identite moins les gels deja
+     consommes ; constante pendant un gel. Sans gel (regime normal),
+     c'est l'identite. */
+  function gOf(s) {
+    var off = 0;
+    for (var i = 0; i < freezes.length; i++) {
+      var fz = freezes[i];
+      if (s >= fz[1]) {
+        off += fz[1] - fz[0];
+      } else {
+        if (s > fz[0]) {
+          off += s - fz[0];
+        }
+        break;
+      }
+    }
+    var y = s - off;
+    var max = Math.max(0, contentH - vh);
+    return y < 0 ? 0 : y > max ? max : y;
   }
 
   function interp(table, x) {
@@ -188,24 +250,24 @@
     pathTail.setAttribute("stroke-dasharray", LEN);
     svg.appendChild(pathMain);
     svg.appendChild(pathTail);
-    body.appendChild(svg);
+    wrap.appendChild(svg);
   }
 
   function build() {
-    /* Phase 1 : lectures seules */
+    /* Phase 1 : lectures seules, en repere contenu */
     vh = window.innerHeight;
-    var sx = window.scrollX;
-    var sy = window.scrollY;
     var horiz = wide.matches;
-    var axA = probeA.getBoundingClientRect().left + sx;
-    var axB = probeB.getBoundingClientRect().left + sx;
+    var virtual = horiz && !reduce.matches;
+    wrapRect = wrap.getBoundingClientRect();
+    contentH = wrapRect.height;
+    var axA = relRect(probeA).left;
+    var axB = relRect(probeB).left;
     var W = doc.documentElement.clientWidth;
     var footer = doc.querySelector(".site-footer");
-    var H = footer
-      ? Math.ceil(footer.getBoundingClientRect().bottom + sy)
-      : doc.documentElement.scrollHeight;
+    var H = Math.ceil(footer ? relRect(footer).bottom : contentH);
 
     var pts = [[axB, 0]];
+    var budgets = {};
     var el;
     var r;
 
@@ -222,8 +284,8 @@
       var st = crossStateFor(el);
       var active = false;
       if (word && horiz && !reduce.matches) {
-        r = absRect(el, sx, sy);
-        var wr = absRect(word, sx, sy);
+        r = relRect(el);
+        var wr = relRect(word);
         var rtl = el.getAttribute("data-cross-dir") === "rtl";
         var dist;
         if (rtl) {
@@ -248,14 +310,35 @@
       }
     }
 
+    /* La frise est mesuree d'abord : les blocs d'avoid situes sous son
+       entree (les chiffres, le logo TEDx) ne peuvent pas etre contournes
+       par l'axe B, la ligne etant deja partie a l'horizontale ; ils sont
+       collectes ici et contournes par la descente vers la prise. */
+    var band = main.querySelector('[data-line="turn"]');
+    var dot = main.querySelector('[data-line="drop"]');
+    var bandR = null;
+    var dotR = null;
+    var bandJogY = 0;
+    var bandCutY = Infinity;
+    if (band && dot && horiz) {
+      bandR = relRect(band);
+      dotR = relRect(dot);
+      var caption = main.querySelector(".fr-caption");
+      bandJogY = caption
+        ? Math.round((relRect(caption).bottom + bandR.top) / 2)
+        : bandR.top - 30;
+      bandCutY = bandJogY;
+    }
+
     /* Les pliures : la ligne plie autour de chaque bloc data-line="avoid",
        vers la gauche par defaut, vers la droite avec data-line-side="right".
        Les blocs qui se chevaucheraient sont ignores (le trace doit rester
        monotone du haut vers le bas). */
     var avoidEls = main.querySelectorAll('[data-line="avoid"]');
     var avoids = [];
+    var lateAvoids = [];
     for (c = 0; c < avoidEls.length; c++) {
-      avoids.push({ el: avoidEls[c], r: absRect(avoidEls[c], sx, sy) });
+      avoids.push({ el: avoidEls[c], r: relRect(avoidEls[c]) });
     }
     avoids.sort(function (a, b) {
       return a.r.top - b.r.top;
@@ -268,50 +351,69 @@
       if (!m || m < 0) {
         m = horiz ? 28 : 14;
       }
+      if (r.top > bandCutY) {
+        lateAvoids.push({ el: el, r: r, m: m });
+        continue;
+      }
       if (r.top - m < lastY + 12) {
         continue;
       }
       var ex;
-      if (el.getAttribute("data-line-side") === "right") {
+      if (horiz && el.getAttribute("data-line-side") === "right") {
         ex = Math.min(W - 4, r.right + m);
       } else {
         ex = horiz
           ? Math.max(4, r.left - m)
           : Math.max(4, Math.min(r.left - m, axA - 10));
       }
-      pts.push([axB, r.top - m], [ex, r.top - m], [ex, r.bottom + m], [axB, r.bottom + m]);
-      lastY = r.bottom + m;
+      /* Le retour vers l'axe se fait pile entre les deux blocs : la
+         frontiere de la section porteuse est le milieu du blanc qui la
+         separe de la suivante (les paddings des sections sont egaux). */
+      var exitY = r.bottom + m;
+      var sec = el.closest("section");
+      if (sec) {
+        var secBottom = relRect(sec).bottom;
+        if (secBottom > exitY) {
+          exitY = secBottom;
+        }
+      }
+      pts.push([axB, r.top - m], [ex, r.top - m], [ex, exitY], [axB, exitY]);
+      lastY = exitY;
     }
 
-    /* Moment 4 : retour a 2016, virage, puis l'escalier des editions
-       (desktop) : une marche par annee, le point de chaque edition pose
-       sur sa marche, la contremarche a mi-chemin entre deux points.
-       Sur mobile la frise reste une echelle verticale sur la ligne. */
+    /* Moment 4 : l'album des editions (desktop). La ligne quitte l'axe B
+       pile entre le texte de la section et les affiches, rejoint la
+       marge gauche, descend au niveau du fil (le centre de la bande des
+       pastilles, mesure sur le point 2027) et balaie l'album a
+       l'horizontale jusqu'au terminus. En regime virtuel, la traversee
+       recoit un gel long (l'ecran se fige pendant le balayage). Les
+       seuils --th des affiches sont calibres sur la geometrie : chaque
+       affiche s'eclaire quand la pointe atteint son bord gauche. */
     var dropX = axB;
-    var band = main.querySelector('[data-line="turn"]');
-    var dot = main.querySelector('[data-line="drop"]');
-    if (band && horiz) {
-      var items = band.querySelectorAll(".fr-item");
-      var steps = [];
-      var k;
-      for (k = 0; k < items.length; k++) {
-        var ir = absRect(items[k], sx, sy);
-        steps.push([ir.left, ir.top]);
-      }
-      if (dot) {
-        var dr = absRect(dot, sx, sy);
-        dropX = dr.left + dr.width / 2;
-        steps.push([dropX, dr.top + dr.height / 2]);
-      }
-      if (steps.length > 1) {
-        var jogY = steps[0][1] - 64;
-        var entryX = Math.max(4, steps[0][0] - 44);
-        pts.push([axB, jogY], [entryX, jogY], [entryX, steps[0][1]]);
-        for (k = 0; k < steps.length - 1; k++) {
-          var mx = (steps[k][0] + steps[k + 1][0]) / 2;
-          pts.push([mx, steps[k][1]], [mx, steps[k + 1][1]]);
+    var bandBottom = 0;
+    var sweepIdx = null;
+    sweepEl = band;
+    if (bandR) {
+      r = bandR;
+      var dr = dotR;
+      var lineY = dr.top + dr.height / 2;
+      dropX = dr.left + dr.width / 2;
+      bandBottom = r.bottom;
+      var entryX = Math.max(4, r.left - 44);
+      pts.push([axB, bandJogY], [entryX, bandJogY], [entryX, lineY]);
+      sweepIdx = [pts.length - 1, pts.length];
+      budgets[pts.length] = vh * 1.2;
+      pts.push([dropX, lineY]);
+      var items = band.querySelectorAll(".alb-item");
+      for (var it = 0; it < items.length; it++) {
+        var anchor = items[it].querySelector(".alb-img") ||
+          items[it].querySelector(".alb-lbl, .alb-end-label");
+        if (!anchor) {
+          continue;
         }
-        pts.push([steps[steps.length - 1][0], steps[steps.length - 1][1]]);
+        var ar = relRect(anchor);
+        var thv = clamp01((ar.left - entryX) / Math.max(1, dropX - entryX));
+        items[it].style.setProperty("--th", Math.min(0.8, thv).toFixed(3));
       }
     }
 
@@ -328,10 +430,46 @@
       } else {
         plug.classList.add("plug-armed");
       }
-      plugRect = absRect(plug, sx, sy);
+      plugRect = relRect(plug);
       var bx = plugRect.left + plugRect.width / 2;
       if (Math.abs(dropX - bx) > 12) {
-        pts.push([dropX, plugRect.top - 18], [bx, plugRect.top - 18]);
+        /* Le coude se fait tout en haut, juste sous l'album : la
+           descente arrive droite dans le bouton, sans courbe finale. */
+        var jogY2 = bandBottom ? bandBottom + 44 : plugRect.top - 18;
+        pts.push([dropX, jogY2], [bx, jogY2]);
+      }
+      /* La descente contourne les blocs d'avoid situes sous la frise
+         (les chiffres, le logo TEDx) : memes regles que sur l'axe B,
+         autour de la verticale du bouton. */
+      var lastY2 = pts[pts.length - 1][1];
+      for (c = 0; c < lateAvoids.length; c++) {
+        el = lateAvoids[c].el;
+        r = lateAvoids[c].r;
+        var m2 = lateAvoids[c].m;
+        if (r.top - m2 < lastY2 + 12 || r.bottom + m2 > plugRect.top - 12) {
+          continue;
+        }
+        var ex2;
+        if (el.getAttribute("data-line-side") === "right") {
+          ex2 = Math.min(W - 4, r.right + m2);
+        } else {
+          ex2 = Math.max(4, r.left - m2);
+        }
+        /* data-line-exit="tight" : le retour se fait a la meme distance
+           sous le bloc qu'au-dessus (cadre symetrique), au lieu d'etre
+           repousse a la frontiere de la section. */
+        var exitY2 = r.bottom + m2;
+        if (el.getAttribute("data-line-exit") !== "tight") {
+          var sec2 = el.closest("section");
+          if (sec2) {
+            var secBottom2 = relRect(sec2).bottom;
+            if (secBottom2 > exitY2) {
+              exitY2 = secBottom2;
+            }
+          }
+        }
+        pts.push([bx, r.top - m2], [ex2, r.top - m2], [ex2, exitY2], [bx, exitY2]);
+        lastY2 = exitY2;
       }
       pts.push([bx, plugRect.top + 8]);
     } else {
@@ -344,6 +482,12 @@
     /* Phase 2 : ecritures */
     if (!svg) {
       inject();
+    }
+    if (!spacer) {
+      spacer = doc.createElement("div");
+      spacer.className = "jscroll-spacer";
+      spacer.setAttribute("aria-hidden", "true");
+      body.appendChild(spacer);
     }
     if (W !== svgW || H !== svgH) {
       svgW = W;
@@ -359,8 +503,22 @@
       pathTail.removeAttribute("d");
     }
 
-    buildTable(pts);
-    var maxScroll = Math.max(1, H - vh);
+    buildTable(pts, virtual, budgets);
+    virtualOn = virtual && tableM.length > 0;
+    var totalF = 0;
+    for (c = 0; c < freezes.length; c++) {
+      totalF += freezes[c][1] - freezes[c][0];
+    }
+    if (virtualOn) {
+      spacer.style.height = Math.round(contentH + totalF) + "px";
+      html.classList.add("jscroll-run");
+    } else {
+      html.classList.remove("jscroll-run");
+      wrap.style.transform = "";
+      freezes = [];
+    }
+
+    var maxScroll = Math.max(1, (virtualOn ? contentH + totalF : contentH) - vh);
     tailFrom = tableM.length ? tableM[tableM.length - 1].t + 30 : 0;
     tailFrom = Math.min(tailFrom, maxScroll - 60);
     tailTo = Math.max(1, maxScroll - Math.max(120, Math.round(vh * 0.45)));
@@ -368,9 +526,61 @@
       tailFrom = Math.max(0, tailTo - 40);
     }
 
+    /* La fenetre du balayage de l'album, en fractions de longueur du
+       trace (tableM et pts partagent les memes indices). */
+    sweepP0 = 0;
+    sweepP1 = 0;
+    lastSweep = -1;
+    if (sweepIdx && tableM.length) {
+      sweepP0 = tableM[sweepIdx[0]].p;
+      sweepP1 = tableM[sweepIdx[1]].p;
+    } else if (sweepEl) {
+      sweepEl.style.removeProperty("--sweep");
+    }
+
+    /* La feuille de salle : chaque pastille est situee sur le trace
+       (segment vertical qui la contient) et recoit sa fraction de
+       longueur ; apply() allume le creneau quand la pointe la depasse.
+       Pastille introuvable sur le trace : creneau visible d'emblee. */
+    tlMarks = [];
+    var dots = main.querySelectorAll(".tl-row .tl-dot");
+    for (c = 0; c < dots.length; c++) {
+      var rowEl = dots[c].closest(".tl-row");
+      if (!rowEl) {
+        continue;
+      }
+      var dd = relRect(dots[c]);
+      var dcx = dd.left + dd.width / 2;
+      var dcy = dd.top + dd.height / 2;
+      var frac = -1;
+      for (var s = 1; s < pts.length; s++) {
+        var vx = pts[s - 1][0];
+        if (Math.abs(pts[s][0] - vx) < 3 && Math.abs(vx - dcx) < 24 &&
+            dcy >= pts[s - 1][1] && dcy <= pts[s][1]) {
+          frac = tableM[s - 1].p + (tableM[s].p - tableM[s - 1].p) *
+            ((dcy - pts[s - 1][1]) / Math.max(1, pts[s][1] - pts[s - 1][1]));
+          break;
+        }
+      }
+      tlMarks.push({
+        el: rowEl,
+        p: frac,
+        on: rowEl.classList.contains("is-on")
+      });
+    }
+
+    doc.documentElement.classList.add("jline-run");
+
     if (reduce.matches) {
       pathMain.style.strokeDashoffset = "0";
       pathTail.style.strokeDashoffset = "0";
+      for (c = 0; c < tlMarks.length; c++) {
+        tlMarks[c].on = true;
+        tlMarks[c].el.classList.add("is-on");
+      }
+      if (sweepEl) {
+        sweepEl.style.removeProperty("--sweep");
+      }
     } else {
       apply(cs);
     }
@@ -378,20 +588,40 @@
 
   /* ------------------------------------------------------------------
      Pilote : le trait se trace au fil du defilement, avec lissage.
+     En regime virtuel, la meme valeur lissee pilote la translation du
+     contenu et le dashoffset : la pointe et la page bougent ensemble.
      La boucle rAF s'arrete d'elle-meme quand la page est immobile.
      ------------------------------------------------------------------ */
 
   function apply(scroll) {
+    var offY = gOf(scroll);
+    if (virtualOn) {
+      wrap.style.transform = "translate3d(0, " + (-offY).toFixed(2) + "px, 0)";
+    }
     var pM = interp(tableM, scroll);
     pathMain.style.strokeDashoffset = (LEN * (1 - pM)).toFixed(2);
     if (plugEl) {
       plugEl.classList.toggle("plug-on", pM >= 0.995);
     }
+    if (sweepEl && sweepP1 > sweepP0) {
+      var sp = clamp01((pM - sweepP0) / (sweepP1 - sweepP0));
+      if (Math.abs(sp - lastSweep) > 0.003) {
+        lastSweep = sp;
+        sweepEl.style.setProperty("--sweep", sp.toFixed(3));
+      }
+    }
+    for (var tm = 0; tm < tlMarks.length; tm++) {
+      var mk = tlMarks[tm];
+      if (!mk.on && pM >= mk.p) {
+        mk.on = true;
+        mk.el.classList.add("is-on");
+      }
+    }
     var pT = clamp01((scroll - tailFrom) / Math.max(1, tailTo - tailFrom));
     pathTail.style.strokeDashoffset = (LEN * (1 - pT)).toFixed(2);
     for (var i = 0; i < crosses.length; i++) {
       var cr = crosses[i];
-      var cp = clamp01((scroll + vh * 0.85 - cr.top) / Math.max(1, cr.h * 0.75));
+      var cp = clamp01((offY + vh * 0.85 - cr.top) / Math.max(1, cr.h * 0.75));
       cp = 1 - Math.pow(1 - cp, 3);
       if (Math.abs(cp - cr.st.p) > 0.001) {
         cr.st.p = cp;
@@ -425,10 +655,19 @@
 
   function fail() {
     doc.documentElement.classList.add("jline-fail");
+    doc.documentElement.classList.remove("jline-run", "jscroll-run");
+    wrap.style.transform = "";
+    virtualOn = false;
+    freezes = [];
     if (plugEl) {
       plugEl.classList.remove("plug-armed", "plug-on");
       plugEl = null;
     }
+    if (sweepEl) {
+      sweepEl.style.removeProperty("--sweep");
+      sweepEl = null;
+    }
+    tlMarks = [];
     if (svg && svg.parentNode) {
       svg.parentNode.removeChild(svg);
     }
@@ -463,7 +702,10 @@
       window.requestAnimationFrame(safeBuild);
     }, 120);
   });
+  /* En regime virtuel le body ne suit plus le contenu (wrapper fixe,
+     hauteur portee par le spacer) : on surveille aussi le wrapper. */
   ro.observe(body);
+  ro.observe(wrap);
 
   if (wide.addEventListener) {
     wide.addEventListener("change", safeBuild);

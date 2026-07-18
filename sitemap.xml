@@ -7,379 +7,385 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/programme.html</loc>
+    <loc>https://tedxuttroyes.fr/programme/</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/editions.html</loc>
+    <loc>https://tedxuttroyes.fr/editions/</loc>
     <lastmod>2026-07-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/editions/edition-2026.html</loc>
+    <loc>https://tedxuttroyes.fr/hall-of-fame/</loc>
+    <lastmod>2026-07-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://tedxuttroyes.fr/editions/edition-2026/</loc>
     <lastmod>2026-07-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/editions/edition-2025.html</loc>
+    <loc>https://tedxuttroyes.fr/editions/edition-2025/</loc>
     <lastmod>2026-07-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/editions/edition-2024.html</loc>
+    <loc>https://tedxuttroyes.fr/editions/edition-2024/</loc>
     <lastmod>2026-07-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/editions/edition-2023.html</loc>
+    <loc>https://tedxuttroyes.fr/editions/edition-2023/</loc>
     <lastmod>2026-07-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/editions/edition-2022.html</loc>
+    <loc>https://tedxuttroyes.fr/editions/edition-2022/</loc>
     <lastmod>2026-07-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/editions/edition-2021.html</loc>
+    <loc>https://tedxuttroyes.fr/editions/edition-2021/</loc>
     <lastmod>2026-07-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/editions/edition-2019.html</loc>
+    <loc>https://tedxuttroyes.fr/editions/edition-2019/</loc>
     <lastmod>2026-07-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/editions/edition-2017.html</loc>
+    <loc>https://tedxuttroyes.fr/editions/edition-2017/</loc>
     <lastmod>2026-07-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/editions/edition-2016.html</loc>
+    <loc>https://tedxuttroyes.fr/editions/edition-2016/</loc>
     <lastmod>2026-07-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/partenaires.html</loc>
+    <loc>https://tedxuttroyes.fr/partenaires/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/devenir-speaker.html</loc>
+    <loc>https://tedxuttroyes.fr/devenir-speaker/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/a-propos.html</loc>
+    <loc>https://tedxuttroyes.fr/a-propos/</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/faq.html</loc>
+    <loc>https://tedxuttroyes.fr/faq/</loc>
     <lastmod>2026-07-10</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2019/alexandre-dana.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2019/alexandre-dana/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2019/cyrielle-hariel.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2019/cyrielle-hariel/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2019/mahamadou-faty.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2019/mahamadou-faty/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2019/frederic-petitjean.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2019/frederic-petitjean/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2019/thomas-saquet-florent-poinsaut.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2019/thomas-saquet-florent-poinsaut/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2019/nathalie-lefevre.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2019/nathalie-lefevre/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2019/olivier-babeau.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2019/olivier-babeau/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2021/jacques-attali.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2021/jacques-attali/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2021/geraldine-naja.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2021/geraldine-naja/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2021/yogan-le-fouler-barthel.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2021/yogan-le-fouler-barthel/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2021/frank-schneider.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2021/frank-schneider/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2021/fatima-ait-bouana.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2021/fatima-ait-bouana/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2021/patrick-constant.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2021/patrick-constant/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2021/myriam-lewkowicz.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2021/myriam-lewkowicz/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2022/frederic-saldmann.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2022/frederic-saldmann/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2022/alexandra-ridoux.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2022/alexandra-ridoux/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2022/nathanael-ramos.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2022/nathanael-ramos/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2022/marc-pic.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2022/marc-pic/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2022/bruno-jarrosson.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2022/bruno-jarrosson/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2022/elias-khoury.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2022/elias-khoury/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2022/serge-zaka.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2022/serge-zaka/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2023/vincent-doumeizel.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2023/vincent-doumeizel/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2023/theo-hoenen.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2023/theo-hoenen/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2023/serge-rohmer.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2023/serge-rohmer/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2023/marcel-soh.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2023/marcel-soh/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2023/karim-hechmi.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2023/karim-hechmi/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2023/leo-techmaker.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2023/leo-techmaker/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2024/claire-petreault.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2024/claire-petreault/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2024/lise-molimard.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2024/lise-molimard/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2024/yogan-le-fouler-barthel.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2024/yogan-le-fouler-barthel/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2024/lydie-lescarmontier.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2024/lydie-lescarmontier/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2024/emmanuel-carquin.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2024/emmanuel-carquin/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2024/damien-berry.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2024/damien-berry/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2024/lilie-boizumault.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2024/lilie-boizumault/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2025/timaho.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2025/timaho/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2025/jean-audouze.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2025/jean-audouze/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2025/eugenie-merieau.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2025/eugenie-merieau/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2025/mathieu-boucher.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2025/mathieu-boucher/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2025/sidonie-martinez-svoboda.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2025/sidonie-martinez-svoboda/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2025/gregory-romano.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2025/gregory-romano/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2025/ivan-kovac.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2025/ivan-kovac/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2026/alban-michon.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2026/alban-michon/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2026/daniella-tchana.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2026/daniella-tchana/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2026/franck-robin.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2026/franck-robin/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2026/jean-marie-simon.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2026/jean-marie-simon/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2026/jean-michel-adelaide.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2026/jean-michel-adelaide/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://tedxuttroyes.fr/speakers/2026/nicolas-dehandschoewercker.html</loc>
+    <loc>https://tedxuttroyes.fr/speakers/2026/nicolas-dehandschoewercker/</loc>
     <lastmod>2026-07-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>

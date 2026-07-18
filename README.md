@@ -4,29 +4,36 @@ Site statique de la dixième édition de TEDxUTTroyes (jeudi 18 mars 2027, porte
 
 ## La direction artistique en deux mots
 
-Le site est construit autour d'un concept directeur unique : **la ligne continue**, qui matérialise la limite du thème. Sur l'accueil, un seul trait SVG rouge parcourt toute la page et change de comportement : au seuil, la question du titre se tient à cheval dessus ; au moment "franchir", il reste droit et un mot le traverse au défilement ; les moments "s'adapter" et "speakers" le laissent filer droit ; au moment "le lieu", il plie autour du bloc carte + présentation ; puis, après la feuille de salle, il redescend à 2016, tourne à l'horizontale et devient la frise des dix ans (interrompue en 2018 et 2020, les deux années sans édition), forme le 1 du grand 10 en retombant de 2027, se branche dans le bouton Réserver (centré), et file en trait fin souligner la mention de licence TED du footer. Le trait se dessine au fil du défilement (`assets/js/line.js`) : le CSS place les contenus, le script mesure les ancres `data-line` et relie. Les pages intérieures gardent la ligne comme dorsale statique (pur CSS), marge technique en Space Mono, contenu à sa droite.
+Le site est construit autour d'un concept directeur unique : **la ligne continue**, qui matérialise la limite du thème. Sur l'accueil, un seul trait SVG rouge parcourt toute la page et change de comportement : au seuil, la question du titre se tient à cheval dessus ; au moment "franchir", il reste droit et un mot le traverse au défilement ; les moments "s'adapter" et "speakers" le laissent filer droit ; au moment "le lieu", il plie autour du bloc carte + présentation ; puis, après la feuille de salle, il redescend à 2016, tourne à l'horizontale et devient la frise des dix ans, forme le 1 du grand 10 en retombant de 2027, se branche dans le bouton Réserver (centré), et file en trait fin souligner la mention de licence TED du footer. Le trait se dessine au fil du défilement (`assets/js/line.js`) : le CSS place les contenus, le script mesure les ancres `data-line` et relie. Les pages intérieures gardent la ligne comme dorsale statique (pur CSS), marge technique en Space Mono, contenu à sa droite.
 
 À ne pas défaire : les speakers non annoncés sont des **fiches sous embargo** (barres de caviardage), les éditions passées un **registre**, le compte à rebours un **téléscripteur** mono d'une seule ligne.
 
 ## Structure
 
+Chaque page vit dans son dossier sous le nom `index.html` et se sert en URL sans extension (`/editions/`, `/speakers/2019/alexandre-dana/`). Les anciennes adresses en `.html` (ancien site inclus) sont redirigées en 301 par le `.htaccess`. Tous les liens internes sont absolus depuis la racine (`/editions/`, `/assets/...`).
+
 ```
 index.html               Accueil (le parcours de la ligne : seuil, franchir,
                          s'adapter, speakers, lieu, programme, frise des dix
                          ans, prise, épilogue)
-speakers.html            Les 6 fiches sous embargo + appel à candidatures
-devenir-speaker.html     Candidature speaker (CTA mailto)
-programme.html           Feuille de salle du 18 mars (portes 18h00, forum)
-editions.html            Le registre des 9 éditions
-editions/                Une page par édition, speakers cliquables
-speakers/<annee>/        Une page par speaker passé (47 pages, générées depuis
-                         les archives de l'ancien site ; mêmes URLs qu'avant)
-partenaires.html         Partenaires (page dédiée, jamais sur l'accueil)
-a-propos.html            About TED / About TEDx / About TEDxUTTroyes
-faq.html                 FAQ pratique (accordéons natifs)
-mentions-legales.html    Mentions légales (LCEN)
-404.html                 Page d'erreur (chemins absolus, servie par Apache)
-.htaccess                HTTPS, cache, compression, 404 (OVH mutualisé)
+speakers/                Les 6 fiches sous embargo + appel à candidatures
+speakers/<annee>/<nom>/  Une page par speaker passé (47 pages, générées depuis
+                         les archives de l'ancien site ; les anciennes URL
+                         en .html sont redirigées en 301)
+devenir-speaker/         Candidature speaker (CTA mailto)
+programme/               Feuille de salle du 18 mars (portes 18h00, forum)
+editions/                Le registre des 9 éditions
+editions/edition-XXXX/   Une page par édition, speakers cliquables
+hall-of-fame/            Toutes les voix passées (47 cartes, 2019 à 2026 ;
+                         speakers 2016-2017 à consigner, PLACEHOLDER)
+partenaires/             Partenaires (page dédiée, jamais sur l'accueil)
+a-propos/                About TED / About TEDx / About TEDxUTTroyes
+faq/                     FAQ pratique (accordéons natifs)
+mentions-legales/        Mentions légales (LCEN)
+404.html                 Page d'erreur (reste à la racine : cible du
+                         ErrorDocument d'Apache)
+.htaccess                HTTPS, URL en dossiers + redirections 301, cache,
+                         compression, 404 (OVH mutualisé)
 robots.txt, sitemap.xml  SEO technique
 assets/
   css/main.css           Feuille unique (sommaire commenté en tête de fichier)
@@ -44,7 +51,7 @@ assets/
 
 ## Tester en local
 
-Ouvrir les fichiers directement dans un navigateur fonctionne, mais pour tester la page 404 et les chemins absolus, servez le dossier :
+Les liens du site sont absolus depuis la racine (`/editions/`, `/assets/...`) : ouvrir les fichiers directement dans un navigateur ne fonctionne pas, servez le dossier (le serveur Python sert bien les `index.html` des dossiers, comme Apache) :
 
 ```
 python -m http.server 8000
@@ -55,7 +62,7 @@ python -m http.server 8000
 Poussez le contenu du dossier tel quel à la racine du site (www). Deux points d'attention :
 
 1. **SSL** : la redirection HTTPS du `.htaccess` suppose un certificat actif (Let's Encrypt gratuit dans l'espace client OVH). Sinon, commentez temporairement les lignes indiquées dans le fichier.
-2. **Cache** : `main.css` et `main.js` sont mis en cache un mois. Si vous les modifiez après la mise en ligne, renommez le fichier (par exemple `main-v2.css`) et mettez à jour les références dans les 9 pages HTML.
+2. **Cache** : `main.css` et `main.js` sont mis en cache un mois. Si vous les modifiez après la mise en ligne, renommez le fichier (par exemple `main-v2.css`) et mettez à jour les références dans toutes les pages HTML.
 
 ## Placeholders à compléter avant mise en ligne
 
@@ -66,15 +73,15 @@ Tous les emplacements variables sont marqués par un commentaire `PLACEHOLDER` d
 | Lien billetterie HelloAsso | toutes les pages + JSON-LD de `index.html` | remplacer partout `https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition` |
 | Lien newsletter HelloAsso | `index.html`, footers | remplacer partout `https://www.helloasso.com/PLACEHOLDER-NEWSLETTER` |
 | Chiffres (talks, intervenants) | `index.html`, section « En chiffres » | remplacer les `XX` des lignes de données |
-| Annonce d'un speaker | `speakers.html` | suivre le gabarit commenté : la fiche sous embargo devient nom + sujet + photo optionnelle (dossier `assets/img/speakers/` à créer) |
-| Liens YouTube par édition | `editions.html` et pages `editions/` | remplacer les liens de recherche YouTube par les playlists exactes |
-| Liens des sites partenaires | `partenaires.html` | les logos 2026 sont en place avec `href="#"` : remplacer chaque `#` par l'URL du site du partenaire (liste fournie par l'équipe) et retirer les partenaires non reconduits |
-| Talks 2026 | `speakers/2026/*.html` | ajouter le lien YouTube de chaque talk 2026 dès sa publication |
+| Annonce d'un speaker | `speakers/index.html` | suivre le gabarit commenté : la fiche sous embargo devient nom + sujet + photo optionnelle (dossier `assets/img/speakers/` à créer) |
+| Liens YouTube par édition | `editions/index.html` et pages `editions/edition-XXXX/` | remplacer les liens de recherche YouTube par les playlists exactes |
+| Liens des sites partenaires | `partenaires/index.html` | les logos 2026 sont en place avec `href="#"` : remplacer chaque `#` par l'URL du site du partenaire (liste fournie par l'équipe) et retirer les partenaires non reconduits |
+| Talks 2026 | `speakers/2026/*/index.html` | ajouter le lien YouTube de chaque talk 2026 dès sa publication |
 | Jeton Mapbox | `assets/js/map.js` | le jeton public et le style rouge proviennent du compte personnel `solene-drnx` (ancien site) ; créer un jeton sur un compte Mapbox de l'association, restreint au domaine tedxuttroyes.fr, et y transférer le style |
 | Image de partage (Open Graph) | `assets/img/og/og-default.jpg` | placeholder généré aux couleurs du site, à remplacer par un visuel conçu (1200x630) |
 | Logos partenaires | `partenaires.html` | suivre le gabarit commenté ; ne pas retirer les limites de taille CSS (règle TEDx) |
-| Mentions légales | `mentions-legales.html` | compléter les champs entre crochets |
-| Contenus FAQ et programme | `faq.html`, `programme.html` | contenus type à relire et ajuster (tarifs, horaires précis, conditions) |
+| Mentions légales | `mentions-legales/index.html` | compléter les champs entre crochets |
+| Contenus FAQ et programme | `faq/index.html`, `programme/index.html` | contenus type à relire et ajuster (tarifs, horaires précis, conditions) |
 
 ## À vérifier (préremplis, non garantis)
 
@@ -83,7 +90,7 @@ Tous les emplacements variables sont marqués par un commentaire `PLACEHOLDER` d
 - **Textes About TED / About TEDx** : adaptation française d'usage, à faire relire.
 - **Heure de fin** : le JSON-LD de `index.html` indique 23h00, à ajuster avec le déroulé définitif.
 - **Mini forum de recrutement** : annoncé à 18h00 (ouverture des portes) sur l'accueil, le programme et la FAQ ; libellé et contenu à préciser avec les partenaires.
-- **2018 et 2020** figurent comme années sans édition (c'est ce qui fait de 2027 la dixième) : la frise de `index.html` interrompt la ligne à ces deux dates, et `editions.html` le mentionne.
+- **2018 et 2020** figurent comme années sans édition (c'est ce qui fait de 2027 la dixième) : la frise de `index.html` ne les affiche pas (retirées le 2026-07-18 à la demande de Baptiste), `editions/index.html` les mentionne dans le texte.
 
 ## Règles TEDx intégrées (ne pas défaire)
 

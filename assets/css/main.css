@@ -18,7 +18,7 @@
    10. Frise des dix ans (sur la marge)
    11. Le dix en batons (tally) et lignes de donnees
    12. Lieu
-   13. Registre des editions
+   13. Registre des editions (13b. Hall of Fame)
    14. Fiches sous embargo (speakers)
    15. Feuille de salle (programme)
    16. Partenaires
@@ -986,6 +986,100 @@ body.nav-open {
   }
 }
 
+/* 13b. Hall of Fame : toutes les voix passees par la scene.
+   Une grille de cartes par annee : portrait carre en couleur, nom,
+   annee (lien vers l'edition) et lien vers la bio. Filets, zero
+   border-radius, zero ombre : le releve. */
+
+.hof-year {
+  margin-top: clamp(40px, 6vw, 64px);
+}
+
+.hof-year:first-of-type {
+  margin-top: 0;
+}
+
+.hof-year .h-md {
+  margin-bottom: 18px;
+}
+
+/* Les filets sont portes par les cartes (bord droit et bas) : une
+   rangee incomplete laisse du noir, pas un pave de fond. */
+.hof-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: 1px solid var(--filet);
+  background-color: var(--noir);
+}
+
+.hof-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: clamp(12px, 1.6vw, 18px);
+  background-color: var(--noir);
+  border-right: 1px solid var(--filet);
+  border-bottom: 1px solid var(--filet);
+}
+
+.hof-card .hof-photo {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.hof-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+}
+
+.hof-name {
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  line-height: 1.1;
+  color: var(--papier);
+}
+
+.hof-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  margin-top: auto;
+  padding-top: 10px;
+  border-top: 1px solid var(--filet);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+.hof-meta a {
+  color: var(--encre-2);
+  text-decoration: none;
+}
+
+.hof-meta a:hover,
+.hof-meta a:focus-visible {
+  color: var(--rouge-vif);
+}
+
+.hof-meta .hof-bio {
+  color: var(--rouge-vif);
+}
+
+@media (min-width: 700px) {
+  .hof-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .hof-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
 /* 14. Fiches sous embargo (speakers) : la grille des six
    Deux lignes sur trois colonnes en desktop, partagee entre l'accueil
    et la page speakers. Les cartes sont cadrees par un filet (gap de
@@ -1122,6 +1216,77 @@ body.nav-open {
 @media (min-width: 1024px) {
   .sgrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* La liste registre de l'accueil : une ligne par intervenant (numero,
+   nom caviarde, statut), cadree par les memes filets que la grille.
+   Les fiches completes (photo, bio, talk) restent sur la page speakers. */
+.slist {
+  display: grid;
+  gap: 1px;
+  margin-top: 40px;
+  border: 1px solid var(--filet);
+  background-color: var(--filet);
+}
+
+.sl-row {
+  display: grid;
+  grid-template-columns: auto 1fr max-content;
+  align-items: center;
+  gap: 6px 16px;
+  padding: 12px clamp(14px, 2vw, 22px);
+  background-color: var(--noir);
+}
+
+/* L'emplacement photo : petit carre, caviarde tant que l'annonce n'est
+   pas tombee (memes hachures que les fiches), portrait en couleur des
+   qu'une image est posee. */
+.sl-photo {
+  width: 52px;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: repeating-linear-gradient(-45deg, var(--caviardage) 0 8px, var(--surface) 8px 11px);
+}
+
+.sl-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+}
+
+.sl-row .sp-id {
+  margin-top: 0;
+}
+
+.sl-name {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
+  align-items: center;
+  grid-column: 1 / -1;
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  line-height: 1.05;
+  color: var(--papier);
+}
+
+.sl-row .sp-status {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+  justify-self: end;
+}
+
+@media (min-width: 640px) {
+  .sl-row {
+    grid-template-columns: auto minmax(11ch, max-content) 1fr max-content;
+  }
+
+  .sl-name {
+    grid-column: auto;
   }
 }
 
@@ -1520,6 +1685,31 @@ details.faq[open] summary .icon {
   position: relative;
 }
 
+/* Le defilement virtuel (accueil, desktop) : line.js fixe le wrapper
+   .jscroll (main + footer) et le translate selon le scroll du spacer,
+   pour figer l'ecran pendant les deplacements horizontaux du trait.
+   Sans la classe jscroll-run (mobile, reduced motion, sans JS, echec) :
+   flux normal, spacer masque. */
+.jscroll {
+  position: relative;
+}
+
+.jscroll-spacer {
+  display: none;
+}
+
+.jscroll-run .jscroll {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  will-change: transform;
+}
+
+.jscroll-run .jscroll-spacer {
+  display: block;
+}
+
 .jline {
   position: absolute;
   top: 0;
@@ -1709,6 +1899,50 @@ details.faq[open] summary .icon {
 
   .mom--droite .cote {
     margin-left: calc(var(--axis-b) - var(--m-left) + var(--body-pad));
+  }
+}
+
+/* Les photos du diptyque : la piece jointe de chaque versant, posee
+   de l'autre cote de la ligne, au niveau du texte. */
+.mom-photo {
+  margin: 26px 0 0;
+}
+
+.mom-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--filet);
+}
+
+@media (min-width: 1024px) {
+  .mom-duo {
+    display: flex;
+    align-items: flex-start;
+    gap: calc(var(--body-pad) + 48px);
+  }
+
+  .mom-duo .colL {
+    flex: none;
+  }
+
+  .mom-duo .mom-photo {
+    flex: 1;
+    min-width: 0;
+    margin-top: 0;
+  }
+
+  /* Variante miroir : la photo vit a gauche de la ligne, le texte a droite */
+  .mom-duo--rtl .mom-photo {
+    flex: none;
+    width: calc(var(--axis-b) - var(--m-left) - 48px);
+  }
+
+  .mom-duo--rtl .colR {
+    flex: 1;
+    min-width: 0;
+    margin-left: 0;
+    max-width: none;
   }
 }
 
@@ -1997,29 +2231,97 @@ details.faq[open] summary .icon {
   margin-top: 28px;
 }
 
-/* Les chiffres de la dixieme : lignes de donnees sous la frise */
+/* Les chiffres de la dixieme : trois grandes colonnes sous la frise,
+   le chiffre en tres grand, l'explication dessous. Empiles en mobile. */
 
 .data-lines {
+  display: grid;
   margin-top: clamp(40px, 6vw, 64px);
   border-top: 1px solid var(--filet);
 }
 
 .data-lines li {
-  padding: 12px 0;
+  padding: 16px 0 14px;
   border-bottom: 1px solid var(--filet);
   font-size: 0.95rem;
   color: var(--encre-2);
 }
 
 .data-lines strong {
+  display: block;
   font-family: var(--font-mono);
   font-weight: 700;
-  font-size: 1.15rem;
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  line-height: 1;
   color: var(--papier);
-  margin-right: 10px;
+  margin-bottom: 10px;
 }
 
-/* Moment 4 : la frise horizontale (desktop) ou verticale (mobile) */
+.data-lines li span {
+  display: block;
+  max-width: 34ch;
+}
+
+@media (min-width: 640px) {
+  .data-lines {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .data-lines li {
+    border-bottom: 0;
+    padding: 24px clamp(16px, 2vw, 28px) 8px 0;
+  }
+
+  .data-lines li + li {
+    border-left: 1px solid var(--filet);
+    padding-left: clamp(16px, 2vw, 28px);
+  }
+}
+
+/* Le logo de l'evenement au moment TEDx : a droite du texte, sur le
+   chemin de la descente vers la prise, que la ligne contourne par la
+   droite (ancre avoid). En desktop le mwrap passe en grille : cote sur
+   toute la largeur, texte a gauche, logo centre verticalement a droite. */
+.tedx-logo {
+  margin: 48px 0 0 auto;
+  width: min(380px, 60%);
+}
+
+.tedx-logo img {
+  width: 100%;
+  height: auto;
+  border: 0;
+}
+
+@media (min-width: 1024px) {
+  .mom--tedx .mwrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+    align-items: center;
+    column-gap: clamp(32px, 4vw, 72px);
+  }
+
+  .mom--tedx .cote {
+    grid-column: 1 / -1;
+  }
+
+  .mom--tedx .colL {
+    grid-column: 1;
+  }
+
+  .tedx-logo {
+    grid-column: 2;
+    margin: 0;
+    width: 100%;
+  }
+}
+
+/* Moment 4 : l'album des editions. La ligne traverse l'ecran a
+   l'horizontale et sert de fil : chaque affiche pend au-dessus de sa
+   pastille, le theme juste en dessous. La revelation suit la pointe du
+   trait : line.js publie --sweep (0 a 1) sur .album, chaque piece porte
+   son seuil --th. Sur mobile : album vertical le long de la dorsale,
+   tout est visible d'emblee. */
 
 .fr-caption {
   font-family: var(--font-mono);
@@ -2030,22 +2332,49 @@ details.faq[open] summary .icon {
   margin-bottom: 36px;
 }
 
-.fr-item {
-  position: relative;
-  padding: 0 0 26px 26px;
+.album {
+  --alb-strip: 36px;
+  list-style: none;
+  margin: 40px 0 0;
+  padding: 0;
 }
 
-.fr-item::before {
-  content: "";
+.alb-item {
+  position: relative;
+  padding: 0 0 34px 26px;
+}
+
+/* La pastille de l'annee : posee sur la dorsale en mobile, centree
+   dans la bande du fil en desktop. Rond et halo : motif etabli. */
+.alb-dot {
   position: absolute;
-  left: calc(-1 * var(--body-pad));
-  top: 0.5em;
+  left: calc(-1 * var(--body-pad) - 6px);
+  top: 0.4em;
   width: 12px;
   height: 12px;
-  margin-left: -5px;
   border-radius: 50%;
   background-color: var(--rouge);
   box-shadow: 0 0 0 4px rgba(235, 0, 40, 0.12);
+}
+
+.alb-img {
+  margin: 0 0 14px;
+}
+
+.alb-img img {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border: 1px solid var(--filet);
+}
+
+.alb-lbl,
+.alb-end-label {
+  display: block;
+  min-width: 0;
 }
 
 .fr-y {
@@ -2066,109 +2395,16 @@ details.faq[open] summary .icon {
   color: var(--papier);
 }
 
-.fr-item--gap::before {
-  content: "";
-  background-color: var(--noir);
-  border-radius: 0;
-  width: 10px;
-  height: 22px;
-  top: 0.1em;
-  margin-left: -4px;
-  box-shadow: none;
-  z-index: 2;
-}
-
-.fr-item--gap .fr-t {
-  font-family: var(--font-mono);
-  font-weight: 400;
-  font-size: 0.8125rem;
-  color: var(--encre-2);
-}
-
-@media (min-width: 1024px) {
-  /* Sur la frise et la prise finale, le releve occupe toute la largeur
-     de la page : le plafond du mwrap saute. */
-  .mom--frise .mwrap,
-  .final-cta .mwrap {
-    max-width: none;
-  }
-
-  /* L'escalier des editions : une marche par annee, le trait descend
-     de 2016 a 2027 contremarche apres contremarche (chaque point est
-     pose au bord gauche de sa marche, a --fx ; --fy est le rang).
-     margin-top : la place du retour a 2016 (le trait redescend a gauche
-     avant de tourner) ; margin-right : la reserve du terminus 2027. */
-  .fr-band {
-    --fr-step: clamp(60px, 8vh, 84px);
-    position: relative;
-    height: calc(11 * var(--fr-step));
-    margin-top: 90px;
-    margin-left: 56px;
-    margin-right: clamp(200px, 18vw, 300px);
-  }
-
-  .fr-item {
-    position: absolute;
-    left: var(--fx);
-    top: calc(var(--fy) * var(--fr-step));
-    width: clamp(180px, 16vw, 260px);
-    margin-left: 0;
-    padding: 0;
-    text-align: left;
-  }
-
-  .fr-item::before {
-    left: 0;
-    top: 0;
-    margin-left: -6px;
-    margin-top: -6px;
-  }
-
-  /* L'etiquette se pose au-dessus de sa marche, a droite du point :
-     l'espace y est toujours libre puisque l'escalier descend. */
-  .fr-item .fr-lbl {
-    position: absolute;
-    left: 16px;
-    right: 0;
-    bottom: 10px;
-  }
-
-  .fr-item .fr-t {
-    font-size: clamp(1.2rem, 1.4vw, 1.5rem);
-  }
-
-  .fr-item--gap::before {
-    width: 26px;
-    height: 10px;
-    margin-left: -13px;
-    margin-top: -5px;
-  }
-}
-
-/* Le terminus : 2027, point vivant au bout du fil. Le trait qui en
-   redescend forme le 1 du grand 10 ; le 0 est pose juste a cote. */
-
-.fr-end {
-  position: relative;
-  margin-top: 12px;
-  padding: 6px 0 0 26px;
-  min-height: 170px;
-}
-
-.fr-end-dot {
-  position: absolute;
-  left: calc(-1 * var(--body-pad));
-  top: 0.9em;
+/* Le terminus : 2027, point vivant au bout du fil */
+.alb-dot--end {
   width: 14px;
   height: 14px;
-  margin-left: -6px;
-  border-radius: 50%;
   background-color: var(--rouge-vif);
   box-shadow: 0 0 0 5px rgba(235, 0, 40, 0.16);
   z-index: 2;
 }
 
-.fr-end-dot::after {
+.alb-dot--end::after {
   content: "";
   position: absolute;
   inset: -4px;
@@ -2188,61 +2424,12 @@ details.faq[open] summary .icon {
   }
 }
 
-@media (min-width: 1024px) {
-  /* Le terminus prend la derniere marche, en bas a droite de l'escalier */
-  .fr-end {
-    position: absolute;
-    left: 100%;
-    top: calc(11 * var(--fr-step));
-    width: clamp(180px, 17vw, 280px);
-    margin: 0;
-    padding: 20px 0 0 28px;
-    min-height: 0;
-  }
-
-  .fr-end-dot {
-    left: 0;
-    top: 0;
-    margin: -7px 0 0 -7px;
-  }
-
-  
-}
-
-.ten-mark {
-  position: absolute;
-  z-index: 0;
-  left: 6px;
-  top: 44px;
-  font-family: var(--font-disp);
-  font-weight: 800;
-  font-size: clamp(7.5rem, 30vw, 10rem);
-  line-height: 0.78;
-  letter-spacing: -0.02em;
-  color: rgba(237, 234, 228, 0.055);
-  pointer-events: none;
-  user-select: none;
-}
-
-@media (min-width: 1024px) {
-  .ten-mark {
-    left: 30px;
-    top: 112px;
-    font-size: clamp(9rem, 15vw, 13rem);
-  }
-}
-
-.fr-end-label {
-  position: relative;
-  z-index: 2;
-}
-
-.fr-end-label .fr-y {
+.alb-end-label .fr-y {
   color: var(--rouge-vif);
   font-size: 1.05rem;
 }
 
-.fr-end-label .fr-t {
+.alb-end-label .fr-t {
   font-size: clamp(1.5rem, 3vw, 1.9rem);
 }
 
@@ -2251,6 +2438,74 @@ details.faq[open] summary .icon {
   font-size: 0.75rem;
   color: var(--encre-2);
   margin-top: 6px;
+}
+
+/* La revelation au passage de la pointe : sans valeur de --sweep
+   (mobile, sans JS, ligne en echec, reduced motion) tout est visible. */
+.jline-run .alb-item > * {
+  opacity: clamp(0.15, (var(--sweep, 1) - var(--th, 0)) * 6, 1);
+}
+
+@media (min-width: 1024px) {
+  /* Sur la frise et la prise finale, le releve occupe toute la largeur
+     de la page : le plafond du mwrap saute. */
+  .mom--frise .mwrap,
+  .final-cta .mwrap {
+    max-width: none;
+  }
+
+  /* Le fil horizontal : dix colonnes (une par edition, le terminus
+     garde sa reserve), trois rangs : les affiches (1), la bande du fil
+     et ses pastilles (2, hauteur fixe, la ligne passe par son centre),
+     les themes (3). Chaque li est en display: contents et ses pieces
+     vont a leur colonne via --c. */
+  .album {
+    display: grid;
+    grid-template-columns: repeat(9, minmax(0, 1fr)) minmax(150px, 1.1fr);
+    grid-template-rows: auto var(--alb-strip) auto;
+    gap: 0 clamp(10px, 1.2vw, 18px);
+    margin-top: 64px;
+  }
+
+  .alb-item {
+    display: contents;
+  }
+
+  .alb-item > * {
+    grid-column: var(--c, auto);
+  }
+
+  .alb-img {
+    grid-row: 1;
+    align-self: end;
+    margin: 0;
+  }
+
+  .alb-img img {
+    max-width: none;
+  }
+
+  .alb-dot {
+    grid-row: 2;
+    position: relative;
+    left: auto;
+    top: auto;
+    justify-self: center;
+    align-self: center;
+  }
+
+  .alb-lbl {
+    grid-row: 3;
+    padding-top: 14px;
+  }
+
+  /* Le terminus n'a pas d'affiche : son etiquette vit au-dessus du fil,
+     le trait redescend sous sa pastille sans rien croiser. */
+  .alb-end-label {
+    grid-row: 1;
+    align-self: end;
+    padding-bottom: 14px;
+  }
 }
 
 /* La prise : le constat se range a gauche, le bouton attend a droite
@@ -2292,13 +2547,25 @@ details.faq[open] summary .icon {
   color: var(--encre-2);
 }
 
-/* Desktop : le bouton se place dans le couloir de descente du trait,
-   sous le terminus 2027 ; line.js branche la ligne dans le bouton. */
+/* Desktop : le constat a gauche, la prise a droite, au meme niveau.
+   Le coude du trait se fait tout en haut, juste sous l'album : la
+   descente arrive droite dans le bouton, sans courbe. */
 @media (min-width: 1024px) {
+  .final-cta .mwrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    column-gap: 48px;
+  }
+
+  .final-cta .cote {
+    grid-column: 1 / -1;
+  }
+
   .final-plug {
     align-items: flex-end;
-    margin-top: 56px;
-    margin-right: clamp(140px, 13vw, 220px);
+    margin-top: 14px;
+    margin-right: clamp(80px, 8vw, 140px);
   }
 
   .final-note {
@@ -2473,7 +2740,7 @@ details.faq[open] summary .icon {
    Six photos sorties des cartons 2023 et 2024, posees sous la frise. */
 
 .arch {
-  margin: 200px 0 10px;
+  margin: 96px 0 10px;
 }
 
 .arch-strip {
@@ -2536,6 +2803,19 @@ details.faq[open] summary .icon {
   border-top: 1px solid var(--filet);
 }
 
+/* La photo du creneau : a gauche du point, une piece du dossier */
+.tl-ph {
+  margin: 0 0 14px;
+  max-width: 340px;
+}
+
+.tl-ph img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--filet);
+}
+
 .tl-dot {
   position: absolute;
   left: calc(-1 * var(--body-pad) - 6px);
@@ -2574,13 +2854,15 @@ details.faq[open] summary .icon {
   max-width: 56ch;
 }
 
-/* L'allumage progressif, seulement quand le JS est la pour le piloter */
-.js .journey .tl-row {
+/* L'allumage progressif, seulement quand la ligne continue est active
+   (classe jline-run posee par line.js) : chaque creneau s'eclaire
+   quand la pointe du trait franchit sa pastille. */
+.jline-run .journey .tl-row {
   opacity: 0.22;
   transition: opacity 0.5s var(--ease-out);
 }
 
-.js .journey .tl-row.is-on {
+.jline-run .journey .tl-row.is-on {
   opacity: 1;
 }
 
@@ -2602,9 +2884,25 @@ details.faq[open] summary .icon {
     border-top: 0;
   }
 
-  /* L'heure vit a gauche de la ligne et reste collee au milieu de
-     l'ecran pendant que son creneau defile. */
+  /* La colonne de gauche : la photo occupe l'espace, l'heure se cale
+     contre le point et reste collee au milieu de l'ecran pendant que
+     son creneau defile. */
+  .tl-left {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 28px;
+  }
+
+  .tl-left .tl-ph {
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+    margin: 0;
+  }
+
   .tl-time {
+    flex: none;
     text-align: right;
     align-self: start;
     position: sticky;
@@ -2691,17 +2989,22 @@ details.faq[open] summary .icon {
     transform: none;
   }
 
-  .fr-end-dot::after {
+  .alb-dot--end::after {
     animation: none;
     opacity: 0;
   }
 
   /* La feuille de salle vivante : tout est allume d'emblee */
-  .js .journey .tl-row {
+  .jline-run .journey .tl-row {
     opacity: 1;
   }
 
   .tl-dot {
     background-color: var(--rouge);
+  }
+
+  /* L'album des editions : toutes les affiches sont revelees */
+  .jline-run .alb-item > * {
+    opacity: 1;
   }
 }
