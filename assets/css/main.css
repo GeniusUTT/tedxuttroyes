@@ -1865,6 +1865,10 @@ details.faq[open] summary .icon {
 .mom {
   position: relative;
   padding-block: clamp(48px, 7vw, 88px);
+  /* Corps du mot qui traverse : sert aussi a remonter la photo du
+     versant s'adapter, d'ou la variable plutot qu'une valeur en dur. */
+  --cross-fs: clamp(2.6rem, 8.5vw, 7rem);
+  --cross-gap: 28px;
 }
 
 .mom-title {
@@ -1879,7 +1883,7 @@ details.faq[open] summary .icon {
 
 /* Le mot qui traverse (moment 2) : pousse par le defilement */
 .cross-track {
-  margin-bottom: 28px;
+  margin-bottom: var(--cross-gap);
 }
 
 @media (min-width: 1024px) {
@@ -1895,7 +1899,7 @@ details.faq[open] summary .icon {
   width: max-content;
   font-family: var(--font-disp);
   font-weight: 800;
-  font-size: clamp(2.6rem, 8.5vw, 7rem);
+  font-size: var(--cross-fs);
   line-height: 0.9;
   letter-spacing: -0.03em;
   text-transform: uppercase;
@@ -1969,10 +1973,15 @@ details.faq[open] summary .icon {
     margin-top: 0;
   }
 
-  /* Variante miroir : la photo vit a gauche de la ligne, le texte a droite */
+  /* Variante miroir : la photo vit a gauche de la ligne, le texte a
+     droite. Le cote et le mot qui traverse etant tous deux passes de
+     l'autre cote, la colonne de gauche est libre jusqu'en haut du bloc :
+     la photo y remonte, au niveau du mot (hauteur de ligne 0.9 plus la
+     marge de la piste). */
   .mom-duo--rtl .mom-photo {
     flex: none;
     width: calc(var(--axis-b) - var(--m-left) - 48px);
+    margin-top: calc(-0.9 * var(--cross-fs) - var(--cross-gap));
   }
 
   .mom-duo--rtl .colR {
@@ -2400,6 +2409,10 @@ details.faq[open] summary .icon {
     scroll-snap-align: center;
   }
 
+  .ed-slides a {
+    display: block;
+  }
+
   .ed-slides img {
     display: block;
     width: 100%;
@@ -2462,6 +2475,24 @@ details.faq[open] summary .icon {
 .alb-end-label {
   display: block;
   min-width: 0;
+}
+
+/* Affiche et etiquette menent a la page de l'edition : deux liens pour
+   une meme piece, sans decor propre (le filet et le theme suffisent). */
+.alb-img a,
+.alb-lbl a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.alb-img a:hover img {
+  border-color: var(--rouge-vif);
+}
+
+.alb-lbl a:hover .fr-t,
+.alb-lbl a:focus-visible .fr-t {
+  color: var(--rouge-vif);
 }
 
 .fr-y {

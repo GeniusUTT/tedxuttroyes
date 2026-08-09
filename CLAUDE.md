@@ -8,7 +8,7 @@ Site statique de TEDxUTTroyes 2027 (dixième édition, jeudi 18 mars 2027, Centr
 
 ## Commandes
 
-Pas de build ni de lint. Pour tester en local (indispensable : tous les liens et chemins d'assets sont absolus depuis la racine, ouvrir les fichiers directement ne fonctionne pas) :
+Pas de build ni de lint pour le site (le dossier `design-system/` a le sien, voir plus bas). Pour tester en local (indispensable : tous les liens et chemins d'assets sont absolus depuis la racine, ouvrir les fichiers directement ne fonctionne pas) :
 
 ```
 python -m http.server 8000
@@ -53,6 +53,22 @@ Conséquence : déplacer, redimensionner ou supprimer un bloc porteur de `data-l
 - Éditions : 2016 à 2026, ni 2018 ni 2020 (deux années sans édition, ce qui fait de 2027 la dixième). Ces deux années blanches ne figurent plus dans la frise de l'accueil (retirées le 2026-07-18), seule `editions/index.html` les mentionne dans le texte.
 - `migration/` : extraction brute de l'ancien site (contenus, tableaux speakers/équipe, photos haute résolution). C'est la matière source, jamais servie ni liée depuis les pages ; les images optimisées vivent dans `assets/img/editions/` (WebP, produites via Pillow).
 - Toute nouvelle page est créée dans son dossier (`nouvelle-page/index.html`), ajoutée à `sitemap.xml` (URL sans extension) et reprend le gabarit commun (header, footer avec mention de licence, ligne dorsale).
+
+### Le paquet design system (design-system/)
+
+Dossier de travail **hors site** : les composants React qui rejouent le markup et les classes du site, pour maquetter de nouvelles pages ailleurs (export vers Claude Design). Il n'est lié depuis aucune page et `.htaccess` refuse son accès en production (`RedirectMatch 404 ^/design-system(/|$)`). Seul endroit du dépôt avec un `package.json` et des dépendances npm : la règle « zéro dépendance » continue de s'appliquer au site lui-même, qui n'en tire rien.
+
+**Le paquet ne redéfinit aucun style** : `build.mjs` copie `assets/css/main*.css` telle quelle dans `dist/styles.css` (seuls les chemins de polices sont réécrits) et embarque le logo en data URI. Une retouche de `main.css` se propage au prochain build. Conséquence : ne jamais recopier une règle CSS dans le paquet, et ne jamais y inventer une classe.
+
+```
+cd design-system && npm run build   # dist/
+node demo.mjs                       # demo/*.html : chaque page recomposée avec les composants
+node verify.mjs                     # compare le vocabulaire de classes rendu avec celui du vrai site
+```
+
+`verify.mjs` est le garde-fou : il échoue si une classe du site n'est produite par aucun composant, ou si le paquet produit une classe qui n'existe nulle part sur le site. À relancer après toute retouche du site ou du paquet. Exclusions assumées et documentées dans `design-system/README.md` : `line.js` et le défilement virtuel (le paquet embarque le repli statique), la carte Mapbox (`lieu-map`), les sondes `probe`, le minuteur vivant.
+
+Trouvaille au passage : `.tally` (le dix en bâtons) est piloté par `main.js` mais n'a plus aucune règle CSS ni usage dans le HTML. Code mort, laissé de côté par le paquet.
 
 ## Pièges de test connus
 
