@@ -38,8 +38,8 @@ mentions-legales/        Mentions légales (LCEN)
                          compression, 404 (OVH mutualisé)
 robots.txt, sitemap.xml  SEO technique
 assets/
-  css/main.css           Feuille unique (sommaire commenté en tête de fichier)
-  js/main.js             Script commun (menu, header, téléscripteur)
+  css/main-v2.css        Feuille unique (sommaire commenté en tête de fichier)
+  js/main-v2.js          Script commun (menu, header, téléscripteur)
   js/line.js             La ligne continue de l'accueil : construit le tracé SVG
                          en mesurant les ancres data-line, le dessine au scroll,
                          pilote le mot qui franchit. Sans JS : dorsale CSS.
@@ -64,7 +64,7 @@ python -m http.server 8000
 Poussez le contenu du dossier tel quel à la racine du site (www). Deux points d'attention :
 
 1. **SSL** : la redirection HTTPS du `.htaccess` suppose un certificat actif (Let's Encrypt gratuit dans l'espace client OVH). Sinon, commentez temporairement les lignes indiquées dans le fichier.
-2. **Cache** : `main.css` et `main.js` sont mis en cache un mois. Si vous les modifiez après la mise en ligne, renommez le fichier (par exemple `main-v2.css`) et mettez à jour les références dans toutes les pages HTML.
+2. **Cache** : la feuille et le script communs sont mis en cache un mois. Si vous les modifiez après la mise en ligne, renommez le fichier (ils s'appellent aujourd'hui `main-v2.css` et `main-v2.js`, passez à `main-v3`) et mettez à jour les références dans toutes les pages HTML.
 
 ## Placeholders à compléter avant mise en ligne
 
@@ -72,6 +72,8 @@ Tous les emplacements variables sont marqués par un commentaire `PLACEHOLDER` d
 
 | Quoi | Où | Comment |
 |---|---|---|
+| Thème (masqué) | toutes les pages | « Franchir ou s'adapter ? » est remplacé par `******** ** *'*******` (une étoile par caractère), « la limite » par `** ******`. Sur l'accueil, les deux sections du diptyque sont sous embargo (barres de caviardage `.redact`, même DA que les fiches speakers). Les titres d'onglet, les metas sociales et le JSON-LD portent un intitulé neutre : « TEDxUTTroyes 2027, dixième édition ». Trois textes ont été reformulés parce qu'ils nommaient le thème : le titre et le chapô du bloc speakers de l'accueil, et le chapô de `speakers/index.html`. Tout se récupère dans l'historique git (commit précédant le masquage). Même échéance que la date : 18 octobre 2026. |
+| Date du jour J (masquée) | toutes les pages + `assets/js/main-v2.js` | la date est remplacée par des étoiles (`***** ** **** ****` pour « Jeudi 18 mars 2027 », `** **** ****` pour « 18 mars 2027 », `** ****` pour « 18 mars ») et le téléscripteur de l'accueil décompte jusqu'à sa révélation, le 18 octobre 2026 à 18h00. Le jour venu : remettre la vraie date partout et repointer `TARGET` dans `main-v2.js` sur le jour J. Le JSON-LD, les attributs `datetime` et la date affichée dans ce README gardent la vraie valeur. |
 | Lien billetterie HelloAsso | toutes les pages + JSON-LD de `index.html` | remplacer partout `https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition` |
 | Lien newsletter HelloAsso | `index.html`, footers | remplacer partout `https://www.helloasso.com/PLACEHOLDER-NEWSLETTER` |
 | Chiffres (talks, intervenants) | `index.html`, section « En chiffres » | remplacer les `XX` des lignes de données |

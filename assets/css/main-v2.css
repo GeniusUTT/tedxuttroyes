@@ -14,7 +14,7 @@
    06. Boutons, liens, icones
    07. Header et navigation
    08. Hero et telescripteur
-   09. Diptyque franchir / s'adapter
+   09. Diptyque des deux versants du theme
    10. Frise des dix ans (sur la marge)
    11. Le dix en batons (tally) et lignes de donnees
    12. Lieu
@@ -450,7 +450,7 @@ main .sec--alt:last-child {
 /* Mobile : les corps d'affichage cassent les noms trop longs pour la
    colonne (Dehandschoewercker) en plein milieu d'un mot, sans trait
    d'union. La cesure n'est ouverte qu'aux mots de quatorze signes et
-   plus : les titres courants (franchit, s'adapter) restent entiers et
+   plus : les titres courants restent entiers et
    passent simplement a la ligne. Le trait d'union de cesure est un
    trait d'union ordinaire, pas un tiret cadratin ni demi-cadratin :
    la regle dure du projet n'est pas concernee. */
@@ -2060,7 +2060,8 @@ details.faq[open] summary .icon {
 }
 
 /* Moment 1 : le seuil. La question se coupe en deux sur la ligne :
-   Franchir s'arrete au bord, ou s'adapter ? commence de l'autre cote.
+   Le premier membre du titre s'arrete au bord, le second commence de
+   l'autre cote (titre sous embargo jusqu'au 18 octobre 2026).
    Tout le reste (date, actions, compte a rebours) se range avant. */
 
 .journey .hero {
@@ -2101,7 +2102,7 @@ details.faq[open] summary .icon {
   position: relative;
   padding-block: clamp(48px, 7vw, 88px);
   /* Corps du mot qui traverse : sert aussi a remonter la photo du
-     versant s'adapter, d'ou la variable plutot qu'une valeur en dur. */
+     second versant, d'ou la variable plutot qu'une valeur en dur. */
   --cross-fs: clamp(2.6rem, 8.5vw, 7rem);
   --cross-gap: 28px;
 }
@@ -2143,7 +2144,7 @@ details.faq[open] summary .icon {
   will-change: transform;
 }
 
-/* Variante miroir (s'adapter) : le mot arrive du bord droit du viewport
+/* Variante miroir (second versant) : le mot arrive du bord droit du viewport
    et vient buter contre la ligne sans la franchir. Position layout :
    cale contre la ligne, cote droit. */
 .cross-track--rtl .cross-word {
@@ -2191,7 +2192,7 @@ details.faq[open] summary .icon {
   border: 1px solid var(--filet);
 }
 
-/* Sur le versant s'adapter, la photo precede le texte dans le document
+/* Sur le second versant, la photo precede le texte dans le document
    parce qu'en desktop elle vit de l'autre cote de la ligne. Empilee,
    elle se retrouvait orpheline entre le mot qui traverse et son titre :
    sous 1024 px elle repasse apres le texte qu'elle illustre. */

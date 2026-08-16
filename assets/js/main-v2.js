@@ -118,13 +118,17 @@
 
   /* ------------------------------------------------------------------
      Telescripteur : compte a rebours en une seule ligne mono.
-     Cible figee en UTC : le 18 mars 2027 a 18h00 (ouverture des portes
-     et mini forum de recrutement), Paris est en heure d'hiver (UTC+1),
-     soit 17h00 UTC. Aucun calcul de fuseau cote client.
+     PLACEHOLDER : la date du jour J est masquee (etoiles) dans toutes les
+     pages, le telescripteur decompte jusqu'a sa revelation. Cible figee en
+     UTC : le 18 octobre 2026 a 18h00, Paris est encore en heure d'ete
+     (UTC+2, le changement d'heure tombe le 25), soit 16h00 UTC. Aucun
+     calcul de fuseau cote client. Le jour de la revelation, remettre la
+     vraie date partout et repointer TARGET sur le jour J (18 mars 2027 a
+     18h00 heure d'hiver, soit Date.UTC(2027, 2, 18, 17, 0, 0)).
      ------------------------------------------------------------------ */
   var tickerValue = doc.getElementById("ticker-value");
   if (tickerValue) {
-    var TARGET = Date.UTC(2027, 2, 18, 17, 0, 0);
+    var TARGET = Date.UTC(2026, 9, 18, 16, 0, 0);
     var DAY = 86400000;
     var HOUR = 3600000;
     var MINUTE = 60000;
@@ -140,9 +144,9 @@
       if (diff <= 0) {
         window.clearInterval(timerId);
         if (tickerLabel) {
-          tickerLabel.textContent = "C'est ce soir";
+          tickerLabel.textContent = "Jour J";
         }
-        tickerValue.textContent = "Ouverture des portes 18h00";
+        tickerValue.textContent = "La date est révélée";
         return;
       }
       var days = Math.floor(diff / DAY);
