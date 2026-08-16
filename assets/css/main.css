@@ -359,6 +359,17 @@ main .sec--alt:last-child {
   margin-right: 12px;
 }
 
+/* Mobile : aucun micro-libelle mono ne descend sous 12 px, et son
+   interlettrage se resserre pour tenir sur une seule ligne. La regle
+   revient a l'identique dans chaque section concernee (05, 08, 12, 14,
+   16, 19, 20, 20b, 20c) : chaque libelle reste avec son composant. */
+@media (max-width: 1023px) {
+  .cote {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+  }
+}
+
 @media (min-width: 1024px) {
   .inner {
     margin-left: var(--m-left);
@@ -434,6 +445,48 @@ main .sec--alt:last-child {
 .data strong {
   color: var(--papier);
   font-weight: 700;
+}
+
+/* Mobile : les corps d'affichage cassent les noms trop longs pour la
+   colonne (Dehandschoewercker) en plein milieu d'un mot, sans trait
+   d'union. La cesure n'est ouverte qu'aux mots de quatorze signes et
+   plus : les titres courants (franchit, s'adapter) restent entiers et
+   passent simplement a la ligne. Le trait d'union de cesure est un
+   trait d'union ordinaire, pas un tiret cadratin ni demi-cadratin :
+   la regle dure du projet n'est pas concernee. */
+@media (max-width: 1023px) {
+  .page-title,
+  .h-md,
+  .mom-title,
+  .hero-sub,
+  .sp-name,
+  .sl-name,
+  .hof-name,
+  .fr-t,
+  .ppl-name {
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    -webkit-hyphenate-limit-before: 7;
+    -webkit-hyphenate-limit-after: 7;
+    hyphenate-limit-chars: 14 7 7;
+  }
+}
+
+/* Ecrans courts (telephone en paysage) : les corps d'affichage sont
+   dimensionnes en vw seuls, un titre y prend toute la hauteur utile.
+   On les replafonne en vh. Meme motif dans les sections 08, 20 et 20b. */
+@media (max-width: 1023px) and (orientation: landscape) and (max-height: 520px) {
+  .page-title {
+    font-size: clamp(1.9rem, 8vh, 3.2rem);
+  }
+
+  .h-md {
+    font-size: clamp(1.3rem, 5.4vh, 1.8rem);
+  }
+
+  .sec--head {
+    padding-top: calc(var(--header-h) + clamp(24px, 6vh, 48px));
+  }
 }
 
 /* 06. Boutons, liens, icones */
@@ -536,6 +589,28 @@ main .sec--alt:last-child {
   text-underline-offset: 4px;
 }
 
+/* Tactile : sous 1024 px la pile de boutons occupe toute la colonne
+   (largeurs alignees, cible plus large) et le lien de suite gagne une
+   zone active de 44 px. Les marges qui l'entourent sont reduites
+   d'autant : la respiration a l'ecran ne bouge pas, seule la surface
+   sensible grandit. */
+@media (max-width: 1023px) {
+  .link-more {
+    min-height: 44px;
+    padding-block: 11px;
+  }
+
+  .btn--sm {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 639px) {
+  .actions .btn {
+    flex: 1 1 100%;
+  }
+}
+
 .icon {
   width: 16px;
   height: 16px;
@@ -586,10 +661,13 @@ main .sec--alt:last-child {
   gap: 24px;
 }
 
+/* La barre fait 64 px : porter le lien du logo a 44 px de haut donne une
+   cible tactile correcte sans rien deplacer. */
 .brand {
   display: inline-flex;
   align-items: center;
   flex: none;
+  min-height: 44px;
 }
 
 /* Mobile : le logo au centre de la barre, le burger reste a droite. */
@@ -720,6 +798,30 @@ main .sec--alt:last-child {
 
 body.nav-open {
   overflow: hidden;
+}
+
+/* Le menu deploye mesure 780 px alors qu'un telephone courant offre
+   autour de 745 px de svh : sans resserrage, le bouton Reserver ma place
+   tombe sous la ligne de flottaison sur tous les modeles. Sous 820 px de
+   hauteur, la liste se compacte pour que la pile de boutons rentre. */
+@media (max-height: 820px) {
+  .mobile-menu {
+    padding-top: calc(var(--header-h) + 14px);
+    padding-bottom: 24px;
+  }
+
+  .mobile-menu-list a {
+    padding: 7px 0;
+    font-size: clamp(1.45rem, 5.6vw, 2rem);
+  }
+
+  .mobile-menu-foot {
+    padding-top: 18px;
+  }
+
+  .mobile-menu-date {
+    margin-top: 10px;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -912,6 +1014,46 @@ body.nav-open {
 
 .ticker-value .u {
   color: var(--rouge-vif);
+}
+
+@media (max-width: 1023px) {
+  .ticker-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+  }
+}
+
+/* Telephone en paysage : le seuil renonce a la pleine hauteur, sinon la
+   date, les boutons et le compte a rebours passent hors ecran (mesure a
+   740 x 380 : hero de 636 px, bouton a 424 px). */
+@media (max-width: 1023px) and (orientation: landscape) and (max-height: 520px) {
+  .hero {
+    min-height: 0;
+    padding-top: calc(var(--header-h) + 20px);
+    padding-bottom: 28px;
+  }
+
+  .hero-word {
+    font-size: clamp(2.2rem, 12vh, 4.4rem);
+  }
+
+  .hero-sub {
+    font-size: clamp(1.2rem, 5.4vh, 2rem);
+  }
+
+  .hero-title {
+    margin-bottom: 14px;
+  }
+
+  .hero-fig,
+  .hero-meta {
+    margin-bottom: 14px;
+  }
+
+  .js .ticker {
+    margin-top: 18px;
+    padding-top: 12px;
+  }
 }
 
 /* 09 et 10 : le diptyque et l'ancienne frise en marge ont ete dissous
@@ -1225,7 +1367,31 @@ body.nav-open {
   color: var(--papier);
 }
 
-@media (min-width: 640px) {
+/* Mobile : tant que le portrait est sous embargo, la reserve 4/5 fait
+   350 px de hachures par fiche, soit 2 100 px de defilement pour six
+   fiches vides. On la ramene a un bandeau. Le vrai portrait, lui, garde
+   son cadrage 4/5 : le selecteur ne vise que l'etat caviarde, et les
+   navigateurs sans :has retombent sur le 4/5 actuel. */
+@media (max-width: 639px) {
+  .sp-photo:has(.sp-photo-mark) {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (max-width: 1023px) {
+  .sp-id,
+  .sp-photo-mark {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+  }
+
+  .sp-talk-k {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (min-width: 480px) {
   .sgrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -1248,13 +1414,21 @@ body.nav-open {
   background-color: var(--filet);
 }
 
+/* Mobile : deux colonnes, la vignette a gauche sur toute la hauteur,
+   identifiant, nom et statut empiles a droite. La grille a trois
+   colonnes renvoyait le statut sur une rangee a lui, cale a gauche,
+   sous le nom qui occupait deja toute la largeur. */
 .sl-row {
   display: grid;
-  grid-template-columns: auto 1fr max-content;
+  grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: 6px 16px;
   padding: 12px clamp(14px, 2vw, 22px);
   background-color: var(--noir);
+}
+
+.sl-row .sl-photo {
+  grid-row: span 3;
 }
 
 /* L'emplacement photo : petit carre, caviarde tant que l'annonce n'est
@@ -1283,7 +1457,7 @@ body.nav-open {
   flex-wrap: wrap;
   gap: 0.3em;
   align-items: center;
-  grid-column: 1 / -1;
+  grid-column: 2;
   font-family: var(--font-disp);
   font-weight: 750;
   font-size: clamp(1.05rem, 1.5vw, 1.25rem);
@@ -1292,10 +1466,11 @@ body.nav-open {
 }
 
 .sl-row .sp-status {
+  grid-column: 2;
   margin-top: 0;
   padding-top: 0;
   border-top: 0;
-  justify-self: end;
+  justify-self: start;
 }
 
 @media (min-width: 640px) {
@@ -1303,8 +1478,17 @@ body.nav-open {
     grid-template-columns: auto minmax(11ch, max-content) 1fr max-content;
   }
 
-  .sl-name {
+  .sl-row .sl-photo {
+    grid-row: auto;
+  }
+
+  .sl-name,
+  .sl-row .sp-status {
     grid-column: auto;
+  }
+
+  .sl-row .sp-status {
+    justify-self: end;
   }
 }
 
@@ -1611,6 +1795,46 @@ details.faq[open] summary .icon {
   color: var(--papier);
 }
 
+/* Tactile et lisibilite du pied de page sur telephone : les liens de
+   colonne montaient a 18 px de haut, l'adresse a 21 px, et les titres
+   de colonne comme la ligne du bas etaient a 11 px. Le blanc entre les
+   colonnes est repris sur les marges pour compenser les paddings. */
+@media (max-width: 1023px) {
+  .footer-title {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+  }
+
+  /* La liste remonte de la valeur du padding : le haut de colonne reste
+     cale sur son titre, et le premier lien garde sa pleine cible. */
+  .footer-list {
+    margin-top: -11px;
+  }
+
+  .footer-list li a {
+    padding: 11px 0;
+  }
+
+  .footer-mail {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    margin-top: 4px;
+  }
+
+  .footer-bottom {
+    font-size: 0.75rem;
+    gap: 0 24px;
+    padding: 10px 0 22px;
+  }
+
+  .footer-bottom a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+
 /* 20. Prose, notices, 404 */
 
 .prose {
@@ -1689,6 +1913,17 @@ details.faq[open] summary .icon {
 
 .error-hero .lead {
   margin-bottom: 28px;
+}
+
+@media (max-width: 1023px) and (orientation: landscape) and (max-height: 520px) {
+  .error-hero {
+    min-height: 0;
+    padding-block: calc(var(--header-h) + 24px) 40px;
+  }
+
+  .error-code {
+    font-size: clamp(4rem, 22vh, 8rem);
+  }
 }
 
 /* 20b. La ligne continue (accueil uniquement, body.journey)
@@ -1954,6 +2189,35 @@ details.faq[open] summary .icon {
   width: 100%;
   height: auto;
   border: 1px solid var(--filet);
+}
+
+/* Sur le versant s'adapter, la photo precede le texte dans le document
+   parce qu'en desktop elle vit de l'autre cote de la ligne. Empilee,
+   elle se retrouvait orpheline entre le mot qui traverse et son titre :
+   sous 1024 px elle repasse apres le texte qu'elle illustre. */
+@media (max-width: 1023px) {
+  .mom-duo--rtl {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mom-duo--rtl .mom-photo {
+    order: 2;
+  }
+}
+
+@media (max-width: 1023px) and (orientation: landscape) and (max-height: 520px) {
+  .mom-title {
+    font-size: clamp(1.6rem, 8vh, 3rem);
+  }
+
+  .cross-word {
+    font-size: clamp(1.9rem, 11vh, 4rem);
+  }
+
+  .mom {
+    padding-block: clamp(28px, 8vh, 56px);
+  }
 }
 
 @media (min-width: 1024px) {
@@ -2265,6 +2529,37 @@ details.faq[open] summary .icon {
   .lieu-mot {
     font-size: 2rem;
   }
+
+  /* Le plan de repli est dessine dans un viewBox de 240 x 330 : les
+     etiquettes y sont calibrees au caractere pres (cathedrale part de
+     x=188 et tient tout juste), les grossir les fait deborder et se
+     chevaucher. On agrandit donc le cadre plutot que les corps : le
+     plan monte de 280 a 340 px, tout grandit d'un cinquieme sans que
+     le dessin bouge, et une carte de 280 px etait de toute facon
+     etriquee sur un telephone. Ce sont des etiquettes cartographiques
+     sur un repli, pas du texte courant : elles restent en dessous des
+     12 px appliques partout ailleurs. */
+  .lieu-scene {
+    min-height: 340px;
+  }
+
+  .lieu-ici-lbl {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .m3-lieu figcaption,
+  .lieu-fiche-kicker {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+  }
+
+  /* Le lien a pris 11 px de padding haut et bas (section 06) : on rend
+     la marge pour garder le meme blanc a l'ecran. */
+  .lieu-fiche .link-more {
+    margin-top: 3px;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -2275,6 +2570,14 @@ details.faq[open] summary .icon {
 
 .more-row {
   margin-top: 28px;
+}
+
+/* Le lien de suite a pris 11 px de padding haut et bas (section 06) :
+   la marge est rendue pour garder le meme blanc a l'ecran. */
+@media (max-width: 1023px) {
+  .more-row {
+    margin-top: 17px;
+  }
 }
 
 /* Les chiffres de la dixieme : trois grandes colonnes sous la frise,
@@ -2366,61 +2669,70 @@ details.faq[open] summary .icon {
    l'horizontale et sert de fil : chaque affiche pend au-dessus de sa
    pastille, le theme juste en dessous. La revelation suit la pointe du
    trait : line.js publie --sweep (0 a 1) sur .album, chaque piece porte
-   son seuil --th. Sur mobile : la section se resume au titre et a un
-   carrousel d'affiches balayable (.ed-slider), l'album, la bande
-   d'archives et les chiffres sont masques. */
+   son seuil --th. Sur mobile : le meme album devient un carrousel
+   balayable, annees et themes compris, les chiffres restent, seule la
+   bande d'archives est mise de cote. */
 
-/* Le carrousel mobile des affiches : scroll-snap pur CSS. */
-.ed-slider {
-  display: none;
-}
-
+/* Mobile : l'album devient lui-meme le carrousel (scroll-snap pur CSS),
+   plutot qu'une seconde liste d'affiches en double du markup. Chaque
+   piece garde donc son etiquette, annee et theme compris ; seule la
+   pastille disparait, faute de fil ou la poser. La bande d'archives
+   reste hors de la version mobile, les chiffres reviennent. */
 @media (max-width: 1023px) {
-  .mom--frise .fr-caption,
-  .mom--frise .album,
-  .mom--frise .arch,
-  .mom--frise .data-lines {
+  .mom--frise .arch {
     display: none;
   }
 
-  .ed-slider {
-    display: block;
-    margin-top: 8px;
-  }
-
-  .ed-slides {
-    list-style: none;
-    margin: 0;
-    padding: 0 4px 8px;
+  .album {
     display: flex;
     gap: 12px;
+    margin-top: 18px;
+    padding: 0 4px 10px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
   }
 
-  .ed-slides::-webkit-scrollbar {
+  .album::-webkit-scrollbar {
     display: none;
   }
 
-  .ed-slides li {
+  .alb-item {
     flex: 0 0 min(72%, 300px);
+    padding: 0;
     scroll-snap-align: center;
   }
 
-  .ed-slides a {
-    display: block;
+  .alb-dot {
+    display: none;
   }
 
-  .ed-slides img {
-    display: block;
-    width: 100%;
-    height: auto;
-    aspect-ratio: 3 / 4;
-    object-fit: cover;
-    border: 1px solid var(--filet);
+  .alb-img {
+    margin: 0 0 10px;
   }
+
+  .alb-img img {
+    max-width: none;
+  }
+
+  .alb-lbl a {
+    display: block;
+    padding-block: 4px 10px;
+  }
+
+  /* Le terminus n'a pas d'affiche : son etiquette prend la place d'une
+     affiche, dans un cadre rouge de meme format. */
+  .alb-item--end .alb-end-label {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 6px;
+    aspect-ratio: 3 / 4;
+    padding: 16px;
+    border: 1px solid var(--rouge);
+  }
+
 }
 
 .fr-caption {
@@ -2430,6 +2742,27 @@ details.faq[open] summary .icon {
   text-transform: uppercase;
   color: var(--encre-2);
   margin-bottom: 36px;
+}
+
+/* Le rappel de balayage ne sert qu'au carrousel mobile, la mention du
+   fil qu'a la traversee horizontale du desktop : chacun a sa largeur. */
+.fr-swipe {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .fr-caption {
+    margin: 26px 0 0;
+    letter-spacing: 0.1em;
+  }
+
+  .fr-fil {
+    display: none;
+  }
+
+  .fr-swipe {
+    display: inline;
+  }
 }
 
 .album {
@@ -2794,6 +3127,26 @@ details.faq[open] summary .icon {
   grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
 }
 
+/* Sous 640 px, auto-fill retombait a une seule colonne (150 px ne rentre
+   pas deux fois dans les 264 px de colonne utile a 320 px de large) :
+   chaque portrait prenait toute la largeur et une page d'edition faisait
+   pres de 10 000 px de haut. Deux colonnes, imposees. */
+@media (max-width: 639px) {
+  .ppl,
+  .ppl--sm,
+  .gal {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ppl {
+    gap: 22px 14px;
+  }
+
+  .gal {
+    gap: 10px;
+  }
+}
+
 .ppl-name {
   display: block;
   font-family: var(--font-disp);
@@ -2814,6 +3167,17 @@ details.faq[open] summary .icon {
   text-decoration: underline;
   text-decoration-color: var(--rouge-vif);
   text-underline-offset: 3px;
+}
+
+@media (max-width: 1023px) {
+  .ppl-name a {
+    display: inline-block;
+    padding-block: 5px;
+  }
+
+  .ed-nav a {
+    min-height: 44px;
+  }
 }
 
 .ppl-role {
@@ -3009,6 +3373,16 @@ details.faq[open] summary .icon {
 
 .jline-run .journey .tl-row.is-on {
   opacity: 1;
+}
+
+/* Sous 1024 px il n'y a pas de defilement virtuel : la pointe suit le
+   centre du viewport et tout ce qui est en dessous resterait a 22 %
+   d'opacite, donc illisible. Le creneau reste plein, seule la pastille
+   garde son allumage (decor, pas information). */
+@media (max-width: 1023px) {
+  .jline-run .journey .tl-row {
+    opacity: 1;
+  }
 }
 
 @media (min-width: 1024px) {
