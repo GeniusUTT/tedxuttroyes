@@ -38,6 +38,15 @@ ErrorDocument 404 /404.html
 RedirectMatch 404 ^/design-system(/|$)
 
 # --------------------------------------------------------------------------
+# Types MIME : les fichiers d'agenda (assets/agenda/*.ics) doivent partir
+# en text/calendar, sinon Apple Calendrier et Samsung Calendrier ne les
+# ouvrent pas et le navigateur affiche du texte brut.
+# --------------------------------------------------------------------------
+<IfModule mod_mime.c>
+  AddType text/calendar .ics
+</IfModule>
+
+# --------------------------------------------------------------------------
 # Compression
 # --------------------------------------------------------------------------
 <IfModule mod_deflate.c>

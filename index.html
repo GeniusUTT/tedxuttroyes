@@ -5,13 +5,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <!-- PLACEHOLDER : titre et theme sous embargo jusqu'a la revelation du
-     18 octobre 2026. Rien de ce qui est masque ne figure dans les pages
-     servies : les textes d'origine se recuperent dans l'historique git
-     (le commit qui precede le masquage). Voir README, table des
-     placeholders. -->
-  <title>TEDxUTTroyes 2027, dixième édition</title>
-  <meta name="description"
-    content="La dixième édition de TEDxUTTroyes se tiendra au Centre de Congrès de l'Aube, à Troyes, à 18h00. Le thème et la date seront révélés le 18 octobre 2026.">
+     samedi 31 octobre 2026 a 18h00. A cet instant, assets/js/reveal.js
+     remet les pages dans leur etat d'origine : chaque zone masquee porte
+     sa version d'avant (data-c, data-reveal, template). Voir README,
+     table des placeholders. -->
+  <title data-reveal="TEDxUTTroyes 2027 : Franchir ou s'adapter ?">TEDxUTTroyes 2027, dixième édition</title>
+  <meta name="description" data-reveal-attr="content"
+    data-reveal="La dixième édition de TEDxUTTroyes explore la limite : franchir ou s'adapter ? Jeudi 18 mars 2027, 18h00, Centre de Congrès de l'Aube, Troyes."
+    content="La dixième édition de TEDxUTTroyes se tiendra au Centre de Congrès de l'Aube, à Troyes, à 18h00. Le thème et la date seront révélés le samedi 31 octobre 2026.">
   <link rel="canonical" href="https://tedxuttroyes.fr/">
   <meta name="theme-color" content="#080808">
 
@@ -19,18 +20,22 @@
   <meta property="og:site_name" content="TEDxUTTroyes">
   <meta property="og:locale" content="fr_FR">
   <meta property="og:url" content="https://tedxuttroyes.fr/">
-  <meta property="og:title" content="TEDxUTTroyes 2027, dixième édition">
-  <meta property="og:description"
-    content="Le thème et la date de la dixième édition seront révélés le 18 octobre 2026. Centre de Congrès de l'Aube, Troyes.">
+  <meta property="og:title" data-reveal-attr="content" data-reveal="TEDxUTTroyes 2027 : Franchir ou s'adapter ?"
+    content="TEDxUTTroyes 2027, dixième édition">
+  <meta property="og:description" data-reveal-attr="content"
+    data-reveal="La dixième édition de TEDxUTTroyes explore la limite. Jeudi 18 mars 2027, 18h00, Centre de Congrès de l'Aube, Troyes."
+    content="Le thème et la date de la dixième édition seront révélés le samedi 31 octobre 2026. Centre de Congrès de l'Aube, Troyes.">
   <meta property="og:image" content="https://tedxuttroyes.fr/assets/img/og/og-default.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:image:alt"
+  <meta data-reveal-attr="content" data-reveal="TEDxUTTroyes 2027, dixième édition : Franchir ou s'adapter ? Jeudi 18 mars 2027 au Centre de Congrès de l'Aube, Troyes." property="og:image:alt"
     content="TEDxUTTroyes 2027, dixième édition, au Centre de Congrès de l'Aube, Troyes.">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="TEDxUTTroyes 2027, dixième édition">
-  <meta name="twitter:description"
-    content="Le thème et la date de la dixième édition seront révélés le 18 octobre 2026. Centre de Congrès de l'Aube, Troyes.">
+  <meta name="twitter:title" data-reveal-attr="content" data-reveal="TEDxUTTroyes 2027 : Franchir ou s'adapter ?"
+    content="TEDxUTTroyes 2027, dixième édition">
+  <meta name="twitter:description" data-reveal-attr="content"
+    data-reveal="La dixième édition de TEDxUTTroyes explore la limite. Jeudi 18 mars 2027, 18h00, Centre de Congrès de l'Aube, Troyes."
+    content="Le thème et la date de la dixième édition seront révélés le samedi 31 octobre 2026. Centre de Congrès de l'Aube, Troyes.">
   <meta name="twitter:image" content="https://tedxuttroyes.fr/assets/img/og/og-default.jpg">
 
   <link rel="icon" type="image/png" href="/assets/img/favicon.png">
@@ -41,6 +46,7 @@
   <link rel="preload" href="/assets/fonts/space-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/assets/css/main-v2.css">
   <script>document.documentElement.classList.add("js");</script>
+  <script src="/assets/js/reveal.js" defer></script>
   <script src="/assets/js/main-v2.js" defer></script>
   <script src="/assets/js/line.js" defer></script>
   <script src="/assets/js/map.js" defer></script>
@@ -143,7 +149,7 @@
       <a class="btn btn--primary"
         href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition" target="_blank"
         rel="noopener">Réserver ma place</a>
-      <p class="mobile-menu-date">***** ** **** **** · 18h00 · Centre de Congrès de l'Aube, Troyes</p>
+      <p class="mobile-menu-date"><span class="msk" data-c="Jeudi 18 mars 2027">***** ** **** ****</span> · 18h00 · Centre de Congrès de l'Aube, Troyes</p>
     </div>
   </div>
 
@@ -159,7 +165,7 @@
 
       <!-- Moment 1 : le seuil. La question du theme se tient a cheval sur la
          ligne : le premier membre s'arrete au bord, le second commence de
-         l'autre cote. Titre masque jusqu'au 18 octobre 2026. -->
+         l'autre cote. Titre masque jusqu'au 31 octobre 2026. -->
       <section class="hero" aria-label="TEDxUTTroyes 2027, dixième édition">
         <!-- Le fond du seuil : une archive de la scene (edition 2024), en
            couleur sous un voile sombre, la typo reste reine. -->
@@ -169,18 +175,21 @@
         <div class="mwrap">
           <p class="cote a a1">Dixième édition</p>
           <!-- PLACEHOLDER : le titre du theme et sa figure sont masques
-             (une etoile par caractere) jusqu'au 18 octobre 2026. Textes
-             d'origine dans l'historique git. -->
+             (une etoile par caractere) jusqu'au samedi 31 octobre 2026 a
+             18h00, ou reveal.js les remet en clair. -->
           <h1 class="hero-title">
-            <span class="hero-word a a2" aria-hidden="true">********</span>
-            <span class="hero-sub a a3" aria-hidden="true">** *'*******&nbsp;?</span>
-            <span class="visually-hidden">Le thème de la dixième édition est sous embargo : il sera révélé le 18
-              octobre 2026.</span>
+            <span class="hero-word a a2" aria-hidden="true" data-reveal-unhide data-reveal="Franchir">********</span>
+            <span class="hero-sub a a3" aria-hidden="true" data-reveal-unhide
+              data-reveal="ou s'adapter&nbsp;?">** *'*******&nbsp;?</span>
+            <span class="visually-hidden" data-reveal-drop>Le thème de la dixième édition est sous embargo : il sera
+              révélé le samedi 31 octobre 2026.</span>
           </h1>
-          <p class="hero-fig a a4" aria-hidden="true"><span class="fig-id">** ****** </span>: ** ******** ** *'***********
+          <p class="hero-fig a a4" aria-hidden="true" data-reveal-unhide
+            data-reveal-html="&lt;span class=&quot;fig-id&quot;&gt;La limite &lt;/span&gt;: Se franchit ou s'apprivoise mais ne s'ignore jamais."><span
+              class="fig-id">** ****** </span>: ** ******** ** *'***********
             **** ** *'****** *******.</p>
           <p class="hero-meta a a5">
-            <time datetime="2027-03-18T18:00:00+01:00">***** ** **** ****</time>
+            <time datetime="2027-03-18T18:00:00+01:00"><span class="msk" data-c="Jeudi 18 mars 2027">***** ** **** ****</span></time>
             <span class="sep" aria-hidden="true">·</span>
             <span>18h00</span>
             <span class="sep" aria-hidden="true">·</span>
@@ -193,15 +202,35 @@
             <a class="btn btn--ghost" href="/programme/">Voir le programme</a>
           </div>
           <!-- PLACEHOLDER : la date du jour J est masquee (etoiles) jusqu'a
-             sa revelation, le 18 octobre 2026 a 18h00. Le telescripteur
-             decompte jusqu'a cette annonce ; le jour venu, remettre la vraie
-             date partout et repointer la cible de main.js sur le jour J. -->
-          <p class="visually-hidden">Le compte à rebours est lancé : la date de la dixième édition sera révélée le
-            dimanche 18 octobre 2026 à 18h00.
+             sa revelation, le samedi 31 octobre 2026 a 18h00. Le
+             telescripteur decompte jusqu'a cette annonce, puis reprend de
+             lui-meme le decompte du jour J. -->
+          <p class="visually-hidden"
+            data-reveal="Le compte à rebours est lancé : l'événement commence le jeudi 18 mars 2027 à 18h00.">Le compte
+            à rebours est lancé : la date et le thème de la dixième édition seront révélés le samedi 31 octobre 2026 à
+            18h00.
           </p>
           <div class="ticker a a7" aria-hidden="true">
-            <span class="ticker-label">Révélation de la date</span>
+            <span class="ticker-label" data-reveal="Temps restant">Révélation de la date et du thème</span>
             <span class="ticker-value" id="ticker-value">J-000 · 00:00:00</span>
+          </div>
+          <!-- Le rendez-vous a mettre dans son agenda. Google a une URL
+             d'ajout ; Apple Calendrier et Samsung Calendrier importent un
+             fichier .ics (le meme pour les deux, assets/agenda/). Les trois
+             destinations basculent sur la soiree au devoilement. -->
+          <div class="ticker-cal a a7">
+            <details class="cal">
+              <summary class="btn btn--ghost btn--sm"
+                data-reveal="Ajouter la soirée à mon agenda">Ajouter la révélation à mon agenda</summary>
+              <ul class="cal-list">
+                <li><a href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=TEDxUTTroyes%202027%20%3A%20r%C3%A9v%C3%A9lation%20de%20la%20date%20et%20du%20th%C3%A8me&amp;dates=20261031T170000Z%2F20261031T180000Z&amp;details=La%20dixi%C3%A8me%20%C3%A9dition%20de%20TEDxUTTroyes%20l%C3%A8ve%20le%20voile%20sur%20sa%20date%20et%20son%20th%C3%A8me%20%3A%20rendez-vous%20sur%20https%3A%2F%2Ftedxuttroyes.fr%2F&amp;location=https%3A%2F%2Ftedxuttroyes.fr%2F" target="_blank" rel="noopener" data-reveal-attr="href"
+                    data-reveal="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=TEDxUTTroyes%202027%20%3A%20Franchir%20ou%20s%27adapter%20%3F&amp;dates=20270318T170000Z%2F20270318T220000Z&amp;details=Dixi%C3%A8me%20%C3%A9dition%20de%20TEDxUTTroyes%2C%20autour%20du%20th%C3%A8me%20de%20la%20limite%20%3A%20franchir%20ou%20s%27adapter%20%3F%0A%0A18h00%20%3A%20ouverture%20des%20portes%20et%20mini%20forum%20de%20recrutement%0A19h30%20%3A%20ouverture%20de%20la%20soir%C3%A9e%2C%20six%20talks%20en%20deux%20sessions%20et%20une%20vid%C3%A9o%20de%20conf%C3%A9rence%20TED%0A22h40%20%3A%20derni%C3%A8re%20question%2C%20puis%20rencontre%20avec%20les%20intervenants%0A%0A750%20places%20au%20Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%20%C3%A0%20Troyes.%0AProgramme%20%3A%20https%3A%2F%2Ftedxuttroyes.fr%2Fprogramme%2F%0ABilletterie%20%3A%20https%3A%2F%2Fwww.helloasso.com%2Fassociations%2Fgeniusutt%2Fevenements%2Ftedxuttroyes-2027-10e-edition&amp;location=Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%202%20rue%20Pierre%20Labonde%2C%2010000%20Troyes">Google Agenda<span class="visually-hidden"> (nouvelle fenêtre)</span></a></li>
+                <li><a href="/assets/agenda/revelation.ics" data-reveal-attr="href"
+                    data-reveal="/assets/agenda/tedxuttroyes-2027.ics">Apple Calendrier</a></li>
+                <li><a href="/assets/agenda/revelation.ics" data-reveal-attr="href"
+                    data-reveal="/assets/agenda/tedxuttroyes-2027.ics">Samsung Calendrier</a></li>
+              </ul>
+            </details>
           </div>
         </div>
       </section>
@@ -210,16 +239,23 @@
          reste droite et tendue ; un mot la traverse au fil du defilement. -->
       <section class="mom" id="moment-2" data-line="cross">
         <div class="mwrap">
-          <p class="cote" aria-hidden="true">********</p>
+          <p class="cote" aria-hidden="true" data-reveal-unhide data-reveal="Franchir">********</p>
           <div class="cross-track" aria-hidden="true">
-            <span class="cross-word">*******</span>
+            <span class="cross-word"><span class="msk" data-c="Au-delà">*******</span></span>
           </div>
           <div class="mom-duo">
-            <div class="colL">
-              <!-- PLACEHOLDER : premier versant du theme, sous embargo
-                 jusqu'au 18 octobre 2026 (memes barres de caviardage que
-                 les fiches speakers). Titre et texte d'origine dans
-                 l'historique git. -->
+            <!-- PLACEHOLDER : premier versant du theme, sous embargo jusqu'au
+               samedi 31 octobre 2026 (memes barres de caviardage que les
+               fiches speakers). Le template porte la version d'origine, que
+               reveal.js remet en place le jour dit. -->
+            <template data-reveal-target="#versant-1">
+              <h2 class="mom-title">Décider que la ligne était provisoire</h2>
+              <p class="lead">Le record tombe, le prototype décolle, une voix s'élève là où personne ne parlait.
+                Franchir, c'est regarder la limite en face et passer outre : le mur devient une marche, la frontière un
+                point de départ. C'est le premier versant du thème 2027 : l'audace d'aller de l'autre côté, et ce que ce
+                geste coûte à celles et ceux qui le font.</p>
+            </template>
+            <div class="colL" id="versant-1">
               <h2 class="mom-title"><span aria-hidden="true"><span class="redact" style="width: 7ch"></span> <span
                     class="redact" style="width: 3ch"></span> <span class="redact" style="width: 2ch"></span> <span
                     class="redact" style="width: 5ch"></span> <span class="redact" style="width: 5ch"></span> <span
@@ -248,9 +284,9 @@
          buter contre elle sans la traverser. -->
       <section class="mom mom--droite" id="moment-3" data-line="cross" data-cross-dir="rtl">
         <div class="mwrap">
-          <p class="cote" aria-hidden="true">*'*******</p>
+          <p class="cote" aria-hidden="true" data-reveal-unhide data-reveal="S'adapter">*'*******</p>
           <div class="cross-track cross-track--rtl" aria-hidden="true">
-            <span class="cross-word">*****'***</span>
+            <span class="cross-word"><span class="msk" data-c="Jusqu&#x27;ici">*****'***</span></span>
           </div>
           <div class="mom-duo mom-duo--rtl">
             <figure class="mom-photo">
@@ -260,10 +296,16 @@
                 alt="Jamy Gourmaud sur la scène de TEDxUTTroyes, devant les lettres rouges"
                 width="1600" height="900" loading="lazy">
             </figure>
-            <div class="colR">
-              <!-- PLACEHOLDER : second versant du theme, sous embargo
-                 jusqu'au 18 octobre 2026. Titre et texte d'origine dans
-                 l'historique git. -->
+            <!-- PLACEHOLDER : second versant du theme, sous embargo jusqu'au
+               samedi 31 octobre 2026 (voir le versant precedent). -->
+            <template data-reveal-target="#versant-2">
+              <h2 class="mom-title">Ce qui ne se franchit pas</h2>
+              <p class="lead">Le corps compose avec la maladie, la ville avec sa rivière, l'ingénieur avec la matière.
+                S'adapter, c'est faire de la ligne un appui : plier sans rompre, transformer la contrainte en méthode.
+                C'est le second versant du thème : certaines limites ne se dépassent pas, elles s'apprivoisent, et ce
+                renoncement apparent demande autant de courage que le saut.</p>
+            </template>
+            <div class="colR" id="versant-2">
               <h2 class="mom-title"><span aria-hidden="true"><span class="redact" style="width: 2ch"></span> <span
                     class="redact" style="width: 3ch"></span> <span class="redact" style="width: 2ch"></span> <span
                     class="redact" style="width: 2ch"></span> <span class="redact" style="width: 8ch"></span> <span
@@ -288,10 +330,13 @@
           <p class="cote">Speakers</p>
           <div class="colL">
             <!-- PLACEHOLDER : titre et texte reformules tant que le theme est
-               sous embargo (ils le nommaient). Version d'origine dans
-               l'historique git, a remettre le 18 octobre 2026. -->
-            <h2 class="mom-title">Six noms s'apprêtent à monter sur scène</h2>
-            <p class="lead">Le ** ****, six talks se succèdent sur la scène troyenne : dix-huit minutes
+               sous embargo (ils le nommaient) ; reveal.js remet la version
+               d'origine le samedi 31 octobre 2026. -->
+            <h2 class="mom-title" data-reveal="Six noms s'apprêtent à franchir">Six noms s'apprêtent à monter sur scène
+            </h2>
+            <p class="lead"
+              data-reveal="Le 18 mars, six talks racontent la limite depuis la scène troyenne : dix-huit minutes chacun, pas une de plus. Les annonces tomberont une par une d'ici mars.">
+              Le ** ****, six talks se succèdent sur la scène troyenne : dix-huit minutes
               chacun, pas une de plus. Les annonces tomberont une par une d'ici au jour J.</p>
           </div>
           <!-- GABARIT : pour annoncer un speaker sur l'accueil, remplacer
@@ -474,7 +519,7 @@
             <p class="lead">Portes à 18h00 avec un mini forum de recrutement, première voix à 19h30, dernière question
               vers 22h40. La feuille de salle tient en sept temps.</p>
           </div>
-          <ol class="tl" aria-label="Le déroulé de la soirée du ** **** ****">
+          <ol data-reveal-attr="aria-label" data-reveal="Le déroulé de la soirée du 18 mars 2027" class="tl" aria-label="Le déroulé de la soirée du ** **** ****">
             <li class="tl-row">
               <div class="tl-left">
                 <figure class="tl-ph" aria-hidden="true">
@@ -505,7 +550,7 @@
               <span class="tl-dot" aria-hidden="true"></span>
               <div class="tl-body">
                 <p class="tl-title">Ouverture de la soirée</p>
-                <p class="tl-desc">Le thème est posé : ******** ** *'*******&nbsp;?</p>
+                <p class="tl-desc">Le thème est posé : <span class="msk" data-c="franchir ou s&#x27;adapter">******** ** *'*******</span>&nbsp;?</p>
               </div>
             </li>
             <li class="tl-row">
@@ -706,8 +751,8 @@
             <li class="alb-item alb-item--end" style="--c: 10; --th: 0.72">
               <span class="alb-end-label">
                 <span class="fr-y">2027</span>
-                <span class="fr-t">******** ** *'*******&nbsp;?</span>
-                <span class="fr-end-note">Dixième édition · ** **** **** · vous êtes ici</span>
+                <span class="fr-t"><span class="msk" data-c="Franchir ou s&#x27;adapter">******** ** *'*******</span>&nbsp;?</span>
+                <span class="fr-end-note">Dixième édition · <span class="msk" data-c="18 mars 2027">** **** ****</span> · vous êtes ici</span>
               </span>
               <span class="alb-dot alb-dot--end" data-line="drop" aria-hidden="true"></span>
             </li>
@@ -736,7 +781,7 @@
             aria-label="La dixième édition en chiffres">
             <li><strong>61</strong><span>talks partagés sur la scène troyenne depuis 2016</span></li>
             <li><strong>2500</strong><span>spectateurs cumulés sur 9 éditions</span></li>
-            <li><strong>750</strong><span>fauteuils le ** **** ****, pas un de plus</span></li>
+            <li><strong>750</strong><span>fauteuils le <span class="msk" data-c="18 mars 2027">** **** ****</span>, pas un de plus</span></li>
           </ul>
           <p class="colL more-row">
             <a class="link-more" href="/editions/">Ouvrir le registre des éditions

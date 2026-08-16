@@ -986,12 +986,16 @@ body.nav-open {
   display: none;
 }
 
+/* Le telescripteur : une seule ligne mono, etiquette et decompte sur la
+   meme ligne de base. Il compte d'abord la revelation de la date et du
+   theme, puis le jour J. Il doit tenir dans le premier ecran avec le
+   reste du seuil : ne pas le grossir. */
 .js .ticker {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   gap: 8px 28px;
-  margin-top: clamp(36px, 6vh, 64px);
+  margin-top: clamp(28px, 4.5vh, 52px);
   padding-top: 16px;
   border-top: 1px solid var(--filet);
 }
@@ -1010,6 +1014,116 @@ body.nav-open {
   font-size: clamp(1.25rem, 3vw, 1.9rem);
   color: var(--papier);
   white-space: nowrap;
+}
+
+/* Ajouter le rendez-vous a son agenda : discret sous le telescripteur,
+   il ne doit pas pousser le seuil hors de l'ecran. Le bouton ouvre un
+   choix natif (details/summary, comme la FAQ) entre les trois agendas :
+   Google par URL, Apple et Samsung par fichier .ics. Referme, il ne
+   coute que la hauteur du bouton. */
+.ticker-cal {
+  margin-top: 14px;
+}
+
+.cal summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.cal summary::-webkit-details-marker {
+  display: none;
+}
+
+.cal-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 22px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cal-list a {
+  color: var(--encre-2);
+  text-decoration: none;
+  border-bottom: 1px solid var(--filet);
+  padding-bottom: 2px;
+}
+
+.cal-list a:hover,
+.cal-list a:focus-visible {
+  color: var(--papier);
+  border-bottom-color: var(--rouge-vif);
+}
+
+/* Ecran court (portable 720p, telephone compact) : le seuil se resserre
+   pour que tout tienne au premier chargement, du titre au bouton
+   d'agenda, sans avoir a defiler. Mesure a 1280 x 720, 1024 x 768 et
+   390 x 700 : le seuil depassait de 25 a 45 px. */
+@media (max-height: 820px) {
+  /* .journey .hero (section 20b) pose 72 px de fond et vient plus loin
+     dans la feuille : il faut passer par body.journey pour reprendre la
+     main sans dependre de l'ordre des regles. */
+  .hero,
+  body.journey .hero {
+    padding-bottom: 28px;
+  }
+
+  .hero-title {
+    margin-bottom: 16px;
+  }
+
+  .hero-fig {
+    margin-bottom: 14px;
+  }
+
+  .hero-meta {
+    margin-bottom: 20px;
+  }
+
+  .js .ticker {
+    margin-top: 20px;
+    padding-top: 12px;
+  }
+
+  .ticker-cal {
+    margin-top: 10px;
+  }
+}
+
+/* Ecran vraiment court (telephone compact, 667 px et moins) : on gagne
+   encore sur l'air au-dessus du titre. En dessous de 640 px de haut, le
+   seuil deborde malgre tout : deux boutons pleine largeur, la date sur
+   deux lignes et le telescripteur ne rentrent pas, et les comprimer
+   abimerait la version mobile validee. */
+@media (max-height: 720px) {
+  .hero,
+  body.journey .hero {
+    padding-top: calc(var(--header-h) + 16px);
+  }
+
+  .hero .cote {
+    margin-bottom: 12px;
+  }
+
+  .hero-fig {
+    margin-bottom: 10px;
+  }
+
+  .hero-meta {
+    margin-bottom: 14px;
+  }
+
+  /* Le bouton d'agenda passe sur deux lignes sous 400 px : on lui retire
+     le rembourrage superflu plutot que de raccourcir son libelle. */
+  .ticker-cal .btn {
+    min-height: 38px;
+    padding: 6px 14px;
+  }
 }
 
 .ticker-value .u {
@@ -2061,7 +2175,7 @@ details.faq[open] summary .icon {
 
 /* Moment 1 : le seuil. La question se coupe en deux sur la ligne :
    Le premier membre du titre s'arrete au bord, le second commence de
-   l'autre cote (titre sous embargo jusqu'au 18 octobre 2026).
+   l'autre cote (titre sous embargo jusqu'au 31 octobre 2026).
    Tout le reste (date, actions, compte a rebours) se range avant. */
 
 .journey .hero {
@@ -2632,8 +2746,11 @@ details.faq[open] summary .icon {
    chemin de la descente vers la prise, que la ligne contourne par la
    droite (ancre avoid). En desktop le mwrap passe en grille : cote sur
    toute la largeur, texte a gauche, logo centre verticalement a droite. */
+/* En mobile le logo se centre sous le texte (demande de Baptiste le
+   2026-08-16) ; en desktop il reprend sa colonne a droite, sur le chemin
+   de la ligne (voir la grille plus bas). */
 .tedx-logo {
-  margin: 48px 0 0 auto;
+  margin: 48px auto 0;
   width: min(380px, 60%);
 }
 

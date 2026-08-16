@@ -118,35 +118,55 @@
 
   /* ------------------------------------------------------------------
      Telescripteur : compte a rebours en une seule ligne mono.
-     PLACEHOLDER : la date du jour J est masquee (etoiles) dans toutes les
-     pages, le telescripteur decompte jusqu'a sa revelation. Cible figee en
-     UTC : le 18 octobre 2026 a 18h00, Paris est encore en heure d'ete
-     (UTC+2, le changement d'heure tombe le 25), soit 16h00 UTC. Aucun
-     calcul de fuseau cote client. Le jour de la revelation, remettre la
-     vraie date partout et repointer TARGET sur le jour J (18 mars 2027 a
-     18h00 heure d'hiver, soit Date.UTC(2027, 2, 18, 17, 0, 0)).
+
+     Deux cibles successives, toutes deux figees en UTC (aucun calcul de
+     fuseau cote client) :
+
+     1. la revelation, samedi 31 octobre 2026 a 18h00 a Paris. L'heure
+        d'hiver est revenue le 25 octobre (UTC+1), soit 17h00 UTC. Quand
+        elle tombe, le telescripteur demande a reveal.js de devoiler la
+        page, puis enchaine sur la cible suivante ;
+     2. le jour J, jeudi 18 mars 2027 a 18h00 (ouverture des portes et
+        mini forum de recrutement), heure d'hiver aussi, soit 17h00 UTC.
+
+     Une page ouverte depuis longtemps bascule donc toute seule, et une
+     page ouverte apres la revelation part directement sur le jour J.
      ------------------------------------------------------------------ */
   var tickerValue = doc.getElementById("ticker-value");
   if (tickerValue) {
-    var TARGET = Date.UTC(2026, 9, 18, 16, 0, 0);
+    var REVELATION = window.TEDX_REVEAL
+      ? window.TEDX_REVEAL.at
+      : Date.UTC(2026, 9, 31, 17, 0, 0);
+    var JOUR_J = Date.UTC(2027, 2, 18, 17, 0, 0);
     var DAY = 86400000;
     var HOUR = 3600000;
     var MINUTE = 60000;
     var tickerLabel = doc.querySelector(".ticker-label");
     var timerId = 0;
+    var target = Date.now() >= REVELATION ? JOUR_J : REVELATION;
 
     var pad = function (value) {
       return value < 10 ? "0" + value : String(value);
     };
 
     var tick = function () {
-      var diff = TARGET - Date.now();
+      var diff = target - Date.now();
       if (diff <= 0) {
+        if (target === REVELATION) {
+          /* L'heure dite : le site retrouve sa version d'origine, et le
+             compte a rebours reprend sa course vers le jour J. */
+          if (window.TEDX_REVEAL) {
+            window.TEDX_REVEAL.run();
+          }
+          target = JOUR_J;
+          tick();
+          return;
+        }
         window.clearInterval(timerId);
         if (tickerLabel) {
-          tickerLabel.textContent = "Jour J";
+          tickerLabel.textContent = "C'est ce soir";
         }
-        tickerValue.textContent = "La date est révélée";
+        tickerValue.textContent = "Ouverture des portes 18h00";
         return;
       }
       var days = Math.floor(diff / DAY);
@@ -158,7 +178,7 @@
     };
 
     tick();
-    if (TARGET - Date.now() > 0) {
+    if (target - Date.now() > 0) {
       timerId = window.setInterval(tick, 1000);
     }
   }

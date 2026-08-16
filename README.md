@@ -39,6 +39,9 @@ mentions-legales/        Mentions légales (LCEN)
 robots.txt, sitemap.xml  SEO technique
 assets/
   css/main-v2.css        Feuille unique (sommaire commenté en tête de fichier)
+  js/reveal.js           Le dévoilement automatique du 31 octobre 2026 :
+                         chaque zone masquée porte sa version d'origine,
+                         ce script les remet en place le jour dit
   js/main-v2.js          Script commun (menu, header, téléscripteur)
   js/line.js             La ligne continue de l'accueil : construit le tracé SVG
                          en mesurant les ancres data-line, le dessine au scroll,
@@ -46,6 +49,9 @@ assets/
   js/map.js              Carte Mapbox du lieu (accueil) : chargée paresseusement
                          à l'approche du bloc, elle remplace le plan SVG qui
                          reste la version par défaut (sans JS, sans WebGL).
+  agenda/                Les deux rendez-vous en .ics (révélation, puis soirée) :
+                         Apple Calendrier et Samsung Calendrier importent ces
+                         fichiers, Google passe par une URL
   fonts/                 Bricolage Grotesque (variable), Space Mono 400 et 700,
                          DM Sans (variable), hébergées en local
   img/                   Logo, favicon, OG, placeholders éditions et lieu
@@ -72,8 +78,9 @@ Tous les emplacements variables sont marqués par un commentaire `PLACEHOLDER` d
 
 | Quoi | Où | Comment |
 |---|---|---|
-| Thème (masqué) | toutes les pages | « Franchir ou s'adapter ? » est remplacé par `******** ** *'*******` (une étoile par caractère), « la limite » par `** ******`. Sur l'accueil, les deux sections du diptyque sont sous embargo (barres de caviardage `.redact`, même DA que les fiches speakers). Les titres d'onglet, les metas sociales et le JSON-LD portent un intitulé neutre : « TEDxUTTroyes 2027, dixième édition ». Trois textes ont été reformulés parce qu'ils nommaient le thème : le titre et le chapô du bloc speakers de l'accueil, et le chapô de `speakers/index.html`. Tout se récupère dans l'historique git (commit précédant le masquage). Même échéance que la date : 18 octobre 2026. |
-| Date du jour J (masquée) | toutes les pages + `assets/js/main-v2.js` | la date est remplacée par des étoiles (`***** ** **** ****` pour « Jeudi 18 mars 2027 », `** **** ****` pour « 18 mars 2027 », `** ****` pour « 18 mars ») et le téléscripteur de l'accueil décompte jusqu'à sa révélation, le 18 octobre 2026 à 18h00. Le jour venu : remettre la vraie date partout et repointer `TARGET` dans `main-v2.js` sur le jour J. Le JSON-LD, les attributs `datetime` et la date affichée dans ce README gardent la vraie valeur. |
+| Dévoilement automatique | `assets/js/reveal.js` | le samedi 31 octobre 2026 à 18h00 (cible UTC figée `2026-10-31T17:00:00Z`), le site reprend de lui-même son état d'avant le masquage : plus une étoile, plus une barre de caviardage, titres et descriptions d'origine. Le compte à rebours de l'accueil enchaîne alors sur le jour J. **Si vous modifiez un texte masqué, mettez à jour sa version d'origine dans le même élément** (`data-c`, `data-reveal`, `data-reveal-html`, `template`), sinon le dévoilement remettra l'ancienne. La remise en état définitive reste un `git revert` du commit de masquage : le HTML servi redevient alors correct pour Google et les partages sociaux, ce que le dévoilement JavaScript ne fait que pour le visiteur (le JSON-LD de l'accueil, lui, n'est pas rétabli par le script). |
+| Thème (masqué) | toutes les pages | « Franchir ou s'adapter ? » est remplacé par `******** ** *'*******` (une étoile par caractère), « la limite » par `** ******`. Sur l'accueil, les deux sections du diptyque sont sous embargo (barres de caviardage `.redact`, même DA que les fiches speakers). Les titres d'onglet, les metas sociales et le JSON-LD portent un intitulé neutre : « TEDxUTTroyes 2027, dixième édition ». Trois textes ont été reformulés parce qu'ils nommaient le thème : le titre et le chapô du bloc speakers de l'accueil, et le chapô de `speakers/index.html`. Tout se récupère dans l'historique git (commit précédant le masquage). Même échéance que la date : samedi 31 octobre 2026 à 18h00. |
+| Date du jour J (masquée) | toutes les pages + `assets/js/main-v2.js` | la date est remplacée par des étoiles (`***** ** **** ****` pour « Jeudi 18 mars 2027 », `** **** ****` pour « 18 mars 2027 », `** ****` pour « 18 mars ») et le téléscripteur de l'accueil décompte jusqu'à sa révélation, le samedi 31 octobre 2026 à 18h00, avec un bouton « ajouter à mon agenda » qui ouvre le choix entre Google Agenda (URL d'ajout), Apple Calendrier et Samsung Calendrier (fichiers `assets/agenda/*.ics`, servis en `text/calendar` grâce à un `AddType` du `.htaccess`). Les trois destinations basculent sur la soirée elle-même une fois la date révélée. Le JSON-LD, les attributs `datetime` et la date affichée dans ce README gardent la vraie valeur. |
 | Lien billetterie HelloAsso | toutes les pages + JSON-LD de `index.html` | remplacer partout `https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition` |
 | Lien newsletter HelloAsso | `index.html`, footers | remplacer partout `https://www.helloasso.com/PLACEHOLDER-NEWSLETTER` |
 | Chiffres (talks, intervenants) | `index.html`, section « En chiffres » | remplacer les `XX` des lignes de données |
