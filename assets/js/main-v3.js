@@ -2,7 +2,7 @@
    Zero dependance, charge en defer.
    Modules : etat du header, menu mobile accessible, telescripteur
    du compte a rebours, trace du dixieme baton. L'allumage de la
-   feuille de salle de l'accueil est pilote par line.js (la pointe
+   feuille de salle de l'accueil est pilote par line-v2.js (la pointe
    du trait franchit les pastilles). */
 
 (function () {

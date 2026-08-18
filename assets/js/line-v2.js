@@ -262,7 +262,12 @@
     contentH = wrapRect.height;
     var axA = relRect(probeA).left;
     var axB = relRect(probeB).left;
-    var W = doc.documentElement.clientWidth;
+    /* Largeur de travail : celle du wrapper, pas celle du viewport.
+       Au-dela de 1920 px la page se fige et se centre, le wrapper est
+       alors plus etroit que l'ecran ; les mots qui franchissent et les
+       contournements doivent buter sur le bord de la page, pas sur le
+       bord de l'ecran. En dessous, les deux valeurs sont identiques. */
+    var W = Math.round(wrapRect.width);
     var footer = doc.querySelector(".site-footer");
     var H = Math.ceil(footer ? relRect(footer).bottom : contentH);
 
@@ -520,8 +525,21 @@
     for (c = 0; c < freezes.length; c++) {
       totalF += freezes[c][1] - freezes[c][0];
     }
+    /* Reserve de fin de course : la pointe vit au centre du viewport, il
+       faut donc toujours une demi-hauteur d'ecran de scroll apres le
+       dernier point, plus la plage de l'epilogue. Sur un ecran tres haut
+       (1600 px, et surtout un 4K natif en 2160) le footer n'y suffit pas :
+       le trait n'atteignait jamais sa fin, la prise ne s'allumait pas.
+       On allonge alors le spacer d'autant : l'ecran reste fige au bas de
+       la page pendant que le trait finit de se tracer, ce qui est le
+       comportement deja en place sur les segments horizontaux. */
+    var lastT = tableM.length ? tableM[tableM.length - 1].t : 0;
+    var reserve = lastT + 70 + Math.max(120, Math.round(vh * 0.45));
+    var pad = 0;
+
     if (virtualOn) {
-      spacer.style.height = Math.round(contentH + totalF) + "px";
+      pad = Math.max(0, Math.ceil(reserve - (contentH + totalF - vh)));
+      spacer.style.height = Math.round(contentH + totalF + pad) + "px";
       html.classList.add("jscroll-run");
     } else {
       html.classList.remove("jscroll-run");
@@ -529,7 +547,7 @@
       freezes = [];
     }
 
-    var maxScroll = Math.max(1, (virtualOn ? contentH + totalF : contentH) - vh);
+    var maxScroll = Math.max(1, (virtualOn ? contentH + totalF + pad : contentH) - vh);
     tailFrom = tableM.length ? tableM[tableM.length - 1].t + 30 : 0;
     tailFrom = Math.min(tailFrom, maxScroll - 60);
     tailTo = Math.max(1, maxScroll - Math.max(120, Math.round(vh * 0.45)));

@@ -118,6 +118,16 @@
 
   --header-h: 64px;
 
+  /* Gabarit de page : la mise en page est calee sur un ecran 1080p. Au-dela
+     de 1920 px elle ne s'etire plus, elle se centre, et --gouttiere mesure
+     la bande noire laissee de chaque cote. Le 100% se resout contre la
+     largeur utile (hors barre de defilement) aussi bien pour le padding du
+     body que pour le left/right des elements fixes, dont le bloc de page
+     est le viewport : les deux restent donc alignes au pixel. N'employer
+     --gouttiere que dans ces deux contextes. */
+  --page-max: 1920px;
+  --gouttiere: max(0px, (100% - var(--page-max)) / 2);
+
   /* La geometrie du document : marge gauche, rail technique, ligne de cote */
   --m-left: clamp(16px, 5vw, 96px);
   --m-right: clamp(20px, 4vw, 72px);
@@ -176,6 +186,7 @@ body {
 }
 
 body {
+  padding-inline: var(--gouttiere);
   background-color: var(--noir);
   color: var(--encre);
   font-family: var(--font-body);
@@ -270,7 +281,7 @@ summary {
 .skip-link {
   position: fixed;
   top: 14px;
-  left: 14px;
+  left: calc(var(--gouttiere) + 14px);
   z-index: var(--z-skip);
   padding: 12px 20px;
   background-color: var(--rouge);
@@ -537,7 +548,7 @@ main .sec--alt:last-child {
 }
 
 /* La prise (accueil) : tant que la ligne n'a pas rejoint le bouton
-   Reserver, il attend en noir ; line.js pose plug-armed au depart et
+   Reserver, il attend en noir ; line-v2.js pose plug-armed au depart et
    plug-on quand le trait s'y branche. Sans JS, en cas d'echec ou en
    reduced motion (trait complet d'emblee) : aucune classe, bouton rouge. */
 .btn--primary.plug-armed {
@@ -627,8 +638,8 @@ main .sec--alt:last-child {
 .site-header {
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
+  left: var(--gouttiere);
+  right: var(--gouttiere);
   z-index: var(--z-header);
   height: var(--header-h);
   display: flex;
@@ -733,7 +744,7 @@ main .sec--alt:last-child {
 
 .mobile-menu {
   position: fixed;
-  inset: 0;
+  inset: 0 var(--gouttiere);
   z-index: var(--z-menu);
   display: flex;
   flex-direction: column;
@@ -1123,6 +1134,72 @@ body.nav-open {
   .ticker-cal .btn {
     min-height: 38px;
     padding: 6px 14px;
+  }
+}
+
+/* Petit telephone (320 x 568, 360 x 640 : iPhone SE premiere generation,
+   entree de gamme Android) : le seuil depassait encore de 89 px, le
+   bouton d'agenda et le compte a rebours tombaient sous la ligne de
+   flottaison. Troisieme palier : on reprend de la hauteur sur les
+   interlignes, la pile de boutons et l'air autour du telescripteur,
+   sans jamais toucher a la taille du compte a rebours lui-meme
+   (clamp(1.25rem, 3vw, 1.9rem), il reste lisible de loin). Le mot du
+   titre se replafonne en vh pour suivre. Regle placee avant celle du
+   paysage, qui garde la main sous 520 px de haut. */
+@media (max-height: 660px) {
+  .hero,
+  body.journey .hero {
+    padding-top: calc(var(--header-h) + 8px);
+    padding-bottom: 20px;
+  }
+
+  .hero .cote {
+    margin-bottom: 6px;
+  }
+
+  .hero-word {
+    font-size: clamp(2.4rem, 10.5vh, 3.4rem);
+  }
+
+  .hero-sub {
+    font-size: clamp(1.35rem, 4.6vh, 2rem);
+  }
+
+  .hero-title {
+    margin-bottom: 8px;
+  }
+
+  /* Les deux lignes mono du seuil descendent a 12 px, plancher de la
+     regle de section 05, et resserrent leur interlettrage : la date et
+     le lieu passent alors de trois lignes a deux sur un ecran de 320 px. */
+  .hero-fig,
+  .hero-meta {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    letter-spacing: 0.04em;
+    margin-bottom: 8px;
+  }
+
+  .hero .actions {
+    gap: 8px;
+  }
+
+  .hero .actions .btn {
+    min-height: 40px;
+    padding: 8px 20px;
+  }
+
+  .js .ticker {
+    margin-top: 10px;
+    padding-top: 8px;
+  }
+
+  .ticker-label {
+    letter-spacing: 0.06em;
+  }
+
+  .ticker-cal {
+    margin-top: 6px;
   }
 }
 
@@ -2070,7 +2147,7 @@ details.faq[open] summary .icon {
   position: relative;
 }
 
-/* Le defilement virtuel (accueil, desktop) : line.js fixe le wrapper
+/* Le defilement virtuel (accueil, desktop) : line-v2.js fixe le wrapper
    .jscroll (main + footer) et le translate selon le scroll du spacer,
    pour figer l'ecran pendant les deplacements horizontaux du trait.
    Sans la classe jscroll-run (mobile, reduced motion, sans JS, echec) :
@@ -2086,8 +2163,8 @@ details.faq[open] summary .icon {
 .jscroll-run .jscroll {
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
+  left: var(--gouttiere);
+  right: var(--gouttiere);
   will-change: transform;
 }
 
@@ -2786,7 +2863,7 @@ details.faq[open] summary .icon {
 /* Moment 4 : l'album des editions. La ligne traverse l'ecran a
    l'horizontale et sert de fil : chaque affiche pend au-dessus de sa
    pastille, le theme juste en dessous. La revelation suit la pointe du
-   trait : line.js publie --sweep (0 a 1) sur .album, chaque piece porte
+   trait : line-v2.js publie --sweep (0 a 1) sur .album, chaque piece porte
    son seuil --th. Sur mobile : le meme album devient un carrousel
    balayable, annees et themes compris, les chiffres restent, seule la
    bande d'archives est mise de cote. */
@@ -3482,7 +3559,7 @@ details.faq[open] summary .icon {
 }
 
 /* L'allumage progressif, seulement quand la ligne continue est active
-   (classe jline-run posee par line.js) : chaque creneau s'eclaire
+   (classe jline-run posee par line-v2.js) : chaque creneau s'eclaire
    quand la pointe du trait franchit sa pastille. */
 .jline-run .journey .tl-row {
   opacity: 0.22;
