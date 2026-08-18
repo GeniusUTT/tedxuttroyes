@@ -1,0 +1,3647 @@
+/* ==========================================================================
+   TEDxUTTroyes 2027 - "Le releve"
+   Direction artistique : le site comme releve technique du franchissement.
+   Une ligne de cote rouge verticale structure chaque page : marge technique
+   en mono a sa gauche, contenu a sa droite, seule la typographie display
+   a le droit de la franchir.
+
+   Sommaire :
+   01. Polices locales
+   02. Tokens
+   03. Reset, base, grain
+   04. Structure : la ligne, la marge, les sections
+   05. Typographie : display, cote, donnees mono
+   06. Boutons, liens, icones
+   07. Header et navigation
+   08. Hero et telescripteur
+   09. Diptyque des deux versants du theme
+   10. Frise des dix ans (sur la marge)
+   11. Le dix en batons (tally) et lignes de donnees
+   12. Lieu
+   13. Registre des editions (13b. Hall of Fame)
+   14. Fiches sous embargo (speakers)
+   15. Feuille de salle (programme)
+   16. Partenaires
+   17. FAQ
+   18. Bandeau constat
+   19. Footer
+   20. Prose, notices, 404
+   21. Animations et reduced motion
+   ========================================================================== */
+
+/* 01. Polices locales */
+
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("../fonts/bricolage-var-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Bricolage Grotesque";
+  font-style: normal;
+  font-weight: 200 800;
+  font-display: swap;
+  src: url("../fonts/bricolage-var-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/space-mono-400-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("../fonts/space-mono-400-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/space-mono-700-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Space Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("../fonts/space-mono-700-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+  src: url("../fonts/dm-sans-var-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "DM Sans";
+  font-style: normal;
+  font-weight: 100 1000;
+  font-display: swap;
+  src: url("../fonts/dm-sans-var-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* 02. Tokens
+   Neutres chauds, cote papier et archive : jamais de gris bleute. */
+
+:root {
+  --noir: #080808;
+  --surface: #0e0d0c;
+  --surface-2: #141210;
+  --papier: #edeae4;      /* titres, texte fort */
+  --encre: #b7b2a9;       /* corps de texte, 9:1 sur noir */
+  --encre-2: #7e7a73;     /* secondaire, marge technique, 4,9:1 */
+  --rouge: #eb0028;       /* encre d'annotation : ligne, cotes, aplats. Jamais en halo. */
+  --rouge-2: #c50022;
+  --rouge-vif: #ff2e4d;   /* petits textes rouges, 5,5:1 */
+  --filet: rgba(237, 234, 228, 0.10);
+  --caviardage: #262320;  /* barres d'embargo */
+
+  --font-disp: "Bricolage Grotesque", "Arial Black", Arial, sans-serif;
+  --font-body: "DM Sans", "Segoe UI", Arial, sans-serif;
+  --font-mono: "Space Mono", "Courier New", monospace;
+
+  --header-h: 64px;
+
+  /* La geometrie du document : marge gauche, rail technique, ligne de cote */
+  --m-left: clamp(16px, 5vw, 96px);
+  --m-right: clamp(20px, 4vw, 72px);
+  --rail-w: 0px;
+  --line-x: calc(var(--m-left) + var(--rail-w));
+  --body-pad: 20px;   /* distance ligne > contenu (mobile) */
+
+  --z-menu: 150;
+  --z-header: 200;
+  --z-skip: 300;
+  --z-grain: 400;
+
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+@media (min-width: 900px) {
+  :root {
+    --header-h: 72px;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --rail-w: 212px;
+    --body-pad: 44px;
+  }
+}
+
+/* 03. Reset, base, grain */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+html,
+body {
+  overflow-x: clip;
+}
+
+body {
+  background-color: var(--noir);
+  color: var(--encre);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@media (min-width: 900px) {
+  body {
+    font-size: 1.0625rem;
+  }
+}
+
+/* Grain global : un voile de matiere sur tout le site, header compris */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-grain);
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+ul[class],
+ol[class] {
+  list-style: none;
+  padding: 0;
+}
+
+h1, h2, h3, h4 {
+  color: var(--papier);
+  line-height: 1.15;
+  overflow-wrap: break-word;
+}
+
+p {
+  overflow-wrap: break-word;
+}
+
+a {
+  color: var(--rouge-vif);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--papier);
+}
+
+a,
+button,
+summary {
+  touch-action: manipulation;
+}
+
+:focus-visible {
+  outline: 2px solid var(--papier);
+  outline-offset: 3px;
+}
+
+::selection {
+  background-color: var(--rouge);
+  color: var(--papier);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: 14px;
+  left: 14px;
+  z-index: var(--z-skip);
+  padding: 12px 20px;
+  background-color: var(--rouge);
+  color: #fff;
+  font-weight: 700;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+  color: #fff;
+}
+
+/* 04. Structure : la ligne, la marge, les sections */
+
+main {
+  position: relative;
+}
+
+/* La ligne de cote : un seul trait rouge, du haut en bas de chaque page.
+   z-index 1 : au-dessus des fonds de section, sous le contenu (.inner). */
+main::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--line-x);
+  width: 2px;
+  z-index: 1;
+  background-color: var(--rouge);
+  transform-origin: top;
+  animation: lineDraw 0.9s var(--ease-out) 0.05s both;
+}
+
+.sec {
+  position: relative;
+  padding-block: clamp(40px, 6vw, 72px);
+}
+
+.sec--head {
+  padding-top: calc(var(--header-h) + clamp(48px, 9vw, 88px));
+  padding-bottom: clamp(24px, 5vw, 48px);
+}
+
+.sec--alt {
+  background-color: var(--surface);
+  border-top: 1px solid var(--filet);
+  border-bottom: 1px solid var(--filet);
+}
+
+.sec--alt + .sec--alt,
+.sec--alt + .band {
+  border-top: 0;
+}
+
+main .sec--alt:last-child {
+  border-bottom: 0;
+}
+
+.inner {
+  position: relative;
+  z-index: 2;
+  margin-left: calc(var(--line-x) + var(--body-pad));
+  margin-right: var(--m-right);
+  max-width: 1080px;
+}
+
+.cote {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+  margin-bottom: 20px;
+}
+
+.cote::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 2px;
+  background-color: var(--rouge);
+  vertical-align: 0.28em;
+  margin-right: 12px;
+}
+
+/* Mobile : aucun micro-libelle mono ne descend sous 12 px, et son
+   interlettrage se resserre pour tenir sur une seule ligne. La regle
+   revient a l'identique dans chaque section concernee (05, 08, 12, 14,
+   16, 19, 20, 20b, 20c) : chaque libelle reste avec son composant. */
+@media (max-width: 1023px) {
+  .cote {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+  }
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    margin-left: var(--m-left);
+    max-width: calc(var(--rail-w) + 1080px);
+    display: grid;
+    grid-template-columns: var(--rail-w) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .cote {
+    grid-column: 1;
+    text-align: right;
+    padding-right: 26px;
+    margin: 0.5em 0 0;
+  }
+
+  .cote::before {
+    content: none;
+  }
+
+  .cote::after {
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 2px;
+    background-color: var(--rouge);
+    vertical-align: 0.28em;
+    margin-left: 12px;
+  }
+
+  .sec-body {
+    grid-column: 2;
+    padding-left: var(--body-pad);
+    min-width: 0;
+  }
+}
+
+/* 05. Typographie */
+
+.page-title {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(2.6rem, 8vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  margin-bottom: 20px;
+}
+
+.h-md {
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: clamp(1.55rem, 3.6vw, 2.2rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  margin-bottom: 16px;
+}
+
+.lead {
+  max-width: 62ch;
+  color: var(--encre);
+}
+
+.lead + .lead {
+  margin-top: 12px;
+}
+
+.data {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--encre-2);
+}
+
+.data strong {
+  color: var(--papier);
+  font-weight: 700;
+}
+
+/* Mobile : les corps d'affichage cassent les noms trop longs pour la
+   colonne (Dehandschoewercker) en plein milieu d'un mot, sans trait
+   d'union. La cesure n'est ouverte qu'aux mots de quatorze signes et
+   plus : les titres courants restent entiers et
+   passent simplement a la ligne. Le trait d'union de cesure est un
+   trait d'union ordinaire, pas un tiret cadratin ni demi-cadratin :
+   la regle dure du projet n'est pas concernee. */
+@media (max-width: 1023px) {
+  .page-title,
+  .h-md,
+  .mom-title,
+  .hero-sub,
+  .sp-name,
+  .sl-name,
+  .hof-name,
+  .fr-t,
+  .ppl-name {
+    -webkit-hyphens: auto;
+    hyphens: auto;
+    -webkit-hyphenate-limit-before: 7;
+    -webkit-hyphenate-limit-after: 7;
+    hyphenate-limit-chars: 14 7 7;
+  }
+}
+
+/* Ecrans courts (telephone en paysage) : les corps d'affichage sont
+   dimensionnes en vw seuls, un titre y prend toute la hauteur utile.
+   On les replafonne en vh. Meme motif dans les sections 08, 20 et 20b. */
+@media (max-width: 1023px) and (orientation: landscape) and (max-height: 520px) {
+  .page-title {
+    font-size: clamp(1.9rem, 8vh, 3.2rem);
+  }
+
+  .h-md {
+    font-size: clamp(1.3rem, 5.4vh, 1.8rem);
+  }
+
+  .sec--head {
+    padding-top: calc(var(--header-h) + clamp(24px, 6vh, 48px));
+  }
+}
+
+/* 06. Boutons, liens, icones */
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 12px 26px;
+  font-family: var(--font-body);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--papier);
+  background-color: transparent;
+  border: 1px solid transparent;
+  border-radius: 0;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.btn:hover {
+  color: #fff;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn--primary {
+  background-color: var(--rouge);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background-color: var(--rouge-2);
+}
+
+/* La prise (accueil) : tant que la ligne n'a pas rejoint le bouton
+   Reserver, il attend en noir ; line.js pose plug-armed au depart et
+   plug-on quand le trait s'y branche. Sans JS, en cas d'echec ou en
+   reduced motion (trait complet d'emblee) : aucune classe, bouton rouge. */
+.btn--primary.plug-armed {
+  background-color: var(--noir);
+  color: var(--papier);
+  border-color: var(--filet);
+  transition: background-color 0.35s var(--ease-out), border-color 0.35s var(--ease-out), color 0.35s var(--ease-out);
+}
+
+.btn--primary.plug-armed:not(.plug-on):hover {
+  background-color: var(--noir);
+  border-color: rgba(237, 234, 228, 0.5);
+}
+
+.btn--primary.plug-armed.plug-on {
+  background-color: var(--rouge);
+  color: #fff;
+  border-color: transparent;
+}
+
+.btn--ghost {
+  border-color: rgba(237, 234, 228, 0.3);
+}
+
+.btn--ghost:hover {
+  border-color: var(--papier);
+}
+
+.btn--sm {
+  min-height: 42px;
+  padding: 8px 18px;
+  font-size: 0.8125rem;
+}
+
+.link-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  color: var(--rouge-vif);
+  text-decoration: none;
+}
+
+.link-more:hover {
+  color: var(--papier);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Tactile : sous 1024 px la pile de boutons occupe toute la colonne
+   (largeurs alignees, cible plus large) et le lien de suite gagne une
+   zone active de 44 px. Les marges qui l'entourent sont reduites
+   d'autant : la respiration a l'ecran ne bouge pas, seule la surface
+   sensible grandit. */
+@media (max-width: 1023px) {
+  .link-more {
+    min-height: 44px;
+    padding-block: 11px;
+  }
+
+  .btn--sm {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 639px) {
+  .actions .btn {
+    flex: 1 1 100%;
+  }
+}
+
+.icon {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  stroke-width: 2;
+  fill: none;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+  flex: none;
+}
+
+/* 07. Header et navigation */
+
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--z-header);
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  background-color: rgba(8, 8, 8, 0.6);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header {
+    background-color: rgba(8, 8, 8, 0.95);
+  }
+}
+
+.site-header.is-scrolled {
+  background-color: rgba(8, 8, 8, 0.88);
+  border-bottom-color: var(--filet);
+}
+
+.header-inner {
+  width: 100%;
+  padding-left: var(--m-left);
+  padding-right: var(--m-right);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+/* La barre fait 64 px : porter le lien du logo a 44 px de haut donne une
+   cible tactile correcte sans rien deplacer. */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  min-height: 44px;
+}
+
+/* Mobile : le logo au centre de la barre, le burger reste a droite. */
+@media (max-width: 1023px) {
+  .header-inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+  }
+
+  .brand {
+    grid-column: 2;
+    justify-self: center;
+  }
+
+  .nav-toggle {
+    grid-column: 3;
+    justify-self: end;
+  }
+}
+
+.brand img {
+  height: 26px;
+  width: auto;
+}
+
+.nav-desktop {
+  display: none;
+}
+
+.nav-toggle {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 12px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.nav-toggle .bar {
+  width: 22px;
+  height: 2px;
+  background-color: var(--papier);
+  transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.nav-toggle[aria-expanded="true"] .bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] .bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-menu);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: calc(var(--header-h) + 24px) var(--m-right) 40px calc(var(--line-x) + var(--body-pad));
+  background-color: #0b0a09;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.mobile-menu[hidden] {
+  display: none;
+}
+
+.mobile-menu.is-open {
+  opacity: 1;
+}
+
+.mobile-menu-list a {
+  display: block;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--filet);
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(1.9rem, 7.5vw, 2.7rem);
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+  text-decoration: none;
+  color: var(--papier);
+}
+
+.mobile-menu-list a:hover,
+.mobile-menu-list a[aria-current="page"] {
+  color: var(--rouge-vif);
+}
+
+.mobile-menu.is-open .mobile-menu-list li {
+  animation: aIn 0.4s var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+
+.mobile-menu-foot {
+  margin-top: auto;
+  padding-top: 32px;
+}
+
+.mobile-menu-foot .btn {
+  width: 100%;
+}
+
+.mobile-menu-foot .btn + .btn {
+  margin-top: 10px;
+}
+
+.mobile-menu-date {
+  margin-top: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--encre-2);
+  text-align: center;
+}
+
+body.nav-open {
+  overflow: hidden;
+}
+
+/* Le menu deploye mesure 780 px alors qu'un telephone courant offre
+   autour de 745 px de svh : sans resserrage, le bouton Reserver ma place
+   tombe sous la ligne de flottaison sur tous les modeles. Sous 820 px de
+   hauteur, la liste se compacte pour que la pile de boutons rentre. */
+@media (max-height: 820px) {
+  .mobile-menu {
+    padding-top: calc(var(--header-h) + 14px);
+    padding-bottom: 24px;
+  }
+
+  .mobile-menu-list a {
+    padding: 7px 0;
+    font-size: clamp(1.45rem, 5.6vw, 2rem);
+  }
+
+  .mobile-menu-foot {
+    padding-top: 18px;
+  }
+
+  .mobile-menu-date {
+    margin-top: 10px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nav-toggle,
+  .mobile-menu {
+    display: none;
+  }
+
+  .nav-desktop {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .nav-desktop a:not(.btn) {
+    position: relative;
+    padding: 8px 2px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--encre);
+    text-decoration: none;
+  }
+
+  .nav-desktop a:not(.btn):hover {
+    color: var(--papier);
+  }
+
+  .nav-desktop a:not(.btn)[aria-current="page"] {
+    color: var(--papier);
+  }
+
+  .nav-desktop a:not(.btn)[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    bottom: 0;
+    height: 2px;
+    background-color: var(--rouge);
+  }
+}
+
+/* 08. Hero et telescripteur */
+
+.hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding-top: calc(var(--header-h) + 40px);
+  padding-bottom: 56px;
+  overflow: clip;
+  position: relative;
+}
+
+/* Le fond du seuil : une archive de la scene, en couleur,
+   sous un voile noir plus dense a gauche (titre, date, actions) et
+   fondu vers le noir en bas pour enchainer sur la suite. */
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: contrast(1.04) brightness(0.62);
+}
+
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(8, 8, 8, 0.9) 0%, rgba(8, 8, 8, 0.72) 44%, rgba(8, 8, 8, 0.42) 100%),
+    linear-gradient(180deg, rgba(8, 8, 8, 0.6) 0%, rgba(8, 8, 8, 0.1) 32%, rgba(8, 8, 8, 0.05) 62%, var(--noir) 100%);
+}
+
+/* Vignette cinema, sans halo colore */
+.hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(130% 105% at 32% 24%, transparent 52%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+.hero .inner {
+  z-index: 2;
+  width: 100%;
+}
+
+.hero-title {
+  margin-bottom: clamp(20px, 3.5vw, 32px);
+}
+
+/* Le mot qui franchit : il demarre dans la marge, traverse la ligne,
+   et peut deborder de la colonne a droite. En mobile il reste en
+   retrait a droite de la dorsale (il ne la touche pas). */
+.hero-word {
+  display: block;
+  position: relative;
+  width: max-content;
+  max-width: none;
+  margin-left: calc(-1 * var(--body-pad) + 10px);
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(3.8rem, 15vw, 13.5rem);
+  line-height: 0.85;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--papier);
+}
+
+@media (min-width: 1024px) {
+  .hero-word {
+    margin-left: calc(-1 * (var(--rail-w) + var(--body-pad)) + 6px);
+  }
+}
+
+/* Le second membre du titre se range dans la colonne : il s'adapte. */
+.hero-sub {
+  display: block;
+  font-family: var(--font-disp);
+  font-weight: 640;
+  font-size: clamp(1.65rem, 5.2vw, 4.1rem);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--papier);
+  margin-top: 0.18em;
+}
+
+.hero-fig {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--encre-2);
+  max-width: 52ch;
+  margin-bottom: clamp(20px, 3vw, 28px);
+}
+
+.hero-fig .fig-id {
+  color: var(--rouge-vif);
+}
+
+.hero-meta {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--papier);
+  margin-bottom: clamp(24px, 4vw, 36px);
+}
+
+.hero-meta .sep {
+  color: var(--rouge-vif);
+}
+
+.ticker {
+  display: none;
+}
+
+/* Le telescripteur : une seule ligne mono, etiquette et decompte sur la
+   meme ligne de base. Il compte d'abord la revelation de la date et du
+   theme, puis le jour J. Il doit tenir dans le premier ecran avec le
+   reste du seuil : ne pas le grossir. */
+.js .ticker {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px 28px;
+  margin-top: clamp(28px, 4.5vh, 52px);
+  padding-top: 16px;
+  border-top: 1px solid var(--filet);
+}
+
+.ticker-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+}
+
+.ticker-value {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(1.25rem, 3vw, 1.9rem);
+  color: var(--papier);
+  white-space: nowrap;
+}
+
+/* Ajouter le rendez-vous a son agenda : discret sous le telescripteur,
+   il ne doit pas pousser le seuil hors de l'ecran. Le bouton ouvre un
+   choix natif (details/summary, comme la FAQ) entre les trois agendas :
+   Google par URL, Apple et Samsung par fichier .ics. Referme, il ne
+   coute que la hauteur du bouton. */
+.ticker-cal {
+  margin-top: 14px;
+}
+
+.cal summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+.cal summary::-webkit-details-marker {
+  display: none;
+}
+
+.cal-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 22px;
+  margin: 12px 0 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.cal-list a {
+  color: var(--encre-2);
+  text-decoration: none;
+  border-bottom: 1px solid var(--filet);
+  padding-bottom: 2px;
+}
+
+.cal-list a:hover,
+.cal-list a:focus-visible {
+  color: var(--papier);
+  border-bottom-color: var(--rouge-vif);
+}
+
+/* Ecran court (portable 720p, telephone compact) : le seuil se resserre
+   pour que tout tienne au premier chargement, du titre au bouton
+   d'agenda, sans avoir a defiler. Mesure a 1280 x 720, 1024 x 768 et
+   390 x 700 : le seuil depassait de 25 a 45 px. */
+@media (max-height: 820px) {
+  /* .journey .hero (section 20b) pose 72 px de fond et vient plus loin
+     dans la feuille : il faut passer par body.journey pour reprendre la
+     main sans dependre de l'ordre des regles. */
+  .hero,
+  body.journey .hero {
+    padding-bottom: 28px;
+  }
+
+  .hero-title {
+    margin-bottom: 16px;
+  }
+
+  .hero-fig {
+    margin-bottom: 14px;
+  }
+
+  .hero-meta {
+    margin-bottom: 20px;
+  }
+
+  .js .ticker {
+    margin-top: 20px;
+    padding-top: 12px;
+  }
+
+  .ticker-cal {
+    margin-top: 10px;
+  }
+}
+
+/* Ecran vraiment court (telephone compact, 667 px et moins) : on gagne
+   encore sur l'air au-dessus du titre. En dessous de 640 px de haut, le
+   seuil deborde malgre tout : deux boutons pleine largeur, la date sur
+   deux lignes et le telescripteur ne rentrent pas, et les comprimer
+   abimerait la version mobile validee. */
+@media (max-height: 720px) {
+  .hero,
+  body.journey .hero {
+    padding-top: calc(var(--header-h) + 16px);
+  }
+
+  .hero .cote {
+    margin-bottom: 12px;
+  }
+
+  .hero-fig {
+    margin-bottom: 10px;
+  }
+
+  .hero-meta {
+    margin-bottom: 14px;
+  }
+
+  /* Le bouton d'agenda passe sur deux lignes sous 400 px : on lui retire
+     le rembourrage superflu plutot que de raccourcir son libelle. */
+  .ticker-cal .btn {
+    min-height: 38px;
+    padding: 6px 14px;
+  }
+}
+
+.ticker-value .u {
+  color: var(--rouge-vif);
+}
+
+@media (max-width: 1023px) {
+  .ticker-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+  }
+}
+
+/* Telephone en paysage : le seuil renonce a la pleine hauteur, sinon la
+   date, les boutons et le compte a rebours passent hors ecran (mesure a
+   740 x 380 : hero de 636 px, bouton a 424 px). */
+@media (max-width: 1023px) and (orientation: landscape) and (max-height: 520px) {
+  .hero {
+    min-height: 0;
+    padding-top: calc(var(--header-h) + 20px);
+    padding-bottom: 28px;
+  }
+
+  .hero-word {
+    font-size: clamp(2.2rem, 12vh, 4.4rem);
+  }
+
+  .hero-sub {
+    font-size: clamp(1.2rem, 5.4vh, 2rem);
+  }
+
+  .hero-title {
+    margin-bottom: 14px;
+  }
+
+  .hero-fig,
+  .hero-meta {
+    margin-bottom: 14px;
+  }
+
+  .js .ticker {
+    margin-top: 18px;
+    padding-top: 12px;
+  }
+}
+
+/* 09 et 10 : le diptyque et l'ancienne frise en marge ont ete dissous
+   dans le parcours de la ligne continue (section 20b). */
+
+/* 12. Lieu */
+
+.facts {
+  margin-top: 20px;
+}
+
+.facts li {
+  position: relative;
+  padding: 12px 0 12px 30px;
+  border-bottom: 1px solid var(--filet);
+  font-size: 0.95rem;
+}
+
+.facts li:first-child {
+  border-top: 1px solid var(--filet);
+}
+
+.facts li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1.45em;
+  width: 14px;
+  height: 2px;
+  background-color: var(--rouge);
+}
+
+.facts strong {
+  color: var(--papier);
+  font-weight: 500;
+}
+
+.facts .data {
+  display: block;
+}
+
+/* 13. Registre des editions */
+
+.reg {
+  border-top: 1px solid var(--filet);
+}
+
+.reg-row {
+  display: grid;
+  gap: 8px 24px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--filet);
+}
+
+.reg-row:hover {
+  background-color: rgba(237, 234, 228, 0.02);
+}
+
+.reg-year {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--rouge-vif);
+}
+
+.reg-main h3 {
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: clamp(1.35rem, 2.8vw, 1.9rem);
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+  margin-bottom: 8px;
+}
+
+.reg-media {
+  order: -1;
+}
+
+.reg-media img {
+  width: 100%;
+  border: 1px solid var(--filet);
+}
+
+@media (min-width: 900px) {
+  .reg-row {
+    grid-template-columns: 84px minmax(0, 1fr) 230px;
+    align-items: center;
+  }
+
+  .reg-media {
+    order: 0;
+  }
+}
+
+/* 13b. Hall of Fame : toutes les voix passees par la scene.
+   Une grille de cartes par annee : la carte entiere (portrait + nom)
+   est un lien vers la bio, le titre d'annee un lien vers l'edition.
+   Filets, zero border-radius, zero ombre : le releve. */
+
+.hof-year {
+  margin-top: clamp(40px, 6vw, 64px);
+}
+
+.hof-year:first-of-type {
+  margin-top: 0;
+}
+
+.hof-year .h-md {
+  margin-bottom: 18px;
+}
+
+.hof-year-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.hof-year-link:hover,
+.hof-year-link:focus-visible {
+  color: var(--rouge-vif);
+}
+
+/* Les filets sont portes par les cartes (bord droit et bas) : une
+   rangee incomplete laisse du noir, pas un pave de fond. */
+.hof-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: 1px solid var(--filet);
+  background-color: var(--noir);
+}
+
+.hof-card {
+  display: flex;
+  flex-direction: column;
+  padding: clamp(12px, 1.6vw, 18px);
+  background-color: var(--noir);
+  border-right: 1px solid var(--filet);
+  border-bottom: 1px solid var(--filet);
+}
+
+/* Toute la carte est cliquable : le lien enveloppe portrait et nom. */
+.hof-link {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+.hof-link:hover .hof-name,
+.hof-link:focus-visible .hof-name {
+  color: var(--rouge-vif);
+}
+
+.hof-card .hof-photo {
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+}
+
+.hof-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+}
+
+.hof-name {
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  line-height: 1.1;
+  color: var(--papier);
+}
+
+@media (min-width: 700px) {
+  .hof-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1100px) {
+  .hof-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* 14. Fiches sous embargo (speakers) : la grille des six
+   Deux lignes sur trois colonnes en desktop, partagee entre l'accueil
+   et la page speakers. Les cartes sont cadrees par un filet (gap de
+   1px sur fond filet), la zone portrait reste caviardee tant que
+   l'annonce n'est pas tombee. */
+
+.redact {
+  display: inline-block;
+  height: 0.82em;
+  background-color: var(--caviardage);
+}
+
+.sgrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1px;
+  margin-top: 40px;
+  border: 1px solid var(--filet);
+  background-color: var(--filet);
+}
+
+.sp-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: clamp(16px, 2.5vw, 26px);
+  background-color: var(--noir);
+}
+
+.sp-photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: repeating-linear-gradient(-45deg, var(--caviardage) 0 12px, var(--surface) 12px 16px);
+}
+
+.sp-photo img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+}
+
+.sp-photo-mark {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+  background-color: var(--noir);
+  padding: 6px 12px;
+}
+
+.sp-id {
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+}
+
+.sp-name {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
+  align-items: center;
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: clamp(1.3rem, 2vw, 1.6rem);
+  line-height: 1.05;
+  color: var(--papier);
+}
+
+.sp-bio {
+  font-size: 0.95rem;
+  color: var(--encre);
+  max-width: 46ch;
+}
+
+.sp-bio .redact {
+  display: block;
+  height: 0.6em;
+}
+
+.sp-bio .redact + .redact {
+  margin-top: 8px;
+}
+
+.sp-talk {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6em;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--encre);
+}
+
+.sp-talk-k {
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+}
+
+.sp-talk .redact {
+  height: 0.9em;
+}
+
+.sp-status {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid var(--filet);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--rouge-vif);
+}
+
+.sp-status--live {
+  color: var(--papier);
+}
+
+/* Mobile : tant que le portrait est sous embargo, la reserve 4/5 fait
+   350 px de hachures par fiche, soit 2 100 px de defilement pour six
+   fiches vides. On la ramene a un bandeau. Le vrai portrait, lui, garde
+   son cadrage 4/5 : le selecteur ne vise que l'etat caviarde, et les
+   navigateurs sans :has retombent sur le 4/5 actuel. */
+@media (max-width: 639px) {
+  .sp-photo:has(.sp-photo-mark) {
+    aspect-ratio: 16 / 9;
+  }
+}
+
+@media (max-width: 1023px) {
+  .sp-id,
+  .sp-photo-mark {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+  }
+
+  .sp-talk-k {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (min-width: 480px) {
+  .sgrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .sgrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* La liste registre de l'accueil : une ligne par intervenant (numero,
+   nom caviarde, statut), cadree par les memes filets que la grille.
+   Les fiches completes (photo, bio, talk) restent sur la page speakers. */
+.slist {
+  display: grid;
+  gap: 1px;
+  margin-top: 40px;
+  border: 1px solid var(--filet);
+  background-color: var(--filet);
+}
+
+/* Mobile : deux colonnes, la vignette a gauche sur toute la hauteur,
+   identifiant, nom et statut empiles a droite. La grille a trois
+   colonnes renvoyait le statut sur une rangee a lui, cale a gauche,
+   sous le nom qui occupait deja toute la largeur. */
+.sl-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 6px 16px;
+  padding: 12px clamp(14px, 2vw, 22px);
+  background-color: var(--noir);
+}
+
+.sl-row .sl-photo {
+  grid-row: span 3;
+}
+
+/* L'emplacement photo : petit carre, caviarde tant que l'annonce n'est
+   pas tombee (memes hachures que les fiches), portrait en couleur des
+   qu'une image est posee. */
+.sl-photo {
+  width: 52px;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  background: repeating-linear-gradient(-45deg, var(--caviardage) 0 8px, var(--surface) 8px 11px);
+}
+
+.sl-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 0;
+}
+
+.sl-row .sp-id {
+  margin-top: 0;
+}
+
+.sl-name {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3em;
+  align-items: center;
+  grid-column: 2;
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+  line-height: 1.05;
+  color: var(--papier);
+}
+
+.sl-row .sp-status {
+  grid-column: 2;
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+  justify-self: start;
+}
+
+@media (min-width: 640px) {
+  .sl-row {
+    grid-template-columns: auto minmax(11ch, max-content) 1fr max-content;
+  }
+
+  .sl-row .sl-photo {
+    grid-row: auto;
+  }
+
+  .sl-name,
+  .sl-row .sp-status {
+    grid-column: auto;
+  }
+
+  .sl-row .sp-status {
+    justify-self: end;
+  }
+}
+
+/* 15. Feuille de salle (programme) */
+
+.sheet {
+  border-top: 1px solid var(--filet);
+  max-width: 780px;
+}
+
+.sheet-row {
+  display: grid;
+  gap: 4px 28px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--filet);
+}
+
+.sheet-time {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1rem;
+  color: var(--papier);
+}
+
+.sheet-title {
+  font-weight: 600;
+  color: var(--papier);
+}
+
+.sheet-desc {
+  color: var(--encre-2);
+  font-size: 0.95rem;
+  max-width: 56ch;
+}
+
+@media (min-width: 700px) {
+  .sheet-row {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .sheet-time {
+    padding-top: 2px;
+  }
+}
+
+/* 16. Partenaires */
+
+.partners-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .partners-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1100px) {
+  .partners-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.partner-tile {
+  aspect-ratio: 3 / 2;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  text-align: center;
+  border: 1px dashed rgba(237, 234, 228, 0.18);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--encre-2);
+  background-color: rgba(237, 234, 228, 0.02);
+}
+
+/* Le lien enveloppe toute la tuile : la cible de clic est genereuse. */
+.partner-tile a {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.partner-tile a:hover img,
+.partner-tile a:focus-visible img {
+  opacity: 0.8;
+}
+
+/* Regle TEDx : un logo partenaire reste plus petit que le logo de
+   l'evenement (26px de haut dans le header). Plafonds ci-dessous. */
+.partner-tile img {
+  max-width: 100%;
+  max-height: 52px;
+  width: auto;
+  height: auto;
+}
+
+/* 17. FAQ */
+
+.faq-group {
+  max-width: 820px;
+  margin-bottom: clamp(36px, 6vw, 56px);
+}
+
+.faq-group:last-child {
+  margin-bottom: 0;
+}
+
+details.faq {
+  border-bottom: 1px solid var(--filet);
+}
+
+details.faq:first-of-type {
+  border-top: 1px solid var(--filet);
+}
+
+.faq summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 56px;
+  padding: 16px 4px;
+  cursor: pointer;
+  color: var(--papier);
+  font-weight: 500;
+  font-size: 1.0625rem;
+  list-style: none;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary:hover {
+  background-color: rgba(237, 234, 228, 0.02);
+}
+
+.faq summary .icon {
+  color: var(--rouge-vif);
+  transition: transform 0.25s ease;
+}
+
+details.faq[open] summary .icon {
+  transform: rotate(180deg);
+}
+
+.faq-a {
+  padding: 0 4px 22px;
+  max-width: 68ch;
+}
+
+.faq-a p + p {
+  margin-top: 10px;
+}
+
+/* 18. Bandeau constat */
+
+.band {
+  position: relative;
+  background-color: var(--surface);
+  border-top: 1px solid var(--filet);
+  border-bottom: 1px solid var(--filet);
+  padding-block: clamp(40px, 6vw, 64px);
+}
+
+.band-title {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(1.7rem, 4.2vw, 3rem);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  max-width: 24ch;
+  margin-bottom: 14px;
+}
+
+.band-note {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--encre-2);
+  margin-top: 18px;
+}
+
+.band .lead {
+  margin-bottom: 24px;
+}
+
+/* 19. Footer */
+
+.site-footer {
+  background-color: #0a0908;
+  border-top: 1px solid var(--filet);
+  padding-top: clamp(44px, 7vw, 64px);
+}
+
+.site-footer .finner {
+  margin-left: var(--m-left);
+  margin-right: var(--m-right);
+  max-width: calc(var(--rail-w) + 1080px);
+}
+
+.footer-grid {
+  display: grid;
+  gap: clamp(28px, 5vw, 44px);
+}
+
+@media (min-width: 700px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: 1.4fr 0.9fr 1fr 1.1fr 1.1fr;
+  }
+}
+
+.footer-brand img {
+  height: 24px;
+  width: auto;
+}
+
+.footer-licence {
+  margin-top: 16px;
+  max-width: 340px;
+  color: var(--encre-2);
+  font-size: 0.9rem;
+}
+
+.footer-title {
+  margin-bottom: 14px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+}
+
+.footer-list li a {
+  display: inline-block;
+  padding: 5px 0;
+  color: var(--encre);
+  text-decoration: none;
+}
+
+.footer-list li a:hover {
+  color: var(--papier);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer-contact p {
+  color: var(--encre-2);
+  font-size: 0.95rem;
+}
+
+.footer-contact .btn {
+  margin-top: 16px;
+}
+
+/* L'adresse en clair sous le bouton : mono, discrete, soulignee au
+   survol. */
+.footer-mail {
+  display: block;
+  width: fit-content;
+  margin-top: 12px;
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--encre);
+  text-decoration: none;
+}
+
+.footer-mail:hover,
+.footer-mail:focus-visible {
+  color: var(--rouge-vif);
+  text-decoration: underline;
+}
+
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: clamp(36px, 6vw, 48px);
+  padding: 18px 0 26px;
+  border-top: 1px solid var(--filet);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.04em;
+  color: var(--encre-2);
+}
+
+.footer-bottom a {
+  color: var(--encre-2);
+}
+
+.footer-bottom a:hover {
+  color: var(--papier);
+}
+
+/* Tactile et lisibilite du pied de page sur telephone : les liens de
+   colonne montaient a 18 px de haut, l'adresse a 21 px, et les titres
+   de colonne comme la ligne du bas etaient a 11 px. Le blanc entre les
+   colonnes est repris sur les marges pour compenser les paddings. */
+@media (max-width: 1023px) {
+  .footer-title {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+  }
+
+  /* La liste remonte de la valeur du padding : le haut de colonne reste
+     cale sur son titre, et le premier lien garde sa pleine cible. */
+  .footer-list {
+    margin-top: -11px;
+  }
+
+  .footer-list li a {
+    padding: 11px 0;
+  }
+
+  .footer-mail {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    margin-top: 4px;
+  }
+
+  .footer-bottom {
+    font-size: 0.75rem;
+    gap: 0 24px;
+    padding: 10px 0 22px;
+  }
+
+  .footer-bottom a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+
+/* 20. Prose, notices, 404 */
+
+.prose {
+  max-width: 720px;
+}
+
+.prose h2 {
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: clamp(1.5rem, 3.4vw, 2rem);
+  letter-spacing: -0.015em;
+  margin: 44px 0 14px;
+}
+
+.prose h2:first-child {
+  margin-top: 0;
+}
+
+.prose p + p {
+  margin-top: 12px;
+}
+
+.prose ul {
+  margin: 12px 0;
+  padding-left: 20px;
+}
+
+.prose strong {
+  color: var(--papier);
+  font-weight: 500;
+}
+
+.notice {
+  max-width: 760px;
+  margin-top: 32px;
+  padding: 14px 18px;
+  border: 1px dashed rgba(237, 234, 228, 0.2);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--encre-2);
+}
+
+.error-hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+}
+
+.error-code {
+  position: relative;
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(6.5rem, 30vw, 16rem);
+  line-height: 0.85;
+  letter-spacing: -0.03em;
+  color: rgba(237, 234, 228, 0.08);
+  width: max-content;
+  margin-left: calc(-1 * var(--body-pad) - 6px);
+}
+
+@media (min-width: 1024px) {
+  .error-code {
+    margin-left: calc(-1 * (var(--rail-w) + var(--body-pad)) + 6px);
+  }
+}
+
+.error-hero h1 {
+  margin: 20px 0 8px;
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: clamp(1.4rem, 3.5vw, 2rem);
+}
+
+.error-hero .lead {
+  margin-bottom: 28px;
+}
+
+@media (max-width: 1023px) and (orientation: landscape) and (max-height: 520px) {
+  .error-hero {
+    min-height: 0;
+    padding-block: calc(var(--header-h) + 24px) 40px;
+  }
+
+  .error-code {
+    font-size: clamp(4rem, 22vh, 8rem);
+  }
+}
+
+/* 20b. La ligne continue (accueil uniquement, body.journey)
+   Un seul chemin SVG, construit par main.js a partir du vrai layout,
+   parcourt la page : seuil, traversee, pliure autour du lieu, frise,
+   diagonale du dixieme baton, prise dans le bouton Reserver.
+   Sans JavaScript : retour a la ligne verticale statique (main::before). */
+
+:root {
+  --axis-b: var(--line-x);
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --axis-b: calc(var(--line-x) + clamp(420px, 38vw, 560px));
+  }
+}
+
+.js .journey main::before {
+  content: none;
+}
+
+/* Si le trace echoue, la ligne statique reprend son poste */
+.jline-fail .journey main::before {
+  content: "";
+}
+
+/* Le SVG de la ligne couvre tout le document, footer compris */
+.journey {
+  position: relative;
+}
+
+/* Le defilement virtuel (accueil, desktop) : line.js fixe le wrapper
+   .jscroll (main + footer) et le translate selon le scroll du spacer,
+   pour figer l'ecran pendant les deplacements horizontaux du trait.
+   Sans la classe jscroll-run (mobile, reduced motion, sans JS, echec) :
+   flux normal, spacer masque. */
+.jscroll {
+  position: relative;
+}
+
+.jscroll-spacer {
+  display: none;
+}
+
+.jscroll-run .jscroll {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  will-change: transform;
+}
+
+.jscroll-run .jscroll-spacer {
+  display: block;
+}
+
+.jline {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.jline path {
+  stroke: var(--rouge);
+  stroke-width: 2.5;
+  fill: none;
+}
+
+/* L'epilogue : trait fin vers la mention de licence */
+.jline .jtail {
+  stroke-width: 1.25;
+}
+
+.probe {
+  position: absolute;
+  top: 0;
+  width: 0;
+  height: 0;
+}
+
+#probe-a {
+  left: var(--line-x);
+}
+
+#probe-b {
+  left: var(--axis-b);
+}
+
+/* Sur l'accueil, les cotes restent en style compact partout :
+   le contenu se place par rapport a la ligne, pas dans un rail fixe. */
+@media (min-width: 1024px) {
+  .journey .cote {
+    text-align: left;
+    padding-right: 0;
+    margin: 0 0 20px;
+  }
+
+  .journey .cote::after {
+    content: none;
+  }
+
+  .journey .cote::before {
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 2px;
+    background-color: var(--rouge);
+    vertical-align: 0.28em;
+    margin-right: 12px;
+  }
+}
+
+.mwrap {
+  position: relative;
+  z-index: 2;
+  margin-left: calc(var(--line-x) + var(--body-pad));
+  margin-right: var(--m-right);
+}
+
+@media (min-width: 1024px) {
+  .mwrap {
+    margin-left: var(--m-left);
+    max-width: 1360px;
+  }
+
+  /* Colonne de gauche : le contenu vit avant la limite */
+  .colL {
+    width: calc(var(--axis-b) - var(--m-left) - 48px);
+    min-width: 0;
+  }
+}
+
+/* Moment 1 : le seuil. La question se coupe en deux sur la ligne :
+   Le premier membre du titre s'arrete au bord, le second commence de
+   l'autre cote (titre sous embargo jusqu'au 31 octobre 2026).
+   Tout le reste (date, actions, compte a rebours) se range avant. */
+
+.journey .hero {
+  padding-bottom: 72px;
+}
+
+.journey .hero .mwrap {
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .journey .hero-word {
+    display: flex;
+    justify-content: flex-end;
+    width: calc(var(--axis-b) - var(--m-left) - 24px);
+    max-width: none;
+    margin-left: 0;
+    font-size: clamp(3.4rem, 8.1vw, 7rem);
+  }
+
+  .journey .hero-sub {
+    margin-left: calc(var(--axis-b) - var(--m-left) + 26px);
+    margin-top: 0.4em;
+  }
+
+  .journey .hero-fig,
+  .journey .hero-meta,
+  .journey .hero .actions,
+  .js .journey .hero .ticker {
+    margin-left: 0;
+    max-width: calc(var(--axis-b) - var(--m-left) - 48px);
+  }
+}
+
+/* Moments 2, 3, 4 : blocs du parcours */
+
+.mom {
+  position: relative;
+  padding-block: clamp(48px, 7vw, 88px);
+  /* Corps du mot qui traverse : sert aussi a remonter la photo du
+     second versant, d'ou la variable plutot qu'une valeur en dur. */
+  --cross-fs: clamp(2.6rem, 8.5vw, 7rem);
+  --cross-gap: 28px;
+}
+
+.mom-title {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 6.5vw, 4.6rem);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  color: var(--papier);
+  margin-bottom: 24px;
+}
+
+/* Le mot qui traverse (moment 2) : pousse par le defilement */
+.cross-track {
+  margin-bottom: var(--cross-gap);
+}
+
+@media (min-width: 1024px) {
+  .cross-track {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 44px;
+  }
+}
+
+.cross-word {
+  display: inline-block;
+  width: max-content;
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: var(--cross-fs);
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+  color: var(--papier);
+  transform: translateX(calc((var(--cross-p, 1) - 1) * var(--cross-dist, 0px)));
+  will-change: transform;
+}
+
+/* Variante miroir (second versant) : le mot arrive du bord droit du viewport
+   et vient buter contre la ligne sans la franchir. Position layout :
+   cale contre la ligne, cote droit. */
+.cross-track--rtl .cross-word {
+  transform: translateX(calc((1 - var(--cross-p, 1)) * var(--cross-dist, 0px)));
+}
+
+/* Mobile : les mots restent en retrait a droite de la dorsale. */
+@media (max-width: 1023px) {
+  .cross-word {
+    margin-left: calc(-1 * var(--body-pad) + 10px);
+  }
+}
+
+/* Le moment installe a droite de la ligne : cote, mot et colonne de
+   texte vivent apres la limite (desktop seulement, la dorsale mobile
+   reste a gauche). */
+@media (min-width: 1024px) {
+  .cross-track--rtl {
+    justify-content: flex-start;
+    padding-right: 0;
+    padding-left: calc(var(--axis-b) - var(--m-left) + 44px);
+  }
+
+  .colR {
+    margin-left: calc(var(--axis-b) - var(--m-left) + var(--body-pad));
+    min-width: 0;
+    max-width: calc(100% - (var(--axis-b) - var(--m-left)) - var(--body-pad));
+  }
+
+  .mom--droite .cote {
+    margin-left: calc(var(--axis-b) - var(--m-left) + var(--body-pad));
+  }
+}
+
+/* Les photos du diptyque : la piece jointe de chaque versant, posee
+   de l'autre cote de la ligne, au niveau du texte. */
+.mom-photo {
+  margin: 26px 0 0;
+}
+
+.mom-photo img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--filet);
+}
+
+/* Sur le second versant, la photo precede le texte dans le document
+   parce qu'en desktop elle vit de l'autre cote de la ligne. Empilee,
+   elle se retrouvait orpheline entre le mot qui traverse et son titre :
+   sous 1024 px elle repasse apres le texte qu'elle illustre. */
+@media (max-width: 1023px) {
+  .mom-duo--rtl {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mom-duo--rtl .mom-photo {
+    order: 2;
+  }
+}
+
+@media (max-width: 1023px) and (orientation: landscape) and (max-height: 520px) {
+  .mom-title {
+    font-size: clamp(1.6rem, 8vh, 3rem);
+  }
+
+  .cross-word {
+    font-size: clamp(1.9rem, 11vh, 4rem);
+  }
+
+  .mom {
+    padding-block: clamp(28px, 8vh, 56px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .mom-duo {
+    display: flex;
+    align-items: flex-start;
+    gap: calc(var(--body-pad) + 48px);
+  }
+
+  .mom-duo .colL {
+    flex: none;
+  }
+
+  .mom-duo .mom-photo {
+    flex: 1;
+    min-width: 0;
+    margin-top: 0;
+  }
+
+  /* Variante miroir : la photo vit a gauche de la ligne, le texte a
+     droite. Le cote et le mot qui traverse etant tous deux passes de
+     l'autre cote, la colonne de gauche est libre jusqu'en haut du bloc :
+     la photo y remonte, au niveau du mot (hauteur de ligne 0.9 plus la
+     marge de la piste). */
+  .mom-duo--rtl .mom-photo {
+    flex: none;
+    width: calc(var(--axis-b) - var(--m-left) - 48px);
+    margin-top: calc(-0.9 * var(--cross-fs) - var(--cross-gap));
+  }
+
+  .mom-duo--rtl .colR {
+    flex: 1;
+    min-width: 0;
+    margin-left: 0;
+    max-width: none;
+  }
+}
+
+/* Moment 3 : le bloc du lieu, l'obstacle que la ligne contourne */
+
+.m3-lieu {
+  position: relative;
+  z-index: 2;
+  margin-block: clamp(40px, 5vw, 64px);
+}
+
+.m3-lieu img {
+  width: 100%;
+  border: 1px solid var(--filet);
+}
+
+.m3-lieu figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+  margin-top: 10px;
+}
+
+.m3-lieu .fig-id {
+  color: var(--rouge-vif);
+}
+
+/* Le releve de terrain : la photo du lieu, la carte et la presentation
+   du batiment au meme niveau (trois colonnes sur grand ecran). Le plan
+   est un SVG local trace a la main : aucun service de cartes avant que
+   map.js ne s'en mele. */
+
+.lieu-photo {
+  position: relative;
+  border: 1px solid var(--filet);
+}
+
+.lieu-photo img {
+  display: block;
+  border: 0;
+}
+
+.lieu-trio {
+  display: grid;
+  gap: 14px;
+  align-items: stretch;
+}
+
+@media (min-width: 768px) {
+  .lieu-trio {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  /* Tablette : la photo reste en bandeau au-dessus du duo */
+  .lieu-trio .lieu-photo {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .lieu-trio {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 0.85fr);
+  }
+
+  .lieu-trio .lieu-photo {
+    grid-column: auto;
+  }
+
+  .lieu-trio .lieu-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+/* Le cadre de la carte : le plan SVG par defaut, Mapbox fond par-dessus */
+.lieu-scene {
+  position: relative;
+  border: 1px solid var(--filet);
+  background-color: var(--rouge);
+  min-height: 280px;
+}
+
+@media (min-width: 768px) {
+  .lieu-scene {
+    min-height: 420px;
+    height: 100%;
+  }
+}
+
+.lieu-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.lieu-mot {
+  position: absolute;
+  top: clamp(6px, 2%, 14px);
+  right: clamp(10px, 3%, 20px);
+  z-index: 1;
+  margin: 0;
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 8vw, 4.6rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: rgba(237, 234, 228, 0.22);
+  pointer-events: none;
+}
+
+.lieu-plan {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+}
+
+.lieu-plan .pl-bg {
+  fill: var(--rouge);
+}
+
+.lieu-plan .pl-rue {
+  fill: none;
+  stroke: rgba(8, 8, 8, 0.24);
+  stroke-width: 8;
+  stroke-linecap: round;
+}
+
+.lieu-plan .pl-rue--fine {
+  stroke-width: 3.5;
+  stroke: rgba(8, 8, 8, 0.18);
+}
+
+.lieu-plan .pl-canal {
+  fill: none;
+  stroke: rgba(8, 8, 8, 0.34);
+  stroke-width: 12;
+}
+
+.lieu-plan .pl-txt {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.05em;
+  fill: rgba(255, 255, 255, 0.82);
+}
+
+.lieu-plan .pl-txt--poi {
+  font-size: 8px;
+  fill: rgba(255, 255, 255, 0.6);
+}
+
+.lieu-plan .pl-txt--ici {
+  font-weight: 700;
+  fill: #ffffff;
+}
+
+.lieu-plan .pl-ici-dot {
+  fill: var(--noir);
+  stroke: var(--papier);
+  stroke-width: 2.5;
+}
+
+.lieu-plan .pl-fig {
+  fill: rgba(8, 8, 8, 0.5);
+}
+
+.lieu-fiche {
+  padding: clamp(14px, 3vw, 22px);
+  background-color: var(--surface);
+  border: 1px solid var(--filet);
+}
+
+.lieu-fiche-kicker {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+  margin-bottom: 10px;
+}
+
+.lieu-fiche-kicker::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 2px;
+  background-color: var(--rouge);
+  vertical-align: 0.28em;
+  margin-right: 10px;
+}
+
+.lieu-fiche-nom {
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  line-height: 1.1;
+  color: var(--papier);
+}
+
+.lieu-fiche-adresse {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--encre);
+  margin-top: 8px;
+}
+
+.lieu-fiche .link-more {
+  margin-top: 14px;
+}
+
+/* La carte interactive : chargee paresseusement par map.js, elle occupe
+   tout le cadre et fond par-dessus le plan de situation.
+   Le plan SVG reste la version par defaut tant que la carte n'est pas la.
+   Le selecteur est double car mapbox-gl.css, charge apres ce fichier,
+   pose position: relative sur .mapboxgl-map a specificite simple. */
+.lieu-scene .lieu-map {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  width: 100%;
+  height: 100%;
+  background-color: var(--rouge);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease;
+}
+
+.lieu-scene.map-live .lieu-map {
+  opacity: 1;
+  visibility: visible;
+}
+
+.lieu-scene.map-live .lieu-plan {
+  visibility: hidden;
+}
+
+.lieu-ici {
+  position: relative;
+  width: 13px;
+  height: 13px;
+}
+
+.lieu-ici-dot {
+  display: block;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background-color: var(--noir);
+  border: 2.5px solid var(--papier);
+}
+
+.lieu-ici-lbl {
+  position: absolute;
+  right: calc(100% + 8px);
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #ffffff;
+  white-space: nowrap;
+  text-shadow: 0 0 4px rgba(8, 8, 8, 0.35);
+}
+
+/* Sur petit ecran, tout s'empile : photo, carte, presentation. */
+@media (max-width: 639px) {
+  .lieu-mot {
+    font-size: 2rem;
+  }
+
+  /* Le plan de repli est dessine dans un viewBox de 240 x 330 : les
+     etiquettes y sont calibrees au caractere pres (cathedrale part de
+     x=188 et tient tout juste), les grossir les fait deborder et se
+     chevaucher. On agrandit donc le cadre plutot que les corps : le
+     plan monte de 280 a 340 px, tout grandit d'un cinquieme sans que
+     le dessin bouge, et une carte de 280 px etait de toute facon
+     etriquee sur un telephone. Ce sont des etiquettes cartographiques
+     sur un repli, pas du texte courant : elles restent en dessous des
+     12 px appliques partout ailleurs. */
+  .lieu-scene {
+    min-height: 340px;
+  }
+
+  .lieu-ici-lbl {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .m3-lieu figcaption,
+  .lieu-fiche-kicker {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+  }
+
+  /* Le lien a pris 11 px de padding haut et bas (section 06) : on rend
+     la marge pour garder le meme blanc a l'ecran. */
+  .lieu-fiche .link-more {
+    margin-top: 3px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .m3-lieu {
+    width: 100%;
+  }
+}
+
+.more-row {
+  margin-top: 28px;
+}
+
+/* Le lien de suite a pris 11 px de padding haut et bas (section 06) :
+   la marge est rendue pour garder le meme blanc a l'ecran. */
+@media (max-width: 1023px) {
+  .more-row {
+    margin-top: 17px;
+  }
+}
+
+/* Les chiffres de la dixieme : trois grandes colonnes sous la frise,
+   le chiffre en tres grand, l'explication dessous. Empiles en mobile. */
+
+.data-lines {
+  display: grid;
+  margin-top: clamp(40px, 6vw, 64px);
+  border-top: 1px solid var(--filet);
+}
+
+.data-lines li {
+  padding: 16px 0 14px;
+  border-bottom: 1px solid var(--filet);
+  font-size: 0.95rem;
+  color: var(--encre-2);
+}
+
+.data-lines strong {
+  display: block;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 6vw, 4.5rem);
+  line-height: 1;
+  color: var(--papier);
+  margin-bottom: 10px;
+}
+
+.data-lines li span {
+  display: block;
+  max-width: 34ch;
+}
+
+@media (min-width: 640px) {
+  .data-lines {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .data-lines li {
+    border-bottom: 0;
+    padding: 24px clamp(16px, 2vw, 28px) 8px 0;
+  }
+
+  .data-lines li + li {
+    border-left: 1px solid var(--filet);
+    padding-left: clamp(16px, 2vw, 28px);
+  }
+}
+
+/* Le logo de l'evenement au moment TEDx : a droite du texte, sur le
+   chemin de la descente vers la prise, que la ligne contourne par la
+   droite (ancre avoid). En desktop le mwrap passe en grille : cote sur
+   toute la largeur, texte a gauche, logo centre verticalement a droite. */
+/* En mobile le logo se centre sous le texte (demande de Baptiste le
+   2026-08-16) ; en desktop il reprend sa colonne a droite, sur le chemin
+   de la ligne (voir la grille plus bas). */
+.tedx-logo {
+  margin: 48px auto 0;
+  width: min(380px, 60%);
+}
+
+.tedx-logo img {
+  width: 100%;
+  height: auto;
+  border: 0;
+}
+
+@media (min-width: 1024px) {
+  .mom--tedx .mwrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(280px, 380px);
+    align-items: center;
+    column-gap: clamp(32px, 4vw, 72px);
+  }
+
+  .mom--tedx .cote {
+    grid-column: 1 / -1;
+  }
+
+  .mom--tedx .colL {
+    grid-column: 1;
+  }
+
+  .tedx-logo {
+    grid-column: 2;
+    margin: 0;
+    width: 100%;
+  }
+}
+
+/* Moment 4 : l'album des editions. La ligne traverse l'ecran a
+   l'horizontale et sert de fil : chaque affiche pend au-dessus de sa
+   pastille, le theme juste en dessous. La revelation suit la pointe du
+   trait : line.js publie --sweep (0 a 1) sur .album, chaque piece porte
+   son seuil --th. Sur mobile : le meme album devient un carrousel
+   balayable, annees et themes compris, les chiffres restent, seule la
+   bande d'archives est mise de cote. */
+
+/* Mobile : l'album devient lui-meme le carrousel (scroll-snap pur CSS),
+   plutot qu'une seconde liste d'affiches en double du markup. Chaque
+   piece garde donc son etiquette, annee et theme compris ; seule la
+   pastille disparait, faute de fil ou la poser. La bande d'archives
+   reste hors de la version mobile, les chiffres reviennent. */
+@media (max-width: 1023px) {
+  .mom--frise .arch {
+    display: none;
+  }
+
+  .album {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+    padding: 0 4px 10px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .album::-webkit-scrollbar {
+    display: none;
+  }
+
+  .alb-item {
+    flex: 0 0 min(72%, 300px);
+    padding: 0;
+    scroll-snap-align: center;
+  }
+
+  .alb-dot {
+    display: none;
+  }
+
+  .alb-img {
+    margin: 0 0 10px;
+  }
+
+  .alb-img img {
+    max-width: none;
+  }
+
+  .alb-lbl a {
+    display: block;
+    padding-block: 4px 10px;
+  }
+
+  /* Le terminus n'a pas d'affiche : son etiquette prend la place d'une
+     affiche, dans un cadre rouge de meme format. */
+  .alb-item--end .alb-end-label {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 6px;
+    aspect-ratio: 3 / 4;
+    padding: 16px;
+    border: 1px solid var(--rouge);
+  }
+
+}
+
+.fr-caption {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+  margin-bottom: 36px;
+}
+
+/* Le rappel de balayage ne sert qu'au carrousel mobile, la mention du
+   fil qu'a la traversee horizontale du desktop : chacun a sa largeur. */
+.fr-swipe {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .fr-caption {
+    margin: 26px 0 0;
+    letter-spacing: 0.1em;
+  }
+
+  .fr-fil {
+    display: none;
+  }
+
+  .fr-swipe {
+    display: inline;
+  }
+}
+
+.album {
+  --alb-strip: 36px;
+  list-style: none;
+  margin: 40px 0 0;
+  padding: 0;
+}
+
+.alb-item {
+  position: relative;
+  padding: 0 0 34px 26px;
+}
+
+/* La pastille de l'annee : posee sur la dorsale en mobile, centree
+   dans la bande du fil en desktop. Rond et halo : motif etabli. */
+.alb-dot {
+  position: absolute;
+  left: calc(-1 * var(--body-pad) - 6px);
+  top: 0.4em;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--rouge);
+  box-shadow: 0 0 0 4px rgba(235, 0, 40, 0.12);
+}
+
+.alb-img {
+  margin: 0 0 14px;
+}
+
+.alb-img img {
+  display: block;
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border: 1px solid var(--filet);
+}
+
+.alb-lbl,
+.alb-end-label {
+  display: block;
+  min-width: 0;
+}
+
+/* Affiche et etiquette menent a la page de l'edition : deux liens pour
+   une meme piece, sans decor propre (le filet et le theme suffisent). */
+.alb-img a,
+.alb-lbl a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.alb-img a:hover img {
+  border-color: var(--rouge-vif);
+}
+
+.alb-lbl a:hover .fr-t,
+.alb-lbl a:focus-visible .fr-t {
+  color: var(--rouge-vif);
+}
+
+.fr-y {
+  display: block;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--encre-2);
+}
+
+.fr-t {
+  display: block;
+  font-family: var(--font-disp);
+  font-weight: 700;
+  font-size: clamp(1.2rem, 2.4vw, 1.5rem);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+  color: var(--papier);
+}
+
+/* Le terminus : 2027, point vivant au bout du fil */
+.alb-dot--end {
+  width: 14px;
+  height: 14px;
+  background-color: var(--rouge-vif);
+  box-shadow: 0 0 0 5px rgba(235, 0, 40, 0.16);
+  z-index: 2;
+}
+
+.alb-dot--end::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid rgba(235, 0, 40, 0.55);
+  animation: pulse27 2.6s ease-out infinite;
+}
+
+@keyframes pulse27 {
+  from {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  to {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.alb-end-label .fr-y {
+  color: var(--rouge-vif);
+  font-size: 1.05rem;
+}
+
+.alb-end-label .fr-t {
+  font-size: clamp(1.5rem, 3vw, 1.9rem);
+}
+
+.fr-end-note {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--encre-2);
+  margin-top: 6px;
+}
+
+/* La revelation au passage de la pointe : sans valeur de --sweep
+   (mobile, sans JS, ligne en echec, reduced motion) tout est visible. */
+.jline-run .alb-item > * {
+  opacity: clamp(0.15, (var(--sweep, 1) - var(--th, 0)) * 6, 1);
+}
+
+@media (min-width: 1024px) {
+  /* Sur la frise et la prise finale, le releve occupe toute la largeur
+     de la page : le plafond du mwrap saute. */
+  .mom--frise .mwrap,
+  .final-cta .mwrap {
+    max-width: none;
+  }
+
+  /* Le fil horizontal : dix colonnes (une par edition, le terminus
+     garde sa reserve), trois rangs : les affiches (1), la bande du fil
+     et ses pastilles (2, hauteur fixe, la ligne passe par son centre),
+     les themes (3). Chaque li est en display: contents et ses pieces
+     vont a leur colonne via --c. */
+  .album {
+    display: grid;
+    grid-template-columns: repeat(9, minmax(0, 1fr)) minmax(150px, 1.1fr);
+    grid-template-rows: auto var(--alb-strip) auto;
+    gap: 0 clamp(10px, 1.2vw, 18px);
+    margin-top: 64px;
+  }
+
+  .alb-item {
+    display: contents;
+  }
+
+  .alb-item > * {
+    grid-column: var(--c, auto);
+  }
+
+  .alb-img {
+    grid-row: 1;
+    align-self: end;
+    margin: 0;
+  }
+
+  .alb-img img {
+    max-width: none;
+  }
+
+  .alb-dot {
+    grid-row: 2;
+    position: relative;
+    left: auto;
+    top: auto;
+    justify-self: center;
+    align-self: center;
+  }
+
+  .alb-lbl {
+    grid-row: 3;
+    padding-top: 14px;
+  }
+
+  /* Le terminus n'a pas d'affiche : son etiquette vit au-dessus du fil,
+     le trait redescend sous sa pastille sans rien croiser. */
+  .alb-end-label {
+    grid-row: 1;
+    align-self: end;
+    padding-bottom: 14px;
+  }
+}
+
+/* La prise : le constat se range a gauche, le bouton attend a droite
+   dans la continuite du trait qui descend des dix ans. */
+
+.final-cta {
+  position: relative;
+  z-index: 2;
+  margin-top: clamp(40px, 5vw, 65px);
+  padding-bottom: clamp(64px, 9vw, 104px);
+}
+
+.final-cta .btn {
+  min-height: 56px;
+  padding: 16px 40px;
+}
+
+.final-title {
+  font-family: var(--font-disp);
+  font-weight: 800;
+  font-size: clamp(1.7rem, 4.2vw, 3rem);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--papier);
+  max-width: 24ch;
+  margin: 0 0 36px;
+}
+
+.final-plug {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.final-note {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--encre-2);
+}
+
+/* Mobile : la prise et son texte se centrent dans la page (les marges
+   asymetriques du mwrap sont annulees) et la ligne vient toucher le
+   bouton par la gauche. */
+@media (max-width: 1023px) {
+  .final-cta .cote,
+  .final-cta .colL,
+  .final-plug {
+    margin-left: calc(-1 * (var(--line-x) + var(--body-pad)));
+    margin-right: calc(-1 * var(--m-right));
+    padding-inline: 16px;
+    text-align: center;
+  }
+
+  .final-plug {
+    align-items: center;
+  }
+
+  .final-title {
+    margin-inline: auto;
+  }
+}
+
+/* Desktop : le constat a gauche, la prise a droite, au meme niveau.
+   Le coude du trait se fait tout en haut, juste sous l'album : la
+   descente arrive droite dans le bouton, sans courbe. */
+@media (min-width: 1024px) {
+  .final-cta .mwrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    column-gap: 48px;
+  }
+
+  .final-cta .cote {
+    grid-column: 1 / -1;
+  }
+
+  .final-plug {
+    align-items: flex-end;
+    margin-top: 14px;
+    margin-right: clamp(80px, 8vw, 140px);
+  }
+
+  .final-note {
+    text-align: right;
+    max-width: 44ch;
+  }
+}
+
+/* Le pied de page laisse passer l'epilogue sous son contenu */
+.journey .site-footer .finner {
+  position: relative;
+  z-index: 2;
+}
+
+/* 20c. Pages d'edition (archives du registre)
+   Fiche, grilles de portraits, galerie et navigation entre editions.
+   Les documents sont presentes en couleur, cadres par les memes filets. */
+
+.ed-meta {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--encre-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  margin-bottom: 20px;
+}
+
+.ed-meta .sep {
+  color: var(--rouge-vif);
+}
+
+.ed-fiche {
+  display: grid;
+  gap: 36px;
+}
+
+.ed-affiche {
+  margin: 0;
+  max-width: 420px;
+}
+
+.ed-affiche img,
+.ppl-card img,
+.gal img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--filet);
+}
+
+.ed-affiche figcaption,
+.gal-credit {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--encre-2);
+  margin-top: 12px;
+}
+
+.ed-fiche-body > p {
+  margin-bottom: 16px;
+}
+
+.ed-fiche-body .facts {
+  margin-top: 24px;
+}
+
+@media (min-width: 900px) {
+  .ed-fiche {
+    grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+    gap: 52px;
+    align-items: start;
+  }
+}
+
+.ppl {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 28px 20px;
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 1px solid var(--filet);
+}
+
+.ppl--sm {
+  grid-template-columns: repeat(auto-fill, minmax(128px, 1fr));
+}
+
+/* Sous 640 px, auto-fill retombait a une seule colonne (150 px ne rentre
+   pas deux fois dans les 264 px de colonne utile a 320 px de large) :
+   chaque portrait prenait toute la largeur et une page d'edition faisait
+   pres de 10 000 px de haut. Deux colonnes, imposees. */
+@media (max-width: 639px) {
+  .ppl,
+  .ppl--sm,
+  .gal {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ppl {
+    gap: 22px 14px;
+  }
+
+  .gal {
+    gap: 10px;
+  }
+}
+
+.ppl-name {
+  display: block;
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: 1.05rem;
+  line-height: 1.15;
+  color: var(--papier);
+  margin-top: 12px;
+}
+
+.ppl-name a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.ppl-name a:hover,
+.ppl-name a:focus-visible {
+  text-decoration: underline;
+  text-decoration-color: var(--rouge-vif);
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 1023px) {
+  .ppl-name a {
+    display: inline-block;
+    padding-block: 5px;
+  }
+
+  .ed-nav a {
+    min-height: 44px;
+  }
+}
+
+.ppl-role {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  color: var(--encre-2);
+  margin-top: 6px;
+}
+
+.gal {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 14px;
+  margin-top: 28px;
+  padding-top: 28px;
+  border-top: 1px solid var(--filet);
+}
+
+.gal img {
+  height: 100%;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+/* Le talk en video : lecteur YouTube en mode confidentialite renforcee,
+   charge en differe (loading lazy), cadre 16/9 responsive. */
+.talk-frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  max-width: 860px;
+  margin-top: 24px;
+  border: 1px solid var(--filet);
+  background-color: var(--surface);
+}
+
+.talk-frame iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.ed-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 14px 32px;
+  border-top: 1px solid var(--filet);
+  padding-top: 24px;
+}
+
+.ed-nav-void {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--encre-2);
+  align-self: center;
+}
+
+/* 20d. Bande d'archives (accueil, moment dix ans)
+   Six photos sorties des cartons 2023 et 2024, posees sous la frise. */
+
+.arch {
+  margin: 96px 0 10px;
+}
+
+.arch-strip {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+}
+
+.arch-strip img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border: 1px solid var(--filet);
+}
+
+.arch figcaption {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--encre-2);
+  margin-top: 10px;
+}
+
+@media (min-width: 700px) {
+  .arch-strip {
+    gap: 12px;
+  }
+}
+
+/* Desktop : trois colonnes sur deux lignes, photos en grand, et un
+   couloir a droite pour laisser descendre le trait du 2027 vers la
+   prise finale. */
+@media (min-width: 1024px) {
+  .arch {
+    margin-right: clamp(240px, 20vw, 340px);
+  }
+}
+
+/* 20e. La feuille de salle vivante (accueil, moment programme)
+   La timeline s'appuie sur la ligne continue : l'heure reste collee au
+   milieu de l'ecran (sticky), la pastille posee sur l'axe s'allume et
+   chaque creneau passe d'attenue a plein quand il atteint le centre du
+   viewport (classe is-on posee par main.js). Sans JavaScript ou en
+   reduced motion : tout est visible d'emblee. */
+
+.tl {
+  margin-top: 48px;
+}
+
+.tl-row {
+  position: relative;
+  padding: 24px 0 24px 26px;
+  border-bottom: 1px solid var(--filet);
+}
+
+.tl-row:first-child {
+  border-top: 1px solid var(--filet);
+}
+
+/* La photo du creneau : a gauche du point, une piece du dossier */
+.tl-ph {
+  margin: 0 0 14px;
+  max-width: 260px;
+}
+
+.tl-ph img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 1;
+  object-fit: cover;
+  /* Exception DA (demande de Baptiste, 2026-07-18) : seul arrondi du
+     site, les photos du planning sont de simples illustrations. */
+  border-radius: 8px;
+  border: 1px solid var(--filet);
+}
+
+.tl-dot {
+  position: absolute;
+  left: calc(-1 * var(--body-pad) - 6px);
+  top: 1.7em;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--noir);
+  border: 2px solid var(--rouge);
+  z-index: 2;
+  transition: background-color 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out);
+}
+
+.tl-row.is-on .tl-dot {
+  background-color: var(--rouge);
+  box-shadow: 0 0 0 4px rgba(235, 0, 40, 0.14);
+}
+
+.tl-time {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 1.125rem;
+  color: var(--papier);
+}
+
+.tl-title {
+  font-weight: 600;
+  font-size: 1.125rem;
+  color: var(--papier);
+}
+
+.tl-desc {
+  margin-top: 4px;
+  font-size: 1rem;
+  color: var(--encre-2);
+  max-width: 56ch;
+}
+
+/* L'allumage progressif, seulement quand la ligne continue est active
+   (classe jline-run posee par line.js) : chaque creneau s'eclaire
+   quand la pointe du trait franchit sa pastille. */
+.jline-run .journey .tl-row {
+  opacity: 0.22;
+  transition: opacity 0.5s var(--ease-out);
+}
+
+.jline-run .journey .tl-row.is-on {
+  opacity: 1;
+}
+
+/* Sous 1024 px il n'y a pas de defilement virtuel : la pointe suit le
+   centre du viewport et tout ce qui est en dessous resterait a 22 %
+   d'opacite, donc illisible. Le creneau reste plein, seule la pastille
+   garde son allumage (decor, pas information). */
+@media (max-width: 1023px) {
+  .jline-run .journey .tl-row {
+    opacity: 1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .tl {
+    margin-top: 64px;
+  }
+
+  .tl-row {
+    display: grid;
+    grid-template-columns: calc(var(--axis-b) - var(--m-left) - 48px) minmax(0, 1fr);
+    gap: 0 96px;
+    min-height: clamp(140px, 18vh, 200px);
+    padding: 34px 0;
+    border-bottom: 0;
+  }
+
+  .tl-row:first-child {
+    border-top: 0;
+  }
+
+  /* La colonne de gauche : la photo occupe l'espace, l'heure se cale
+     contre le point et reste collee au milieu de l'ecran pendant que
+     son creneau defile. */
+  .tl-left {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 28px;
+  }
+
+  .tl-left .tl-ph {
+    flex: 0 1 300px;
+    min-width: 0;
+    max-width: 300px;
+    margin: 0;
+  }
+
+  .tl-time {
+    flex: none;
+    text-align: right;
+    align-self: start;
+    position: sticky;
+    top: calc(50vh - 0.7em);
+    font-size: clamp(1.3rem, 2vw, 1.8rem);
+  }
+
+  .tl-dot {
+    left: calc(var(--axis-b) - var(--m-left) - 6px);
+    top: 42px;
+  }
+}
+
+/* 21. Animations et reduced motion
+   Une seule sequence orchestree : la ligne se trace, le hero entre,
+   le telescripteur s'allume. Rien d'autre ne bouge au scroll,
+   a l'exception du dixieme baton. */
+
+@keyframes lineDraw {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes aIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.a {
+  opacity: 0;
+  animation: aIn 0.65s var(--ease-out) forwards;
+}
+
+.a1 { animation-delay: 0.15s; }
+.a2 { animation-delay: 0.3s; }
+.a3 { animation-delay: 0.45s; }
+.a4 { animation-delay: 0.6s; }
+.a5 { animation-delay: 0.72s; }
+.a6 { animation-delay: 0.84s; }
+.a7 { animation-delay: 1s; }
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  main::before {
+    animation: none;
+    transform: none;
+  }
+
+  .a {
+    animation: none;
+    opacity: 1;
+  }
+
+  /* La ligne continue : entierement tracee, immobile. La pliure,
+     le virage et la frise restent lisibles puisqu'ils sont dans
+     la geometrie du trait, pas dans son animation. */
+  .jline path {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+
+  .cross-word {
+    transform: none;
+  }
+
+  .alb-dot--end::after {
+    animation: none;
+    opacity: 0;
+  }
+
+  /* La feuille de salle vivante : tout est allume d'emblee */
+  .jline-run .journey .tl-row {
+    opacity: 1;
+  }
+
+  .tl-dot {
+    background-color: var(--rouge);
+  }
+
+  /* L'album des editions : toutes les affiches sont revelees */
+  .jline-run .alb-item > * {
+    opacity: 1;
+  }
+}

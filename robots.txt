@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://www.tedxuttroyes.fr/sitemap.xml
+Sitemap: https://tedxuttroyes.fr/sitemap.xml

@@ -1,56 +1,78 @@
-# ============================================================
-#  TEDxUTTroyes - Configuration Apache (OVH mutualisé)
-# ============================================================
+# TEDxUTTroyes 2027 : configuration Apache pour hebergement mutualise OVH
 
+AddDefaultCharset UTF-8
+
+# --------------------------------------------------------------------------
+# HTTPS force et suppression du www.
+# Si le certificat SSL n'est pas encore actif sur OVH, commentez les 4 lignes
+# RewriteCond/RewriteRule ci-dessous le temps de l'activer.
+# --------------------------------------------------------------------------
 RewriteEngine On
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
 
-# --- Forçage HTTPS + canonicalisation vers www.tedxuttroyes.fr ---
-# (HTTPS d'abord, puis non-www -> www, en une seule redirection 301)
-RewriteCond %{HTTP:X-Forwarded-Proto} !https [OR]
-RewriteCond %{HTTP_HOST} !^www\. [NC]
-RewriteRule ^ https://www.tedxuttroyes.fr%{REQUEST_URI} [L,R=301]
+# --------------------------------------------------------------------------
+# URL en dossiers : chaque page vit dans son dossier sous le nom index.html
+# et se sert en /dossier/. Redirections 301 des anciennes URL .html
+# (ancien site et premiere version de celui-ci) vers les dossiers.
+# Le test porte sur THE_REQUEST (la requete externe d'origine) : la
+# sous-requete interne de ErrorDocument vers /404.html n'est pas touchee.
+# --------------------------------------------------------------------------
+DirectoryIndex index.html
+RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.html[?\s]
+RewriteRule ^ /%1 [R=301,L]
+RewriteCond %{THE_REQUEST} \s/+([^?\s]+)\.html[?\s]
+RewriteCond %{REQUEST_URI} !^/404\.html$
+RewriteRule ^ /%1/ [R=301,L]
 
-# --- Page d'erreur 404 personnalisée ---
+# Page 404 personnalisee
 ErrorDocument 404 /404.html
 
-# --- Bloquer l'accès aux fichiers/dossiers sensibles ---
-RedirectMatch 404 /\.git
-<FilesMatch "(^\.|\.(htaccess|gitignore|md|json|py)$)">
-  Require all denied
-</FilesMatch>
+# --------------------------------------------------------------------------
+# Dossier de travail, hors site : design-system/ contient les sources du
+# paquet de composants (export vers Claude Design). Il vit dans le depot
+# mais ne fait pas partie du site et n'est lie depuis aucune page.
+# --------------------------------------------------------------------------
+RedirectMatch 404 ^/design-system(/|$)
 
-# --- Compression (gzip / deflate) ---
-<IfModule mod_deflate.c>
-  AddOutputFilterByType DEFLATE text/html text/plain text/css text/xml
-  AddOutputFilterByType DEFLATE application/javascript application/x-javascript
-  AddOutputFilterByType DEFLATE application/json application/xml
-  AddOutputFilterByType DEFLATE image/svg+xml application/rss+xml
+# --------------------------------------------------------------------------
+# Types MIME : les fichiers d'agenda (assets/agenda/*.ics) doivent partir
+# en text/calendar, sinon Apple Calendrier et Samsung Calendrier ne les
+# ouvrent pas et le navigateur affiche du texte brut.
+# --------------------------------------------------------------------------
+<IfModule mod_mime.c>
+  AddType text/calendar .ics
 </IfModule>
 
-# --- Cache navigateur (Expires) ---
+# --------------------------------------------------------------------------
+# Compression
+# --------------------------------------------------------------------------
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript application/json image/svg+xml
+</IfModule>
+
+# --------------------------------------------------------------------------
+# Cache navigateur : long pour les assets (polices, images),
+# moyen pour CSS et JS, aucun pour le HTML.
+# Si vous modifiez main.css ou main.js apres la mise en ligne, le cache
+# d'un mois peut retarder la prise en compte : changez alors le nom du
+# fichier (par exemple main-v2.css) et les references dans les pages.
+# --------------------------------------------------------------------------
 <IfModule mod_expires.c>
   ExpiresActive On
-  ExpiresByType image/jpeg          "access plus 1 year"
-  ExpiresByType image/png           "access plus 1 year"
-  ExpiresByType image/webp          "access plus 1 year"
-  ExpiresByType image/avif          "access plus 1 year"
-  ExpiresByType image/svg+xml       "access plus 1 year"
-  ExpiresByType image/x-icon        "access plus 1 year"
-  ExpiresByType font/otf            "access plus 1 year"
-  ExpiresByType application/x-font-otf "access plus 1 year"
-  ExpiresByType text/css            "access plus 1 month"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
   ExpiresByType application/javascript "access plus 1 month"
-  ExpiresByType text/html           "access plus 1 day"
+  ExpiresByType text/html "access plus 0 seconds"
 </IfModule>
 
-# --- En-têtes de sécurité ---
 <IfModule mod_headers.c>
   Header set X-Content-Type-Options "nosniff"
-  Header set X-Frame-Options "SAMEORIGIN"
   Header set Referrer-Policy "strict-origin-when-cross-origin"
-  Header set Permissions-Policy "geolocation=(), microphone=(), camera=()"
-  # Cache immuable pour les assets versionnés (images/css/js/fonts)
-  <FilesMatch "\.(jpg|jpeg|png|webp|avif|gif|svg|ico|css|js|otf|woff2?)$">
-    Header set Cache-Control "public, max-age=31536000"
-  </FilesMatch>
+  Header set X-Frame-Options "SAMEORIGIN"
 </IfModule>

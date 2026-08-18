@@ -2,30 +2,87 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <title>Page introuvable (404) - TEDxUTTroyes</title>
-  <meta name="description" content="La page demandée n'existe pas ou a été déplacée.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page introuvable | TEDxUTTroyes</title>
+  <meta name="description" content="La page demandée n'existe pas ou plus sur tedxuttroyes.fr.">
   <meta name="robots" content="noindex">
-  <meta content="width=device-width, initial-scale=1" name="viewport">
-  <link href="/css/normalize.css" rel="stylesheet" type="text/css">
-  <link href="/css/webflow.css" rel="stylesheet" type="text/css">
-  <link href="/css/genius-utt.webflow.css" rel="stylesheet" type="text/css">
-  <link href="/images/favicon.png" rel="shortcut icon" type="image/x-icon">
-  <link href="/images/webclip.png" rel="apple-touch-icon">
-  <style>
-    .err-wrap{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 20px;gap:18px}
-    .err-code{font-size:96px;font-weight:800;line-height:1;color:#db1f37;margin:0}
-    .err-title{font-size:24px;font-weight:700;margin:0}
-    .err-text{max-width:520px;color:#1b1a1a}
-    .err-btn{display:inline-block;background:#db1f37;color:#fff;padding:12px 26px;border-radius:8px;text-decoration:none;font-weight:600}
-  </style>
+  <meta name="theme-color" content="#080808">
+
+  <link rel="icon" type="image/png" href="/assets/img/favicon.png">
+  <link rel="apple-touch-icon" href="/assets/img/webclip.png">
+  <link rel="preload" href="/assets/fonts/bricolage-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/dm-sans-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/assets/css/main-v2.css">
+  <script>document.documentElement.classList.add("js");</script>
+  <script src="/assets/js/reveal.js" defer></script>
+  <script src="/assets/js/main-v2.js" defer></script>
 </head>
 <body>
-  <main class="err-wrap">
-    <a href="/index.html"><img src="/images/logo-black.png" width="180" alt="TEDxUTTroyes"></a>
-    <p class="err-code">404</p>
-    <h1 class="err-title">Cette page est introuvable</h1>
-    <p class="err-text">Le lien est peut-être erroné ou la page a été déplacée. Pas de panique, vous pouvez revenir à l'accueil.</p>
-    <a class="err-btn" href="/index.html">Retour à l'accueil</a>
+  <a class="skip-link" href="#contenu">Aller au contenu</a>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="TEDxUTTroyes, retour à l'accueil">
+        <img src="/assets/img/logo-white.png" alt="TEDxUTTroyes" width="500" height="105">
+      </a>
+
+      <nav class="nav-desktop" aria-label="Navigation principale">
+        <a href="/">Accueil</a>
+        <a href="/speakers/">Speakers</a>
+        <a href="/programme/">Programme</a>
+        <a href="/editions/">Éditions</a>
+        <a href="/hall-of-fame/">Hall of Fame</a>
+        <a href="/partenaires/">Partenaires</a>
+        <a href="/a-propos/">À propos</a>
+        <a href="/faq/">FAQ</a>
+        <a class="btn btn--ghost btn--sm" href="/devenir-speaker/">Postuler</a>
+        <a class="btn btn--primary btn--sm" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition" target="_blank" rel="noopener">Réserver</a>
+      </nav>
+
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-mobile" aria-label="Menu">
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+      </button>
+    </div>
+  </header>
+
+  <div class="mobile-menu" id="menu-mobile" role="dialog" aria-modal="true" aria-label="Menu de navigation" hidden>
+    <nav aria-label="Navigation mobile">
+      <ul class="mobile-menu-list">
+        <li style="--i: 0"><a href="/">Accueil</a></li>
+        <li style="--i: 1"><a href="/speakers/">Speakers</a></li>
+        <li style="--i: 2"><a href="/programme/">Programme</a></li>
+        <li style="--i: 3"><a href="/editions/">Éditions</a></li>
+        <li style="--i: 4"><a href="/hall-of-fame/">Hall of Fame</a></li>
+        <li style="--i: 5"><a href="/partenaires/">Partenaires</a></li>
+        <li style="--i: 6"><a href="/a-propos/">À propos</a></li>
+        <li style="--i: 7"><a href="/faq/">FAQ</a></li>
+      </ul>
+    </nav>
+    <div class="mobile-menu-foot">
+      <a class="btn btn--ghost" href="/devenir-speaker/">Postuler comme speaker</a>
+      <a class="btn btn--primary" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition" target="_blank" rel="noopener">Réserver ma place</a>
+      <p class="mobile-menu-date"><span class="msk" data-c="Jeudi 18 mars 2027">***** ** **** ****</span> · 18h00 · Centre de Congrès de l'Aube, Troyes</p>
+    </div>
+  </div>
+
+  <main id="contenu">
+    <div class="error-hero">
+      <div class="inner">
+        <p class="cote">Erreur 404</p>
+        <div class="sec-body">
+          <p class="error-code" aria-hidden="true">404</p>
+          <h1>Cette page est hors limite</h1>
+          <p class="lead">L'adresse demandée n'existe pas, ou n'existe plus. Reprenons depuis la ligne de départ.</p>
+          <div class="actions">
+            <a class="btn btn--primary" href="/">Retour à l'accueil</a>
+            <a class="btn btn--ghost" href="/faq/">Consulter la FAQ</a>
+          </div>
+          <p class="notice">Une page de ce site n'est dans aucun menu, et elle donne une place pour la dixième édition. <a href="/faq/">La FAQ dit comment la trouver.</a></p>
+        </div>
+      </div>
+    </div>
   </main>
 </body>
 </html>
