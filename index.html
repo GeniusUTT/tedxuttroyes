@@ -4,11 +4,6 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- PLACEHOLDER : titre et theme sous embargo jusqu'a la revelation du
-     samedi 31 octobre 2026 a 18h00. A cet instant, assets/js/reveal.js
-     remet les pages dans leur etat d'origine : chaque zone masquee porte
-     sa version d'avant (data-c, data-reveal, template). Voir README,
-     table des placeholders. -->
   <title data-reveal="TEDxUTTroyes 2027 : Franchir ou s'adapter ?">TEDxUTTroyes 2027, dixième édition</title>
   <meta name="description" data-reveal-attr="content"
     data-reveal="La dixième édition de TEDxUTTroyes explore la limite : franchir ou s'adapter ? Jeudi 18 mars 2027, 18h00, Centre de Congrès de l'Aube, Troyes."
@@ -153,30 +148,17 @@
     </div>
   </div>
 
-  <!-- Le defilement virtuel : line.js fixe ce wrapper (main + footer) et
-       le translate selon le scroll d'un spacer, pour figer l'ecran
-       pendant les deplacements horizontaux de la ligne. Sans JS, en
-       mobile ou en reduced motion : flux normal. -->
   <div class="jscroll">
     <main id="contenu">
-      <!-- Sondes de mesure : le JS y lit la position des deux axes de la ligne -->
       <span class="probe" id="probe-a" aria-hidden="true"></span>
       <span class="probe" id="probe-b" aria-hidden="true"></span>
 
-      <!-- Moment 1 : le seuil. La question du theme se tient a cheval sur la
-         ligne : le premier membre s'arrete au bord, le second commence de
-         l'autre cote. Titre masque jusqu'au 31 octobre 2026. -->
       <section class="hero" aria-label="TEDxUTTroyes 2027, dixième édition">
-        <!-- Le fond du seuil : une archive de la scene (edition 2024), en
-           couleur sous un voile sombre, la typo reste reine. -->
         <div class="hero-bg" aria-hidden="true">
           <img src="/assets/img/editions/2024/galerie/05.webp" alt="" width="1400" height="933" fetchpriority="high">
         </div>
         <div class="mwrap">
           <p class="cote a a1">Dixième édition</p>
-          <!-- PLACEHOLDER : le titre du theme et sa figure sont masques
-             (une etoile par caractere) jusqu'au samedi 31 octobre 2026 a
-             18h00, ou reveal.js les remet en clair. -->
           <h1 class="hero-title">
             <span class="hero-word a a2" aria-hidden="true" data-reveal-unhide data-reveal="Franchir">********</span>
             <span class="hero-sub a a3" aria-hidden="true" data-reveal-unhide
@@ -201,10 +183,6 @@
               target="_blank" rel="noopener">Réserver ma place</a>
             <a class="btn btn--ghost" href="/programme/">Voir le programme</a>
           </div>
-          <!-- PLACEHOLDER : la date du jour J est masquee (etoiles) jusqu'a
-             sa revelation, le samedi 31 octobre 2026 a 18h00. Le
-             telescripteur decompte jusqu'a cette annonce, puis reprend de
-             lui-meme le decompte du jour J. -->
           <p class="visually-hidden"
             data-reveal="Le compte à rebours est lancé : l'événement commence le jeudi 18 mars 2027 à 18h00.">Le compte
             à rebours est lancé : la date et le thème de la dixième édition seront révélés le samedi 31 octobre 2026 à
@@ -214,10 +192,6 @@
             <span class="ticker-label" data-reveal="Temps restant">Révélation de la date et du thème</span>
             <span class="ticker-value" id="ticker-value">J-000 · 00:00:00</span>
           </div>
-          <!-- Le rendez-vous a mettre dans son agenda. Google a une URL
-             d'ajout ; Apple Calendrier et Samsung Calendrier importent un
-             fichier .ics (le meme pour les deux, assets/agenda/). Les trois
-             destinations basculent sur la soiree au devoilement. -->
           <div class="ticker-cal a a7">
             <details class="cal">
               <summary class="btn btn--ghost btn--sm"
@@ -235,8 +209,6 @@
         </div>
       </section>
 
-      <!-- Moment 2 : le premier versant du theme (sous embargo). La ligne
-         reste droite et tendue ; un mot la traverse au fil du defilement. -->
       <section class="mom" id="moment-2" data-line="cross">
         <div class="mwrap">
           <p class="cote" aria-hidden="true" data-reveal-unhide data-reveal="Franchir">********</p>
@@ -244,10 +216,6 @@
             <span class="cross-word"><span class="msk" data-c="Au-delà">*******</span></span>
           </div>
           <div class="mom-duo">
-            <!-- PLACEHOLDER : premier versant du theme, sous embargo jusqu'au
-               samedi 31 octobre 2026 (memes barres de caviardage que les
-               fiches speakers). Le template porte la version d'origine, que
-               reveal.js remet en place le jour dit. -->
             <template data-reveal-target="#versant-1">
               <h2 class="mom-title">Décider que la ligne était provisoire</h2>
               <p class="lead">Le record tombe, le prototype décolle, une voix s'élève là où personne ne parlait.
@@ -279,9 +247,6 @@
         </div>
       </section>
 
-      <!-- Moment 3 : le second versant du theme (sous embargo), installe de
-         l'autre cote de la ligne : le mot arrive du bord droit et vient
-         buter contre elle sans la traverser. -->
       <section class="mom mom--droite" id="moment-3" data-line="cross" data-cross-dir="rtl">
         <div class="mwrap">
           <p class="cote" aria-hidden="true" data-reveal-unhide data-reveal="S'adapter">*'*******</p>
@@ -296,8 +261,6 @@
                 alt="Jamy Gourmaud sur la scène de TEDxUTTroyes, devant les lettres rouges"
                 width="1600" height="900" loading="lazy">
             </figure>
-            <!-- PLACEHOLDER : second versant du theme, sous embargo jusqu'au
-               samedi 31 octobre 2026 (voir le versant precedent). -->
             <template data-reveal-target="#versant-2">
               <h2 class="mom-title">Ce qui ne se franchit pas</h2>
               <p class="lead">Le corps compose avec la maladie, la ville avec sa rivière, l'ingénieur avec la matière.
@@ -322,16 +285,10 @@
         </div>
       </section>
 
-      <!-- Moment 4 : les speakers. Six fiches sous embargo en grille de
-         deux lignes sur trois colonnes ; le bloc coupe la route de la
-         ligne, qui plie autour comme au lieu (ancre avoid). -->
       <section class="mom" id="speakers">
         <div class="mwrap">
           <p class="cote">Speakers</p>
           <div class="colL">
-            <!-- PLACEHOLDER : titre et texte reformules tant que le theme est
-               sous embargo (ils le nommaient) ; reveal.js remet la version
-               d'origine le samedi 31 octobre 2026. -->
             <h2 class="mom-title" data-reveal="Six noms s'apprêtent à franchir">Six noms s'apprêtent à monter sur scène
             </h2>
             <p class="lead"
@@ -339,17 +296,6 @@
               Le ** ****, six talks se succèdent sur la scène troyenne : dix-huit minutes
               chacun, pas une de plus. Les annonces tomberont une par une d'ici au jour J.</p>
           </div>
-          <!-- GABARIT : pour annoncer un speaker sur l'accueil, remplacer
-             une ligne sous embargo par celle-ci (la fiche complete, avec
-             photo et bio, vit sur la page speakers, gabarit sur place) :
-
-        <li class="sl-row sl-row--live">
-          <span class="sl-photo"><img src="/assets/img/speakers/prenom-nom.webp" alt="" width="120" height="120" loading="lazy"></span>
-          <span class="sp-id">Intervenant·e 01</span>
-          <span class="sl-name">Prénom Nom</span>
-          <span class="sp-status sp-status--live">annoncé·e</span>
-        </li>
-        -->
           <ol class="slist" data-line="avoid" data-line-margin="28" data-line-margin-m="14"
             aria-label="Les six intervenantes et intervenants de 2027, annonces à venir">
             <li class="sl-row">
@@ -412,9 +358,6 @@
         </div>
       </section>
 
-      <!-- Moment 5 : le lieu. Le bloc se dresse sur le chemin ; cette fois la
-         ligne ne se laisse pas traverser, elle plie autour. La carte et la
-         presentation du Centre de Congres se tiennent cote a cote. -->
       <section class="mom" id="lieu">
         <div class="mwrap">
           <p class="cote">Le lieu</p>
@@ -425,12 +368,6 @@
               et une acoustique dessinée pour la voix. Ici, la ligne plie.</p>
           </div>
           <figure class="m3-lieu" data-line="avoid" data-line-margin="28" data-line-margin-m="14">
-            <!-- Le releve de terrain : la photo du lieu, la carte et la
-               fiche d'identite du batiment au meme niveau, trois pieces
-               d'un meme dossier. Le plan SVG local est la version par
-               defaut (sans JS, sans WebGL) ; quand le bloc approche de
-               l'ecran, map.js charge Mapbox GL et la carte interactive
-               prend sa place. -->
             <div class="lieu-trio">
               <div class="lieu-photo">
                 <img src="/assets/img/lieu/centre-congres.webp"
@@ -508,9 +445,6 @@
         </div>
       </section>
 
-      <!-- Moment 6 : le programme. La feuille de salle vivante : la ligne
-         continue sert de rail, l'heure reste collee au milieu de l'ecran
-         et chaque creneau s'allume quand il atteint le centre. -->
       <section class="mom" id="programme">
         <div class="mwrap">
           <p class="cote">Programme</p>
@@ -628,12 +562,6 @@
         </div>
       </section>
 
-      <!-- Moment 7 : l'album des dix ans. La ligne redescend a 2016, tourne,
-         et traverse l'ecran a l'horizontale : les affiches des editions
-         pendent sur le fil comme un album photo, le theme sous chacune.
-         2027 est le point final, d'ou le trait redescend vers la prise.
-         Les affiches se revelent au passage de la pointe (variable
-         --sweep posee par line.js). -->
       <section class="mom mom--frise" id="dix-ans">
         <div class="mwrap">
           <p class="cote">Dix ans</p>
@@ -644,11 +572,6 @@
           </div>
           <p class="fr-caption">L'album des éditions · 2016 à 2027 · <span class="fr-fil">les affiches au fil de la ligne</span><span class="fr-swipe">glissez pour parcourir les affiches</span></p>
           <ol class="album" data-line="turn" aria-label="L'album des éditions TEDxUTTroyes, de 2016 à 2027">
-            <!-- Chaque piece de l'album mene a sa page d'edition : l'affiche
-               et l'etiquette portent le meme lien. Le lien de l'affiche est
-               retire du parcours clavier et de la restitution vocale
-               (tabindex et aria-hidden) : il double celui de l'etiquette,
-               qui porte l'annee et le theme. -->
             <li class="alb-item" style="--c: 1; --th: 0">
               <figure class="alb-img">
                 <a href="/editions/edition-2016/" tabindex="-1" aria-hidden="true">
@@ -779,7 +702,7 @@
           </figure>
           <ul class="data-lines" data-line="avoid" data-line-margin="28" data-line-margin-m="14"
             aria-label="La dixième édition en chiffres">
-            <li><strong>61</strong><span>talks partagés sur la scène troyenne depuis 2016</span></li>
+            <li><strong>60</strong><span>talks partagés sur la scène troyenne depuis 2016</span></li>
             <li><strong>2500</strong><span>spectateurs cumulés sur 9 éditions</span></li>
             <li><strong>750</strong><span>fauteuils le <span class="msk" data-c="18 mars 2027">** **** ****</span>, pas un de plus</span></li>
           </ul>
@@ -793,8 +716,6 @@
         </div>
       </section>
 
-      <!-- Le programme TEDx (texte officiel, conformite) : un moment calme,
-         a gauche de la ligne qui descend vers la prise. -->
       <section class="mom mom--tedx" id="tedx">
         <div class="mwrap">
           <p class="cote">Le programme TEDx</p>
@@ -814,10 +735,6 @@
               </a>
             </div>
           </div>
-          <!-- Le logo de l'evenement, a droite du texte sur le chemin de la
-             descente : la ligne le contourne par la droite, a egale
-             distance au-dessus et au-dessous (exit tight : pas de retour
-             repousse a la frontiere de section). -->
           <figure class="tedx-logo" data-line="avoid" data-line-side="right" data-line-exit="tight"
             data-line-margin="28" data-line-margin-m="14">
             <img src="/assets/img/logo-white.png" alt="TEDxUTTroyes" width="500" height="105" loading="lazy">
@@ -825,9 +742,6 @@
         </div>
       </section>
 
-      <!-- La prise : la ligne descend des dix ans ; le constat se range a
-         gauche, le bouton attend a droite dans la continuite du trait,
-         qui vient s'y brancher. -->
       <section class="final-cta" id="billetterie">
         <div class="mwrap">
           <p class="cote">Billetterie</p>

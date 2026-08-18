@@ -19,19 +19,23 @@ index.html               Accueil (le parcours de la ligne : seuil, franchir,
 speakers/                Les 6 fiches sous embargo + appel à candidatures
 speakers/<annee>/<nom>/  Une page par speaker passé (61 pages, générées depuis
                          les archives de l'ancien site ; les anciennes URL
-                         en .html sont redirigées en 301 ; bio 2016-2017 en
-                         PLACEHOLDER, seuls nom et talk sont documentés)
+                         en .html sont redirigées en 301 ; bio 2016-2017
+                         à reconstituer, seuls nom et talk sont documentés)
 devenir-speaker/         Candidature speaker (CTA Google Forms)
 programme/               Feuille de salle du 18 mars (portes 18h00, forum)
 editions/                Le registre des 9 éditions
 editions/edition-XXXX/   Une page par édition, speakers cliquables
-hall-of-fame/            Toutes les voix passées (61 cartes, 2016 à 2026 ;
+hall-of-fame/            Toutes les voix passées (61 fiches, 60 interventions
+                         données, 2016 à 2026 ;
                          portrait et nom cliquables vers la bio, titre
                          d'année cliquable vers l'édition)
 partenaires/             Partenaires (page dédiée, jamais sur l'accueil)
 a-propos/                About TED / About TEDx / About TEDxUTTroyes
 faq/                     FAQ pratique (accordéons natifs)
 mentions-legales/        Mentions légales (LCEN)
+tedx-utt-10ans/          La page cachée du jeu de piste : hors menu, hors
+                         plan du site, en noindex. Une place à gagner (voir
+                         « Le jeu de piste » plus bas). Ne pas la lier.
 404.html                 Page d'erreur (reste à la racine : cible du
                          ErrorDocument d'Apache)
 .htaccess                HTTPS, URL en dossiers + redirections 301, cache,
@@ -57,6 +61,19 @@ assets/
   img/                   Logo, favicon, OG, placeholders éditions et lieu
 ```
 
+## Le jeu de piste (page cachée)
+
+Une page du site n'est dans aucun menu, dans aucun pied de page, ni dans `sitemap.xml`, et porte `<meta name="robots" content="noindex, nofollow">` : `tedx-utt-10ans/`. Elle affiche un code, `codesite10`, et un seul bouton, vers la billetterie. Le code est un code de réduction de 100 % limité à une utilisation : la place revient à la première personne qui s'en sert, sans passer par l'équipe. Le code existe sur HelloAsso depuis le 2026-08-18 : la page cachée peut donc être mise en ligne telle quelle.
+
+On y arrive sans ouvrir le code source ni la console : la charade est posée en clair dans la FAQ (groupe « Le jeu de piste »), et la page 404 souffle qu'une telle page existe. Les trois morceaux de l'adresse : `tedx` (le programme sous licence duquel la soirée existe), `utt` (l'école), `10ans` (les dix ans fêtés par cette édition), reliés par des traits d'union.
+
+À tenir :
+
+- **Ne pas lier la page**, ne pas l'ajouter au menu, au pied de page ni au `sitemap.xml`, ne rien écrire dans `robots.txt` (un `Disallow` publierait l'adresse à qui lit ce fichier).
+- **Pas de balises Open Graph** sur cette page : un lien partagé sur un réseau ne doit pas afficher d'aperçu qui vend la mèche.
+- Si l'adresse change, la charade de la FAQ change avec elle.
+- La page ne définit aucune règle CSS : elle se compose uniquement de classes existantes (`sec`, `cote`, `prose`, `notice`, `ticker-label`, `ticker-value`). Pas de renommage `main-v3.css` à prévoir de son fait.
+
 ## Tester en local
 
 Les liens du site sont absolus depuis la racine (`/editions/`, `/assets/...`) : ouvrir les fichiers directement dans un navigateur ne fonctionne pas, servez le dossier (le serveur Python sert bien les `index.html` des dossiers, comme Apache) :
@@ -74,25 +91,50 @@ Poussez le contenu du dossier tel quel à la racine du site (www). Deux points d
 
 ## Placeholders à compléter avant mise en ligne
 
-Tous les emplacements variables sont marqués par un commentaire `PLACEHOLDER` dans les fichiers. Recherchez le mot `PLACEHOLDER` dans le projet pour tous les retrouver.
+Les pages HTML ne portent plus aucun commentaire depuis le nettoyage du 2026-08-18 : **ce tableau est la seule liste des points à compléter**. Seuls la feuille CSS et les scripts gardent leurs commentaires, dont un `PLACEHOLDER` dans `assets/js/map.js`.
 
 | Quoi | Où | Comment |
 |---|---|---|
 | Dévoilement automatique | `assets/js/reveal.js` | le samedi 31 octobre 2026 à 18h00 (cible UTC figée `2026-10-31T17:00:00Z`), le site reprend de lui-même son état d'avant le masquage : plus une étoile, plus une barre de caviardage, titres et descriptions d'origine. Le compte à rebours de l'accueil enchaîne alors sur le jour J. **Si vous modifiez un texte masqué, mettez à jour sa version d'origine dans le même élément** (`data-c`, `data-reveal`, `data-reveal-html`, `template`), sinon le dévoilement remettra l'ancienne. La remise en état définitive reste un `git revert` du commit de masquage : le HTML servi redevient alors correct pour Google et les partages sociaux, ce que le dévoilement JavaScript ne fait que pour le visiteur (le JSON-LD de l'accueil, lui, n'est pas rétabli par le script). |
 | Thème (masqué) | toutes les pages | « Franchir ou s'adapter ? » est remplacé par `******** ** *'*******` (une étoile par caractère), « la limite » par `** ******`. Sur l'accueil, les deux sections du diptyque sont sous embargo (barres de caviardage `.redact`, même DA que les fiches speakers). Les titres d'onglet, les metas sociales et le JSON-LD portent un intitulé neutre : « TEDxUTTroyes 2027, dixième édition ». Trois textes ont été reformulés parce qu'ils nommaient le thème : le titre et le chapô du bloc speakers de l'accueil, et le chapô de `speakers/index.html`. Tout se récupère dans l'historique git (commit précédant le masquage). Même échéance que la date : samedi 31 octobre 2026 à 18h00. |
 | Date du jour J (masquée) | toutes les pages + `assets/js/main-v2.js` | la date est remplacée par des étoiles (`***** ** **** ****` pour « Jeudi 18 mars 2027 », `** **** ****` pour « 18 mars 2027 », `** ****` pour « 18 mars ») et le téléscripteur de l'accueil décompte jusqu'à sa révélation, le samedi 31 octobre 2026 à 18h00, avec un bouton « ajouter à mon agenda » qui ouvre le choix entre Google Agenda (URL d'ajout), Apple Calendrier et Samsung Calendrier (fichiers `assets/agenda/*.ics`, servis en `text/calendar` grâce à un `AddType` du `.htaccess`). Les trois destinations basculent sur la soirée elle-même une fois la date révélée. Le JSON-LD, les attributs `datetime` et la date affichée dans ce README gardent la vraie valeur. |
-| Lien billetterie HelloAsso | toutes les pages + JSON-LD de `index.html` | remplacer partout `https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition` |
-| Lien newsletter HelloAsso | `index.html`, footers | remplacer partout `https://www.helloasso.com/PLACEHOLDER-NEWSLETTER` |
-| Chiffres (talks, intervenants) | `index.html`, section « En chiffres » | remplacer les `XX` des lignes de données |
-| Annonce d'un speaker | `speakers/index.html` | suivre le gabarit commenté : la fiche sous embargo devient nom + sujet + photo optionnelle (dossier `assets/img/speakers/` à créer) |
-| Liens YouTube par édition | `editions/index.html` et pages `editions/edition-XXXX/` | remplacer les liens de recherche YouTube par les playlists exactes |
-| Liens des sites partenaires | `partenaires/index.html` | les logos 2026 sont en place avec `href="#"` : remplacer chaque `#` par l'URL du site du partenaire (liste fournie par l'équipe) et retirer les partenaires non reconduits |
-| Talks 2026 | `speakers/2026/*/index.html` | ajouter le lien YouTube de chaque talk 2026 dès sa publication |
-| Jeton Mapbox | `assets/js/map.js` | le jeton public et le style rouge proviennent du compte personnel `solene-drnx` (ancien site) ; créer un jeton sur un compte Mapbox de l'association, restreint au domaine tedxuttroyes.fr, et y transférer le style |
-| Image de partage (Open Graph) | `assets/img/og/og-default.jpg` | placeholder généré aux couleurs du site, à remplacer par un visuel conçu (1200x630) |
-| Logos partenaires | `partenaires.html` | suivre le gabarit commenté ; ne pas retirer les limites de taille CSS (règle TEDx) |
-| Mentions légales | `mentions-legales/index.html` | compléter les champs entre crochets |
-| Contenus FAQ et programme | `faq/index.html`, `programme/index.html` | contenus type à relire et ajuster (tarifs, horaires précis, conditions) |
+| Lien billetterie HelloAsso | toutes les pages + JSON-LD de `index.html` | vérifier que `https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition` est bien l'adresse définitive de la billetterie 2027 |
+| Playlists YouTube par édition | `editions/index.html`, `editions/edition-XXXX/` | aucune playlist n'existe côté chaîne : les liens pointent vers une recherche YouTube « TEDxUTTroyes + année ». À remplacer le jour où des playlists sont créées. |
+| Jeton Mapbox | `assets/js/map.js` | le jeton public et le style rouge viennent du compte personnel `solene-drnx` (ancien site). Laissé tel quel à la demande de Baptiste le 2026-08-18 ; à basculer un jour sur un compte Mapbox de l'association, restreint au domaine tedxuttroyes.fr. |
+| Déroulé du jour J | `programme/index.html` | horaires type (portes 18h00 avec mini forum, talks 19h30, fin vers 22h30) à figer quand le programme sera arrêté. |
+| Image de partage (Open Graph) | `assets/img/og/og-default.jpg` | capture du seuil de l'accueil en 1200x630, faite le 2026-08-18 : elle montre donc la date et le thème masqués. À refaire après le dévoilement du 31 octobre 2026. |
+
+Réglés le 2026-08-18 : mentions légales, sites des partenaires, chiffres de l'accueil, tarifs et conditions d'échange de la FAQ, date et rôles de l'édition 2026, liens LinkedIn de l'équipe 2026, biographies des speakers 2016 et 2017, code `codesite10` créé sur HelloAsso.
+
+## Gabarits
+
+Les pages ne portent plus de commentaire : les deux gabarits qui y vivaient sont consignés ici.
+
+**Annoncer un speaker** (`speakers/index.html` et le bloc speakers de `index.html`) : remplacer une fiche sous embargo par cette carte, et créer le dossier `assets/img/speakers/` au premier ajout.
+
+```html
+<li class="sp-card sp-card--live">
+  <div class="sp-photo">
+    <img src="/assets/img/speakers/prenom-nom.jpg" alt="Portrait de Prénom Nom" width="600" height="750" loading="lazy">
+  </div>
+  <span class="sp-id">Intervenant·e 01</span>
+  <p class="sp-name">Prénom Nom</p>
+  <p class="sp-bio">Mini bio en une ou deux phrases : qui parle, depuis quelle expérience.</p>
+  <p class="sp-talk"><span class="sp-talk-k">Talk</span> Le titre du talk</p>
+  <span class="sp-status sp-status--live">annoncé·e</span>
+</li>
+```
+
+**Ajouter un partenaire** (`partenaires/index.html`) : une tuile est un logo enveloppé d'un lien vers le site du partenaire. Le CSS plafonne la taille des logos pour qu'ils restent plus petits que celui de TEDxUTTroyes : règle TEDx, ne pas retirer ces limites.
+
+```html
+<li class="partner-tile">
+  <a href="https://exemple.fr" target="_blank" rel="noopener">
+    <img src="/assets/img/partenaires/nom-du-partenaire.webp" alt="Nom du partenaire" width="300" height="120" loading="lazy">
+    <span class="visually-hidden"> (nouvelle fenêtre)</span>
+  </a>
+</li>
+```
 
 ## À vérifier (préremplis, non garantis)
 
@@ -101,6 +143,7 @@ Tous les emplacements variables sont marqués par un commentaire `PLACEHOLDER` d
 - **Textes About TED / About TEDx** : adaptation française d'usage, à faire relire.
 - **Heure de fin** : le JSON-LD de `index.html` indique 23h00, à ajuster avec le déroulé définitif.
 - **Mini forum de recrutement** : annoncé à 18h00 (ouverture des portes) sur l'accueil, le programme et la FAQ ; libellé et contenu à préciser avec les partenaires.
+- **Édition 2026** : vendredi 20 mars 2026 au Centre de Congrès de l'Aube, cinq talks donnés, quatre publiés sur la chaîne TEDx Talks (celui de Franck Robin n'a pas été capté). La sixième voix annoncée, Jean-Marie Simon, n'a pas pu être présente. Confirmé par Baptiste le 2026-08-18.
 - **2018 et 2020** figurent comme années sans édition (c'est ce qui fait de 2027 la dixième) : la frise de `index.html` ne les affiche pas (retirées le 2026-07-18 à la demande de Baptiste), `editions/index.html` les mentionne dans le texte.
 
 ## Règles TEDx intégrées (ne pas défaire)
