@@ -124,9 +124,19 @@
      largeur utile (hors barre de defilement) aussi bien pour le padding du
      body que pour le left/right des elements fixes, dont le bloc de page
      est le viewport : les deux restent donc alignes au pixel. N'employer
-     --gouttiere que dans ces deux contextes. */
+     ces gouttieres que dans ces deux contextes.
+
+     Le centrage vise le milieu du moniteur, pas le milieu de la zone
+     utile : la gouttiere de gauche se calcule sur 100vw, barre de
+     defilement comprise, celle de droite prend ce qui reste. Sur un
+     ecran de 2560 avec une barre de 15 px, cela donne 320 a gauche et
+     305 a droite, soit 320 de chaque cote une fois la barre comptee.
+     Sans ce decalage la page partait 7 px trop a gauche et la bande
+     noire de droite paraissait plus large. --axis-b vise deja le milieu
+     du moniteur (50vw) : les deux concordent. */
   --page-max: 1920px;
-  --gouttiere: max(0px, (100% - var(--page-max)) / 2);
+  --gouttiere: clamp(0px, (100vw - var(--page-max)) / 2, 100% - var(--page-max));
+  --gouttiere-d: max(0px, 100% - var(--page-max) - var(--gouttiere));
 
   /* La geometrie du document : marge gauche, rail technique, ligne de cote */
   --m-left: clamp(16px, 5vw, 96px);
@@ -186,7 +196,8 @@ body {
 }
 
 body {
-  padding-inline: var(--gouttiere);
+  padding-left: var(--gouttiere);
+  padding-right: var(--gouttiere-d);
   background-color: var(--noir);
   color: var(--encre);
   font-family: var(--font-body);
@@ -639,7 +650,7 @@ main .sec--alt:last-child {
   position: fixed;
   top: 0;
   left: var(--gouttiere);
-  right: var(--gouttiere);
+  right: var(--gouttiere-d);
   z-index: var(--z-header);
   height: var(--header-h);
   display: flex;
@@ -744,7 +755,7 @@ main .sec--alt:last-child {
 
 .mobile-menu {
   position: fixed;
-  inset: 0 var(--gouttiere);
+  inset: 0 var(--gouttiere-d) 0 var(--gouttiere);
   z-index: var(--z-menu);
   display: flex;
   flex-direction: column;
@@ -2197,7 +2208,7 @@ details.faq[open] summary .icon {
   position: fixed;
   top: 0;
   left: var(--gouttiere);
-  right: var(--gouttiere);
+  right: var(--gouttiere-d);
   will-change: transform;
 }
 
