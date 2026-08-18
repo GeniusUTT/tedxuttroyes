@@ -63,7 +63,11 @@ assets/
 
 ## Le jeu de piste (page cachée)
 
-Une page du site n'est dans aucun menu, dans aucun pied de page, ni dans `sitemap.xml`, et porte `<meta name="robots" content="noindex, nofollow">` : `tedx-utt-10ans/`. Elle affiche un code, `codesite10`, et un seul bouton, vers la billetterie. Le code est un code de réduction de 100 % limité à une utilisation : la place revient à la première personne qui s'en sert, sans passer par l'équipe. Le code existe sur HelloAsso depuis le 2026-08-18 : la page cachée peut donc être mise en ligne telle quelle.
+Une page du site n'est dans aucun menu, dans aucun pied de page, ni dans `sitemap.xml`, et porte `<meta name="robots" content="noindex, nofollow">` : `tedx-utt-10ans/`. Elle affiche un mot de passe, « Genius mieux que la Junior », et deux boutons : un `mailto:` vers `geniusutt@utt.fr` (objet et corps pré-remplis avec le mot de passe) et le compte Instagram `@tedxuttroyes`. Ce n'est plus un code de réduction HelloAsso : la personne qui trouve la page nous envoie le mot de passe, l'équipe vérifie et lui réserve sa place (tarif normal VIP). Une seule place, à la première personne qui écrit : c'est donc l'équipe qui arbitre, pensez à répondre vite et à prévenir les autres une fois la place attribuée.
+
+La page annonce en outre, en avant-première, la date et le thème de l'édition : « Franchir ou s'adapter ? » et « Jeudi 18 mars 2027 », en clair et sans masquage, alors que le reste du site les remplace par des étoiles jusqu'au 31 octobre 2026 à 18h00. C'est la récompense de la charade, et la seule exception au masquage : elle ne tient que parce que la page est introuvable (hors menu, hors sitemap, `noindex`, sans Open Graph) et parce que son `<title>` reste neutre. Un encadré demande au visiteur de garder la primeur pour lui.
+
+Modifié le 2026-08-18 : la première version distribuait un code de réduction de 100 % (`codesite10`) à saisir sur la billetterie. Le code HelloAsso existe toujours ; il n'est plus affiché nulle part.
 
 On y arrive sans ouvrir le code source ni la console : la charade est posée en clair dans la FAQ (groupe « Le jeu de piste »), et la page 404 souffle qu'une telle page existe. Les trois morceaux de l'adresse : `tedx` (le programme sous licence duquel la soirée existe), `utt` (l'école), `10ans` (les dix ans fêtés par cette édition), reliés par des traits d'union.
 
@@ -72,7 +76,9 @@ On y arrive sans ouvrir le code source ni la console : la charade est posée en 
 - **Ne pas lier la page**, ne pas l'ajouter au menu, au pied de page ni au `sitemap.xml`, ne rien écrire dans `robots.txt` (un `Disallow` publierait l'adresse à qui lit ce fichier).
 - **Pas de balises Open Graph** sur cette page : un lien partagé sur un réseau ne doit pas afficher d'aperçu qui vend la mèche.
 - Si l'adresse change, la charade de la FAQ change avec elle.
-- La page ne définit aucune règle CSS : elle se compose uniquement de classes existantes (`sec`, `cote`, `prose`, `notice`, `ticker-label`, `ticker-value`). Pas de renommage `main-v3.css` à prévoir de son fait.
+- La page ne définit aucune règle CSS : elle se compose uniquement de classes existantes (`sec`, `cote`, `prose`, `notice`, `ticker-label`, `ticker-value`, `actions`, `btn`). Pas de renommage `main-v3.css` à prévoir de son fait.
+- La page ne porte aucun `.msk` ni `data-reveal` : date et thème y sont écrits en clair, `reveal.js` n'a donc rien à y dévoiler le 31 octobre. En contrepartie, ne jamais lui donner de balise Open Graph et ne jamais la lier depuis une page publique.
+- Le mot de passe est le seul endroit du site qui force `white-space: normal` en style en ligne sur un `.ticker-value` : la classe est en `nowrap` pour le téléscripteur, et la phrase déborderait sous 400 px sans cela.
 
 ## Tester en local
 
@@ -104,7 +110,7 @@ Les pages HTML ne portent plus aucun commentaire depuis le nettoyage du 2026-08-
 | Déroulé du jour J | `programme/index.html` | horaires type (portes 18h00 avec mini forum, talks 19h30, fin vers 22h30) à figer quand le programme sera arrêté. |
 | Image de partage (Open Graph) | `assets/img/og/og-default.jpg` | capture du seuil de l'accueil en 1200x630, faite le 2026-08-18 : elle montre donc la date et le thème masqués. À refaire après le dévoilement du 31 octobre 2026. |
 
-Réglés le 2026-08-18 : mentions légales, sites des partenaires, chiffres de l'accueil, tarifs et conditions d'échange de la FAQ, date et rôles de l'édition 2026, liens LinkedIn de l'équipe 2026, biographies des speakers 2016 et 2017, code `codesite10` créé sur HelloAsso.
+Réglés le 2026-08-18 : mentions légales, sites des partenaires, chiffres de l'accueil, tarifs et conditions d'échange de la FAQ, date et rôles de l'édition 2026, liens LinkedIn de l'équipe 2026, biographies des speakers 2016 et 2017, mot de passe de la page cachée (la place se réclame par e-mail ou sur Instagram, plus par code sur la billetterie).
 
 ## Gabarits
 
