@@ -4,7 +4,7 @@ Site statique de la dixième édition de TEDxUTTroyes (jeudi 18 mars 2027, porte
 
 ## La direction artistique en deux mots
 
-Le site est construit autour d'un concept directeur unique : **la ligne continue**, qui matérialise la limite du thème. Sur l'accueil, un seul trait SVG rouge parcourt toute la page et change de comportement : au seuil, la question du titre se tient à cheval dessus ; au moment "franchir", il reste droit et un mot le traverse au défilement ; les moments "s'adapter" et "speakers" le laissent filer droit ; au moment "le lieu", il plie autour du bloc carte + présentation ; puis, après la feuille de salle, il redescend à 2016, tourne à l'horizontale et devient la frise des dix ans, forme le 1 du grand 10 en retombant de 2027, se branche dans le bouton Réserver (centré), et file en trait fin souligner la mention de licence TED du footer. Le trait se dessine au fil du défilement (`assets/js/line-v2.js`) : le CSS place les contenus, le script mesure les ancres `data-line` et relie. Les pages intérieures gardent la ligne comme dorsale statique (pur CSS), marge technique en Space Mono, contenu à sa droite.
+Le site est construit autour d'un concept directeur unique : **la ligne continue**, qui matérialise la limite du thème. Sur l'accueil, un seul trait SVG rouge parcourt toute la page et change de comportement : au seuil, la question du titre se tient à cheval dessus ; au moment "franchir", il reste droit et un mot le traverse au défilement ; les moments "s'adapter" et "speakers" le laissent filer droit ; au moment "le lieu", il plie autour du bloc carte + présentation ; puis, après la feuille de salle, il redescend à 2016, tourne à l'horizontale et devient la frise des dix ans, forme le 1 du grand 10 en retombant de 2027, se branche dans le bouton Réserver (centré), et file en trait fin souligner la mention de licence TED du footer. Le trait se dessine au fil du défilement (`assets/js/line-v3.js`) : le CSS place les contenus, le script mesure les ancres `data-line` et relie. Les pages intérieures gardent la ligne comme dorsale statique (pur CSS), marge technique en Space Mono, contenu à sa droite.
 
 À ne pas défaire : les speakers non annoncés sont des **fiches sous embargo** (barres de caviardage), les éditions passées un **registre**, le compte à rebours un **téléscripteur** mono d'une seule ligne.
 
@@ -47,7 +47,7 @@ assets/
                          chaque zone masquée porte sa version d'origine,
                          ce script les remet en place le jour dit
   js/main-v3.js          Script commun (menu, header, téléscripteur)
-  js/line-v2.js          La ligne continue de l'accueil : construit le tracé SVG
+  js/line-v3.js          La ligne continue de l'accueil : construit le tracé SVG
                          en mesurant les ancres data-line, le dessine au scroll,
                          pilote le mot qui franchit. Sans JS : dorsale CSS.
   js/map.js              Carte Mapbox du lieu (accueil) : chargée paresseusement
@@ -93,7 +93,7 @@ python -m http.server 8000
 Poussez le contenu du dossier tel quel à la racine du site (www). Trois points d'attention :
 
 1. **SSL** : la redirection HTTPS du `.htaccess` suppose un certificat actif (Let's Encrypt gratuit dans l'espace client OVH). Sinon, commentez temporairement les lignes indiquées dans le fichier.
-2. **Cache** : la feuille et le script communs sont mis en cache un mois. Si vous les modifiez après la mise en ligne, renommez le fichier (ils s'appellent aujourd'hui `main-v3.css`, `main-v3.js` et `line-v2.js`, passez au numero suivant) et mettez à jour les références dans toutes les pages HTML.
+2. **Cache** : la feuille et le script communs sont mis en cache un mois. Si vous les modifiez après la mise en ligne, renommez le fichier (ils s'appellent aujourd'hui `main-v3.css`, `main-v3.js` et `line-v3.js`, passez au numero suivant) et mettez à jour les références dans toutes les pages HTML.
 3. **Fichiers du dépôt** : `README.md`, `CLAUDE.md`, `.gitignore` et `.git/` suivent le site à la racine du www sans en faire partie. Le `.htaccess` les refuse en 404, parce que ce fichier-ci donne l'adresse de la page cachée et son mot de passe. Si vous ajoutez un fichier de travail à la racine, ajoutez-le à cette règle.
 
 ## Placeholders à compléter avant mise en ligne

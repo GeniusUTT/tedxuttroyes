@@ -367,13 +367,22 @@
       if (r.top - m < lastY + 12) {
         continue;
       }
+      /* Une pliure ne se justifie que si l'axe passe encore dans le
+         bloc, ou trop pres. Si l'axe le degage deja, la pliure ferait
+         revenir le trait VERS le bloc au lieu de s'en ecarter. */
       var ex;
       if (horiz && el.getAttribute("data-line-side") === "right") {
         ex = Math.min(W - 4, r.right + m);
+        if (ex <= axB + 1) {
+          continue;
+        }
       } else {
         ex = horiz
           ? Math.max(4, r.left - m)
           : Math.max(4, Math.min(r.left - m, axA - 10));
+        if (ex >= axB - 1) {
+          continue;
+        }
       }
       /* Le retour vers l'axe se fait pile entre les deux blocs : la
          frontiere de la section porteuse est le milieu du blanc qui la
@@ -464,11 +473,22 @@
           if (r.top - m2 < lastY2 + 12 || r.bottom + m2 > plugRect.top - 12) {
             continue;
           }
+          /* Meme regle que sur l'axe B : pas de pliure si la descente
+             degage deja le bloc. Sans ce test, des que la page se fige a
+             1920 px le bouton Reserver passe a droite du logo TEDx, et
+             le contournement ramenait le trait vers le logo (une bosse
+             de 100 px vers la gauche qui ne contournait rien). */
           var ex2;
           if (el.getAttribute("data-line-side") === "right") {
             ex2 = Math.min(W - 4, r.right + m2);
+            if (ex2 <= bx + 1) {
+              continue;
+            }
           } else {
             ex2 = Math.max(4, r.left - m2);
+            if (ex2 >= bx - 1) {
+              continue;
+            }
           }
           /* data-line-exit="tight" : le retour se fait a la meme distance
              sous le bloc qu'au-dessus (cadre symetrique), au lieu d'etre

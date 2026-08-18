@@ -548,7 +548,7 @@ main .sec--alt:last-child {
 }
 
 /* La prise (accueil) : tant que la ligne n'a pas rejoint le bouton
-   Reserver, il attend en noir ; line-v2.js pose plug-armed au depart et
+   Reserver, il attend en noir ; line-v3.js pose plug-armed au depart et
    plug-on quand le trait s'y branche. Sans JS, en cas d'echec ou en
    reduced motion (trait complet d'emblee) : aucune classe, bouton rouge. */
 .btn--primary.plug-armed {
@@ -2147,7 +2147,7 @@ details.faq[open] summary .icon {
   position: relative;
 }
 
-/* Le defilement virtuel (accueil, desktop) : line-v2.js fixe le wrapper
+/* Le defilement virtuel (accueil, desktop) : line-v3.js fixe le wrapper
    .jscroll (main + footer) et le translate selon le scroll du spacer,
    pour figer l'ecran pendant les deplacements horizontaux du trait.
    Sans la classe jscroll-run (mobile, reduced motion, sans JS, echec) :
@@ -2863,7 +2863,7 @@ details.faq[open] summary .icon {
 /* Moment 4 : l'album des editions. La ligne traverse l'ecran a
    l'horizontale et sert de fil : chaque affiche pend au-dessus de sa
    pastille, le theme juste en dessous. La revelation suit la pointe du
-   trait : line-v2.js publie --sweep (0 a 1) sur .album, chaque piece porte
+   trait : line-v3.js publie --sweep (0 a 1) sur .album, chaque piece porte
    son seuil --th. Sur mobile : le meme album devient un carrousel
    balayable, annees et themes compris, les chiffres restent, seule la
    bande d'archives est mise de cote. */
@@ -3559,7 +3559,7 @@ details.faq[open] summary .icon {
 }
 
 /* L'allumage progressif, seulement quand la ligne continue est active
-   (classe jline-run posee par line-v2.js) : chaque creneau s'eclaire
+   (classe jline-run posee par line-v3.js) : chaque creneau s'eclaire
    quand la pointe du trait franchit sa pastille. */
 .jline-run .journey .tl-row {
   opacity: 0.22;
