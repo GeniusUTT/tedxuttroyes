@@ -21,6 +21,17 @@ RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
 # sous-requete interne de ErrorDocument vers /404.html n'est pas touchee.
 # --------------------------------------------------------------------------
 DirectoryIndex index.html
+
+# Anciennes pages du site Webflow qui n'ont pas d'equivalent direct dans la
+# nouvelle arborescence : la regle generique ci-dessous les enverrait vers un
+# dossier inexistant, donc vers la 404. Ces redirections passent avant elle.
+RewriteRule ^billetterie\.html$ https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition [R=301,L]
+RewriteRule ^contact\.html$ /faq/ [R=301,L]
+RewriteRule ^detail_localisation\.html$ / [R=301,L]
+RewriteRule ^tous-les-speakers\.html$ /speakers/ [R=301,L]
+RewriteRule ^toutes-les-editions\.html$ /editions/ [R=301,L]
+RewriteRule ^speakers/([0-9]{4})/speaker-[0-9]{4}\.html$ /editions/edition-$1/ [R=301,L]
+
 RewriteCond %{THE_REQUEST} \s/+(.*/)?index\.html[?\s]
 RewriteRule ^ /%1 [R=301,L]
 RewriteCond %{THE_REQUEST} \s/+([^?\s]+)\.html[?\s]
@@ -38,12 +49,22 @@ ErrorDocument 404 /404.html
 RedirectMatch 404 ^/design-system(/|$)
 
 # --------------------------------------------------------------------------
+# Fichiers du depot : ils suivent le site quand on pousse le dossier tel quel
+# a la racine du www, mais ils ne font pas partie du site. Le README et le
+# CLAUDE.md decrivent notamment la page cachee du jeu de piste et son mot de
+# passe : ils ne doivent pas etre lisibles en ligne.
+# --------------------------------------------------------------------------
+RedirectMatch 404 ^/(.*/)?(README|CLAUDE)\.md$
+RedirectMatch 404 ^/(.*/)?\.(git|gitignore|htaccess)
+
+# --------------------------------------------------------------------------
 # Types MIME : les fichiers d'agenda (assets/agenda/*.ics) doivent partir
 # en text/calendar, sinon Apple Calendrier et Samsung Calendrier ne les
 # ouvrent pas et le navigateur affiche du texte brut.
 # --------------------------------------------------------------------------
 <IfModule mod_mime.c>
   AddType text/calendar .ics
+  AddType image/webp .webp
 </IfModule>
 
 # --------------------------------------------------------------------------
@@ -64,6 +85,7 @@ RedirectMatch 404 ^/design-system(/|$)
   ExpiresActive On
   ExpiresByType font/woff2 "access plus 1 year"
   ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
   ExpiresByType image/jpeg "access plus 1 year"
   ExpiresByType image/svg+xml "access plus 1 year"
   ExpiresByType text/css "access plus 1 month"

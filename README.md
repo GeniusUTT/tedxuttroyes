@@ -90,10 +90,11 @@ python -m http.server 8000
 
 ## Déploiement OVH
 
-Poussez le contenu du dossier tel quel à la racine du site (www). Deux points d'attention :
+Poussez le contenu du dossier tel quel à la racine du site (www). Trois points d'attention :
 
 1. **SSL** : la redirection HTTPS du `.htaccess` suppose un certificat actif (Let's Encrypt gratuit dans l'espace client OVH). Sinon, commentez temporairement les lignes indiquées dans le fichier.
 2. **Cache** : la feuille et le script communs sont mis en cache un mois. Si vous les modifiez après la mise en ligne, renommez le fichier (ils s'appellent aujourd'hui `main-v2.css` et `main-v2.js`, passez à `main-v3`) et mettez à jour les références dans toutes les pages HTML.
+3. **Fichiers du dépôt** : `README.md`, `CLAUDE.md`, `.gitignore` et `.git/` suivent le site à la racine du www sans en faire partie. Le `.htaccess` les refuse en 404, parce que ce fichier-ci donne l'adresse de la page cachée et son mot de passe. Si vous ajoutez un fichier de travail à la racine, ajoutez-le à cette règle.
 
 ## Placeholders à compléter avant mise en ligne
 
