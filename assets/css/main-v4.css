@@ -875,6 +875,32 @@ body.nav-open {
   }
 }
 
+/* Petit ecran d'ordinateur (1024 a 1279 px : iPad en paysage, portables
+   compacts). La navigation de bureau s'allume des 1024 px mais ne tient
+   pas dans la largeur avant 1280 : elle passait sur trois lignes et le
+   bouton Reserver sortait du header de 93 px. Elle se compacte donc sur
+   cette plage plutot que de rendre la main au menu burger, qui serait
+   inattendu sur un ecran de cette taille. */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .header-inner {
+    gap: 16px;
+  }
+
+  .nav-desktop {
+    gap: 12px;
+  }
+
+  .nav-desktop a:not(.btn) {
+    font-size: 0.8125rem;
+    padding: 8px 0;
+  }
+
+  .nav-desktop .btn--sm {
+    padding: 8px 12px;
+    font-size: 0.75rem;
+  }
+}
+
 /* 08. Hero et telescripteur */
 
 .hero {
@@ -2127,9 +2153,16 @@ details.faq[open] summary .icon {
   --axis-b: var(--line-x);
 }
 
+/* L'axe B, celui que suit le trait rouge sur l'accueil, tombe pile au
+   milieu de la page : la moitie de la largeur utile tant que la page est
+   fluide, la moitie du gabarit une fois qu'elle se fige a 1920 px. Avant,
+   il etait cale sur la marge gauche (line-x + 420 a 560 px), ce qui le
+   placait a 67 % de la largeur en 1024 px et a 45 % en 1920 px : la ligne
+   changeait de cote par rapport au centre selon l'ecran. Les quatorze
+   regles qui mesurent a partir de --axis-b suivent d'elles-memes. */
 @media (min-width: 1024px) {
   :root {
-    --axis-b: calc(var(--line-x) + clamp(420px, 38vw, 560px));
+    --axis-b: min(50vw, calc(var(--page-max) / 2));
   }
 }
 

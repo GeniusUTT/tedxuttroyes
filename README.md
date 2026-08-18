@@ -42,7 +42,7 @@ tedx-utt-10ans/          La page cachée du jeu de piste : hors menu, hors
                          compression, 404 (OVH mutualisé)
 robots.txt, sitemap.xml  SEO technique
 assets/
-  css/main-v3.css        Feuille unique (sommaire commenté en tête de fichier)
+  css/main-v4.css        Feuille unique (sommaire commenté en tête de fichier)
   js/reveal.js           Le dévoilement automatique du 31 octobre 2026 :
                          chaque zone masquée porte sa version d'origine,
                          ce script les remet en place le jour dit
@@ -76,7 +76,7 @@ On y arrive sans ouvrir le code source ni la console : la charade est posée en 
 - **Ne pas lier la page**, ne pas l'ajouter au menu, au pied de page ni au `sitemap.xml`, ne rien écrire dans `robots.txt` (un `Disallow` publierait l'adresse à qui lit ce fichier).
 - **Pas de balises Open Graph** sur cette page : un lien partagé sur un réseau ne doit pas afficher d'aperçu qui vend la mèche.
 - Si l'adresse change, la charade de la FAQ change avec elle.
-- La page ne définit aucune règle CSS : elle se compose uniquement de classes existantes (`sec`, `cote`, `prose`, `notice`, `ticker-label`, `ticker-value`, `actions`, `btn`). Pas de renommage `main-v3.css` à prévoir de son fait.
+- La page ne définit aucune règle CSS : elle se compose uniquement de classes existantes (`sec`, `cote`, `prose`, `notice`, `ticker-label`, `ticker-value`, `actions`, `btn`). Pas de renommage `main-v4.css` à prévoir de son fait.
 - La page ne porte aucun `.msk` ni `data-reveal` : date et thème y sont écrits en clair, `reveal.js` n'a donc rien à y dévoiler le 31 octobre. En contrepartie, ne jamais lui donner de balise Open Graph et ne jamais la lier depuis une page publique.
 - Le mot de passe est le seul endroit du site qui force `white-space: normal` en style en ligne sur un `.ticker-value` : la classe est en `nowrap` pour le téléscripteur, et la phrase déborderait sous 400 px sans cela.
 
@@ -93,7 +93,7 @@ python -m http.server 8000
 Poussez le contenu du dossier tel quel à la racine du site (www). Trois points d'attention :
 
 1. **SSL** : la redirection HTTPS du `.htaccess` suppose un certificat actif (Let's Encrypt gratuit dans l'espace client OVH). Sinon, commentez temporairement les lignes indiquées dans le fichier.
-2. **Cache** : la feuille et le script communs sont mis en cache un mois. Si vous les modifiez après la mise en ligne, renommez le fichier (ils s'appellent aujourd'hui `main-v3.css`, `main-v3.js` et `line-v3.js`, passez au numero suivant) et mettez à jour les références dans toutes les pages HTML.
+2. **Cache** : la feuille et le script communs sont mis en cache un mois. Si vous les modifiez après la mise en ligne, renommez le fichier (ils s'appellent aujourd'hui `main-v4.css`, `main-v3.js` et `line-v3.js`, passez au numero suivant) et mettez à jour les références dans toutes les pages HTML.
 3. **Fichiers du dépôt** : `README.md`, `CLAUDE.md`, `.gitignore` et `.git/` suivent le site à la racine du www sans en faire partie. Le `.htaccess` les refuse en 404, parce que ce fichier-ci donne l'adresse de la page cachée et son mot de passe. Si vous ajoutez un fichier de travail à la racine, ajoutez-le à cette règle.
 
 ## Placeholders à compléter avant mise en ligne

@@ -79,7 +79,7 @@ RedirectMatch 404 ^/(.*/)?\.(git|gitignore|htaccess)
 # moyen pour CSS et JS, aucun pour le HTML.
 # Si vous modifiez main.css ou main.js apres la mise en ligne, le cache
 # d'un mois peut retarder la prise en compte : changez alors le nom du
-# fichier (ils s'appellent aujourd'hui main-v3.css, main-v3.js et
+# fichier (ils s'appellent aujourd'hui main-v4.css, main-v3.js et
 # line-v3.js) et les references dans les pages.
 # --------------------------------------------------------------------------
 <IfModule mod_expires.c>
