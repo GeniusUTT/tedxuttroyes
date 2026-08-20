@@ -2507,7 +2507,12 @@ details.faq[open] summary .icon {
   }
 }
 
-/* Moment 3 : le bloc du lieu, l'obstacle que la ligne contourne */
+/* Moment 3 : le bloc du lieu, l'obstacle que la ligne contourne.
+   Le contournement se fait par la droite (data-line-side="right"
+   sur la figure, demande de Baptiste le 2026-08-20) : le trait
+   quitte l'axe au-dessus du bloc, longe son bord droit et revient
+   a l'axe sous la section. Par la gauche il traversait la colonne
+   de texte et repartait vers la marge. */
 
 .m3-lieu {
   position: relative;
