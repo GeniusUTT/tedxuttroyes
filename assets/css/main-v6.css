@@ -1727,11 +1727,18 @@ body.nav-open {
    rend autant de noir de chaque cote. Le max() borne la regle : tant
    que le mwrap remplit la largeur disponible, la liste garde le bord
    du titre. Le 50 % se resout sur le mwrap, dont la liste prend toute
-   la largeur : c'est bien sa demi-largeur. */
+   la largeur : c'est bien sa demi-largeur.
+   La rangee d'actions qui suit la liste prend le meme decalage (le
+   50 % se mesure sur le meme mwrap) : le bouton Postuler part du bord
+   gauche de la liste, pas de celui du titre. */
 @media (min-width: 1024px) {
+  .slist,
+  .slist + .more-row {
+    margin-left: max(0px, calc(var(--axis-b) - var(--m-left) - 50%));
+  }
+
   .slist {
     width: 100%;
-    margin-left: max(0px, calc(var(--axis-b) - var(--m-left) - 50%));
   }
 }
 
