@@ -17,7 +17,7 @@
      l'association, restreint au domaine tedxuttroyes.fr. */
   var TOKEN = "pk.eyJ1Ijoic29sZW5lLWRybngiLCJhIjoiY2xxbWtnOThsMms5MTJrdGs4eHlrazluOSJ9.OUYIvMEY-JOWEAbXw1ysFw";
   var STYLE = "mapbox://styles/solene-drnx/clqmks2rs00pq01qu989l0bl3";
-  var CENTRE = [4.077912, 48.298433];
+  var CENTRE = [4.077638, 48.297577];
 
   var started = false;
 
@@ -85,7 +85,7 @@
       el.className = "lieu-ici";
       el.innerHTML =
         '<span class="lieu-ici-dot"></span>' +
-        '<span class="lieu-ici-lbl">vous êtes ici</span>';
+        '<span class="lieu-ici-lbl">TEDxUTTroyes 2027</span>';
       new window.mapboxgl.Marker({ element: el }).setLngLat(CENTRE).addTo(map);
 
       scene.classList.add("map-live");
