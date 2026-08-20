@@ -1720,6 +1720,21 @@ body.nav-open {
   }
 }
 
+/* Desktop : la liste se centre sur l'axe de la page au lieu de rester
+   calee sur la marge de gauche. Passe 1494 px le mwrap bute sur son
+   plafond de 1360 px et tout le vide tombait a droite (464 px a
+   1920 px, la liste centree a 776 px pour un axe a 960) ; le decalage
+   rend autant de noir de chaque cote. Le max() borne la regle : tant
+   que le mwrap remplit la largeur disponible, la liste garde le bord
+   du titre. Le 50 % se resout sur le mwrap, dont la liste prend toute
+   la largeur : c'est bien sa demi-largeur. */
+@media (min-width: 1024px) {
+  .slist {
+    width: 100%;
+    margin-left: max(0px, calc(var(--axis-b) - var(--m-left) - 50%));
+  }
+}
+
 /* 15. Feuille de salle (programme) */
 
 .sheet {
