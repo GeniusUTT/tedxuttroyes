@@ -25,6 +25,8 @@ DirectoryIndex index.html
 # Anciennes pages du site Webflow qui n'ont pas d'equivalent direct dans la
 # nouvelle arborescence : la regle generique ci-dessous les enverrait vers un
 # dossier inexistant, donc vers la 404. Ces redirections passent avant elle.
+RewriteRule ^images/edition-2026/logo_genius\.png$ /assets/img/partenaires/logo-genius-utt.webp [R=301,L]
+RewriteRule ^images/logo-black\.png$ /assets/img/logo-white.png [R=301,L]
 RewriteRule ^billetterie\.html$ https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition [R=301,L]
 RewriteRule ^contact\.html$ /faq/ [R=301,L]
 RewriteRule ^detail_localisation\.html$ / [R=301,L]
