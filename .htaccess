@@ -26,7 +26,7 @@ DirectoryIndex index.html
 # nouvelle arborescence : la regle generique ci-dessous les enverrait vers un
 # dossier inexistant, donc vers la 404. Ces redirections passent avant elle.
 RewriteRule ^images/edition-2026/logo_genius\.png$ /assets/img/partenaires/logo-genius-utt.webp [R=301,L]
-RewriteRule ^images/logo-black\.png$ /assets/img/logo-white.png [R=301,L]
+RewriteRule ^images/logo-black\.png$ /assets/img/logo-black.png [R=301,L]
 RewriteRule ^billetterie\.html$ https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition [R=301,L]
 RewriteRule ^contact\.html$ /faq/ [R=301,L]
 RewriteRule ^detail_localisation\.html$ / [R=301,L]
@@ -49,6 +49,14 @@ ErrorDocument 404 /404.html
 # mais ne fait pas partie du site et n'est lie depuis aucune page.
 # --------------------------------------------------------------------------
 RedirectMatch 404 ^/design-system(/|$)
+
+# --------------------------------------------------------------------------
+# Dossier de travail, hors site : marque-2027/ contient le systeme de marque
+# du dixieme anniversaire (SVG, PNG, planche de controle, notice). Il vit
+# dans le depot mais ne fait pas partie du site et n'est lie depuis aucune
+# page. Le site publie n'en tire rien.
+# --------------------------------------------------------------------------
+RedirectMatch 404 ^/marque-2027(/|$)
 
 # --------------------------------------------------------------------------
 # Fichiers du depot : ils suivent le site quand on pousse le dossier tel quel
