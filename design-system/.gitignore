@@ -1,0 +1,15 @@
+node_modules/
+dist/
+demo/*.html
+demo/.build/
+src/assets.generated.ts
+.ds-build-meta.json
+
+# Synchronisation vers Claude Design : scripts stages, build intermediaire,
+# etat machine. Le durable (.design-sync/config.json, NOTES.md,
+# conventions.md, previews/) est versionne.
+.ds-sync/
+ds-bundle/
+.design-sync/.cache/
+.design-sync/learnings/
+.design-sync/node_modules

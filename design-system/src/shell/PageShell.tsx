@@ -1,0 +1,47 @@
+import type { ReactNode } from "react";
+import { SiteFooter } from "./SiteFooter";
+import { SiteHeader } from "./SiteHeader";
+import type { NavKey } from "../types";
+
+export interface PageShellProps {
+  /** Les sections de la page, dans l'ordre. */
+  children: ReactNode;
+  /** La page courante, pour marquer l'entree active de la navigation. */
+  current?: NavKey;
+  /**
+   * « page » pour toutes les pages interieures. « journey » pour
+   * l'accueil : la dorsale rouge et les reglages de hero propres au
+   * parcours de la ligne continue s'activent.
+   */
+  variant?: "page" | "journey";
+  /**
+   * Le pied de page. Il porte la mention de licence TED, obligatoire :
+   * ne le retirer que pour reproduire la page 404, seule page du site
+   * qui s'en passe.
+   */
+  footer?: boolean;
+}
+
+/**
+ * La page complete : lien d'evitement, header, contenu, pied de page.
+ * C'est le point de depart de toute nouvelle page du site : il garantit
+ * la mention de licence TED et la ligne de cote rouge, qui ne sont pas
+ * optionnelles.
+ */
+export function PageShell({
+  children,
+  current,
+  variant = "page",
+  footer = true
+}: PageShellProps) {
+  return (
+    <div className={variant === "journey" ? "journey" : undefined}>
+      <a className="skip-link" href="#contenu">
+        Aller au contenu
+      </a>
+      <SiteHeader current={current} />
+      <main id="contenu">{children}</main>
+      {footer ? <SiteFooter finale={variant === "journey"} /> : null}
+    </div>
+  );
+}
