@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
+import { VoileOuverture } from "../marque/Marque10";
 import type { NavKey } from "../types";
 
 export interface PageShellProps {
@@ -20,6 +21,12 @@ export interface PageShellProps {
    * qui s'en passe.
    */
   footer?: boolean;
+  /**
+   * Le voile d'ouverture des dix ans, reserve a l'accueil. Le paquet
+   * n'en pose que le markup : sur le site, c'est un script en ligne du
+   * head qui decide de l'afficher, une seule fois par onglet.
+   */
+  voile?: boolean;
 }
 
 /**
@@ -32,13 +39,15 @@ export function PageShell({
   children,
   current,
   variant = "page",
-  footer = true
+  footer = true,
+  voile = false
 }: PageShellProps) {
   return (
     <div className={variant === "journey" ? "journey" : undefined}>
       <a className="skip-link" href="#contenu">
         Aller au contenu
       </a>
+      {voile ? <VoileOuverture /> : null}
       <SiteHeader current={current} />
       <main id="contenu">{children}</main>
       {footer ? <SiteFooter finale={variant === "journey"} /> : null}

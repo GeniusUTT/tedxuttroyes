@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { MARQUE_10ANS, MARQUE_10ANS_TAILLE } from "../assets.generated";
+
 export interface ErrorHeroProps {
   /** Le code, en grand chiffre de releve. */
   code?: string;
@@ -11,6 +13,8 @@ export interface ErrorHeroProps {
   children?: ReactNode;
   /** L'annotation de marge. */
   cote?: ReactNode;
+  /** Le filigrane des dix ans derriere le texte. Pose par defaut. */
+  marque?: boolean;
 }
 
 /** Le bloc de la page 404 : le code en grand, la sortie de secours dessous. */
@@ -19,10 +23,20 @@ export function ErrorHero({
   title,
   lead,
   children,
-  cote = "Erreur 404"
+  cote = "Erreur 404",
+  marque = true
 }: ErrorHeroProps) {
   return (
     <div className="error-hero">
+      {marque ? (
+        <img
+          className="error-mark"
+          src={MARQUE_10ANS}
+          alt=""
+          width={MARQUE_10ANS_TAILLE}
+          height={MARQUE_10ANS_TAILLE}
+        />
+      ) : null}
       <div className="inner">
         <p className="cote">{cote}</p>
         <div className="sec-body">

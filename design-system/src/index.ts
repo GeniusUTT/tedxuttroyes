@@ -11,6 +11,9 @@ export * from "./shell/Section";
 export * from "./shell/PageHead";
 export * from "./shell/Band";
 
+/* La marque des dix ans */
+export * from "./marque/Marque10";
+
 /* Briques de base */
 export * from "./base/Button";
 export * from "./base/LinkMore";

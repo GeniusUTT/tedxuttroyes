@@ -21,6 +21,11 @@ export interface MomentProps {
    * « Jusqu'ici »). Reserve aux deux moments du theme.
    */
   crossWord?: string;
+  /**
+   * Ce qui se glisse sous le chapeau, dans la colonne de texte : la
+   * marque des dix ans signe ainsi le moment de la frise.
+   */
+  signature?: ReactNode;
   /** Le contenu supplementaire : listes, figures, liens de rebond. */
   children?: ReactNode;
   /** « frise » pour le moment des dix ans, qui deroule l'album. */
@@ -40,6 +45,7 @@ export function Moment({
   side = "gauche",
   photo,
   crossWord,
+  signature,
   children,
   variant = "default"
 }: MomentProps) {
@@ -55,6 +61,7 @@ export function Moment({
     <div className={side === "droite" ? "colR" : "colL"}>
       {title ? <h2 className="mom-title">{title}</h2> : null}
       {lead ? <p className="lead">{lead}</p> : null}
+      {signature}
     </div>
   );
 

@@ -42,7 +42,7 @@ tedx-utt-10ans/          La page cachée du jeu de piste : hors menu, hors
                          compression, 404 (OVH mutualisé)
 robots.txt, sitemap.xml  SEO technique
 assets/
-  css/main-v7.css        Feuille unique (sommaire commenté en tête de fichier)
+  css/main-v8.css        Feuille unique (sommaire commenté en tête de fichier)
   js/reveal.js           Le dévoilement automatique du 31 octobre 2026 :
                          chaque zone masquée porte sa version d'origine,
                          ce script les remet en place le jour dit
@@ -58,7 +58,8 @@ assets/
                          fichiers, Google passe par une URL
   fonts/                 Bricolage Grotesque (variable), Space Mono 400 et 700,
                          DM Sans (variable), hébergées en local
-  img/                   Logo, favicon, OG, placeholders éditions et lieu
+  img/                   Logo, marque des dix ans (logo-10ans*.svg), favicons,
+                         image de partage, visuels éditions et lieu
 ```
 
 ## Le jeu de piste (page cachée)
@@ -76,7 +77,7 @@ On y arrive sans ouvrir le code source ni la console : la charade est posée en 
 - **Ne pas lier la page**, ne pas l'ajouter au menu, au pied de page ni au `sitemap.xml`, ne rien écrire dans `robots.txt` (un `Disallow` publierait l'adresse à qui lit ce fichier).
 - **Pas de balises Open Graph** sur cette page : un lien partagé sur un réseau ne doit pas afficher d'aperçu qui vend la mèche.
 - Si l'adresse change, la charade de la FAQ change avec elle.
-- La page ne définit aucune règle CSS : elle se compose uniquement de classes existantes (`sec`, `cote`, `prose`, `notice`, `ticker-label`, `ticker-value`, `actions`, `btn`). Pas de renommage `main-v7.css` à prévoir de son fait.
+- La page ne définit aucune règle CSS : elle se compose uniquement de classes existantes (`sec`, `cote`, `prose`, `notice`, `ticker-label`, `ticker-value`, `actions`, `btn`). Pas de renommage `main-v8.css` à prévoir de son fait.
 - La page ne porte aucun `.msk` ni `data-reveal` : date et thème y sont écrits en clair, `reveal.js` n'a donc rien à y dévoiler le 31 octobre. En contrepartie, ne jamais lui donner de balise Open Graph et ne jamais la lier depuis une page publique.
 - Le mot de passe est le seul endroit du site qui force `white-space: normal` en style en ligne sur un `.ticker-value` : la classe est en `nowrap` pour le téléscripteur, et la phrase déborderait sous 400 px sans cela.
 
@@ -93,7 +94,7 @@ python -m http.server 8000
 Poussez le contenu du dossier tel quel à la racine du site (www). Trois points d'attention :
 
 1. **SSL** : la redirection HTTPS du `.htaccess` suppose un certificat actif (Let's Encrypt gratuit dans l'espace client OVH). Sinon, commentez temporairement les lignes indiquées dans le fichier.
-2. **Cache** : la feuille et le script communs sont mis en cache un mois. Si vous les modifiez après la mise en ligne, renommez le fichier (ils s'appellent aujourd'hui `main-v7.css`, `main-v3.js` et `line-v3.js`, passez au numero suivant) et mettez à jour les références dans toutes les pages HTML.
+2. **Cache** : la feuille et le script communs sont mis en cache un mois. Si vous les modifiez après la mise en ligne, renommez le fichier (ils s'appellent aujourd'hui `main-v8.css`, `main-v3.js` et `line-v3.js`, passez au numero suivant) et mettez à jour les références dans toutes les pages HTML.
 3. **Fichiers du dépôt** : `README.md`, `CLAUDE.md`, `.gitignore` et `.git/` suivent le site à la racine du www sans en faire partie. Le `.htaccess` les refuse en 404, parce que ce fichier-ci donne l'adresse de la page cachée et son mot de passe. Si vous ajoutez un fichier de travail à la racine, ajoutez-le à cette règle.
 
 ## Placeholders à compléter avant mise en ligne
@@ -109,7 +110,7 @@ Les pages HTML ne portent plus aucun commentaire depuis le nettoyage du 2026-08-
 | Playlists YouTube par édition | `editions/index.html`, `editions/edition-XXXX/` | aucune playlist n'existe côté chaîne : les liens pointent vers une recherche YouTube « TEDxUTTroyes + année ». À remplacer le jour où des playlists sont créées. |
 | Jeton Mapbox | `assets/js/map.js` | le jeton public et le style rouge viennent du compte personnel `solene-drnx` (ancien site). Laissé tel quel à la demande de Baptiste le 2026-08-18 ; à basculer un jour sur un compte Mapbox de l'association, restreint au domaine tedxuttroyes.fr. |
 | Déroulé du jour J | `programme/index.html` | horaires type (portes 18h00 avec mini forum, talks 19h30, fin vers 22h30) à figer quand le programme sera arrêté. |
-| Image de partage (Open Graph) | `assets/img/og/og-default.jpg` | capture du seuil de l'accueil en 1200x630, faite le 2026-08-18 : elle montre donc la date et le thème masqués. À refaire après le dévoilement du 31 octobre 2026. |
+| Image de partage (Open Graph) | `assets/img/og/og-2027.jpg` | carte 1200x630 composée le 2026-08-25 autour du X moiré des dix ans : elle porte la date masquée et la mention « date et thème révélés le 31 octobre 2026 ». La version d'après le dévoilement est déjà faite, `assets/img/og/og-2027-revele.jpg` (thème et vraie date) : le 31 octobre 2026, un seul remplacement suffit dans les 79 pages qui portent une balise `og:image`, `sed -i 's#og/og-2027.jpg#og/og-2027-revele.jpg#g'`. Une image étant statique, `reveal.js` ne peut rien y faire. L'ancienne capture `og-default.jpg` reste sur le serveur pour ne pas casser les partages déjà publiés, mais plus aucune page ne la référence. |
 
 Réglés le 2026-08-18 : mentions légales, sites des partenaires, chiffres de l'accueil, tarifs et conditions d'échange de la FAQ, date et rôles de l'édition 2026, liens LinkedIn de l'équipe 2026, biographies des speakers 2016 et 2017, mot de passe de la page cachée (la place se réclame par e-mail ou sur Instagram, plus par code sur la billetterie).
 
@@ -169,4 +170,6 @@ Les pages ne portent plus de commentaire : les deux gabarits qui y vivaient sont
 - **Photos** : les photos (registre, fiches, galeries, bande d'archives) sont affichées en couleur, cadrées par les mêmes filets. Le fond du hero reste assombri (`brightness`) pour la lisibilité du titre. Les grandes images de l'accueil (diptyque, feuille de salle, photo du lieu) sont servies en WebP à plusieurs largeurs via `srcset` et `sizes` : un téléphone télécharge la variante à sa taille, pas l'original. Les variantes sont produites avec Pillow, comme les visuels d'éditions.
 - **Mobile** : mise en page mobile first, vérifiée de 320 à 768 px de large plus le cas paysage. Aucun débordement horizontal, aucun texte sous 12 px (à l'exception des étiquettes du plan de situation SVG, calibrées au caractère près dans leur `viewBox`), cibles tactiles à 44 px pour toutes les commandes (les liens posés au milieu d'une phrase relèvent de l'exception WCAG 2.5.8). Trois adaptations de fond : la feuille de salle de l'accueil reste pleinement opaque (l'allumage progressif au passage du trait n'a de sens qu'avec le défilement virtuel du desktop), l'album des éditions devient un carrousel à `scroll-snap` qui garde année et thème, et les portraits d'édition passent en deux colonnes.
 - **Accessibilité** : navigation clavier complète (menu mobile inclus, fermeture par Échap), contrastes AA sur fond sombre (corps 9:1, secondaire 4,9:1), barres de caviardage doublées d'un texte pour lecteurs d'écran, téléscripteur doublé d'une phrase statique.
+- **La marque des dix ans** : le X moiré exporté par Baptiste vit dans `assets/img/` en cinq versions (`logo-10ans.svg` la marque seule, `logo-10ans-texte.svg` le bloc complet, `logo-10ans-anime.svg` et `logo-10ans-texte-anime.svg` les boucles de 5,9 s, `logo-10ans-intro.svg` la même animation jouée une seule fois en 2,36 s puis figée). Elle sert de favicon (`favicon-10ans.svg`, `favicon-10ans.png`, `webclip-10ans.png` : traits épaissis, sans quoi le moiré se referme sous 32 px), de voile d'ouverture de l'accueil, de signature du moment « Dix ans », de filigrane de la 404, de sujet de la page cachée et de motif de l'image de partage. Tout le CSS correspondant est en section 22 de la feuille.
+- **Voile d'ouverture** : l'accueil s'ouvre sur l'animation du X, une seule fois par onglet. Un script en ligne dans le `<head>` pose la classe `voile-on` ; sa sortie est une animation CSS de 2,9 s en `forwards`, le voile ne capte pas le pointeur et la page est utilisable dessous dès la première image. Rien ne peut le laisser coincé, même si un script tombe. Neutralisé en `prefers-reduced-motion` et sans JavaScript. La mémoire de session porte la clé `tedx-ouverture` : c'est la seule écriture du site dans le navigateur, elle est documentée dans les mentions légales pour que la promesse « aucun cookie » reste exacte.
 - **Typographie** : les tirets cadratins et demi-cadratins sont proscrits sur l'ensemble du site (règle éditoriale du projet).
