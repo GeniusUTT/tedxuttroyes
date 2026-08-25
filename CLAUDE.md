@@ -14,7 +14,7 @@ Pas de build ni de lint pour le site (le dossier `design-system/` a le sien, voi
 python -m http.server 8000
 ```
 
-Le déploiement est fait par Baptiste via Git/SSH sur OVH mutualisé. Attention : `.htaccess` met la feuille et les scripts en cache un mois ; après une mise en ligne, une modification de ces fichiers exige de les renommer (ils s'appellent aujourd'hui `main-v6.css`, `main-v3.js` et `line-v3.js`, passer au numéro suivant) et de mettre à jour les références dans toutes les pages HTML.
+Le déploiement est fait par Baptiste via Git/SSH sur OVH mutualisé. Attention : `.htaccess` met la feuille et les scripts en cache un mois ; après une mise en ligne, une modification de ces fichiers exige de les renommer (ils s'appellent aujourd'hui `main-v7.css`, `main-v3.js` et `line-v3.js`, passer au numéro suivant) et de mettre à jour les références dans toutes les pages HTML.
 
 ## Règles dures (ne jamais défaire)
 
@@ -43,14 +43,14 @@ Conséquence : déplacer, redimensionner ou supprimer un bloc porteur de `data-l
 
 ### CSS : une seule feuille, sections numérotées
 
-`assets/css/main-v6.css` est la feuille unique, organisée en sections numérotées (01 à 21, sous-sections 20b/20c/20d) avec un sommaire commenté en tête de fichier. Toute nouvelle règle va dans la section correspondante, et le sommaire est tenu à jour. Tokens en tête : `--noir #080808`, `--papier #EDEAE4`, `--rouge #EB0028`, `--filet`, `--line-x`, etc. Mobile first.
+`assets/css/main-v7.css` est la feuille unique, organisée en sections numérotées (01 à 21, sous-sections 20b/20c/20d) avec un sommaire commenté en tête de fichier. Toute nouvelle règle va dans la section correspondante, et le sommaire est tenu à jour. Tokens en tête : `--noir #080808`, `--papier #EDEAE4`, `--rouge #EB0028`, `--filet`, `--line-x`, etc. Mobile first.
 
 ### JavaScript : quatre fichiers, zéro dépendance, chargés en defer
 
 - `assets/js/reveal.js` : le dévoilement du samedi 31 octobre 2026 à 18h00 (voir les règles dures). Chargé sur toutes les pages, avant `main-v3.js`, et expose `window.TEDX_REVEAL`.
 - `assets/js/main-v3.js` : header au scroll, menu mobile accessible, téléscripteur du compte à rebours, dixième bâton. Le téléscripteur vise deux cibles successives : la révélation (`2026-10-31T17:00:00Z`), puis le jour J (`2027-03-18T17:00:00Z`). Quand la première tombe, il déclenche le dévoilement et enchaîne sur la seconde.
 - `assets/js/line-v3.js` : la ligne continue (accueil uniquement, voir ci-dessus).
-- `assets/js/map.js` : carte Mapbox GL du bloc lieu, chargée paresseusement (IntersectionObserver) ; le plan SVG dessiné à la main reste la version par défaut (sans JS, sans WebGL, en cas d'échec). Piège : `mapbox-gl.css` se charge après `main-v6.css` et pose `position: relative` sur `.mapboxgl-map`, d'où le sélecteur plus spécifique `.lieu-scene .lieu-map`.
+- `assets/js/map.js` : carte Mapbox GL du bloc lieu, chargée paresseusement (IntersectionObserver) ; le plan SVG dessiné à la main reste la version par défaut (sans JS, sans WebGL, en cas d'échec). Piège : `mapbox-gl.css` se charge après `main-v7.css` et pose `position: relative` sur `.mapboxgl-map`, d'où le sélecteur plus spécifique `.lieu-scene .lieu-map`.
 
 ### Pages et contenus
 

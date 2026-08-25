@@ -27,6 +27,7 @@
    19. Footer
    20. Prose, notices, 404
    21. Animations et reduced motion
+   22. La marque des dix ans (voile d'ouverture, frise, 404)
    ========================================================================== */
 
 /* 01. Polices locales */
@@ -149,6 +150,7 @@
   --z-header: 200;
   --z-skip: 300;
   --z-grain: 400;
+  --z-voile: 500;
 
   --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -3791,5 +3793,108 @@ details.faq[open] summary .icon {
   /* L'album des editions : toutes les affiches sont revelees */
   .jline-run .alb-item > * {
     opacity: 1;
+  }
+}
+
+/* 22. La marque des dix ans
+   Le X moire (assets/img/logo-10ans*.svg) sert a trois endroits : le
+   voile d'ouverture de l'accueil, la signature du moment "Dix ans" et
+   le filigrane de la 404.
+
+   Le voile est pose par le script en ligne du head de l'accueil, une
+   seule fois par onglet (sessionStorage) et jamais en reduced motion.
+   Sa sortie est une pure animation CSS a remplissage forwards : rien
+   ne l'attend, rien ne peut le retenir si un script tombe. Il ne
+   capte pas le pointeur, la page reste utilisable et defilable
+   dessous des la premiere frame. Le calage du minutage tient a
+   logo-10ans-intro.svg : ce dessin joue une seule fois en 2,36 s puis
+   se fige sur le logo complet, l'opacite ne commence donc a tomber
+   qu'a 79 % de 2,9 s, soit 2,29 s. */
+
+.voile {
+  display: none;
+}
+
+.voile-on .voile {
+  display: grid;
+  place-items: center;
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-voile);
+  background-color: var(--noir);
+  pointer-events: none;
+  animation: voile-sortie 2.9s linear forwards;
+}
+
+.voile-mark {
+  width: min(72vmin, 560px);
+  height: auto;
+  animation: voile-entree 0.45s var(--ease-out) both;
+}
+
+@keyframes voile-sortie {
+  0%,
+  79% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes voile-entree {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* La signature du moment "Dix ans" : posee sous le chapeau, dans la
+   colonne de gauche. Aucune ancre data-line, la marque ne fait
+   qu'ajouter de la hauteur, que line.js remesure de lui-meme. */
+.marque-10 {
+  width: clamp(112px, 20vw, 188px);
+  height: auto;
+  margin: 32px 0 22px;
+}
+
+/* Le lockup complet, la ou la marque est le sujet et non la signature :
+   la page cachee des dix ans. */
+.marque-10--plein {
+  width: min(70vw, 360px);
+  margin: 4px 0 26px;
+}
+
+/* Le filigrane de la 404 : derriere le texte, dans le meme empilement
+   que le 404 fantome. z-index negatif pour rester sous le contenu sans
+   sortir de .error-hero, qui est deja un contexte d'empilement. */
+.error-mark {
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  right: -14%;
+  transform: translateY(-50%);
+  width: 66vw;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+@media (min-width: 1024px) {
+  .error-mark {
+    right: var(--m-right);
+    width: min(40vw, 460px);
+    opacity: 0.16;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voile,
+  .voile-on .voile {
+    display: none !important;
   }
 }
