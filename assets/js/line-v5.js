@@ -377,24 +377,27 @@
             /* En mobile la section est plus courte qu'un ecran : cadencer
                le mot sur toute sa hauteur le ferait finir sa course avant
                qu'il soit entre dans l'ecran. Le mot se cale donc sur
-               lui-meme, d'un bord de l'ecran au milieu (demande de
-               Baptiste le 2026-08-26) : il s'ebranle quand il pointe par
-               le bas, il a fini quand son centre atteint le milieu de
-               l'ecran, la ou vit la pointe du trait.
+               lui-meme, du bas de l'ecran au tiers superieur (demande
+               de Baptiste le 2026-08-26) : il s'ebranle quand il pointe
+               par le bas, il a fini quand son centre atteint le tiers
+               haut. La course tient ainsi sur les deux tiers de l'ecran,
+               assez longue pour se laisser regarder, et elle s'acheve
+               au-dessus du centre, la ou vit la pointe du trait : le mot
+               franchit donc une ligne deja tracee.
 
                Les deux valeurs sortent de la formule d'apply() : cp vaut
                0 a 0,85 hauteur d'ecran au-dessus du repere et 1 apres
                0,75 x h de defilement. D'ou le recul de 0,15 pour partir
-               au ras du bas, et la plage d'une demi-hauteur d'ecran plus
-               la moitie du mot. L'easing doux (soft) va avec : la courbe
+               au ras du bas, et la plage de deux tiers d'ecran plus la
+               moitie du mot. L'easing doux (soft) va avec : la courbe
                cubique du bureau expedierait la course dans le premier
-               tiers de la plage, bien avant le milieu. */
+               tiers de la plage. */
             var wRect = relRect(word);
             crosses.push({
               el: el,
               st: st,
               top: wRect.top - vh * 0.15,
-              h: (vh * 0.5 + wRect.height / 2) / 0.75,
+              h: ((vh * 2) / 3 + wRect.height / 2) / 0.75,
               soft: true
             });
           }
