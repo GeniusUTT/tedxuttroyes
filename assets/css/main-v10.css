@@ -2279,6 +2279,14 @@ details.faq[open] summary .icon {
    Un seul chemin SVG, construit par main.js a partir du vrai layout,
    parcourt la page : seuil, traversee, pliure autour du lieu, frise,
    diagonale du dixieme baton, prise dans le bouton Reserver.
+
+   Les pages interieures (body.parcours) recoivent le meme trait, servi
+   par le meme script : il serpente entre le rail de gauche (--line-x) et
+   le milieu de la marge libre a droite du contenu, traverse la largeur
+   dans le blanc qui borde les blocs ancres par data-line-rail, et se
+   branche dans le bouton du bloc final. Aucune regle propre a un type de
+   page : la silhouette tient aux ancres du HTML.
+
    Sans JavaScript : retour a la ligne verticale statique (main::before). */
 
 :root {
@@ -2298,12 +2306,14 @@ details.faq[open] summary .icon {
   }
 }
 
-.js .journey main::before {
+.js .journey main::before,
+.js .parcours main::before {
   content: none;
 }
 
 /* Si le trace echoue, la ligne statique reprend son poste */
-.jline-fail .journey main::before {
+.jline-fail .journey main::before,
+.jline-fail .parcours main::before {
   content: "";
 }
 

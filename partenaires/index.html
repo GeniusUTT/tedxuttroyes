@@ -30,12 +30,13 @@
   <link rel="preload" href="/assets/fonts/bricolage-var-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/dm-sans-var-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/space-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/css/main-v9.css">
+  <link rel="stylesheet" href="/assets/css/main-v10.css">
   <script>document.documentElement.classList.add("js");</script>
   <script src="/assets/js/reveal.js" defer></script>
   <script src="/assets/js/main-v3.js" defer></script>
+  <script src="/assets/js/line-v6.js" defer></script>
 </head>
-<body>
+<body class="parcours">
   <a class="skip-link" href="#contenu">Aller au contenu</a>
 
   <header class="site-header">
@@ -110,7 +111,7 @@
         <div class="sec-body">
           <h2 class="visually-hidden" id="titre-partenaires">Les partenaires de l'édition 2027</h2>
 
-<ul class="partners-grid">
+<ul class="partners-grid" data-line-rail="right">
             <li class="partner-tile">
               <a href="https://www.utt.fr/" target="_blank" rel="noopener noreferrer"><img src="/assets/img/partenaires/logo-utt.webp" alt="Université de Technologie de Troyes" width="233" height="240" loading="lazy"></a>
             </li>
@@ -168,7 +169,7 @@
           <h2 class="h-md">Devenir partenaire</h2>
           <p class="lead">Associez votre structure à 750 spectateurs le soir même, à des talks vus bien au-delà de Troyes ensuite, et à dix ans d'histoire locale. Mécénat, dotation matérielle, compétences : chaque coup de main déplace la ligne.</p>
           <div class="actions" style="margin-top: 24px">
-            <a class="btn btn--primary" href="mailto:geniusutt@utt.fr?subject=Partenariat%20TEDxUTTroyes%202027">Proposer un partenariat</a>
+            <a class="btn btn--primary" href="mailto:geniusutt@utt.fr?subject=Partenariat%20TEDxUTTroyes%202027" data-line="plug">Proposer un partenariat</a>
           </div>
         </div>
       </div>

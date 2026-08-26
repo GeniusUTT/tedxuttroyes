@@ -30,12 +30,13 @@
   <link rel="preload" href="/assets/fonts/bricolage-var-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/dm-sans-var-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/space-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/css/main-v9.css">
+  <link rel="stylesheet" href="/assets/css/main-v10.css">
   <script>document.documentElement.classList.add("js");</script>
   <script src="/assets/js/reveal.js" defer></script>
   <script src="/assets/js/main-v3.js" defer></script>
+  <script src="/assets/js/line-v6.js" defer></script>
 </head>
-<body>
+<body class="parcours">
   <a class="skip-link" href="#contenu">Aller au contenu</a>
 
   <header class="site-header">
@@ -111,7 +112,7 @@
         <div class="sec-body">
           <h2 class="visually-hidden" id="titre-programme">Déroulé de la soirée</h2>
 
-          <ol class="sheet">
+          <ol class="sheet" data-line-rail="right">
             <li class="sheet-row">
               <span class="sheet-time">18h00</span>
               <div>
@@ -168,7 +169,7 @@
           <h2 class="band-title">La soirée commence à 18h00. Votre décision peut commencer maintenant.</h2>
           <div class="actions">
             
-            <a class="btn btn--primary" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition" target="_blank" rel="noopener">Réserver ma place</a>
+            <a class="btn btn--primary" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition" target="_blank" rel="noopener" data-line="plug">Réserver ma place</a>
             <a class="btn btn--ghost" href="/faq/">Lire la FAQ pratique</a>
           </div>
           <p class="band-note">Billetterie hébergée sur HelloAsso. Aucune donnée n'est collectée sur ce site.</p>

@@ -4,7 +4,7 @@ Site statique de la dixième édition de TEDxUTTroyes (jeudi 18 mars 2027, porte
 
 ## La direction artistique en deux mots
 
-Le site est construit autour d'un concept directeur unique : **la ligne continue**, qui matérialise la limite du thème. Sur l'accueil, un seul trait SVG rouge parcourt toute la page et change de comportement : au seuil, la question du titre se tient à cheval dessus ; au moment "franchir", il reste droit et un mot le traverse au défilement ; les moments "s'adapter" et "speakers" le laissent filer droit ; au moment "le lieu", il plie autour du bloc carte + présentation ; puis, après la feuille de salle, il redescend à 2016, tourne à l'horizontale et devient la frise des dix ans, forme le 1 du grand 10 en retombant de 2027, se branche dans le bouton Réserver (centré), et file en trait fin souligner la mention de licence TED du footer. Le trait se dessine au fil du défilement (`assets/js/line-v5.js`) : le CSS place les contenus, le script mesure les ancres `data-line` et relie. Les pages intérieures gardent la ligne comme dorsale statique (pur CSS), marge technique en Space Mono, contenu à sa droite.
+Le site est construit autour d'un concept directeur unique : **la ligne continue**, qui matérialise la limite du thème. Sur l'accueil, un seul trait SVG rouge parcourt toute la page et change de comportement : au seuil, la question du titre se tient à cheval dessus ; au moment "franchir", il reste droit et un mot le traverse au défilement ; les moments "s'adapter" et "speakers" le laissent filer droit ; au moment "le lieu", il plie autour du bloc carte + présentation ; puis, après la feuille de salle, il redescend à 2016, tourne à l'horizontale et devient la frise des dix ans, forme le 1 du grand 10 en retombant de 2027, se branche dans le bouton Réserver (centré), et file en trait fin souligner la mention de licence TED du footer. Le trait se dessine au fil du défilement (`assets/js/line-v6.js`) : le CSS place les contenus, le script mesure les ancres `data-line` et relie. Les pages intérieures ont elles aussi leur tracé depuis le 2026-08-26 : le même trait, servi par le même script, qui serpente entre le rail de gauche et le milieu de la marge droite et se branche dans le bouton final. **Chaque type de page a sa silhouette**, décidée par les blocs qui portent `data-line-rail="right"` : deux ailes sur une fiche speaker (la fiche, puis les fiches voisines), une seule au centre sur une fiche d'édition (l'équipe), un quinconce sur le registre, un peigne sur le Hall of Fame, une alternance par groupe sur la FAQ, une grille encadrée sur l'index des speakers et sur les partenaires. Le tableau complet est dans CLAUDE.md. Marge technique en Space Mono, contenu à sa droite. Sans JavaScript : dorsale verticale statique, comme avant.
 
 À ne pas défaire : les speakers non annoncés sont des **fiches sous embargo** (barres de caviardage), les éditions passées un **registre**, le compte à rebours un **téléscripteur** mono d'une seule ligne.
 
@@ -42,14 +42,18 @@ tedx-utt-10ans/          La page cachée du jeu de piste : hors menu, hors
                          compression, 404 (OVH mutualisé)
 robots.txt, sitemap.xml  SEO technique
 assets/
-  css/main-v9.css        Feuille unique (sommaire commenté en tête de fichier)
+  css/main-v10.css        Feuille unique (sommaire commenté en tête de fichier)
   js/reveal.js           Le dévoilement automatique du 31 octobre 2026 :
                          chaque zone masquée porte sa version d'origine,
                          ce script les remet en place le jour dit
   js/main-v3.js          Script commun (menu, header, téléscripteur)
-  js/line-v5.js          La ligne continue de l'accueil : construit le tracé SVG
-                         en mesurant les ancres data-line, le dessine au scroll,
-                         pilote le mot qui franchit. Sans JS : dorsale CSS.
+  js/line-v6.js          La ligne continue, sur tout le site : construit le tracé
+                         SVG en mesurant les ancres data-line, le dessine au
+                         scroll, pilote le mot qui franchit. Deux régimes :
+                         l'accueil (body.journey, parcours complet, défilement
+                         virtuel en bureau) et les pages intérieures
+                         (body.parcours, serpentin entre deux rails, jamais de
+                         gel). Sans JS : dorsale CSS.
   js/map.js              Carte Mapbox du lieu (accueil) : chargée paresseusement
                          à l'approche du bloc, elle remplace le plan SVG qui
                          reste la version par défaut (sans JS, sans WebGL).
@@ -77,7 +81,7 @@ On y arrive sans ouvrir le code source ni la console : la charade est posée en 
 - **Ne pas lier la page**, ne pas l'ajouter au menu, au pied de page ni au `sitemap.xml`, ne rien écrire dans `robots.txt` (un `Disallow` publierait l'adresse à qui lit ce fichier).
 - **Pas de balises Open Graph** sur cette page : un lien partagé sur un réseau ne doit pas afficher d'aperçu qui vend la mèche.
 - Si l'adresse change, la charade de la FAQ change avec elle.
-- La page ne définit aucune règle CSS : elle se compose uniquement de classes existantes (`sec`, `cote`, `prose`, `notice`, `ticker-label`, `ticker-value`, `actions`, `btn`). Pas de renommage `main-v9.css` à prévoir de son fait.
+- La page ne définit aucune règle CSS : elle se compose uniquement de classes existantes (`sec`, `cote`, `prose`, `notice`, `ticker-label`, `ticker-value`, `actions`, `btn`). Pas de renommage `main-v10.css` à prévoir de son fait.
 - La page ne porte aucun `.msk` ni `data-reveal` : date et thème y sont écrits en clair, `reveal.js` n'a donc rien à y dévoiler le 31 octobre. En contrepartie, ne jamais lui donner de balise Open Graph et ne jamais la lier depuis une page publique.
 - Le mot de passe est le seul endroit du site qui force `white-space: normal` en style en ligne sur un `.ticker-value` : la classe est en `nowrap` pour le téléscripteur, et la phrase déborderait sous 400 px sans cela.
 
@@ -94,7 +98,7 @@ python -m http.server 8000
 Poussez le contenu du dossier tel quel à la racine du site (www). Trois points d'attention :
 
 1. **SSL** : la redirection HTTPS du `.htaccess` suppose un certificat actif (Let's Encrypt gratuit dans l'espace client OVH). Sinon, commentez temporairement les lignes indiquées dans le fichier.
-2. **Cache** : la feuille et le script communs sont mis en cache un mois. Si vous les modifiez après la mise en ligne, renommez le fichier (ils s'appellent aujourd'hui `main-v9.css`, `main-v3.js` et `line-v5.js`, passez au numero suivant) et mettez à jour les références dans toutes les pages HTML.
+2. **Cache** : la feuille et le script communs sont mis en cache un mois. Si vous les modifiez après la mise en ligne, renommez le fichier (ils s'appellent aujourd'hui `main-v10.css`, `main-v3.js` et `line-v6.js`, passez au numero suivant) et mettez à jour les références dans toutes les pages HTML.
 3. **Fichiers du dépôt** : `README.md`, `CLAUDE.md`, `.gitignore` et `.git/` suivent le site à la racine du www sans en faire partie. Le `.htaccess` les refuse en 404, parce que ce fichier-ci donne l'adresse de la page cachée et son mot de passe. Si vous ajoutez un fichier de travail à la racine, ajoutez-le à cette règle.
 
 ## Placeholders à compléter avant mise en ligne
@@ -117,6 +121,8 @@ Réglés le 2026-08-18 : mentions légales, sites des partenaires, chiffres de l
 ## Gabarits
 
 Les pages ne portent plus de commentaire : les deux gabarits qui y vivaient sont consignés ici.
+
+**Créer une page** : reprendre le gabarit d'une page voisine du même type, garder `class="parcours"` sur `<body>`, le `line-v6.js` en `defer` après `main-v3.js`, le `data-line="plug"` sur le bouton final, et les mêmes ancres `data-line-rail="right"` que ses semblables (le tableau des recettes est dans CLAUDE.md). Une nouvelle fiche speaker se contente donc de son portrait et de sa nav ancrés, comme les soixante autres.
 
 **Annoncer un speaker** (`speakers/index.html` et le bloc speakers de `index.html`) : remplacer une fiche sous embargo par cette carte, et créer le dossier `assets/img/speakers/` au premier ajout.
 

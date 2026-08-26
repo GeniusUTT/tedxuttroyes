@@ -16,9 +16,18 @@
    l'ecran. La regle s'arrete a la prise (bouton Reserver) : l'epilogue
    se trace au fil du defilement normal.
 
-   Regime mobile (sous 1024 px) : pas de defilement virtuel, mais le
-   trait traverse quand meme la page. Il court le long d'un rail (la
-   marge de gauche, ou le milieu de la marge de droite), change de cote
+   Pages interieures (body.parcours) : le meme trait, mais sans aucun
+   defilement virtuel et avec le serpentin aux deux paliers. Le SVG vit
+   dans main, la sonde de --line-x est posee au vol, le trait s'arrete
+   au bas du contenu et se branche dans le bouton du bloc final. Ce qui
+   distingue un type de page d'un autre tient entierement aux blocs qui
+   portent data-line-rail="right" : deux pages du meme type portent les
+   memes ancres, deux types differents n'ont pas la meme silhouette.
+
+   Regime mobile de l'accueil (sous 1024 px) : pas de defilement
+   virtuel, mais le trait traverse quand meme la page. Il court le long
+   d'un rail (la marge de gauche, ou le milieu de la marge de droite),
+   change de cote
    dans le blanc qui borde un bloc, et redescend : les blocs se
    retrouvent tantot a droite, tantot a gauche du trait. L'ancre
    data-line-rail="right" se pose sur une section entiere ou sur un bloc
@@ -42,16 +51,39 @@
   var body = doc.body;
   var html = doc.documentElement;
 
-  if (!body.classList.contains("journey") || !("ResizeObserver" in window)) {
+  /* Deux regimes, un seul script. L'accueil (body.journey) garde son
+     parcours complet et son defilement virtuel ; les pages interieures
+     (body.parcours) recoivent le meme trait, mais serpente entre deux
+     rails aux deux paliers, sans jamais figer l'ecran. */
+  var journey = body.classList.contains("journey");
+  var parcours = !journey && body.classList.contains("parcours");
+  if ((!journey && !parcours) || !("ResizeObserver" in window)) {
     return;
   }
 
   var main = doc.getElementById("contenu");
-  var wrap = doc.querySelector(".jscroll");
+  /* Repere de mesure et hote du SVG : le wrapper du defilement virtuel
+     sur l'accueil, main lui-meme sur une page interieure (il est deja
+     en position: relative et commence au haut du document). */
+  var wrap = journey ? doc.querySelector(".jscroll") : main;
+  if (!main || !wrap) {
+    return;
+  }
   var probeA = doc.getElementById("probe-a");
   var probeB = doc.getElementById("probe-b");
-  if (!main || !wrap || !probeA || !probeB) {
+  if (journey && (!probeA || !probeB)) {
     return;
+  }
+  if (parcours) {
+    /* Une sonde posee au vol plutot que deux spans a ajouter dans 82
+       pages : elle donne --line-x resolu en pixels, ce que
+       getComputedStyle rendrait sous forme de clamp() non calcule. */
+    probeA = doc.createElement("span");
+    probeA.className = "probe";
+    probeA.setAttribute("aria-hidden", "true");
+    probeA.style.left = "var(--line-x)";
+    main.appendChild(probeA);
+    probeB = probeA;
   }
 
   var SVG_NS = "http://www.w3.org/2000/svg";
@@ -73,6 +105,7 @@
   var contentH = 0;
   var virtualOn = false;
   var tableM = [];      /* etapes [scroll, fraction] du trait principal */
+  var extraH = 0;       /* scroll total consomme par les balayages horizontaux */
   var freezes = [];     /* fenetres de gel [debut, fin] en scroll */
   var tailFrom = 0;     /* fenetre de scroll ou l'epilogue se trace */
   var tailTo = 1;
@@ -155,8 +188,9 @@
      scroll pendant lequel la page est figee) ; hors regime virtuel,
      l'ancienne petite plage de scroll est conservee. budgets : plage
      dediee par indice de point (la traversee de la frise). */
-  function buildTable(pts, virtual, budgets) {
+  function buildTable(pts, virtual, budgets, hFactor) {
     freezes = [];
+    extraH = 0;
     var lens = [0];
     var total = 0;
     var i;
@@ -183,7 +217,9 @@
           freezes.push([t[i - 1], t[i - 1] + F]);
           acc += F;
         } else {
-          t.push(t[i - 1] + Math.min(Math.max(dx * 0.35, 48), vh * 0.35));
+          var win = Math.min(Math.max(dx * 0.35, 48), vh * 0.35) * (hFactor || 1);
+          extraH += win;
+          t.push(t[i - 1] + win);
         }
       } else {
         t.push(Math.max(t[i - 1] + 2, pts[i][1] - TIP * vh + acc));
@@ -245,19 +281,54 @@
     return n < 0 ? 0 : n > 1 ? 1 : n;
   }
 
-  /* Le frere visible qui precede ou qui suit, en remontant les parents
-     tant qu'il n'y en a pas. Sert a mesurer le blanc de part et d'autre
-     d'un bloc, que ce bloc soit une section entiere ou une liste posee
-     au milieu d'une section. */
-  function neighbour(el, forward) {
+  /* Une traversee tombe par defaut au milieu du blanc entre deux blocs,
+     ce qui est aussi l'endroit ou passe le filet d'une section alternee :
+     le trait courrait dessus. On la decale alors de 18 px du cote du bloc
+     ancre (dir : 1 vers le bas, -1 vers le haut), sans jamais sortir du
+     blanc. Sans filet a proximite, la traversee ne bouge pas. */
+  function clearFilet(y, lo, hi, dir, filets) {
+    for (var i = 0; i < filets.length; i++) {
+      if (Math.abs(y - filets[i]) < 10) {
+        y = dir > 0
+          ? Math.min(hi - 8, filets[i] + 18)
+          : Math.max(lo + 8, filets[i] - 18);
+        break;
+      }
+    }
+    return Math.round(y);
+  }
+
+  /* Piege connu du projet : dans Chrome, le contenu d'un details ferme
+     garde une geometrie non nulle. Sans ce filtre, les reponses repliees
+     d'une FAQ faisaient deborder leur groupe de 77 px, le blanc entre
+     deux groupes tombait sous le seuil et aucune traversee ne se posait.
+     Le resume (summary) reste visible et compte, lui. */
+  function replie(el) {
+    return !!el.closest("details:not([open])") && !el.closest("summary");
+  }
+
+  /* Le frere visible qui precede ou qui suit VERTICALEMENT, en remontant
+     les parents tant qu'il n'y en a pas. Sert a mesurer le blanc de part
+     et d'autre d'un bloc, que ce bloc soit une section entiere ou une
+     liste posee au milieu d'une section.
+
+     Le test de recouvrement n'est pas un detail : les pages interieures
+     posent la marge technique (.cote) et le contenu (.sec-body) cote a
+     cote dans une meme grille, et une fiche met l'affiche a cote de son
+     texte. Un frere qui chevauche le bloc n'est pas au-dessus de lui :
+     le prendre pour tel donnait des blancs negatifs, donc aucune
+     traversee. */
+  function neighbour(el, forward, bande) {
     var n = el;
+    var er = bande || relRect(el);
     var s;
     var sr;
     while (n && n !== main) {
       s = forward ? n.nextElementSibling : n.previousElementSibling;
       while (s) {
         sr = relRect(s);
-        if (sr.width >= 2 && sr.height >= 2) {
+        if (sr.width >= 2 && sr.height >= 2 && !replie(s) &&
+            (forward ? sr.top >= er.bottom - 4 : sr.bottom <= er.top + 4)) {
           return s;
         }
         s = forward ? s.nextElementSibling : s.previousElementSibling;
@@ -265,6 +336,87 @@
       n = n.parentElement;
     }
     return null;
+  }
+
+  /* La bande de page occupee par un bloc : son propre contenu, plus
+     celui des freres qui vivent a la meme hauteur (une affiche a cote de
+     son texte, la marge technique a cote de son contenu). Sans elle, le
+     blanc mesure sous une affiche courte ignorait la colonne de texte
+     voisine, plus longue, et la traversee tombait en plein paragraphe
+     (mesure : 2 fiches speakers sur 61). */
+  function rowSpan(el) {
+    var sp = innerSpan(el);
+    var top = sp.top;
+    var bottom = sp.bottom;
+    var s = el.parentElement ? el.parentElement.firstElementChild : null;
+    var sr;
+    var ss;
+    while (s) {
+      if (s !== el) {
+        sr = relRect(s);
+        if (sr.width >= 2 && sr.height >= 2 && !replie(s) &&
+            sr.top < bottom - 4 && sr.bottom > top + 4) {
+          ss = innerSpan(s);
+          if (ss.top < top) {
+            top = ss.top;
+          }
+          if (ss.bottom > bottom) {
+            bottom = ss.bottom;
+          }
+        }
+      }
+      s = s.nextElementSibling;
+    }
+    return { top: top, bottom: bottom };
+  }
+
+  /* Le blanc exploitable au-dessus (dir -1) ou en dessous (dir 1) d'un
+     bloc : on essaie le bloc lui-meme, puis ses parents jusqu'a main.
+     Un bloc peut etre serre contre son voisin (25 px sous un chapeau)
+     alors que la section qui le porte, elle, est largement degagee : la
+     traversee se pose alors au bord de la section. Renvoie null si rien
+     n'offre les 36 px demandes. */
+  function gapNear(el, dir, cartes, filets) {
+    var n = el;
+    var sp;
+    var nb;
+    var edge;
+    var lo;
+    var hi;
+    var y;
+    while (n && n !== main) {
+      sp = rowSpan(n);
+      nb = neighbour(n, dir > 0, sp);
+      if (nb) {
+        edge = dir > 0 ? innerSpan(nb).top : innerSpan(nb).bottom;
+        lo = dir > 0 ? sp.bottom : edge;
+        hi = dir > 0 ? edge : sp.top;
+        if (hi - lo >= 36) {
+          /* Le filet d'abord, la carte ensuite : c'est le point ecarte du
+             filet qui doit etre teste, sinon on ecarte une traversee que
+             le decalage aurait rendue valable. */
+          y = clearFilet((lo + hi) / 2, lo, hi, -dir, filets);
+          if (!dansUneCarte(y, el, cartes)) {
+            return { y: y, lo: lo, hi: hi };
+          }
+        }
+      }
+      n = n.parentElement;
+    }
+    return null;
+  }
+
+  /* Vrai si la hauteur y tombe dans un bloc encadre qui ne contient pas
+     le bloc ancre : le trait y entrerait par le cote pour ressortir de
+     l'autre, ce qui se lit comme une carte coupee en deux. */
+  function dansUneCarte(y, el, cartes) {
+    for (var i = 0; i < cartes.length; i++) {
+      if (y > cartes[i].top + 2 && y < cartes[i].bottom - 2 &&
+          !cartes[i].el.contains(el)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   /* Extremites peintes d'une section : la premiere et la derniere boite
@@ -279,7 +431,7 @@
     var kr;
     for (i = 0; i < kids.length; i++) {
       kr = relRect(kids[i]);
-      if (kr.width < 2 || kr.height < 2) {
+      if (kr.width < 2 || kr.height < 2 || replie(kids[i])) {
         continue;
       }
       if (kr.top < top) {
@@ -321,19 +473,69 @@
     /* Phase 1 : lectures seules, en repere contenu */
     vh = window.innerHeight;
     var horiz = wide.matches;
-    var virtual = horiz && !reduce.matches;
+    /* moments : les gestes propres au bureau de l'accueil (mots qui
+       franchissent, pliures avoid, album, pastilles).
+       rails : le serpentin entre deux rails, qui vaut pour le mobile de
+       l'accueil et pour toutes les pages interieures. */
+    var moments = journey && horiz;
+    var rails = parcours || !horiz;
+    var virtual = moments && !reduce.matches;
     wrapRect = wrap.getBoundingClientRect();
     contentH = wrapRect.height;
     var axA = relRect(probeA).left;
-    var axB = relRect(probeB).left;
+    /* Une page interieure n'a qu'un axe : le rail de gauche. */
+    var axB = journey ? relRect(probeB).left : axA;
     /* Largeur de travail : celle du wrapper, pas celle du viewport.
        Au-dela de 1920 px la page se fige et se centre, le wrapper est
        alors plus etroit que l'ecran ; les mots qui franchissent et les
        contournements doivent buter sur le bord de la page, pas sur le
        bord de l'ecran. En dessous, les deux valeurs sont identiques. */
     var W = Math.round(wrapRect.width);
-    var footer = doc.querySelector(".site-footer");
+    /* Le trait de l'accueil couvre le pied de page (l'epilogue y file
+       sous la mention de licence) ; celui d'une page interieure s'arrete
+       au bas du contenu, sa prise est le bouton du bloc final. */
+    var footer = journey ? doc.querySelector(".site-footer") : null;
     var H = Math.ceil(footer ? relRect(footer).bottom : contentH);
+
+    /* Les filets : sections alternees, rangees d'un registre, questions
+       d'une FAQ portent une bordure haute ou basse, et le milieu du blanc
+       entre deux blocs tombe souvent pile dessus. Une traversee posee la
+       courrait sur le filet au lieu de le croiser franchement.
+
+       Seuls les bords larges comptent (plus de la moitie de la page) : le
+       style n'est lu que pour ceux-la, ce qui evite un getComputedStyle
+       sur chaque element d'une page longue. */
+    var filets = [];
+    var cartes = [];
+    if (parcours) {
+      var edged = main.querySelectorAll("*");
+      var fst;
+      var haut;
+      var bas;
+      for (var fq = 0; fq < edged.length; fq++) {
+        r = relRect(edged[fq]);
+        if (r.width < W * 0.5 || r.height < 2 || replie(edged[fq])) {
+          continue;
+        }
+        fst = window.getComputedStyle(edged[fq]);
+        haut = parseFloat(fst.borderTopWidth) > 0;
+        bas = parseFloat(fst.borderBottomWidth) > 0;
+        if (haut) {
+          filets.push(r.top);
+        }
+        if (bas) {
+          filets.push(r.bottom);
+        }
+        if (haut || bas) {
+          /* Un bloc encadre est une carte : le trait la contourne, il ne
+             la coupe pas, meme en passant dans sa marge interieure. Les
+             ancetres du bloc ancre (sections, listes qui le contiennent)
+             sont ecartes de ce test : sinon plus aucune traversee ne
+             serait possible a l'interieur d'une section encadree. */
+          cartes.push({ el: edged[fq], top: r.top, bottom: r.bottom });
+        }
+      }
+    }
 
     var pts = [[axB, 0]];
     var budgets = {};
@@ -356,7 +558,7 @@
          dorsale : un moment pose sur le rail de droite n'aurait rien a
          franchir, son mot reste donc immobile. */
       var onRightRail = el.getAttribute("data-line-rail") === "right";
-      if (word && !reduce.matches && (horiz || !onRightRail)) {
+      if (word && !reduce.matches && (moments || !onRightRail)) {
         r = relRect(el);
         var wr = relRect(word);
         var rtl = el.getAttribute("data-cross-dir") === "rtl";
@@ -371,7 +573,7 @@
         if (dist > 40) {
           st.dist = dist;
           el.style.setProperty("--cross-dist", dist + "px");
-          if (horiz) {
+          if (moments) {
             crosses.push({ el: el, st: st, top: r.top, h: r.height });
           } else {
             /* En mobile la section est plus courte qu'un ecran : cadencer
@@ -422,7 +624,7 @@
     var dotR = null;
     var bandJogY = 0;
     var bandCutY = Infinity;
-    if (band && dot && horiz) {
+    if (band && dot && moments) {
       bandR = relRect(band);
       dotR = relRect(dot);
       var caption = main.querySelector(".fr-caption");
@@ -439,7 +641,7 @@
     /* En mobile, aucune pliure autour des blocs : la marge est trop
        etroite pour qu'un contournement se lise. Le parcours passe par
        les rails et les traversees, plus bas. */
-    var avoidEls = horiz ? main.querySelectorAll('[data-line="avoid"]') : [];
+    var avoidEls = moments ? main.querySelectorAll('[data-line="avoid"]') : [];
     var avoids = [];
     var lateAvoids = [];
     for (c = 0; c < avoidEls.length; c++) {
@@ -455,9 +657,11 @@
       if (r.width < 2 || r.height < 2) {
         continue;
       }
-      var m = parseFloat(el.getAttribute(horiz ? "data-line-margin" : "data-line-margin-m"));
+      var m = parseFloat(el.getAttribute(
+        moments ? "data-line-margin" : "data-line-margin-m"
+      ));
       if (!m || m < 0) {
-        m = horiz ? 28 : 14;
+        m = moments ? 28 : 14;
       }
       if (r.top > bandCutY) {
         lateAvoids.push({ el: el, r: r, m: m });
@@ -470,13 +674,13 @@
          bloc, ou trop pres. Si l'axe le degage deja, la pliure ferait
          revenir le trait VERS le bloc au lieu de s'en ecarter. */
       var ex;
-      if (horiz && el.getAttribute("data-line-side") === "right") {
+      if (moments && el.getAttribute("data-line-side") === "right") {
         ex = Math.min(W - 4, r.right + m);
         if (ex <= axB + 1) {
           continue;
         }
       } else {
-        ex = horiz
+        ex = moments
           ? Math.max(4, r.left - m)
           : Math.max(4, Math.min(r.left - m, axA - 10));
         if (ex >= axB - 1) {
@@ -498,13 +702,15 @@
       lastY = exitY;
     }
 
-    /* Mobile : la dorsale n'est plus une simple verticale. Elle court le
-       long d'un rail, traverse la largeur de la page dans le blanc d'une
-       frontiere de section, puis redescend le long de l'autre rail : les
-       blocs passent tantot a droite, tantot a gauche du trait, ce qui
-       donne le parcours a l'echelle d'un telephone (demande de Baptiste
-       le 2026-08-26). Les sections qui prennent le rail de droite le
-       declarent par data-line-rail="right".
+    /* Le serpentin. La dorsale n'est plus une simple verticale : elle
+       court le long d'un rail, traverse la largeur de la page dans le
+       blanc qui borde un bloc, puis redescend le long de l'autre rail.
+       Les blocs passent tantot a droite, tantot a gauche du trait, ce
+       qui donne l'aspect de parcours. Il vaut pour le mobile de
+       l'accueil (2026-08-26) et pour toutes les pages interieures aux
+       deux paliers (2026-08-26) : c'est la, et seulement la, que se joue
+       la difference entre deux types de page, par le choix des blocs qui
+       portent data-line-rail="right".
 
        Aucun gel : le defilement virtuel reste une affaire de bureau. En
        regime normal buildTable donne a chaque segment horizontal une
@@ -513,10 +719,16 @@
        pointe se resorbe de lui-meme sur la verticale suivante. */
     var railX = axB;
     var railR = axB;
-    if (!horiz) {
+    if (rails) {
       var cRight = 0;
+      /* Bord droit du contenu : .sec-body couvre les pages interieures,
+         les autres selecteurs l'accueil, dont les sections n'en ont pas.
+         Les blocs pleine largeur (le bloc final, les fonds de section)
+         sont volontairement absents : ils donneraient la largeur de la
+         page et colleraient le rail au bord de l'ecran. */
       var refs = main.querySelectorAll(
-        ".lead, .mom-title, .slist, .album, .tl, .data-lines, .mom-photo"
+        ".sec-body, .lead, .mom-title, .slist, .album, .tl, .data-lines," +
+        " .mom-photo"
       );
       for (c = 0; c < refs.length; c++) {
         r = relRect(refs[c]);
@@ -539,7 +751,9 @@
          les memes que le bureau contourne par data-line="avoid"). Le
          trait passe a droite dans le blanc qui precede le bloc et revient
          a gauche dans celui qui le suit. */
-      var tagged = railR === axB ? [] : main.querySelectorAll('[data-line-rail="right"]');
+      var tagged = railR === axB
+        ? []
+        : main.querySelectorAll('[data-line-rail="right"]');
       var evts = [];
       for (c = 0; c < tagged.length; c++) {
         el = tagged[c];
@@ -555,38 +769,32 @@
         if (span.bottom - span.top < 2) {
           continue;
         }
-        /* Pas de traversee sans blanc : 36 px de vide au moins entre le
-           bloc et son voisin. */
-        var prevEl = neighbour(el, false);
-        var above = prevEl ? innerSpan(prevEl).bottom : null;
-        if (above !== null && span.top - above >= 36) {
-          evts.push({ y: Math.round((above + span.top) / 2), x: railR });
+        /* Le trait passe a droite dans le blanc qui precede le bloc et
+           revient dans celui qui le suit. Pas de blanc, pas de
+           traversee : le trait reste sur son rail. */
+        var gIn = gapNear(el, -1, cartes, filets);
+        if (gIn) {
+          evts.push({ y: gIn.y, x: railR });
         }
-        var nextEl = neighbour(el, true);
-        var below = nextEl ? innerSpan(nextEl).top : null;
-        if (below !== null && below - span.bottom >= 36) {
-          evts.push({ y: Math.round((span.bottom + below) / 2), x: axB });
-        } else {
-          /* Blanc trop mince sous le bloc (un bouton colle a une liste,
-             par exemple) : le retour attend la fin de la section qui le
-             porte. */
-          var sec = el.closest("section");
-          var secNext = sec && sec !== el ? neighbour(sec, true) : null;
-          if (secNext) {
-            var secSpan = innerSpan(sec);
-            var secBelow = innerSpan(secNext).top;
-            if (secBelow - secSpan.bottom >= 36) {
-              evts.push({
-                y: Math.round((secSpan.bottom + secBelow) / 2),
-                x: axB
-              });
-            }
-          }
+        var gOut = gapNear(el, 1, cartes, filets);
+        if (gOut) {
+          evts.push({ y: gOut.y, x: axB });
         }
       }
       evts.sort(function (a, b) {
         return a.y - b.y;
       });
+      /* Deux blocs ancres qui se suivent (la fiche puis le talk, deux
+         sections mitoyennes) posent un retour et un depart au meme
+         endroit : le trait reviendrait a gauche pour repartir aussitot a
+         droite. Les deux s'annulent, le trait poursuit son flanc. */
+      for (c = 0; c < evts.length - 1; c++) {
+        if (evts[c].x === axB && evts[c + 1].x === railR &&
+            evts[c + 1].y - evts[c].y < 100) {
+          evts.splice(c, 2);
+          c -= 1;
+        }
+      }
       /* 80 px au moins depuis la traversee precedente, sinon le trait
          ferait du sur-place. */
       var lastCross = -1e9;
@@ -650,8 +858,8 @@
         plug.classList.add("plug-armed");
       }
       plugRect = relRect(plug);
-      if (!horiz) {
-        /* Mobile : la dorsale descend jusqu'au centre vertical du bouton
+      if (!moments) {
+        /* Rails : la dorsale descend jusqu'au centre vertical du bouton
            (centre dans la page), puis la ligne y entre par le cote d'ou
            elle arrive. Le serpentin ramene normalement le trait a gauche
            avant la billetterie ; si le blanc a manque pour la derniere
@@ -717,7 +925,18 @@
         pts.push([bx, plugRect.top + 8]);
       }
     } else {
-      pts.push([horiz ? dropX : railX, H]);
+      /* Pas de bouton final (le Hall of Fame et les mentions legales n'en
+         ont pas) : le trait revient sur le rail de gauche avant de mourir
+         au bas du contenu, plutot que de s'arreter dans le coin droit. */
+      if (parcours && railX !== axB) {
+        var basContenu = innerSpan(main).bottom;
+        var yRetour = H - basContenu >= 24
+          ? Math.round((basContenu + H) / 2)
+          : H;
+        pts.push([railX, yRetour], [axB, yRetour]);
+        railX = axB;
+      }
+      pts.push([moments ? dropX : railX, H]);
     }
 
     /* Epilogue : trait fin (non trace pour l'instant) */
@@ -727,7 +946,7 @@
     if (!svg) {
       inject();
     }
-    if (!spacer) {
+    if (journey && !spacer) {
       spacer = doc.createElement("div");
       spacer.className = "jscroll-spacer";
       spacer.setAttribute("aria-hidden", "true");
@@ -747,7 +966,35 @@
       pathTail.removeAttribute("d");
     }
 
-    buildTable(pts, virtual, budgets);
+    buildTable(pts, virtual, budgets, 1);
+    /* Sur une page interieure il n'y a pas de spacer pour allonger la
+       course : si la somme des balayages horizontaux pousse la fin du
+       trace au-dela de ce que la page offre a defiler, le trait
+       n'arrive jamais a son terme et la prise ne s'allume pas (mesure :
+       la FAQ s'arretait a 84 %). On resserre alors toutes les fenetres
+       horizontales d'un meme facteur, sans jamais descendre sous un
+       cinquieme : la pointe balaie plus vite, mais elle arrive. */
+    if (!virtual && tableM.length > 1 && extraH > 0) {
+      var dispo = Math.max(1, html.scrollHeight - vh) - 40;
+      var finT = tableM[tableM.length - 1].t;
+      if (finT > dispo) {
+        var fSec = (dispo - (finT - extraH)) / extraH;
+        buildTable(pts, virtual, budgets, Math.max(0.1, Math.min(1, fSec)));
+        finT = tableM[tableM.length - 1].t;
+        if (finT > dispo) {
+          /* Page trop courte meme fenetres resserrees (la FAQ, dont la
+             prise est a 60 px du bas) : la course entiere est comprimee
+             pour se terminer au bas de la page. La pointe prend un peu
+             d'avance sur la lecture, ce qui vaut mieux qu'un trait qui
+             n'arrive jamais et une prise qui ne s'allume pas. */
+          var t0 = tableM[0].t;
+          var kSec = (dispo - t0) / Math.max(1, finT - t0);
+          for (c = 0; c < tableM.length; c++) {
+            tableM[c].t = t0 + (tableM[c].t - t0) * kSec;
+          }
+        }
+      }
+    }
     virtualOn = virtual && tableM.length > 0;
     var totalF = 0;
     for (c = 0; c < freezes.length; c++) {
@@ -771,7 +1018,9 @@
       html.classList.add("jscroll-run");
     } else {
       html.classList.remove("jscroll-run");
-      wrap.style.transform = "";
+      if (journey) {
+        wrap.style.transform = "";
+      }
       freezes = [];
     }
 

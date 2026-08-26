@@ -35,13 +35,14 @@
   <link rel="preload" href="/assets/fonts/bricolage-var-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/dm-sans-var-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/space-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/css/main-v9.css">
+  <link rel="stylesheet" href="/assets/css/main-v10.css">
   <script>document.documentElement.classList.add("js");</script>
   <script src="/assets/js/reveal.js" defer></script>
   <script src="/assets/js/main-v3.js" defer></script>
+  <script src="/assets/js/line-v6.js" defer></script>
 </head>
 
-<body>
+<body class="parcours">
   <a class="skip-link" href="#contenu">Aller au contenu</a>
 
   <header class="site-header">
@@ -120,7 +121,7 @@
     <section class="sec" aria-labelledby="titre-attendu">
       <div class="inner">
         <p class="cote">Ce qu'on cherche</p>
-        <div class="sec-body">
+        <div class="sec-body" data-line-rail="right">
           <h2 class="h-md" id="titre-attendu">Une idée, pas un CV</h2>
           <p class="lead">Un talk TEDx ne vend rien et ne promeut personne : il transmet une idée. Peu importe votre
             notoriété, votre métier ou votre âge. Ce qui compte c'est ce que vous avez compris, découvert ou traversé,
@@ -158,7 +159,7 @@
           <div class="actions" style="margin-top: 24px">
             <a class="btn btn--primary"
               href="https://docs.google.com/forms/d/e/1FAIpQLSfpEpbedKsx5EaSJMxT01t8cRJHdYnp66uqgxK28zoEEBzZbQ/viewform?usp=header"
-              target="_blank" rel="noopener">Postuler comme speaker<span class="visually-hidden"> (nouvelle
+              target="_blank" rel="noopener" data-line="plug">Postuler comme speaker<span class="visually-hidden"> (nouvelle
                 fenêtre)</span></a>
           </div>
           <p class="notice" style="margin-top: 18px">Vous connaissez quelqu'un qui devrait monter sur cette scène ?

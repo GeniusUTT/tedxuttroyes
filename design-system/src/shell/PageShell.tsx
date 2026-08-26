@@ -10,9 +10,11 @@ export interface PageShellProps {
   /** La page courante, pour marquer l'entree active de la navigation. */
   current?: NavKey;
   /**
-   * « page » pour toutes les pages interieures. « journey » pour
-   * l'accueil : la dorsale rouge et les reglages de hero propres au
-   * parcours de la ligne continue s'activent.
+   * « page » pour toutes les pages interieures (classe parcours : le
+   * trait y serpente entre deux rails, pose par line.js). « journey »
+   * pour l'accueil : la dorsale rouge et les reglages de hero propres
+   * au parcours complet s'activent. Dans les deux cas le paquet ne
+   * rejoue que le markup et le repli CSS, pas la choregraphie.
    */
   variant?: "page" | "journey";
   /**
@@ -43,7 +45,7 @@ export function PageShell({
   voile = false
 }: PageShellProps) {
   return (
-    <div className={variant === "journey" ? "journey" : undefined}>
+    <div className={variant === "journey" ? "journey" : "parcours"}>
       <a className="skip-link" href="#contenu">
         Aller au contenu
       </a>

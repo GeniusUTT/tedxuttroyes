@@ -43,7 +43,7 @@ Etat au dernier passage : 184 classes couvertes sur 186, zero invention.
 
 | Ecarte | Pourquoi |
 |---|---|
-| `line.js` et le defilement virtuel | Choregraphie de page entiere (mesures, fenetres de gel, wrapper fixe) : irreproductible hors du site. `PageShell` embarque le repli CSS, la dorsale verticale statique. |
+| `line.js`, le defilement virtuel et les ancres `data-line` | Choregraphie de page entiere (mesures, fenetres de gel, wrapper fixe) : irreproductible hors du site. `PageShell` pose la classe du regime (`journey` pour l'accueil, `parcours` pour les pages interieures) et embarque le repli CSS, la dorsale verticale statique. Les ancres qui donnent sa silhouette a chaque type de page sont des attributs, pas des classes : elles vivent dans le HTML du site. |
 | La carte Mapbox (`lieu-map`) | Requete externe et jeton d'API. `PlanLieu`, le plan SVG dessine a la main, est la version unique du paquet. |
 | Les sondes `probe` | Points de mesure de `line.js`, sans rendu. |
 | Le minuteur vivant | `Ticker` prend sa valeur en prop : un rendu doit etre reproductible. |
