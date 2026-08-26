@@ -48,7 +48,7 @@ Conséquence : déplacer, redimensionner ou supprimer un bloc porteur de `data-l
 
 Depuis le 2026-08-26, la ligne continue ne vit plus seulement sur l'accueil : les 81 autres pages la reçoivent aussi, servie par le même script. Elles portent `class="parcours"` sur `<body>` et chargent `line-v6.js`.
 
-Le régime est plus simple que celui de l'accueil : **aucun défilement virtuel, aucun gel**, le SVG vit dans `main` (déjà `position: relative`, et qui commence au haut du document), la sonde de `--line-x` est créée puis mesurée au vol (pas de `#probe-a` à ajouter dans 82 pages), le trait s'arrête au bas du contenu et se branche dans le bouton du bloc final (`data-line="plug"`). Le pied de page n'a pas de trait. Deux pages n'ont aucun bouton dans leur contenu (le Hall of Fame et les mentions légales) : le trait y revient sur le rail de gauche dans le blanc du bas avant de mourir au bas du contenu, plutôt que de s'arrêter dans le coin droit.
+Le régime est plus simple que celui de l'accueil : **aucun défilement virtuel, aucun gel**, le SVG vit dans `main` (déjà `position: relative`, et qui commence au haut du document), la sonde de `--line-x` est créée puis mesurée au vol (pas de `#probe-a` à ajouter dans 82 pages), le trait s'arrête au bas du contenu et se branche dans le bouton du bloc final (`data-line="plug"`). Le pied de page n'a pas de trait. Une seule page n'a aucun bouton dans son contenu (les mentions légales) : le trait y revient sur le rail de gauche dans le blanc du bas avant de mourir au bas du contenu, plutôt que de s'arrêter dans le coin droit.
 
 **Le trait serpente entre deux rails, aux deux paliers** : le rail de gauche (`--line-x`) et le milieu de la marge libre à droite du contenu. Il traverse la largeur dans le blanc qui borde un bloc ancré, exactement comme le mobile de l'accueil, dont il reprend le code.
 
@@ -60,7 +60,7 @@ Le régime est plus simple que celui de l'accueil : **aucun défilement virtuel,
 | Fiche édition | 9 | `.ppl` | une seule aile, au centre, le long de l'équipe |
 | Registre des éditions | 1 | une `.reg-row` sur trois | quinconce : le trait change de côté d'une édition à l'autre |
 | Index speakers | 1 | `.sgrid` | la grille encadrée |
-| Hall of Fame | 1 | un `.hof-year` sur deux | peigne sur 6 860 px, une année sur deux |
+| Hall of Fame | 1 | un `.hof-year` sur deux | peigne sur 6 860 px, une année sur deux. Le bloc d'appel vers la billetterie a été ajouté le 2026-08-26 : la page n'en avait pas, le trait n'avait donc pas de prise |
 | FAQ | 1 | un `.faq-group` sur deux | alternance par groupe de questions |
 | Programme | 1 | `.sheet` | un flanc le long de la feuille de salle |
 | Partenaires | 1 | `.partners-grid` | la grille encadrée |
@@ -77,6 +77,8 @@ Cinq règles de tracé, à ne pas défaire (chacune vient d'un défaut mesuré) 
 - **Deux ancres mitoyennes s'annulent.** Un retour et un départ posés au même endroit feraient revenir le trait à gauche pour repartir aussitôt à droite : les deux événements sont supprimés, le trait poursuit son flanc.
 
 **Piège de mesure, déjà connu ailleurs dans le projet** : dans Chrome, le contenu d'un `details` fermé garde une géométrie non nulle. Les réponses repliées de la FAQ faisaient déborder leur groupe de 77 px, le blanc entre deux groupes tombait sous le seuil et aucune traversée ne se posait. `innerSpan`, `neighbour` et la collecte des filets ignorent donc `details:not([open])` (le `summary`, lui, compte).
+
+**La prise est atteinte aux deux tiers de la page** (demande de Baptiste le 2026-08-26). Avant, le trait arrivait sur le bouton entre 96 et 99 % du défilement : on touchait le bas de la page au moment où la prise s'allumait. La table est donc mise à l'échelle pour que son dernier point tombe à `2/3` de ce que la page offre à défiler ; le trait se dessine un peu plus vite que la lecture et le dernier tiers se parcourt avec le bouton déjà allumé. Sans bouton (les mentions légales), la course se termine au bas de la page comme avant. **Exception : l'accueil en bureau**, dont la table partage son axe avec les fenêtres de gel et la translation du contenu ; la toucher désynchroniserait la chorégraphie, sa prise reste donc à 96 %. L'accueil en mobile et en tablette, lui, suit la règle. Conséquence mesurée : la pointe devance la lecture de 20 à 500 px sur toutes les pages, ce qui reste dans l'écran, **sauf sur le Hall of Fame** (6 860 px de contenu pour une prise tout en bas) où elle la devance de 1 500 px, donc hors champ : sur cette page, le trait est déjà tracé quand on arrive. Un plafond d'avance (une hauteur d'écran) corrigerait cela au prix d'une prise vers 80 % au lieu des deux tiers.
 
 **La fin de course est garantie.** Sans spacer pour allonger la page, la somme des balayages horizontaux peut pousser la fin du tracé au-delà de ce que la page offre à défiler : le trait n'arrivait jamais et la prise ne s'allumait pas (la FAQ s'arrêtait à 84 %). Les fenêtres horizontales sont donc resserrées d'un facteur commun, et si cela ne suffit pas la course entière est comprimée pour finir au bas de la page.
 

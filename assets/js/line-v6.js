@@ -967,31 +967,27 @@
     }
 
     buildTable(pts, virtual, budgets, 1);
-    /* Sur une page interieure il n'y a pas de spacer pour allonger la
-       course : si la somme des balayages horizontaux pousse la fin du
-       trace au-dela de ce que la page offre a defiler, le trait
-       n'arrive jamais a son terme et la prise ne s'allume pas (mesure :
-       la FAQ s'arretait a 84 %). On resserre alors toutes les fenetres
-       horizontales d'un meme facteur, sans jamais descendre sous un
-       cinquieme : la pointe balaie plus vite, mais elle arrive. */
-    if (!virtual && tableM.length > 1 && extraH > 0) {
-      var dispo = Math.max(1, html.scrollHeight - vh) - 40;
+    /* La course est calee sur ce que la page offre a defiler.
+       Avec un bouton final : le trait doit l'atteindre aux DEUX TIERS de
+       la page (demande de Baptiste le 2026-08-26). Le trait se dessine
+       donc un peu plus vite que la lecture et le dernier tiers se
+       parcourt avec la prise deja allumee, au lieu de voir le trait
+       arriver au moment ou l'on touche le bas (mesure avant : 96 a 99 %
+       du defilement). Sans bouton, la course se termine au bas de la
+       page.
+
+       Hors regime virtuel seulement : sur l'accueil en bureau, la table
+       partage son axe avec les fenetres de gel et la translation du
+       contenu, les toucher desynchroniserait la choregraphie. */
+    if (!virtual && tableM.length > 1) {
+      var dispo = Math.max(1, html.scrollHeight - vh);
+      var cible = plugEl ? dispo * (2 / 3) : dispo - 40;
+      var t0 = tableM[0].t;
       var finT = tableM[tableM.length - 1].t;
-      if (finT > dispo) {
-        var fSec = (dispo - (finT - extraH)) / extraH;
-        buildTable(pts, virtual, budgets, Math.max(0.1, Math.min(1, fSec)));
-        finT = tableM[tableM.length - 1].t;
-        if (finT > dispo) {
-          /* Page trop courte meme fenetres resserrees (la FAQ, dont la
-             prise est a 60 px du bas) : la course entiere est comprimee
-             pour se terminer au bas de la page. La pointe prend un peu
-             d'avance sur la lecture, ce qui vaut mieux qu'un trait qui
-             n'arrive jamais et une prise qui ne s'allume pas. */
-          var t0 = tableM[0].t;
-          var kSec = (dispo - t0) / Math.max(1, finT - t0);
-          for (c = 0; c < tableM.length; c++) {
-            tableM[c].t = t0 + (tableM[c].t - t0) * kSec;
-          }
+      if (finT - t0 > 1 && cible > t0) {
+        var kSec = (cible - t0) / (finT - t0);
+        for (c = 0; c < tableM.length; c++) {
+          tableM[c].t = t0 + (tableM[c].t - t0) * kSec;
         }
       }
     }
