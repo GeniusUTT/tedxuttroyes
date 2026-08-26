@@ -32,7 +32,6 @@ import {
   Lead,
   LieuBlock,
   LinkMore,
-  Marque10,
   Moment,
   Notice,
   PageHead,
@@ -240,7 +239,6 @@ const accueil: DemoPage = {
         cote="Dix ans"
         title="La ligne vient de loin"
         lead="Neuf éditions, une seule scène. En 2017, le thème s'appelait déjà To the Limits and Beyond : dix ans plus tard, la question revient."
-        signature={<Marque10 />}
       >
         <EditionSlider
           posters={AFFICHES.map((a) => ({

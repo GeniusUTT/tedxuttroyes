@@ -694,12 +694,50 @@ main .sec--alt:last-child {
   min-height: 44px;
 }
 
-/* Mobile : le logo au centre de la barre, le burger reste a droite. */
+/* Le bloc de droite : le lien Instagram, et le burger quand il sort.
+   En bureau le burger disparait, il ne reste que l'icone, en bout de
+   navigation. */
+.header-end {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+}
+
+/* Icone au trait comme les autres (.icon), angles vifs : la DA ne veut
+   pas d'arrondi, le carre du glyphe reste donc droit. La cible fait
+   44 px alors que le dessin n'en fait que 20. */
+.nav-ig {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  color: var(--encre);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.nav-ig:hover {
+  color: var(--papier);
+}
+
+.nav-ig .icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Mobile : le logo au centre de la barre, Instagram et le burger a
+   droite. Les deux colonnes laterales sont a egalite (1fr), le logo
+   tombe donc pile au milieu tant que le bloc de droite tient dans sa
+   part ; sous 340 px il la deborde et le logo glisse d'autant. */
 @media (max-width: 1023px) {
   .header-inner {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
     align-items: center;
+    gap: 8px;
   }
 
   .brand {
@@ -707,7 +745,7 @@ main .sec--alt:last-child {
     justify-self: center;
   }
 
-  .nav-toggle {
+  .header-end {
     grid-column: 3;
     justify-self: end;
   }
@@ -854,10 +892,29 @@ body.nav-open {
     display: none;
   }
 
+  /* L'icone Instagram passe en tete de navigation, juste avant Accueil
+     (demande de Baptiste le 2026-08-26). Les trois blocs sont freres
+     dans le meme flex : la navigation passe en dernier par order, le
+     bloc d'icone reprend la marge automatique qu'elle portait, et le
+     duo reste colle a droite. Le logo garde l'ordre du source, il
+     suffit donc de deplacer la navigation. */
   .nav-desktop {
     display: flex;
     align-items: center;
     gap: 24px;
+    order: 1;
+  }
+
+  .header-end {
+    margin-left: auto;
+  }
+
+  /* Sans nowrap, un lien de bureau est un element flexible qui peut se
+     reduire jusqu'a son contenu minimal : Hall of Fame et A propos
+     passaient sur deux lignes des que la barre se serrait, au lieu de
+     forcer le palier compact. */
+  .nav-desktop a {
+    white-space: nowrap;
   }
 
   .nav-desktop a:not(.btn) {
@@ -888,19 +945,24 @@ body.nav-open {
   }
 }
 
-/* Petit ecran d'ordinateur (1024 a 1279 px : iPad en paysage, portables
+/* Petit ecran d'ordinateur (1024 a 1359 px : iPad en paysage, portables
    compacts). La navigation de bureau s'allume des 1024 px mais ne tient
-   pas dans la largeur avant 1280 : elle passait sur trois lignes et le
+   pas dans la largeur avant 1360 : elle passait sur trois lignes et le
    bouton Reserver sortait du header de 93 px. Elle se compacte donc sur
    cette plage plutot que de rendre la main au menu burger, qui serait
-   inattendu sur un ecran de cette taille. */
-@media (min-width: 1024px) and (max-width: 1279px) {
+   inattendu sur un ecran de cette taille. Le palier tenait a 1280 avant
+   le lien Instagram, puis a 1320 : mesure faite, la barre pleine taille
+   reclame 1318 px de contenu, elle ne rentre donc qu'a partir de 1332
+   et le palier est pose a 1360 pour garder de la marge. En dessous,
+   les deux gouttieres passent a 12 et 10 px : a 16 et 12, la barre
+   debordait encore de 8 px a 1024. */
+@media (min-width: 1024px) and (max-width: 1359px) {
   .header-inner {
-    gap: 16px;
+    gap: 12px;
   }
 
   .nav-desktop {
-    gap: 12px;
+    gap: 10px;
   }
 
   .nav-desktop a:not(.btn) {
@@ -911,6 +973,25 @@ body.nav-open {
   .nav-desktop .btn--sm {
     padding: 8px 12px;
     font-size: 0.75rem;
+  }
+
+  /* L'icone se resserre a 32 px pour laisser passer la navigation : la
+     barre reclame 992 px de contenu pour 1009 disponibles a 1024, soit
+     18 px de marge, contre 6 seulement si l'icone gardait ses 44 px.
+     Un ::after de 6 px de part
+     et d'autre rend les 44 px au doigt sans rien deplacer, comme
+     .hof-year-link et .ppl-name a : il tient dans les deux gouttieres
+     de 12 px qui la separent du logo et d'Accueil. Piege de mesure :
+     ce pseudo-element n'entre pas dans le getBoundingClientRect() du
+     lien, une sonde qui lit la boite du lien croit encore a 32 px. */
+  .nav-ig {
+    min-width: 32px;
+  }
+
+  .nav-ig::after {
+    content: "";
+    position: absolute;
+    inset: 0 -6px;
   }
 }
 
@@ -3834,7 +3915,16 @@ details.faq[open] summary .icon {
    dessous des la premiere frame. Le calage du minutage tient a
    logo-10ans-intro.svg : ce dessin joue une seule fois en 2,36 s puis
    se fige sur le logo complet, l'opacite ne commence donc a tomber
-   qu'a 79 % de 2,9 s, soit 2,29 s. */
+   qu'a 79 % de 2,9 s, soit 2,29 s.
+
+   Deux paliers depuis le 2026-08-26 (demande de Baptiste) : la
+   premiere venue a droit au dessin qui se trace (2,9 s), une visite
+   suivante n'a plus rien a decouvrir et recoit la version courte,
+   1 s sur le logo deja fini (classe voile-court, posee quand le
+   navigateur garde la trace d'une visite passee). Le dessin anime et
+   le dessin fixe sont deux images distinctes : un SVG qui se trace ne
+   peut pas etre coupe en cours de route sans montrer un trait a
+   moitie fait. */
 
 .voile {
   display: none;
@@ -3855,6 +3945,39 @@ details.faq[open] summary .icon {
   width: min(72vmin, 560px);
   height: auto;
   animation: voile-entree 0.45s var(--ease-out) both;
+  grid-area: 1 / 1;
+}
+
+/* Version courte : le logo deja fini, une seconde, sortie plus tot
+   dans la plage (55 % de 1 s). */
+.voile-mark--fixe {
+  display: none;
+}
+
+.voile-court .voile {
+  animation-name: voile-sortie-court;
+  animation-duration: 1s;
+}
+
+.voile-court .voile-mark--trace {
+  display: none;
+}
+
+.voile-court .voile-mark--fixe {
+  display: block;
+  animation-duration: 0.3s;
+}
+
+@keyframes voile-sortie-court {
+  0%,
+  55% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
 }
 
 @keyframes voile-sortie {

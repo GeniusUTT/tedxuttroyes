@@ -1,5 +1,5 @@
 import { LOGO_HEIGHT, LOGO_TEDXUTTROYES, LOGO_WIDTH } from "../assets.generated";
-import { BILLETTERIE_URL, DATE_LONGUE, LIEU, NAV } from "../types";
+import { BILLETTERIE_URL, DATE_LONGUE, INSTAGRAM_URL, LIEU, NAV } from "../types";
 import type { NavKey } from "../types";
 
 export interface SiteHeaderProps {
@@ -8,9 +8,10 @@ export interface SiteHeaderProps {
 }
 
 /**
- * Le bandeau de tete du site : logo, navigation, deux boutons, et le
- * menu mobile qui va avec (le bouton burger le pilote). Les deux
- * partent ensemble : le menu porte l'identifiant que le bouton vise.
+ * Le bandeau de tete du site : logo, navigation, deux boutons, le lien
+ * Instagram, et le menu mobile qui va avec (le bouton burger le pilote).
+ * Les deux partent ensemble : le menu porte l'identifiant que le bouton
+ * vise.
  */
 export function SiteHeader({ current }: SiteHeaderProps) {
   return (
@@ -50,17 +51,33 @@ export function SiteHeader({ current }: SiteHeaderProps) {
             </a>
           </nav>
 
-          <button
-            className="nav-toggle"
-            type="button"
-            aria-expanded="false"
-            aria-controls="menu-mobile"
-            aria-label="Menu"
-          >
-            <span className="bar" aria-hidden="true" />
-            <span className="bar" aria-hidden="true" />
-            <span className="bar" aria-hidden="true" />
-          </button>
+          <div className="header-end">
+            <a
+              className="nav-ig"
+              href={INSTAGRAM_URL}
+              target="_blank"
+              rel="noopener"
+              aria-label="Instagram TEDxUTTroyes (nouvelle fenêtre)"
+            >
+              <svg className="icon" viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="3" y="3" width="18" height="18" />
+                <circle cx="12" cy="12" r="4.2" />
+                <path d="M17 7h.01" />
+              </svg>
+            </a>
+
+            <button
+              className="nav-toggle"
+              type="button"
+              aria-expanded="false"
+              aria-controls="menu-mobile"
+              aria-label="Menu"
+            >
+              <span className="bar" aria-hidden="true" />
+              <span className="bar" aria-hidden="true" />
+              <span className="bar" aria-hidden="true" />
+            </button>
+          </div>
         </div>
       </header>
 

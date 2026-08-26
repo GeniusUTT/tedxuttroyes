@@ -16,7 +16,7 @@
   <link rel="preload" href="/assets/fonts/bricolage-var-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/dm-sans-var-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/space-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/css/main-v8.css">
+  <link rel="stylesheet" href="/assets/css/main-v9.css">
   <script>document.documentElement.classList.add("js");</script>
   <script src="/assets/js/reveal.js" defer></script>
   <script src="/assets/js/main-v3.js" defer></script>
@@ -44,11 +44,17 @@
         <a class="btn btn--primary btn--sm" href="https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition" target="_blank" rel="noopener">Réserver</a>
       </nav>
 
-      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-mobile" aria-label="Menu">
-        <span class="bar" aria-hidden="true"></span>
-        <span class="bar" aria-hidden="true"></span>
-        <span class="bar" aria-hidden="true"></span>
-      </button>
+      <div class="header-end">
+        <a class="nav-ig" href="https://www.instagram.com/tedxuttroyes/" target="_blank" rel="noopener"
+          aria-label="Instagram TEDxUTTroyes (nouvelle fenêtre)">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18"/><circle cx="12" cy="12" r="4.2"/><path d="M17 7h.01"/></svg>
+        </a>
+        <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-mobile" aria-label="Menu">
+          <span class="bar" aria-hidden="true"></span>
+          <span class="bar" aria-hidden="true"></span>
+          <span class="bar" aria-hidden="true"></span>
+        </button>
+      </div>
     </div>
   </header>
 
@@ -103,7 +109,7 @@
 
             <h2>Données personnelles et cookies</h2>
             <p>Ce site ne dépose aucun cookie, n'embarque aucun outil de mesure d'audience et ne collecte aucune donnée personnelle. Aucune bannière de consentement n'est donc nécessaire.</p>
-            <p>Seule exception, sans rapport avec vos données : la page d'accueil s'ouvre sur une brève animation du logo des dix ans. Pour ne pas vous la rejouer à chaque passage, un unique indicateur technique est écrit dans la mémoire de session de votre navigateur (<span lang="en">sessionStorage</span>). Il ne quitte jamais votre appareil, ne contient aucune information vous concernant, et disparaît à la fermeture de l'onglet.</p>
+            <p>Seule exception, sans rapport avec vos données : la page d'accueil s'ouvre sur une brève animation du logo des dix ans. Pour ne pas vous la rejouer à chaque passage, deux indicateurs techniques sont écrits dans la mémoire de votre navigateur : le premier, dans la mémoire de session (<span lang="en">sessionStorage</span>), disparaît à la fermeture de l'onglet et évite de rejouer l'animation d'une page à l'autre ; le second, dans la mémoire locale (<span lang="en">localStorage</span>), retient seulement que vous avez déjà vu l'animation, pour vous en servir une version courte lors d'une prochaine visite. Ni l'un ni l'autre ne quitte votre appareil et aucun ne contient d'information vous concernant.</p>
             <p>La page d'accueil affiche une carte interactive fournie par Mapbox (Mapbox Inc., États-Unis). Les données cartographiques ne sont chargées depuis les serveurs de Mapbox qu'au moment où la carte approche de l'écran ; Mapbox reçoit alors votre adresse IP et des données techniques liées à l'affichage de la carte. Sans JavaScript, un plan dessiné localement s'affiche à la place et aucune requête n'est envoyée.</p>
             <p>Les pages d'archives des speakers intègrent un lecteur vidéo YouTube en mode de confidentialité renforcée (youtube-nocookie.com, Google Ireland Ltd.). Le lecteur est chargé en différé : au moment où il s'affiche puis lors de la lecture, Google reçoit votre adresse IP et des données techniques. Tant que la vidéo n'est pas lue, aucun cookie n'est déposé.</p>
             <p>La billetterie et l'inscription à la newsletter sont opérées par HelloAsso, sur son propre site : HelloAsso est responsable des traitements de données qu'elle réalise. Les e-mails envoyés à l'adresse de contact ne sont utilisés que pour vous répondre.</p>

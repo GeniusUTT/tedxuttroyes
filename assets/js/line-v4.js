@@ -16,6 +16,19 @@
    l'ecran. La regle s'arrete a la prise (bouton Reserver) : l'epilogue
    se trace au fil du defilement normal.
 
+   Regime mobile (sous 1024 px) : pas de defilement virtuel, mais le
+   trait traverse quand meme la page. Il court le long d'un rail (la
+   marge de gauche, ou le milieu de la marge de droite), change de cote
+   dans le blanc qui borde un bloc, et redescend : les blocs se
+   retrouvent tantot a droite, tantot a gauche du trait. L'ancre
+   data-line-rail="right" se pose sur une section entiere ou sur un bloc
+   precis. La page defile normalement pendant le balayage.
+
+   Les mots qui franchissent valent aussi en mobile : ils franchissent
+   le rail de gauche, avec leur propre minutage (voir plus bas). Un
+   moment porteur d'un mot doit donc rester sur ce rail, sinon son mot
+   n'aurait rien a franchir et reste immobile.
+
    Principe inchange : le CSS place les contenus, ce script mesure et
    relie, le chemin est reconstruit a chaque changement de geometrie.
    Sans JavaScript, sous 1024 px, en reduced motion ou en cas d'echec :
@@ -232,6 +245,57 @@
     return n < 0 ? 0 : n > 1 ? 1 : n;
   }
 
+  /* Le frere visible qui precede ou qui suit, en remontant les parents
+     tant qu'il n'y en a pas. Sert a mesurer le blanc de part et d'autre
+     d'un bloc, que ce bloc soit une section entiere ou une liste posee
+     au milieu d'une section. */
+  function neighbour(el, forward) {
+    var n = el;
+    var s;
+    var sr;
+    while (n && n !== main) {
+      s = forward ? n.nextElementSibling : n.previousElementSibling;
+      while (s) {
+        sr = relRect(s);
+        if (sr.width >= 2 && sr.height >= 2) {
+          return s;
+        }
+        s = forward ? s.nextElementSibling : s.previousElementSibling;
+      }
+      n = n.parentElement;
+    }
+    return null;
+  }
+
+  /* Extremites peintes d'une section : la premiere et la derniere boite
+     non vide parmi ses descendants. Sert a mesurer le blanc reel entre
+     deux sections, la ou passe une traversee mobile ; les bords de la
+     section elle-meme ne diraient que ses paddings. */
+  function innerSpan(sec) {
+    var kids = sec.querySelectorAll("*");
+    var top = Infinity;
+    var bot = -Infinity;
+    var i;
+    var kr;
+    for (i = 0; i < kids.length; i++) {
+      kr = relRect(kids[i]);
+      if (kr.width < 2 || kr.height < 2) {
+        continue;
+      }
+      if (kr.top < top) {
+        top = kr.top;
+      }
+      if (kr.bottom > bot) {
+        bot = kr.bottom;
+      }
+    }
+    var sr = relRect(sec);
+    return {
+      top: top === Infinity ? sr.top : top,
+      bottom: bot === -Infinity ? sr.bottom : bot
+    };
+  }
+
   /* ------------------------------------------------------------------
      Construction du chemin a partir des ancres data-line du document
      ------------------------------------------------------------------ */
@@ -288,7 +352,11 @@
       var word = el.querySelector(".cross-word");
       var st = crossStateFor(el);
       var active = false;
-      if (word && horiz && !reduce.matches) {
+      /* En mobile le mot franchit le rail de gauche, la ou vit la
+         dorsale : un moment pose sur le rail de droite n'aurait rien a
+         franchir, son mot reste donc immobile. */
+      var onRightRail = el.getAttribute("data-line-rail") === "right";
+      if (word && !reduce.matches && (horiz || !onRightRail)) {
         r = relRect(el);
         var wr = relRect(word);
         var rtl = el.getAttribute("data-cross-dir") === "rtl";
@@ -303,7 +371,33 @@
         if (dist > 40) {
           st.dist = dist;
           el.style.setProperty("--cross-dist", dist + "px");
-          crosses.push({ el: el, st: st, top: r.top, h: r.height });
+          if (horiz) {
+            crosses.push({ el: el, st: st, top: r.top, h: r.height });
+          } else {
+            /* En mobile la section est plus courte qu'un ecran : cadencer
+               le mot sur toute sa hauteur le ferait finir sa course avant
+               qu'il soit entre dans l'ecran. Le mot se cale donc sur
+               lui-meme, d'un bord de l'ecran au milieu (demande de
+               Baptiste le 2026-08-26) : il s'ebranle quand il pointe par
+               le bas, il a fini quand son centre atteint le milieu de
+               l'ecran, la ou vit la pointe du trait.
+
+               Les deux valeurs sortent de la formule d'apply() : cp vaut
+               0 a 0,85 hauteur d'ecran au-dessus du repere et 1 apres
+               0,75 x h de defilement. D'ou le recul de 0,15 pour partir
+               au ras du bas, et la plage d'une demi-hauteur d'ecran plus
+               la moitie du mot. L'easing doux (soft) va avec : la courbe
+               cubique du bureau expedierait la course dans le premier
+               tiers de la plage, bien avant le milieu. */
+            var wRect = relRect(word);
+            crosses.push({
+              el: el,
+              st: st,
+              top: wRect.top - vh * 0.15,
+              h: (vh * 0.5 + wRect.height / 2) / 0.75,
+              soft: true
+            });
+          }
           active = true;
         }
       }
@@ -339,7 +433,9 @@
        vers la gauche par defaut, vers la droite avec data-line-side="right".
        Les blocs qui se chevaucheraient sont ignores (le trace doit rester
        monotone du haut vers le bas). */
-    /* En mobile la dorsale reste parfaitement droite : aucune pliure. */
+    /* En mobile, aucune pliure autour des blocs : la marge est trop
+       etroite pour qu'un contournement se lise. Le parcours passe par
+       les rails et les traversees, plus bas. */
     var avoidEls = horiz ? main.querySelectorAll('[data-line="avoid"]') : [];
     var avoids = [];
     var lateAvoids = [];
@@ -399,6 +495,108 @@
       lastY = exitY;
     }
 
+    /* Mobile : la dorsale n'est plus une simple verticale. Elle court le
+       long d'un rail, traverse la largeur de la page dans le blanc d'une
+       frontiere de section, puis redescend le long de l'autre rail : les
+       blocs passent tantot a droite, tantot a gauche du trait, ce qui
+       donne le parcours a l'echelle d'un telephone (demande de Baptiste
+       le 2026-08-26). Les sections qui prennent le rail de droite le
+       declarent par data-line-rail="right".
+
+       Aucun gel : le defilement virtuel reste une affaire de bureau. En
+       regime normal buildTable donne a chaque segment horizontal une
+       plage de 48 a 160 px de scroll pendant laquelle la pointe balaie
+       la largeur, la page continuant de defiler ; le retard pris par la
+       pointe se resorbe de lui-meme sur la verticale suivante. */
+    var railX = axB;
+    var railR = axB;
+    if (!horiz) {
+      var cRight = 0;
+      var refs = main.querySelectorAll(
+        ".lead, .mom-title, .slist, .album, .tl, .data-lines, .mom-photo"
+      );
+      for (c = 0; c < refs.length; c++) {
+        r = relRect(refs[c]);
+        if (r.width > 2 && r.right > cRight) {
+          cRight = r.right;
+        }
+      }
+      if (cRight < 2) {
+        cRight = W - 20;
+      }
+      /* Le rail de droite se pose au milieu de la marge libre : autant
+         d'air entre le trait et les blocs qu'entre le trait et le bord
+         de l'ecran (10 px de chaque cote sur un telephone courant). */
+      railR = Math.min(W - 6, Math.round(cRight + (W - cRight) / 2));
+      if (railR - axB < 80) {
+        railR = axB;
+      }
+      /* L'ancre data-line-rail="right" se pose sur une section entiere
+         ou sur un bloc precis (la liste des speakers, la fiche du lieu :
+         les memes que le bureau contourne par data-line="avoid"). Le
+         trait passe a droite dans le blanc qui precede le bloc et revient
+         a gauche dans celui qui le suit. */
+      var tagged = railR === axB ? [] : main.querySelectorAll('[data-line-rail="right"]');
+      var evts = [];
+      for (c = 0; c < tagged.length; c++) {
+        el = tagged[c];
+        /* Garde-fou : les pastilles du planning sont posees sur l'axe
+           lui-meme (left: -body-pad - 6px), le trait les enfile une a une
+           et n'allume que celles qui touchent un de ses segments
+           verticaux. Le bloc qui porte la feuille de salle reste donc sur
+           le rail de gauche, quoi que dise l'attribut. */
+        if (el.querySelector(".tl-row .tl-dot")) {
+          continue;
+        }
+        var span = innerSpan(el);
+        if (span.bottom - span.top < 2) {
+          continue;
+        }
+        /* Pas de traversee sans blanc : 36 px de vide au moins entre le
+           bloc et son voisin. */
+        var prevEl = neighbour(el, false);
+        var above = prevEl ? innerSpan(prevEl).bottom : null;
+        if (above !== null && span.top - above >= 36) {
+          evts.push({ y: Math.round((above + span.top) / 2), x: railR });
+        }
+        var nextEl = neighbour(el, true);
+        var below = nextEl ? innerSpan(nextEl).top : null;
+        if (below !== null && below - span.bottom >= 36) {
+          evts.push({ y: Math.round((span.bottom + below) / 2), x: axB });
+        } else {
+          /* Blanc trop mince sous le bloc (un bouton colle a une liste,
+             par exemple) : le retour attend la fin de la section qui le
+             porte. */
+          var sec = el.closest("section");
+          var secNext = sec && sec !== el ? neighbour(sec, true) : null;
+          if (secNext) {
+            var secSpan = innerSpan(sec);
+            var secBelow = innerSpan(secNext).top;
+            if (secBelow - secSpan.bottom >= 36) {
+              evts.push({
+                y: Math.round((secSpan.bottom + secBelow) / 2),
+                x: axB
+              });
+            }
+          }
+        }
+      }
+      evts.sort(function (a, b) {
+        return a.y - b.y;
+      });
+      /* 80 px au moins depuis la traversee precedente, sinon le trait
+         ferait du sur-place. */
+      var lastCross = -1e9;
+      for (c = 0; c < evts.length; c++) {
+        if (evts[c].x === railX || evts[c].y < lastCross + 80) {
+          continue;
+        }
+        pts.push([railX, evts[c].y], [evts[c].x, evts[c].y]);
+        railX = evts[c].x;
+        lastCross = evts[c].y;
+      }
+    }
+
     /* Moment 4 : l'album des editions (desktop). La ligne quitte l'axe B
        pile entre le texte de la section et les affiches, rejoint la
        marge gauche, descend au niveau du fil (le centre de la bande des
@@ -450,10 +648,17 @@
       }
       plugRect = relRect(plug);
       if (!horiz) {
-        /* Mobile : la dorsale descend droite jusqu'au centre vertical du
-           bouton (centre dans la page), puis la ligne entre par la gauche. */
+        /* Mobile : la dorsale descend jusqu'au centre vertical du bouton
+           (centre dans la page), puis la ligne y entre par le cote d'ou
+           elle arrive. Le serpentin ramene normalement le trait a gauche
+           avant la billetterie ; si le blanc a manque pour la derniere
+           traversee, l'entree se fait par la droite plutot que de couper
+           le bouton en deux. */
         var py = plugRect.top + plugRect.height / 2;
-        pts.push([axB, py], [plugRect.left + 8, py]);
+        var plugX = railX > plugRect.left + plugRect.width / 2
+          ? plugRect.right - 8
+          : plugRect.left + 8;
+        pts.push([railX, py], [plugX, py]);
       } else {
         var bx = plugRect.left + plugRect.width / 2;
         if (Math.abs(dropX - bx) > 12) {
@@ -509,7 +714,7 @@
         pts.push([bx, plugRect.top + 8]);
       }
     } else {
-      pts.push([dropX, H]);
+      pts.push([horiz ? dropX : railX, H]);
     }
 
     /* Epilogue : trait fin (non trace pour l'instant) */
@@ -671,7 +876,7 @@
     for (var i = 0; i < crosses.length; i++) {
       var cr = crosses[i];
       var cp = clamp01((offY + vh * 0.85 - cr.top) / Math.max(1, cr.h * 0.75));
-      cp = 1 - Math.pow(1 - cp, 3);
+      cp = cr.soft ? cp * cp * (3 - 2 * cp) : 1 - Math.pow(1 - cp, 3);
       if (Math.abs(cp - cr.st.p) > 0.001) {
         cr.st.p = cp;
         cr.el.style.setProperty("--cross-p", cp.toFixed(3));

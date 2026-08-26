@@ -43,14 +43,24 @@ export function Marque10({ plein, alt = "", step }: Marque10Props) {
  *
  * Le paquet n'en rejoue que le markup. Sur le site, le voile n'est pose
  * qu'une fois par onglet par un script en ligne du head (classe voile-on
- * sur html, cle de session tedx-ouverture), il porte la version animee
- * logo-10ans-intro.svg, et il sort tout seul par une animation CSS.
+ * sur html, cle de session tedx-ouverture), et il sort tout seul par une
+ * animation CSS. Il porte deux images : le dessin qui se trace
+ * (logo-10ans-intro.svg) pour une premiere venue, et le logo deja fini
+ * pour la version courte servie ensuite (classe voile-court sur html,
+ * cle locale tedx-ouverture-vue). Le CSS n'en montre qu'une.
  */
 export function VoileOuverture() {
   return (
     <div className="voile" aria-hidden="true">
       <img
-        className="voile-mark"
+        className="voile-mark voile-mark--trace"
+        src={MARQUE_10ANS}
+        alt=""
+        width={MARQUE_10ANS_TAILLE}
+        height={MARQUE_10ANS_TAILLE}
+      />
+      <img
+        className="voile-mark voile-mark--fixe"
         src={MARQUE_10ANS}
         alt=""
         width={MARQUE_10ANS_TAILLE}

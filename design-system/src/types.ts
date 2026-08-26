@@ -35,6 +35,7 @@ export const BILLETTERIE_URL =
   "https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition";
 
 export const CONTACT_MAIL = "geniusutt@utt.fr";
+export const INSTAGRAM_URL = "https://www.instagram.com/tedxuttroyes/";
 export const CANDIDATURE_URL = "https://forms.gle/M7vKmPAUq3z3MWJNA";
 export const TEDX_PROGRAMME_URL = "https://www.ted.com/tedx";
 
