@@ -21,7 +21,7 @@
    dans main, la sonde de --line-x est posee au vol, le trait s'arrete
    au bas du contenu et se branche dans le bouton du bloc final. Ce qui
    distingue un type de page d'un autre tient entierement aux blocs qui
-   portent data-line-rail="right" : deux pages du meme type portent les
+   portent data-line-flank : deux pages du meme type portent les
    memes ancres, deux types differents n'ont pas la meme silhouette.
 
    Regime mobile de l'accueil (sous 1024 px) : pas de defilement
@@ -30,7 +30,7 @@
    change de cote
    dans le blanc qui borde un bloc, et redescend : les blocs se
    retrouvent tantot a droite, tantot a gauche du trait. L'ancre
-   data-line-rail="right" se pose sur une section entiere ou sur un bloc
+   data-line-flank se pose sur une section entiere ou sur un bloc
    precis. La page defile normalement pendant le balayage.
 
    Les mots qui franchissent valent aussi en mobile : ils franchissent
@@ -478,7 +478,15 @@
        rails : le serpentin entre deux rails, qui vaut pour le mobile de
        l'accueil et pour toutes les pages interieures. */
     var moments = journey && horiz;
-    var rails = parcours || !horiz;
+    /* Trois gestes, jamais deux a la fois :
+       moments : les pliures et les traversees de l'accueil en bureau ;
+       rails   : le serpentin d'un bord a l'autre, en mobile ;
+       jogs    : le decrochement dans la marge technique, sur les pages
+                 interieures en bureau (demande de Baptiste le
+                 2026-08-26 : le bureau a 212 px de marge que le mobile
+                 n'a pas, c'est la que le trait longe les blocs). */
+    var rails = !horiz;
+    var jogs = parcours && horiz;
     var virtual = moments && !reduce.matches;
     wrapRect = wrap.getBoundingClientRect();
     contentH = wrapRect.height;
@@ -557,7 +565,7 @@
       /* En mobile le mot franchit le rail de gauche, la ou vit la
          dorsale : un moment pose sur le rail de droite n'aurait rien a
          franchir, son mot reste donc immobile. */
-      var onRightRail = el.getAttribute("data-line-rail") === "right";
+      var onRightRail = el.hasAttribute("data-line-flank");
       if (word && !reduce.matches && (moments || !onRightRail)) {
         r = relRect(el);
         var wr = relRect(word);
@@ -710,7 +718,7 @@
        l'accueil (2026-08-26) et pour toutes les pages interieures aux
        deux paliers (2026-08-26) : c'est la, et seulement la, que se joue
        la difference entre deux types de page, par le choix des blocs qui
-       portent data-line-rail="right".
+       portent data-line-flank.
 
        Aucun gel : le defilement virtuel reste une affaire de bureau. En
        regime normal buildTable donne a chaque segment horizontal une
@@ -746,14 +754,14 @@
       if (railR - axB < 80) {
         railR = axB;
       }
-      /* L'ancre data-line-rail="right" se pose sur une section entiere
+      /* L'ancre data-line-flank se pose sur une section entiere
          ou sur un bloc precis (la liste des speakers, la fiche du lieu :
          les memes que le bureau contourne par data-line="avoid"). Le
          trait passe a droite dans le blanc qui precede le bloc et revient
          a gauche dans celui qui le suit. */
       var tagged = railR === axB
         ? []
-        : main.querySelectorAll('[data-line-rail="right"]');
+        : main.querySelectorAll('[data-line-flank]');
       var evts = [];
       for (c = 0; c < tagged.length; c++) {
         el = tagged[c];
@@ -805,6 +813,80 @@
         pts.push([railX, evts[c].y], [evts[c].x, evts[c].y]);
         railX = evts[c].x;
         lastCross = evts[c].y;
+      }
+    }
+
+    /* Le decrochement, en bureau sur une page interieure. Le mobile n'a
+       que 20 px de marge : il traverse la page. Le bureau, lui, dispose
+       de la marge technique (212 px a 1440), et c'est la que le trait va
+       longer le bloc ancre : il quitte le rail, descend dans la marge le
+       long du bloc, puis revient. Meme partition qu'en mobile (les memes
+       ancres, donc la meme silhouette par type de page), autre geste.
+
+       Les etiquettes de section (.cote) vivent dans cette marge, calees a
+       droite contre le rail : leur encre va de 76 a 258 px a 1440. Le
+       decrochement part donc SOUS l'etiquette de sa section, sinon le
+       trait lui passerait au travers. */
+    if (jogs) {
+      var innerEl = main.querySelector(".inner");
+      var margeL = innerEl ? relRect(innerEl).left : 8;
+      var jogX = Math.max(margeL + 8, axB - 96);
+      var etiquettes = [];
+      var cotes = main.querySelectorAll(".cote");
+      var rg;
+      var rb;
+      for (c = 0; c < cotes.length; c++) {
+        rg = doc.createRange();
+        rg.selectNodeContents(cotes[c]);
+        rb = rg.getBoundingClientRect();
+        if (rb.width < 2 || rb.height < 2) {
+          continue;
+        }
+        etiquettes.push({
+          left: rb.left - wrapRect.left,
+          right: rb.right - wrapRect.left,
+          top: rb.top - wrapRect.top,
+          bottom: rb.bottom - wrapRect.top
+        });
+      }
+      var flanked = main.querySelectorAll("[data-line-flank]");
+      var lastJog = -1e9;
+      var gJ;
+      var y1;
+      var y2;
+      var et;
+      for (c = 0; c < flanked.length; c++) {
+        el = flanked[c];
+        /* Meme garde-fou qu'en mobile : les pastilles du planning sont
+           posees sur l'axe, le trait doit les enfiler. */
+        if (el.querySelector(".tl-row .tl-dot")) {
+          continue;
+        }
+        gJ = gapNear(el, -1, cartes, filets);
+        if (!gJ) {
+          continue;
+        }
+        y1 = gJ.y;
+        gJ = gapNear(el, 1, cartes, filets);
+        /* Bloc en dernier de page (la prose des mentions legales) : il
+           n'a aucun voisin en dessous, donc aucun blanc a mesurer. Le
+           decrochement se referme alors juste sous le bloc. */
+        y2 = gJ ? gJ.y : Math.min(H - 8, rowSpan(el).bottom + 24);
+        for (var q = 0; q < etiquettes.length; q++) {
+          et = etiquettes[q];
+          if (et.right >= jogX - 4 && et.left <= axB + 4 &&
+              et.bottom > y1 && et.top < y2) {
+            y1 = Math.max(y1, et.bottom + 12);
+          }
+        }
+        /* Trop court, le decrochement ne se lit plus comme un flanc mais
+           comme un accident : 56 px au moins, et 40 px depuis le
+           precedent. */
+        if (y2 - y1 < 56 || y1 < lastJog + 40) {
+          continue;
+        }
+        pts.push([axB, y1], [jogX, y1], [jogX, y2], [axB, y2]);
+        lastJog = y2;
       }
     }
 
