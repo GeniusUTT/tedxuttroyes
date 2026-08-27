@@ -37,6 +37,14 @@ export function SiteHeader({ current }: SiteHeaderProps) {
                 {entry.label}
               </a>
             ))}
+            <a
+              className="btn btn--ghost btn--sm"
+              href="https://forms.gle/MWD7mHLfomYf2RUj6"
+              target="_blank"
+              rel="noopener"
+            >
+              Nous rejoindre
+            </a>
             <a className="btn btn--ghost btn--sm" href="/devenir-speaker/">
               Postuler
             </a>
@@ -104,6 +112,14 @@ export function SiteHeader({ current }: SiteHeaderProps) {
           </ul>
         </nav>
         <div className="mobile-menu-foot">
+          <a
+            className="btn btn--ghost"
+            href="https://forms.gle/MWD7mHLfomYf2RUj6"
+            target="_blank"
+            rel="noopener"
+          >
+            Nous rejoindre
+          </a>
           <a className="btn btn--ghost" href="/devenir-speaker/">
             Postuler comme speaker
           </a>

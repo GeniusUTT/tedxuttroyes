@@ -106,7 +106,11 @@
       }
     });
 
-    var desktopQuery = window.matchMedia("(min-width: 1024px)");
+    /* Le seuil ou la barre complete remplace le burger : 1160 px
+       depuis l'arrivee du bouton Nous rejoindre (2026-08-28), et il
+       doit rester d'accord avec les trois blocs media du header en
+       section 07 de la feuille. */
+    var desktopQuery = window.matchMedia("(min-width: 1160px)");
     if (desktopQuery.addEventListener) {
       desktopQuery.addEventListener("change", function (mq) {
         if (mq.matches && menuOpen) {

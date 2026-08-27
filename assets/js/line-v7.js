@@ -473,17 +473,20 @@
     /* Phase 1 : lectures seules, en repere contenu */
     vh = window.innerHeight;
     var horiz = wide.matches;
-    /* moments : les gestes propres au bureau de l'accueil (mots qui
-       franchissent, pliures avoid, album, pastilles).
-       rails : le serpentin entre deux rails, qui vaut pour le mobile de
-       l'accueil et pour toutes les pages interieures. */
     /* Retour en arriere du 2026-08-27 (demande de Baptiste) : sur une
        page interieure, le trait anime ne vit plus qu'en mobile. En
        bureau elles reviennent a la dorsale verticale statique du CSS
        (main::before, que la feuille ne masque plus au-dessus de
        1024 px). Le geste de decrochement dans la marge technique, ecrit
        la veille, est retire : son code vit dans l'historique (commit
-       3699aad) si l'envie revient. */
+       3699aad) si l'envie revient.
+
+       Une seule mesure y subsiste : la dorsale doit s'arreter sur le
+       bouton d'appel de la page (2026-08-28). Sa hauteur d'arret part
+       dans --dorsale-fin, le raccord horizontal jusqu'au bouton est en
+       CSS pur (la distance du rail au contenu vaut --body-pad). Sans
+       JavaScript, la variable n'existe pas et la dorsale descend jusqu'au
+       bas du contenu, comme avant. */
     if (parcours && horiz) {
       if (svg && svg.parentNode) {
         svg.parentNode.removeChild(svg);
@@ -493,11 +496,20 @@
         svgW = 0;
         svgH = 0;
       }
-      /* Passage de mobile a bureau par redimensionnement : le bouton
-         resterait arme (noir) sans que rien ne vienne l'allumer. */
-      el = main.querySelector('[data-line="plug"]');
-      if (el) {
-        el.classList.remove("plug-armed", "plug-on");
+      wrapRect = wrap.getBoundingClientRect();
+      contentH = wrapRect.height;
+      var fin = main.querySelector('[data-line="plug"]');
+      if (fin) {
+        /* Passage de mobile a bureau par redimensionnement : le bouton
+           resterait arme (noir) sans que rien ne vienne l'allumer. */
+        fin.classList.remove("plug-armed", "plug-on");
+        var finR = relRect(fin);
+        main.style.setProperty(
+          "--dorsale-fin",
+          Math.max(0, Math.round(contentH - (finR.top + finR.height / 2))) + "px"
+        );
+      } else {
+        main.style.removeProperty("--dorsale-fin");
       }
       plugEl = null;
       tableM = [];

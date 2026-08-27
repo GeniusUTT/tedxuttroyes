@@ -728,11 +728,11 @@ main .sec--alt:last-child {
   height: 20px;
 }
 
-/* Mobile : le logo au centre de la barre, Instagram et le burger a
-   droite. Les deux colonnes laterales sont a egalite (1fr), le logo
+/* Sous le seuil de la barre complete : le logo au centre, Instagram et
+   le burger a droite. Les deux colonnes laterales sont a egalite (1fr), le logo
    tombe donc pile au milieu tant que le bloc de droite tient dans sa
    part ; sous 340 px il la deborde et le logo glisse d'autant. */
-@media (max-width: 1023px) {
+@media (max-width: 1159px) {
   .header-inner {
     display: grid;
     grid-template-columns: 1fr auto 1fr;
@@ -886,7 +886,39 @@ body.nav-open {
   }
 }
 
-@media (min-width: 1024px) {
+/* Deuxieme palier, depuis l'arrivee du bouton Nous rejoindre
+   (2026-08-28) : la pile compte trois boutons au lieu de deux, soit
+   61 px de plus. Sur un ecran de 568 px de haut, le bouton Reserver ma
+   place passait sous la ligne de flottaison, ce que la regle du menu
+   interdit. La liste se resserre encore : ses rangees tombent a 35 px,
+   sous la barre des 44, meme compromis assume que le bouton du seuil a
+   43 px sous 640 px de haut. Mesure a 320x568 : le bouton finit a
+   552 px, 16 px au-dessus de la ligne. */
+@media (max-height: 620px) {
+  .mobile-menu {
+    padding-top: calc(var(--header-h) + 8px);
+    padding-bottom: 16px;
+  }
+
+  .mobile-menu-list a {
+    padding: 6px 0;
+    font-size: clamp(1.3rem, 5vw, 1.7rem);
+  }
+
+  .mobile-menu-foot {
+    padding-top: 12px;
+  }
+
+  .mobile-menu-foot .btn + .btn {
+    margin-top: 6px;
+  }
+
+  .mobile-menu-date {
+    margin-top: 6px;
+  }
+}
+
+@media (min-width: 1160px) {
   .nav-toggle,
   .mobile-menu {
     display: none;
@@ -956,7 +988,7 @@ body.nav-open {
    et le palier est pose a 1360 pour garder de la marge. En dessous,
    les deux gouttieres passent a 12 et 10 px : a 16 et 12, la barre
    debordait encore de 8 px a 1024. */
-@media (min-width: 1024px) and (max-width: 1359px) {
+@media (min-width: 1160px) and (max-width: 1559px) {
   .header-inner {
     gap: 12px;
   }
@@ -2317,6 +2349,34 @@ details.faq[open] summary .icon {
 @media (max-width: 1023px) {
   .js .parcours main::before {
     content: none;
+  }
+}
+
+/* En bureau, la dorsale ne descend plus jusqu'au bas du contenu : elle
+   s'arrete a la hauteur du bouton d'appel de la page et le rejoint par
+   un raccord horizontal (demande de Baptiste le 2026-08-28). La hauteur
+   d'arret est mesuree par line.js (--dorsale-fin) ; le raccord, lui, est
+   une constante : du rail au contenu il y a toujours --body-pad. Sans
+   JavaScript la variable n'existe pas, la dorsale descend jusqu'en bas
+   et le raccord se pose simplement dessus. */
+@media (min-width: 1024px) {
+  .parcours main::before {
+    bottom: var(--dorsale-fin, 0px);
+  }
+
+  .parcours [data-line="plug"] {
+    position: relative;
+  }
+
+  .parcours [data-line="plug"]::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    width: var(--body-pad);
+    height: 2px;
+    margin-top: -1px;
+    background-color: var(--rouge);
   }
 }
 
