@@ -1,4 +1,4 @@
-import { MARQUE_10ANS, MARQUE_10ANS_TAILLE } from "../assets.generated";
+import { MARQUE_10E, MARQUE_10E_TAILLE } from "../assets.generated";
 
 export interface Marque10Props {
   /** Le lockup complet plutot que la signature : la marque devient le sujet. */
@@ -10,7 +10,7 @@ export interface Marque10Props {
 }
 
 /**
- * La marque des dix ans : le X moire. En signature, elle se glisse sous
+ * La marque de la dixieme edition : le X moire. En signature, elle se glisse sous
  * un chapeau et ne fait qu'ajouter de la hauteur. En version pleine, elle
  * porte le bloc, comme sur la page cachee.
  *
@@ -28,10 +28,10 @@ export function Marque10({ plein, alt = "", step }: Marque10Props) {
   return (
     <img
       className={classes.join(" ")}
-      src={MARQUE_10ANS}
+      src={MARQUE_10E}
       alt={alt}
-      width={MARQUE_10ANS_TAILLE}
-      height={MARQUE_10ANS_TAILLE}
+      width={MARQUE_10E_TAILLE}
+      height={MARQUE_10E_TAILLE}
       loading="lazy"
     />
   );
@@ -54,17 +54,17 @@ export function VoileOuverture() {
     <div className="voile" aria-hidden="true">
       <img
         className="voile-mark voile-mark--trace"
-        src={MARQUE_10ANS}
+        src={MARQUE_10E}
         alt=""
-        width={MARQUE_10ANS_TAILLE}
-        height={MARQUE_10ANS_TAILLE}
+        width={MARQUE_10E_TAILLE}
+        height={MARQUE_10E_TAILLE}
       />
       <img
         className="voile-mark voile-mark--fixe"
-        src={MARQUE_10ANS}
+        src={MARQUE_10E}
         alt=""
-        width={MARQUE_10ANS_TAILLE}
-        height={MARQUE_10ANS_TAILLE}
+        width={MARQUE_10E_TAILLE}
+        height={MARQUE_10E_TAILLE}
       />
     </div>
   );

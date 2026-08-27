@@ -47,7 +47,7 @@ Etat au dernier passage : 184 classes couvertes sur 186, zero invention.
 | La carte Mapbox (`lieu-map`) | Requete externe et jeton d'API. `PlanLieu`, le plan SVG dessine a la main, est la version unique du paquet. |
 | Les sondes `probe` | Points de mesure de `line.js`, sans rendu. |
 | Le minuteur vivant | `Ticker` prend sa valeur en prop : un rendu doit etre reproductible. |
-| L'animation du voile d'ouverture | `VoileOuverture` pose le markup et la marque statique. Sur le site, le voile est arme par un script en ligne du head (une fois par onglet, cle de session `tedx-ouverture`), porte `logo-10ans-intro.svg` et sort par une animation CSS : rien de tout cela n'a de sens hors du site. |
+| L'animation du voile d'ouverture | `VoileOuverture` pose le markup et la marque statique. Sur le site, le voile est arme par un script en ligne du head (une fois par onglet, cle de session `tedx-ouverture`), porte `logo-10e-intro.svg` et sort par une animation CSS : rien de tout cela n'a de sens hors du site. |
 | `.tally` | Classe pilotee par `main.js` mais sans aucune regle CSS ni usage dans le HTML du site : code mort, laisse de cote. |
 
 ## Composer une page
@@ -82,7 +82,7 @@ reglages de hero propres au parcours de la ligne.
 
 **Gabarit** : `PageShell`, `SiteHeader`, `SiteFooter`, `Section`, `PageHead`, `Band`
 
-**Marque des dix ans** : `Marque10`, `VoileOuverture`
+**Marque de la dixième édition** : `Marque10`, `VoileOuverture`
 
 **Base** : `Button`, `LinkMore`, `Icon`, `Heading`, `Cote`, `Lead`, `Prose`, `Notice`,
 `Actions`, `Facts`, `Redact`, `VisuallyHidden`

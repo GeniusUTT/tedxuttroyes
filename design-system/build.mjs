@@ -56,7 +56,7 @@ async function findSiteStylesheet() {
 
 /* Deux visuels sont des composants a eux seuls et non des props : le
    logo, present dans le header et le footer de chaque page, et la
-   marque des dix ans, qui signe l'accueil, la 404 et la page cachee.
+   marque de la dixieme edition, qui signe l'accueil, la 404 et la page cachee.
    Ils partent donc dans le bundle, en data URI. Tous les autres
    visuels sont des props (src), fournis par la page. La version animee
    de la marque n'est pas embarquee : elle pese un demi megaoctet et le
@@ -64,7 +64,7 @@ async function findSiteStylesheet() {
 async function generateAssets() {
   const logoPath = join(siteRoot, "assets", "img", "logo-white.png");
   const logo = await readFile(logoPath);
-  const marquePath = join(siteRoot, "assets", "img", "logo-10ans.svg");
+  const marquePath = join(siteRoot, "assets", "img", "logo-10e.svg");
   const marque = await readFile(marquePath);
   const body = `/* Genere par build.mjs : ne pas editer a la main. */
 
@@ -76,13 +76,13 @@ export const LOGO_TEDXUTTROYES = "data:image/png;base64,${logo.toString("base64"
 export const LOGO_WIDTH = 500;
 export const LOGO_HEIGHT = 105;
 
-/** La marque des dix ans (assets/img/logo-10ans.svg), figee en data URI.
+/** La marque de la dixieme edition (assets/img/logo-10e.svg), figee en data URI.
  *  Le X moire, version statique : c'est celle qui signe la frise, la 404
  *  et la page cachee. */
-export const MARQUE_10ANS = "data:image/svg+xml;base64,${marque.toString("base64")}";
+export const MARQUE_10E = "data:image/svg+xml;base64,${marque.toString("base64")}";
 
 /** Dimensions natives de la marque, carree. */
-export const MARQUE_10ANS_TAILLE = 2160;
+export const MARQUE_10E_TAILLE = 2160;
 `;
   await writeFile(join(here, "src", "assets.generated.ts"), body, "utf8");
   log("logo embarque", `${(logo.length / 1024).toFixed(1)} ko`);

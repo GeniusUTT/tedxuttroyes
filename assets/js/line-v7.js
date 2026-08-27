@@ -3,8 +3,8 @@
    reste droit quand les mots le franchissent (ancres cross, sens ltr ou
    rtl), plie autour des blocs qui portent l'ancre avoid (liste des
    speakers, lieu) en revenant pile entre deux sections, allume la
-   feuille de salle pastille apres pastille, traverse l'album des dix
-   ans a l'horizontale (variable --sweep : les affiches se revelent au
+   feuille de salle pastille apres pastille, traverse l'album des
+   editions a l'horizontale (variable --sweep : les affiches se revelent au
    passage de la pointe), et se branche dans le bouton Reserver.
 
    Regime desktop : defilement virtuel a scrollbar native. Le contenu

@@ -23,7 +23,7 @@ export interface MomentProps {
   crossWord?: string;
   /**
    * Ce qui se glisse sous le chapeau, dans la colonne de texte : la
-   * marque des dix ans signe ainsi le moment de la frise.
+   * marque de la dixieme edition signe ainsi le moment de la frise.
    */
   signature?: ReactNode;
   /** Le contenu supplementaire : listes, figures, liens de rebond. */

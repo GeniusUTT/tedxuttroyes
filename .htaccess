@@ -52,7 +52,7 @@ RedirectMatch 404 ^/design-system(/|$)
 
 # --------------------------------------------------------------------------
 # Dossier de travail, hors site : marque-2027/ contient le systeme de marque
-# du dixieme anniversaire (SVG, PNG, planche de controle, notice). Il vit
+# de la dixieme edition (SVG, PNG, planche de controle, notice). Il vit
 # dans le depot mais ne fait pas partie du site et n'est lie depuis aucune
 # page. Le site publie n'en tire rien.
 # --------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { MARQUE_10ANS, MARQUE_10ANS_TAILLE } from "../assets.generated";
+import { MARQUE_10E, MARQUE_10E_TAILLE } from "../assets.generated";
 
 export interface ErrorHeroProps {
   /** Le code, en grand chiffre de releve. */
@@ -31,10 +31,10 @@ export function ErrorHero({
       {marque ? (
         <img
           className="error-mark"
-          src={MARQUE_10ANS}
+          src={MARQUE_10E}
           alt=""
-          width={MARQUE_10ANS_TAILLE}
-          height={MARQUE_10ANS_TAILLE}
+          width={MARQUE_10E_TAILLE}
+          height={MARQUE_10E_TAILLE}
         />
       ) : null}
       <div className="inner">

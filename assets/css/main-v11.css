@@ -15,7 +15,7 @@
    07. Header et navigation
    08. Hero et telescripteur
    09. Diptyque des deux versants du theme
-   10. Frise des dix ans (sur la marge)
+   10. Frise des editions (sur la marge)
    11. Le dix en batons (tally) et lignes de donnees
    12. Lieu
    13. Registre des editions (13b. Hall of Fame)
@@ -27,7 +27,7 @@
    19. Footer
    20. Prose, notices, 404
    21. Animations et reduced motion
-   22. La marque des dix ans (voile d'ouverture, frise, 404)
+   22. La marque de la dixieme edition (voile d'ouverture, frise, 404)
    ========================================================================== */
 
 /* 01. Polices locales */
@@ -3404,7 +3404,7 @@ details.faq[open] summary .icon {
 }
 
 /* La prise : le constat se range a gauche, le bouton attend a droite
-   dans la continuite du trait qui descend des dix ans. */
+   dans la continuite du trait qui descend de la frise. */
 
 .final-cta {
   position: relative;
@@ -3693,7 +3693,7 @@ details.faq[open] summary .icon {
   align-self: center;
 }
 
-/* 20d. Bande d'archives (accueil, moment dix ans)
+/* 20d. Bande d'archives (accueil, moment dixieme edition)
    Six photos sorties des cartons 2023 et 2024, posees sous la frise. */
 
 .arch {
@@ -3981,9 +3981,9 @@ details.faq[open] summary .icon {
   }
 }
 
-/* 22. La marque des dix ans
-   Le X moire (assets/img/logo-10ans*.svg) sert a trois endroits : le
-   voile d'ouverture de l'accueil, la signature du moment "Dix ans" et
+/* 22. La marque de la dixieme edition
+   Le X moire (assets/img/logo-10e*.svg) sert a trois endroits : le
+   voile d'ouverture de l'accueil, la signature du moment "Dixieme edition" et
    le filigrane de la 404.
 
    Le voile est pose par le script en ligne du head de l'accueil, une
@@ -3992,7 +3992,7 @@ details.faq[open] summary .icon {
    ne l'attend, rien ne peut le retenir si un script tombe. Il ne
    capte pas le pointeur, la page reste utilisable et defilable
    dessous des la premiere frame. Le calage du minutage tient a
-   logo-10ans-intro.svg : ce dessin joue une seule fois en 2,36 s puis
+   logo-10e-intro.svg : ce dessin joue une seule fois en 2,36 s puis
    se fige sur le logo complet, l'opacite ne commence donc a tomber
    qu'a 79 % de 2,9 s, soit 2,29 s.
 
@@ -4081,7 +4081,7 @@ details.faq[open] summary .icon {
   }
 }
 
-/* La signature du moment "Dix ans" : posee sous le chapeau, dans la
+/* La signature du moment "Dixieme edition" : posee sous le chapeau, dans la
    colonne de gauche. Aucune ancre data-line, la marque ne fait
    qu'ajouter de la hauteur, que line.js remesure de lui-meme. */
 .marque-10 {
@@ -4091,7 +4091,7 @@ details.faq[open] summary .icon {
 }
 
 /* Le lockup complet, la ou la marque est le sujet et non la signature :
-   la page cachee des dix ans. */
+   la page cachee du jeu de piste. */
 .marque-10--plein {
   width: min(70vw, 360px);
   margin: 4px 0 26px;
