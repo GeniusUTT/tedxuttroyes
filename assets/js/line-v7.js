@@ -477,16 +477,42 @@
        franchissent, pliures avoid, album, pastilles).
        rails : le serpentin entre deux rails, qui vaut pour le mobile de
        l'accueil et pour toutes les pages interieures. */
+    /* Retour en arriere du 2026-08-27 (demande de Baptiste) : sur une
+       page interieure, le trait anime ne vit plus qu'en mobile. En
+       bureau elles reviennent a la dorsale verticale statique du CSS
+       (main::before, que la feuille ne masque plus au-dessus de
+       1024 px). Le geste de decrochement dans la marge technique, ecrit
+       la veille, est retire : son code vit dans l'historique (commit
+       3699aad) si l'envie revient. */
+    if (parcours && horiz) {
+      if (svg && svg.parentNode) {
+        svg.parentNode.removeChild(svg);
+        svg = null;
+        pathMain = null;
+        pathTail = null;
+        svgW = 0;
+        svgH = 0;
+      }
+      /* Passage de mobile a bureau par redimensionnement : le bouton
+         resterait arme (noir) sans que rien ne vienne l'allumer. */
+      el = main.querySelector('[data-line="plug"]');
+      if (el) {
+        el.classList.remove("plug-armed", "plug-on");
+      }
+      plugEl = null;
+      tableM = [];
+      freezes = [];
+      virtualOn = false;
+      html.classList.remove("jline-run");
+      return;
+    }
+
     var moments = journey && horiz;
-    /* Trois gestes, jamais deux a la fois :
+    /* Deux gestes, jamais les deux a la fois :
        moments : les pliures et les traversees de l'accueil en bureau ;
-       rails   : le serpentin d'un bord a l'autre, en mobile ;
-       jogs    : le decrochement dans la marge technique, sur les pages
-                 interieures en bureau (demande de Baptiste le
-                 2026-08-26 : le bureau a 212 px de marge que le mobile
-                 n'a pas, c'est la que le trait longe les blocs). */
+       rails   : le serpentin d'un bord a l'autre, en mobile (l'accueil
+                 comme les pages interieures). */
     var rails = !horiz;
-    var jogs = parcours && horiz;
     var virtual = moments && !reduce.matches;
     wrapRect = wrap.getBoundingClientRect();
     contentH = wrapRect.height;
@@ -816,80 +842,6 @@
       }
     }
 
-    /* Le decrochement, en bureau sur une page interieure. Le mobile n'a
-       que 20 px de marge : il traverse la page. Le bureau, lui, dispose
-       de la marge technique (212 px a 1440), et c'est la que le trait va
-       longer le bloc ancre : il quitte le rail, descend dans la marge le
-       long du bloc, puis revient. Meme partition qu'en mobile (les memes
-       ancres, donc la meme silhouette par type de page), autre geste.
-
-       Les etiquettes de section (.cote) vivent dans cette marge, calees a
-       droite contre le rail : leur encre va de 76 a 258 px a 1440. Le
-       decrochement part donc SOUS l'etiquette de sa section, sinon le
-       trait lui passerait au travers. */
-    if (jogs) {
-      var innerEl = main.querySelector(".inner");
-      var margeL = innerEl ? relRect(innerEl).left : 8;
-      var jogX = Math.max(margeL + 8, axB - 96);
-      var etiquettes = [];
-      var cotes = main.querySelectorAll(".cote");
-      var rg;
-      var rb;
-      for (c = 0; c < cotes.length; c++) {
-        rg = doc.createRange();
-        rg.selectNodeContents(cotes[c]);
-        rb = rg.getBoundingClientRect();
-        if (rb.width < 2 || rb.height < 2) {
-          continue;
-        }
-        etiquettes.push({
-          left: rb.left - wrapRect.left,
-          right: rb.right - wrapRect.left,
-          top: rb.top - wrapRect.top,
-          bottom: rb.bottom - wrapRect.top
-        });
-      }
-      var flanked = main.querySelectorAll("[data-line-flank]");
-      var lastJog = -1e9;
-      var gJ;
-      var y1;
-      var y2;
-      var et;
-      for (c = 0; c < flanked.length; c++) {
-        el = flanked[c];
-        /* Meme garde-fou qu'en mobile : les pastilles du planning sont
-           posees sur l'axe, le trait doit les enfiler. */
-        if (el.querySelector(".tl-row .tl-dot")) {
-          continue;
-        }
-        gJ = gapNear(el, -1, cartes, filets);
-        if (!gJ) {
-          continue;
-        }
-        y1 = gJ.y;
-        gJ = gapNear(el, 1, cartes, filets);
-        /* Bloc en dernier de page (la prose des mentions legales) : il
-           n'a aucun voisin en dessous, donc aucun blanc a mesurer. Le
-           decrochement se referme alors juste sous le bloc. */
-        y2 = gJ ? gJ.y : Math.min(H - 8, rowSpan(el).bottom + 24);
-        for (var q = 0; q < etiquettes.length; q++) {
-          et = etiquettes[q];
-          if (et.right >= jogX - 4 && et.left <= axB + 4 &&
-              et.bottom > y1 && et.top < y2) {
-            y1 = Math.max(y1, et.bottom + 12);
-          }
-        }
-        /* Trop court, le decrochement ne se lit plus comme un flanc mais
-           comme un accident : 56 px au moins, et 40 px depuis le
-           precedent. */
-        if (y2 - y1 < 56 || y1 < lastJog + 40) {
-          continue;
-        }
-        pts.push([axB, y1], [jogX, y1], [jogX, y2], [axB, y2]);
-        lastJog = y2;
-      }
-    }
-
     /* Moment 4 : l'album des editions (desktop). La ligne quitte l'axe B
        pile entre le texte de la section et les affiches, rejoint la
        marge gauche, descend au niveau du fil (le centre de la bande des
@@ -1178,6 +1130,9 @@
      ------------------------------------------------------------------ */
 
   function apply(scroll) {
+    if (!pathMain) {
+      return;
+    }
     var offY = gOf(scroll);
     if (virtualOn) {
       wrap.style.transform = "translate3d(0, " + (-offY).toFixed(2) + "px, 0)";
