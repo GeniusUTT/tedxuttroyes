@@ -30,9 +30,9 @@ export const NAV: NavEntry[] = [
   { key: "faq", label: "FAQ", href: "/faq/", footerLabel: "FAQ pratique" }
 ];
 
-/* PLACEHOLDER : remplacer par le vrai lien HelloAsso de billetterie. */
+/* PLACEHOLDER : remplacer par le vrai lien Billetweb de billetterie. */
 export const BILLETTERIE_URL =
-  "https://www.helloasso.com/associations/geniusutt/evenements/tedxuttroyes-2027-10e-edition";
+  "https://www.billetweb.fr/tedxuttroyes-2027-10e-edition";
 
 export const CONTACT_MAIL = "geniusutt@utt.fr";
 export const INSTAGRAM_URL = "https://www.instagram.com/tedxuttroyes/";

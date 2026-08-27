@@ -29,6 +29,7 @@ import {
   Heading,
   Hero,
   HofYear,
+  INSTAGRAM_URL,
   Lead,
   LieuBlock,
   LinkMore,
@@ -60,7 +61,7 @@ const bandBilletterie = (
   <Band
     title="La dixième ligne du registre s'écrira le 18 mars 2027."
     lead="Franchir ou s'adapter ? 750 fauteuils au Centre de Congrès de l'Aube pour en décider."
-    note="Billetterie hébergée sur HelloAsso. Aucune donnée n'est collectée sur ce site."
+    note="Billetterie hébergée sur Billetweb. Aucune donnée n'est collectée sur ce site."
   >
     <Actions>
       <Button href={BILLETTERIE_URL} external>
@@ -339,8 +340,11 @@ const speakers: DemoPage = {
           />
         </SpeakerGrid>
         <Notice>
-          Pour être prévenu à chaque levée d'embargo : la newsletter, depuis la page
-          d'accueil.
+          Pour être prévenu à chaque levée d'embargo : le compte Instagram{" "}
+          <a href={INSTAGRAM_URL} target="_blank" rel="noopener">
+            @tedxuttroyes
+          </a>
+          .
         </Notice>
       </Section>
 
@@ -358,7 +362,7 @@ const speakers: DemoPage = {
       <Band
         title="Chaque année, la salle se remplit avant la fin des annonces."
         lead="750 fauteuils, six inconnues, une soirée. Réserver maintenant, c'est parier sur dix ans d'exigence."
-        note="Billetterie hébergée sur HelloAsso. Aucune donnée n'est collectée sur ce site."
+        note="Billetterie hébergée sur Billetweb. Aucune donnée n'est collectée sur ce site."
       >
         <Actions>
           <Button href={BILLETTERIE_URL} external>
@@ -432,7 +436,7 @@ const programme: DemoPage = {
 
       <Band
         title="La soirée commence à 18h00. Votre décision peut commencer maintenant."
-        note="Billetterie hébergée sur HelloAsso. Aucune donnée n'est collectée sur ce site."
+        note="Billetterie hébergée sur Billetweb. Aucune donnée n'est collectée sur ce site."
       >
         <Actions>
           <Button href={BILLETTERIE_URL} external>
@@ -495,7 +499,7 @@ const editions: DemoPage = {
       <Band
         title="Le registre attend sa dixième ligne."
         lead="Elle s'écrira le 18 mars 2027, devant 750 personnes."
-        note="Billetterie hébergée sur HelloAsso. Aucune donnée n'est collectée sur ce site."
+        note="Billetterie hébergée sur Billetweb. Aucune donnée n'est collectée sur ce site."
       >
         <Actions>
           <Button href={BILLETTERIE_URL} external>
@@ -789,7 +793,7 @@ const aPropos: DemoPage = {
 
       <Band
         title="Les talks se regardent en ligne. Les idées se vivent en salle."
-        note="Billetterie hébergée sur HelloAsso. Aucune donnée n'est collectée sur ce site."
+        note="Billetterie hébergée sur Billetweb. Aucune donnée n'est collectée sur ce site."
       >
         <Actions>
           <Button href={BILLETTERIE_URL} external>
@@ -818,7 +822,7 @@ const faq: DemoPage = {
         <FaqGroup title="Billetterie">
           <FaqItem question="Comment réserver ma place ?">
             <p>
-              La billetterie est hébergée sur HelloAsso : cliquez sur « Réserver ma place »
+              La billetterie est hébergée sur Billetweb : cliquez sur « Réserver ma place »
               depuis n'importe quelle page du site.
             </p>
           </FaqItem>

@@ -25,7 +25,7 @@ export function FinalCta({
   title,
   cta = "Réserver ma place",
   href = BILLETTERIE_URL,
-  note = "Billetterie hébergée sur HelloAsso. Aucune donnée n'est collectée sur ce site.",
+  note = "Billetterie hébergée sur Billetweb. Aucune donnée n'est collectée sur ce site.",
   cote = "Billetterie",
   id = "billetterie"
 }: FinalCtaProps) {
@@ -37,7 +37,7 @@ export function FinalCta({
           <h2 className="final-title">{title}</h2>
         </div>
         <div className="final-plug">
-          {/* PLACEHOLDER : remplacer par le vrai lien HelloAsso de billetterie */}
+          {/* PLACEHOLDER : remplacer par le vrai lien Billetweb de billetterie */}
           <a
             className="btn btn--primary"
             data-line="plug"

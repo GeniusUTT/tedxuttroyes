@@ -74,7 +74,7 @@ composant, `<Nom>.d.ts` donne le contrat de props et `<Nom>.prompt.md` l'usage.
   <Section cote="Questions, réponses">
     <FaqGroup title="Billetterie">
       <FaqItem question="Comment réserver ma place ?">
-        <p>La billetterie est hébergée sur HelloAsso.</p>
+        <p>La billetterie est hébergée sur Billetweb.</p>
       </FaqItem>
     </FaqGroup>
 

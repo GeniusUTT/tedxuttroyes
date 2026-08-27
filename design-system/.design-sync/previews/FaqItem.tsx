@@ -8,7 +8,7 @@ export function Question() {
   return (
     <FaqItem question="Comment réserver ma place ?">
       <p>
-        La billetterie est hébergée sur HelloAsso : cliquez sur « Réserver ma place »
+        La billetterie est hébergée sur Billetweb : cliquez sur « Réserver ma place »
         depuis n'importe quelle page du site. Votre billet, envoyé par e-mail, sera à
         présenter à l'entrée, sur téléphone ou imprimé.
       </p>

@@ -40,7 +40,7 @@ export function SiteHeader({ current }: SiteHeaderProps) {
             <a className="btn btn--ghost btn--sm" href="/devenir-speaker/">
               Postuler
             </a>
-            {/* PLACEHOLDER : remplacer par le vrai lien HelloAsso de billetterie */}
+            {/* PLACEHOLDER : remplacer par le vrai lien Billetweb de billetterie */}
             <a
               className="btn btn--primary btn--sm"
               href={BILLETTERIE_URL}
@@ -107,7 +107,7 @@ export function SiteHeader({ current }: SiteHeaderProps) {
           <a className="btn btn--ghost" href="/devenir-speaker/">
             Postuler comme speaker
           </a>
-          {/* PLACEHOLDER : remplacer par le vrai lien HelloAsso de billetterie */}
+          {/* PLACEHOLDER : remplacer par le vrai lien Billetweb de billetterie */}
           <a
             className="btn btn--primary"
             href={BILLETTERIE_URL}

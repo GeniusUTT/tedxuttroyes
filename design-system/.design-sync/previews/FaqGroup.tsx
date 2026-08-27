@@ -6,7 +6,7 @@ export function Groupe() {
     <FaqGroup title="Billetterie">
       <FaqItem question="Comment réserver ma place ?">
         <p>
-          La billetterie est hébergée sur HelloAsso : cliquez sur « Réserver ma place »
+          La billetterie est hébergée sur Billetweb : cliquez sur « Réserver ma place »
           depuis n'importe quelle page du site.
         </p>
       </FaqItem>
@@ -18,7 +18,7 @@ export function Groupe() {
       <FaqItem question="Puis-je me faire rembourser ou céder mon billet ?">
         <p>
           Les conditions d'échange et de remboursement seront précisées sur la page
-          HelloAsso de la billetterie.
+          Billetweb de la billetterie.
         </p>
       </FaqItem>
     </FaqGroup>

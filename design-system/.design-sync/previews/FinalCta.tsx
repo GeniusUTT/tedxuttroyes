@@ -17,7 +17,7 @@ export function ConstatCourt() {
     <FinalCta
       title="Le registre attend sa dixième ligne."
       cta="Prendre ma place"
-      note="Billetterie hébergée sur HelloAsso. Aucune donnée n'est collectée sur ce site."
+      note="Billetterie hébergée sur Billetweb. Aucune donnée n'est collectée sur ce site."
     />
   );
 }

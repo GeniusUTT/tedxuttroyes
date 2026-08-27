@@ -62,7 +62,7 @@ Etat au dernier passage : 184 classes couvertes sur 186, zero invention.
   <Section cote="Questions, réponses">
     <FaqGroup title="Billetterie">
       <FaqItem question="Comment réserver ma place ?">
-        <p>La billetterie est hébergée sur HelloAsso.</p>
+        <p>La billetterie est hébergée sur Billetweb.</p>
       </FaqItem>
     </FaqGroup>
   </Section>
