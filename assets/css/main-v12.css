@@ -13,7 +13,7 @@
    05. Typographie : display, cote, donnees mono
    06. Boutons, liens, icones
    07. Header et navigation
-   08. Hero et telescripteur
+   08. Hero, telescripteur et repere d'ouverture
    09. Diptyque des deux versants du theme
    10. Frise des editions (sur la marge)
    11. Le dix en batons (tally) et lignes de donnees
@@ -146,6 +146,7 @@
   --line-x: calc(var(--m-left) + var(--rail-w));
   --body-pad: 20px;   /* distance ligne > contenu (mobile) */
 
+  --z-repere: 120;
   --z-menu: 150;
   --z-header: 200;
   --z-skip: 300;
@@ -1406,6 +1407,80 @@ body.nav-open {
   }
 }
 
+/* Le repere d'ouverture : une phrase au milieu de l'ecran qui dit ce que
+   le trait rouge fait la, et qui s'efface au premier defilement (demande
+   de Baptiste le 2026-08-28). main.js pose repere-off sur html des que la
+   page a bouge de plus de 4 px, le meme signal que le fond du header.
+
+   Trois choses la rendent inoffensive : elle est en position: fixed,
+   donc elle ne peut pas pousser le seuil hors du premier ecran (regle
+   dure) ; elle est en pointer-events: none, donc elle n'intercepte aucun
+   clic ; et elle ne vit que sur l'accueil (.journey), les pages
+   interieures n'ayant pas d'ouverture a expliquer. Sous le menu mobile
+   (z 150) et sous le header (z 200), qui la recouvrent proprement.
+
+   Le 50vw vise le milieu du moniteur et non celui de la zone utile,
+   comme --axis-b : au-dessous de 1920 px le bloc se centre donc pile sur
+   l'axe que suit le trait rouge, ce qui est tout le propos.
+
+   Le texte est a deux temps : la version servie ne nomme pas le theme,
+   masque jusqu'au 31 octobre 2026 ; data-reveal porte celle qui dit
+   "c'est la limite". Retoucher l'une oblige a retoucher l'autre.
+
+   L'entree et la sortie vivent sur deux elements expres : la boite
+   interieure porte l'animation d'apparition (forwards, calee juste apres
+   le dernier palier du seuil), l'enveloppe porte la transition de
+   disparition. Les melanger ferait sauter le bloc au lieu de le fondre,
+   une animation forwards ne se laissant pas transitionner. */
+.journey .repere {
+  position: fixed;
+  z-index: var(--z-repere);
+  top: 50%;
+  left: 50vw;
+  width: min(560px, calc(100vw - 40px));
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: opacity 0.45s var(--ease-out), visibility 0s linear 0.45s;
+}
+
+.repere-off .journey .repere {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.journey .repere-box {
+  margin: 0;
+  padding: 16px 20px;
+  border: 1px solid var(--filet);
+  border-left: 2px solid var(--rouge);
+  background-color: rgba(8, 8, 8, 0.92);
+  opacity: 0;
+  animation: aIn 0.65s var(--ease-out) 1.15s forwards;
+}
+
+/* Sur telephone le seuil est serre : au milieu pile, le bloc recouvrait
+   la ligne de date et le bouton « Reserver ma place ». On le descend
+   d'un cran (demande de Baptiste le 2026-08-28), il se pose alors sous
+   les deux boutons sans quitter le milieu de l'ecran. */
+@media (max-width: 639px) {
+  .journey .repere {
+    top: 62%;
+  }
+}
+
+.journey .repere-box .cote {
+  margin-bottom: 8px;
+}
+
+.repere-t {
+  margin: 0;
+  font-family: var(--font-disp);
+  font-weight: 600;
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  line-height: 1.3;
+  color: var(--papier);
+}
+
 /* 09 et 10 : le diptyque et l'ancienne frise en marge ont ete dissous
    dans le parcours de la ligne continue (section 20b). */
 
@@ -1451,7 +1526,20 @@ body.nav-open {
   border-top: 1px solid var(--filet);
 }
 
+/* La rangee entiere est cliquable depuis le 2026-08-28 (demande de
+   Baptiste) : le lien « ouvrir l'edition X » a disparu, le titre de
+   l'edition est devenu le seul lien de la rangee et son ::after couvre
+   toute la carte. C'est le motif du lien etire : la cible au doigt fait
+   la hauteur de la rangee, mais le lien reste un vrai lien, avec un nom
+   accessible qui porte l'annee (un <span class="visually-hidden"> dans
+   le HTML, que le titre seul ne dit pas).
+
+   Deux consequences a ne pas defaire : la rangee doit rester en
+   position: relative (sinon le ::after se cale sur un autre ancetre et
+   couvre la page), et rien d'autre dans la rangee ne doit devenir
+   cliquable, un ::after etire recouvrant tout ce qui passe dessous. */
 .reg-row {
+  position: relative;
   display: grid;
   gap: 8px 24px;
   padding: 22px 0;
@@ -1459,7 +1547,7 @@ body.nav-open {
 }
 
 .reg-row:hover {
-  background-color: rgba(237, 234, 228, 0.02);
+  background-color: rgba(237, 234, 228, 0.04);
 }
 
 .reg-year {
@@ -1475,7 +1563,36 @@ body.nav-open {
   font-size: clamp(1.35rem, 2.8vw, 1.9rem);
   letter-spacing: -0.015em;
   line-height: 1.05;
-  margin-bottom: 8px;
+}
+
+.reg-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* La surface cliquable, etiree sur toute la rangee. Le padding de la
+   rangee est compris : on deborde de sa moitie de gouttiere pour que
+   deux rangees voisines se touchent sans laisser de bande morte. */
+.reg-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.reg-row:hover .reg-link,
+.reg-link:focus-visible {
+  color: var(--rouge-vif);
+}
+
+/* Le focus clavier cerne la rangee, pas le seul titre : c'est elle que
+   l'on active. outline-offset negatif pour rester dans la bordure. */
+.reg-link:focus-visible {
+  outline: none;
+}
+
+.reg-link:focus-visible::after {
+  outline: 2px solid var(--rouge);
+  outline-offset: -2px;
 }
 
 .reg-media {
@@ -1851,23 +1968,19 @@ body.nav-open {
   }
 }
 
-/* Desktop : la liste se centre sur l'axe de la page au lieu de rester
-   calee sur la marge de gauche. Passe 1494 px le mwrap bute sur son
-   plafond de 1360 px et tout le vide tombait a droite (464 px a
-   1920 px, la liste centree a 776 px pour un axe a 960) ; le decalage
-   rend autant de noir de chaque cote. Le max() borne la regle : tant
-   que le mwrap remplit la largeur disponible, la liste garde le bord
-   du titre. Le 50 % se resout sur le mwrap, dont la liste prend toute
-   la largeur : c'est bien sa demi-largeur.
-   La rangee d'actions qui suit la liste prend le meme decalage (le
-   50 % se mesure sur le meme mwrap) : le bouton Postuler part du bord
-   gauche de la liste, pas de celui du titre. */
+/* Desktop : la liste reste calee sur la marge de gauche, au bord du
+   titre et du chapo qui la presentent (demande de Baptiste le
+   2026-08-28). Elle a ete centree sur l'axe de la page du 2026-08-18 au
+   2026-08-28 : passe 1494 px le mwrap bute sur son plafond de 1360 px
+   et tout le vide tombait a droite, le decalage rendait autant de noir
+   de chaque cote. Le prix etait un alinea que rien d'autre sur la page
+   ne partageait. Si l'envie du centrage revient, la regle etait
+   margin-left: max(0px, calc(var(--axis-b) - var(--m-left) - 50%)) sur
+   .slist et .slist + .more-row, plus width: 100% sur .slist.
+   Consequence sur le trace : la liste porte data-line="avoid", le
+   contournement se recalcule tout seul et ne se declenche que si l'axe
+   la traverse encore. */
 @media (min-width: 1024px) {
-  .slist,
-  .slist + .more-row {
-    margin-left: max(0px, calc(var(--axis-b) - var(--m-left) - 50%));
-  }
-
   .slist {
     width: 100%;
   }
@@ -2358,10 +2471,25 @@ details.faq[open] summary .icon {
    d'arret est mesuree par line.js (--dorsale-fin) ; le raccord, lui, est
    une constante : du rail au contenu il y a toujours --body-pad. Sans
    JavaScript la variable n'existe pas, la dorsale descend jusqu'en bas
-   et le raccord se pose simplement dessus. */
+   et le raccord se pose simplement dessus.
+
+   Le virage est arrondi comme ceux du trait anime de l'accueil (demande
+   de Baptiste le 2026-08-28) : meme rayon de 22 px que le roundedPath()
+   de line.js, pour que la dorsale statique et la ligne dessinee plient
+   de la meme facon. Le coin n'est pas un element de plus, c'est le
+   raccord lui-meme, devenu une equerre : bord gauche et bord bas d'une
+   boite de 22 px de haut, adoucis par un border-bottom-left-radius. La
+   dorsale s'arrete donc 21 px plus haut qu'avant pour lui laisser la
+   place (21 et non 22 : le trait fait 2 px, son axe passe un demi-pixel
+   sous le bord de la boite).
+
+   Le calc(var(--dorsale-fin, -21px) + 21px) porte le repli : quand
+   line.js n'a pas pose la variable (pas de JavaScript, ou une page sans
+   bouton comme les mentions legales), la valeur de secours annule le
+   decalage et la dorsale redescend jusqu'au bas du contenu. */
 @media (min-width: 1024px) {
   .parcours main::before {
-    bottom: var(--dorsale-fin, 0px);
+    bottom: calc(var(--dorsale-fin, -21px) + 21px);
   }
 
   .parcours [data-line="plug"] {
@@ -2374,9 +2502,11 @@ details.faq[open] summary .icon {
     top: 50%;
     right: 100%;
     width: var(--body-pad);
-    height: 2px;
-    margin-top: -1px;
-    background-color: var(--rouge);
+    height: 22px;
+    margin-top: -21px;
+    border-left: 2px solid var(--rouge);
+    border-bottom: 2px solid var(--rouge);
+    border-bottom-left-radius: 22px;
   }
 }
 
@@ -3945,6 +4075,13 @@ details.faq[open] summary .icon {
   }
 
   .a {
+    animation: none;
+    opacity: 1;
+  }
+
+  /* Le repere d'ouverture est la d'emblee : il disparait toujours au
+     premier defilement, mais sans fondu. */
+  .journey .repere-box {
     animation: none;
     opacity: 1;
   }

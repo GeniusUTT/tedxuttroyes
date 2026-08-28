@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
+import { Repere } from "../accueil/Repere";
 import { VoileOuverture } from "../marque/Marque10";
 import type { NavKey } from "../types";
 
@@ -29,6 +30,13 @@ export interface PageShellProps {
    * head qui decide de l'afficher, une seule fois par onglet.
    */
   voile?: boolean;
+  /**
+   * Le repere d'ouverture, reserve a l'accueil : la phrase posee au
+   * milieu de l'ecran qui dit ce que le trait rouge fait la. Sur le
+   * site, main.js la fait fondre au premier defilement ; le paquet ne
+   * rejoue que le markup, la boite y reste donc visible.
+   */
+  repere?: boolean;
 }
 
 /**
@@ -42,7 +50,8 @@ export function PageShell({
   current,
   variant = "page",
   footer = true,
-  voile = false
+  voile = false,
+  repere = false
 }: PageShellProps) {
   return (
     <div className={variant === "journey" ? "journey" : "parcours"}>
@@ -50,6 +59,7 @@ export function PageShell({
         Aller au contenu
       </a>
       {voile ? <VoileOuverture /> : null}
+      {repere ? <Repere /> : null}
       <SiteHeader current={current} />
       <main id="contenu">{children}</main>
       {footer ? <SiteFooter finale={variant === "journey"} /> : null}

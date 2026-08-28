@@ -41,12 +41,12 @@
   <link rel="preload" href="/assets/fonts/bricolage-var-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/dm-sans-var-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/space-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/css/main-v11.css">
+  <link rel="stylesheet" href="/assets/css/main-v12.css">
   <script>document.documentElement.classList.add("js");</script>
   <script>try { if (!sessionStorage.getItem("tedx-ouverture") && !matchMedia("(prefers-reduced-motion: reduce)").matches) { var v = document.documentElement; v.classList.add("voile-on"); if (localStorage.getItem("tedx-ouverture-vue")) { v.classList.add("voile-court") } sessionStorage.setItem("tedx-ouverture", "1"); localStorage.setItem("tedx-ouverture-vue", "1") } } catch (e) { }</script>
   <script src="/assets/js/reveal.js" defer></script>
-  <script src="/assets/js/main-v4.js" defer></script>
-  <script src="/assets/js/line-v7.js" defer></script>
+  <script src="/assets/js/main-v5.js" defer></script>
+  <script src="/assets/js/line-v8.js" defer></script>
   <script src="/assets/js/map.js" defer></script>
 
   <script type="application/ld+json">
@@ -57,7 +57,7 @@
     "description": "Dixième édition de TEDxUTTroyes : talks en direct et vidéos de conférences TED au Centre de Congrès de l'Aube, à Troyes.",
     "startDate": "2027-03-18T18:00:00+01:00",
     "doorTime": "2027-03-18T18:00:00+01:00",
-    "endDate": "2027-03-18T23:00:00+01:00",
+    "endDate": "2027-03-19T00:00:00+01:00",
     "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
     "eventStatus": "https://schema.org/EventScheduled",
     "location": {
@@ -103,6 +103,15 @@
   <div class="voile" aria-hidden="true">
     <img class="voile-mark voile-mark--trace" src="/assets/img/logo-10e-intro.svg" alt="" width="2160" height="2160">
     <img class="voile-mark voile-mark--fixe" src="/assets/img/logo-10e.svg" alt="" width="2160" height="2160">
+  </div>
+
+  <div class="repere">
+    <div class="repere-box">
+      <p class="cote">Repère</p>
+      <p class="repere-t"
+        data-reveal="Suivez la ligne rouge : c'est la limite, et elle vous guide de page en page jusqu'au jour J.">Suivez
+        la ligne rouge : elle vous guide de page en page jusqu'au jour J.</p>
+    </div>
   </div>
 
   <header class="site-header">
@@ -222,7 +231,7 @@
                 <li><a
                     href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=TEDxUTTroyes%202027%20%3A%20r%C3%A9v%C3%A9lation%20de%20la%20date%20et%20du%20th%C3%A8me&amp;dates=20261031T170000Z%2F20261031T180000Z&amp;details=La%20dixi%C3%A8me%20%C3%A9dition%20de%20TEDxUTTroyes%20l%C3%A8ve%20le%20voile%20sur%20sa%20date%20et%20son%20th%C3%A8me%20%3A%20rendez-vous%20sur%20https%3A%2F%2Ftedxuttroyes.fr%2F&amp;location=https%3A%2F%2Ftedxuttroyes.fr%2F"
                     target="_blank" rel="noopener" data-reveal-attr="href"
-                    data-reveal="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=TEDxUTTroyes%202027%20%3A%20Franchir%20ou%20s%27adapter%20%3F&amp;dates=20270318T170000Z%2F20270318T220000Z&amp;details=Dixi%C3%A8me%20%C3%A9dition%20de%20TEDxUTTroyes%2C%20autour%20du%20th%C3%A8me%20de%20la%20limite%20%3A%20franchir%20ou%20s%27adapter%20%3F%0A%0A18h00%20%3A%20ouverture%20des%20portes%20et%20mini%20forum%20de%20recrutement%0A19h30%20%3A%20ouverture%20de%20la%20soir%C3%A9e%2C%20six%20talks%20en%20deux%20sessions%20et%20une%20vid%C3%A9o%20de%20conf%C3%A9rence%20TED%0A22h40%20%3A%20derni%C3%A8re%20question%2C%20puis%20rencontre%20avec%20les%20intervenants%0A%0A750%20places%20au%20Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%20%C3%A0%20Troyes.%0AProgramme%20%3A%20https%3A%2F%2Ftedxuttroyes.fr%2Fprogramme%2F%0ABilletterie%20%3A%20https%3A%2F%2Fwww.billetweb.fr%2Ftedxuttroyes-2027-10e-edition&amp;location=Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%202%20rue%20Pierre%20Labonde%2C%2010000%20Troyes">Google
+                    data-reveal="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=TEDxUTTroyes%202027%20%3A%20Franchir%20ou%20s%27adapter%20%3F&amp;dates=20270318T170000Z%2F20270318T230000Z&amp;details=Dixi%C3%A8me%20%C3%A9dition%20de%20TEDxUTTroyes%2C%20autour%20du%20th%C3%A8me%20de%20la%20limite%20%3A%20franchir%20ou%20s%27adapter%20%3F%0A%0A18h00%20%3A%20ouverture%20des%20portes%20et%20mini%20forum%20de%20recrutement%0A19h30%20%3A%20ouverture%20de%20la%20soir%C3%A9e%2C%20six%20talks%20en%20deux%20sessions%20et%20un%20entracte%0A22h30%20%3A%20pot%20VIP%2C%20rencontre%20avec%20les%20intervenantes%20et%20intervenants%20jusqu%27%C3%A0%20minuit%0A%0A750%20places%20au%20Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%20%C3%A0%20Troyes.%0AProgramme%20%3A%20https%3A%2F%2Ftedxuttroyes.fr%2Fprogramme%2F%0ABilletterie%20%3A%20https%3A%2F%2Fwww.billetweb.fr%2Ftedxuttroyes-2027-10e-edition&amp;location=Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%202%20rue%20Pierre%20Labonde%2C%2010000%20Troyes">Google
                     Agenda<span class="visually-hidden"> (nouvelle fenêtre)</span></a></li>
                 <li><a href="/assets/agenda/revelation.ics" data-reveal-attr="href"
                     data-reveal="/assets/agenda/tedxuttroyes-2027.ics">Apple Calendrier</a></li>
@@ -289,7 +298,7 @@
               <p class="lead">Le corps compose avec la maladie, la ville avec sa rivière, l'ingénieur avec la matière.
                 S'adapter, c'est faire de la ligne un appui : plier sans rompre, transformer la contrainte en méthode.
                 C'est le second versant du thème : certaines limites ne se dépassent pas, elles s'apprivoisent, et ce
-                renoncement apparent demande autant de courage que le dépacement.</p>
+                renoncement apparent demande autant de courage que le dépassement.</p>
             </template>
             <div class="colR" id="versant-2">
               <h2 class="mom-title"><span aria-hidden="true"><span class="redact" style="width: 2ch"></span> <span
@@ -472,8 +481,8 @@
           <p class="cote">Programme</p>
           <div class="colL">
             <h2 class="mom-title">La soirée, réglée au quart d'heure</h2>
-            <p class="lead">Portes à 18h00 avec un mini forum de recrutement, premier talk à 19h30, dernière talk
-              à 22h30. La feuille de salle tient en 7 temps.</p>
+            <p class="lead">Portes à 18h00 avec un mini forum de recrutement, premier talk à 19h30, dernier talk
+              à 22h30. La feuille de salle tient en 6 temps.</p>
           </div>
           <ol data-reveal-attr="aria-label" data-reveal="Le déroulé de la soirée du 18 mars 2027" class="tl"
             aria-label="Le déroulé de la soirée du ** **** ****">
@@ -565,7 +574,7 @@
               </div>
               <span class="tl-dot" aria-hidden="true"></span>
               <div class="tl-body">
-                <p class="tl-title">Pôt VIP</p>
+                <p class="tl-title">Pot VIP</p>
                 <p class="tl-desc">Un moment privilégié pour rencontrer les intervenantes et intervenants autour d'un verre.</p>
               </div>
             </li>
@@ -723,7 +732,7 @@
           </figure>
           <ul class="data-lines" data-line="avoid" data-line-margin="28" data-line-margin-m="14"
             aria-label="La dixième édition en chiffres">
-            <li><strong>60</strong><span>talks partagés sur la scène troyenne depuis 2016</span></li>
+            <li><strong>61</strong><span>talks partagés sur la scène troyenne depuis 2016</span></li>
             <li><strong>2500</strong><span>spectateurs cumulés sur 9 éditions</span></li>
             <li><strong>750</strong><span>fauteuils le <span class="msk" data-c="18 mars 2027">** **** ****</span>, pas
                 un de plus</span></li>

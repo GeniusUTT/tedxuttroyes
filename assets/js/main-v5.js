@@ -1,9 +1,9 @@
 /* TEDxUTTroyes 2027 - script principal ("Le releve")
    Zero dependance, charge en defer.
-   Modules : etat du header, menu mobile accessible, telescripteur
-   du compte a rebours, trace du dixieme baton. L'allumage de la
-   feuille de salle de l'accueil est pilote par line-v7.js (la pointe
-   du trait franchit les pastilles). */
+   Modules : etat du header, repere d'ouverture de l'accueil, menu
+   mobile accessible, telescripteur du compte a rebours, trace du
+   dixieme baton. L'allumage de la feuille de salle de l'accueil est
+   pilote par line-v8.js (la pointe du trait franchit les pastilles). */
 
 (function () {
   "use strict";
@@ -26,6 +26,34 @@
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
+  }
+
+  /* ------------------------------------------------------------------
+     Le repere d'ouverture : la phrase posee au milieu de l'accueil
+     s'efface des que la lecture commence (demande de Baptiste le
+     2026-08-28). Meme seuil que le fond du header, et une seule fois :
+     l'ecouteur se retire de lui-meme, le repere ne revient pas si l'on
+     remonte en haut de la page.
+
+     Sur l'accueil en bureau la page est en defilement virtuel, mais
+     window.scrollY continue d'avancer normalement : ce signal vaut dans
+     les deux regimes. Le fondu est en CSS (classe repere-off sur html),
+     le script ne fait que donner le depart. */
+  var repere = doc.querySelector(".repere");
+  if (repere) {
+    var closeRepere = function () {
+      doc.documentElement.classList.add("repere-off");
+      window.removeEventListener("scroll", onRepereScroll);
+    };
+    var onRepereScroll = function () {
+      if (window.scrollY > 4) {
+        closeRepere();
+      }
+    };
+    window.addEventListener("scroll", onRepereScroll, { passive: true });
+    /* Rechargement au milieu de la page, ou retour par l'historique :
+       la lecture a deja commence, le repere n'a plus lieu d'etre. */
+    onRepereScroll();
   }
 
   /* ------------------------------------------------------------------

@@ -5,17 +5,17 @@ CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
 UID:tedxuttroyes-2027-03-18@tedxuttroyes.fr
-DTSTAMP:20260816T000000Z
+DTSTAMP:20260828T000000Z
 DTSTART:20270318T170000Z
-DTEND:20270318T220000Z
+DTEND:20270318T230000Z
 SUMMARY:TEDxUTTroyes 2027 : Franchir ou s'adapter ?
 DESCRIPTION:Dixième édition de TEDxUTTroyes\, autour du thème de la limi
  te : franchir ou s'adapter ?\n\n18h00 : ouverture des portes et mini forum
   de recrutement\n19h30 : ouverture de la soirée\, six talks en deux sessi
- ons et une vidéo de conférence TED\n22h40 : dernière question\, puis re
- ncontre avec les intervenants\n\n750 places au Centre de Congrès de l'Aub
- e\, à Troyes.\nProgramme : https://tedxuttroyes.fr/programme/\nBilletteri
- e : https://www.billetweb.fr/tedxuttroyes-2027-10e-edition
+ ons et un entracte\n22h30 : pot VIP\, rencontre avec les intervenantes et 
+ intervenants jusqu'à minuit\n\n750 places au Centre de Congrès de l'Aube
+ \, à Troyes.\nProgramme : https://tedxuttroyes.fr/programme/\nBilletterie
+  : https://www.billetweb.fr/tedxuttroyes-2027-10e-edition
 URL:https://tedxuttroyes.fr/
 LOCATION:Centre de Congrès de l'Aube\, 2 rue Pierre Labonde\, 10000 Troyes
 GEO:48.298433;4.077912

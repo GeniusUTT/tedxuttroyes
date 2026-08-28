@@ -605,7 +605,6 @@
          franchir, son mot reste donc immobile. */
       var onRightRail = el.hasAttribute("data-line-flank");
       if (word && !reduce.matches && (moments || !onRightRail)) {
-        r = relRect(el);
         var wr = relRect(word);
         var rtl = el.getAttribute("data-cross-dir") === "rtl";
         var dist;
@@ -619,36 +618,36 @@
         if (dist > 40) {
           st.dist = dist;
           el.style.setProperty("--cross-dist", dist + "px");
-          if (moments) {
-            crosses.push({ el: el, st: st, top: r.top, h: r.height });
-          } else {
-            /* En mobile la section est plus courte qu'un ecran : cadencer
-               le mot sur toute sa hauteur le ferait finir sa course avant
-               qu'il soit entre dans l'ecran. Le mot se cale donc sur
-               lui-meme, du bas de l'ecran au tiers superieur (demande
-               de Baptiste le 2026-08-26) : il s'ebranle quand il pointe
-               par le bas, il a fini quand son centre atteint le tiers
-               haut. La course tient ainsi sur les deux tiers de l'ecran,
-               assez longue pour se laisser regarder, et elle s'acheve
-               au-dessus du centre, la ou vit la pointe du trait : le mot
-               franchit donc une ligne deja tracee.
+          /* Le mot se cadence sur lui-meme, du bas de l'ecran au tiers
+             superieur : il s'ebranle quand il pointe par le bas, il a
+             fini quand son centre atteint le tiers haut. La course tient
+             sur les deux tiers de l'ecran, assez longue pour se laisser
+             regarder, et elle s'acheve au-dessus du centre, la ou vit la
+             pointe du trait : le mot franchit donc une ligne deja
+             tracee. Une fin au milieu ou plus bas le ferait franchir
+             dans le vide, sous la pointe.
 
-               Les deux valeurs sortent de la formule d'apply() : cp vaut
-               0 a 0,85 hauteur d'ecran au-dessus du repere et 1 apres
-               0,75 x h de defilement. D'ou le recul de 0,15 pour partir
-               au ras du bas, et la plage de deux tiers d'ecran plus la
-               moitie du mot. L'easing doux (soft) va avec : la courbe
-               cubique du bureau expedierait la course dans le premier
-               tiers de la plage. */
-            var wRect = relRect(word);
-            crosses.push({
-              el: el,
-              st: st,
-              top: wRect.top - vh * 0.15,
-              h: ((vh * 2) / 3 + wRect.height / 2) / 0.75,
-              soft: true
-            });
-          }
+             Ce reglage est celui du mobile depuis le 2026-08-26 ; le
+             bureau l'a rejoint le 2026-08-28 (demande de Baptiste), lui
+             qui se calait jusque-la sur la hauteur de la section
+             porteuse. Une section faisant plusieurs ecrans, le mot y
+             finissait sa course n'importe ou, souvent bien apres avoir
+             quitte le haut de l'ecran.
+
+             Les deux valeurs sortent de la formule d'apply() : cp vaut 0
+             a 0,85 hauteur d'ecran au-dessus du repere et 1 apres
+             0,75 x h de defilement. D'ou le recul de 0,15 pour partir au
+             ras du bas, et la plage de deux tiers d'ecran plus la moitie
+             du mot. L'easing doux qui va avec est dans apply() : la
+             courbe cubique d'avant expedierait une course devenue courte
+             dans son premier tiers. */
+          var wRect = relRect(word);
+          crosses.push({
+            el: el,
+            st: st,
+            top: wRect.top - vh * 0.15,
+            h: ((vh * 2) / 3 + wRect.height / 2) / 0.75
+          });
           active = true;
         }
       }
@@ -1032,6 +1031,39 @@
       var finT = tableM[tableM.length - 1].t;
       if (finT - t0 > 1 && cible > t0) {
         var kSec = (cible - t0) / (finT - t0);
+        /* Plafond d'avance (2026-08-28, demande de Baptiste : la ligne
+           doit accompagner la lecture d'un bout a l'autre).
+
+           buildTable cale chaque point vertical sur le centre du
+           viewport : sans retouche, la pointe y vit. Le resserrement
+           ci-dessus la tire en avant d'exactement (t - t0) x (1 - kSec)
+           pixels, un ecart qui croit jusqu'au dernier point. Sur une
+           page courte il ne se voit pas ; sur une page longue il
+           devient enorme, la pointe passe sous le bas de l'ecran et le
+           trait est deja entierement dessine quand on arrive. Mesure
+           avant ce plafond, en fractions de hauteur d'ecran (0,5 = le
+           centre, au-dela de 1 la pointe est sortie par le bas) :
+           accueil en mobile 3,12 ; Hall of Fame 2,73 ; fiche edition
+           1,33 ; registre 1,06.
+
+           On borne donc l'avance a 0,35 hauteur d'ecran, ce qui garde
+           la pointe au-dessus de 0,85 : elle reste dans le cadre en
+           toutes circonstances. La regle des deux tiers continue de
+           s'appliquer partout ou elle ne coute rien (les pages courtes,
+           soit la grande majorite) ; sur les pages longues la prise
+           s'allume plus tard, vers 80 a 90 %, ce qui est le prix
+           assume. */
+        var kPlafond = 1 - (vh * 0.35) / (finT - t0);
+        if (kSec < kPlafond) {
+          kSec = kPlafond;
+        }
+        /* La fin de course prime sur le plafond : si la course ne tient
+           plus dans ce que la page offre a defiler, la prise ne
+           s'allumerait jamais. */
+        var kFin = (dispo - 40 - t0) / (finT - t0);
+        if (kSec > kFin) {
+          kSec = kFin;
+        }
         for (c = 0; c < tableM.length; c++) {
           tableM[c].t = t0 + (tableM[c].t - t0) * kSec;
         }
@@ -1173,7 +1205,9 @@
     for (var i = 0; i < crosses.length; i++) {
       var cr = crosses[i];
       var cp = clamp01((offY + vh * 0.85 - cr.top) / Math.max(1, cr.h * 0.75));
-      cp = cr.soft ? cp * cp * (3 - 2 * cp) : 1 - Math.pow(1 - cp, 3);
+      /* Smoothstep : la course ne dure que deux tiers d'ecran, une
+         cubique sortante l'expedierait dans son premier tiers. */
+      cp = cp * cp * (3 - 2 * cp);
       if (Math.abs(cp - cr.st.p) > 0.001) {
         cr.st.p = cp;
         cr.el.style.setProperty("--cross-p", cp.toFixed(3));

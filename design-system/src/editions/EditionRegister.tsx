@@ -1,5 +1,3 @@
-import { LinkMore } from "../base/LinkMore";
-
 export interface RegisterEntry {
   /** L'annee de l'edition. */
   year: string;
@@ -24,6 +22,11 @@ export interface EditionRegisterProps {
  * Le registre des editions : une ligne par annee, l'annee dans la
  * marge, le theme et la vignette a droite. C'est un registre, pas une
  * galerie : les lignes se lisent de haut en bas.
+ *
+ * La rangee entiere est cliquable depuis le 2026-08-28 : le lien
+ * « ouvrir l'edition X » a disparu, le titre porte le seul lien de la
+ * rangee et son ::after (dans la feuille) couvre toute la carte. Le nom
+ * accessible reprend l'annee, que le titre seul ne dit pas.
  */
 export function EditionRegister({ entries }: EditionRegisterProps) {
   return (
@@ -32,8 +35,12 @@ export function EditionRegister({ entries }: EditionRegisterProps) {
         <article className="reg-row" key={entry.year}>
           <p className="reg-year">{entry.year}</p>
           <div className="reg-main">
-            <h3 lang={entry.lang}>{entry.theme}</h3>
-            <LinkMore href={entry.href}>ouvrir l'édition {entry.year}</LinkMore>
+            <h3 lang={entry.lang}>
+              <a className="reg-link" href={entry.href}>
+                {entry.theme}
+                <span className="visually-hidden">, édition {entry.year}</span>
+              </a>
+            </h3>
           </div>
           {entry.thumb ? (
             <div className="reg-media">

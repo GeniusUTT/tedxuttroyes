@@ -89,7 +89,7 @@ const accueil: DemoPage = {
   slug: "accueil",
   title: "Accueil",
   element: (
-    <PageShell current="accueil" variant="journey" voile>
+    <PageShell current="accueil" variant="journey" voile repere>
       <Hero
         cote="Dixième édition"
         word="Franchir"
