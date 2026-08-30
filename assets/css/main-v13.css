@@ -2297,6 +2297,11 @@ details.faq[open] summary .icon {
 /* 19. Footer */
 
 .site-footer {
+  /* position: relative pour que le pied de page se peigne apres le
+     filigrane, qui est une couche positionnee posee avant lui. Sans
+     cela, sur une page interieure ou le pied n'est pas dans un
+     conteneur positionne, le X passerait par-dessus le texte. */
+  position: relative;
   background-color: #0a0908;
   border-top: 1px solid var(--filet);
   padding-top: clamp(44px, 7vw, 64px);
@@ -4376,28 +4381,6 @@ details.faq[open] summary .icon {
   margin: 4px 0 26px;
 }
 
-/* Le filigrane de la 404 : derriere le texte, dans le meme empilement
-   que le 404 fantome. z-index negatif pour rester sous le contenu sans
-   sortir de .error-hero, qui est deja un contexte d'empilement. */
-.error-mark {
-  position: absolute;
-  z-index: -1;
-  top: 50%;
-  right: -14%;
-  transform: translateY(-50%);
-  width: 66vw;
-  opacity: 0.1;
-  pointer-events: none;
-}
-
-@media (min-width: 1024px) {
-  .error-mark {
-    right: var(--m-right);
-    width: min(40vw, 460px);
-    opacity: 0.16;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .voile,
   .voile-on .voile {
@@ -4452,10 +4435,16 @@ details.faq[open] summary .icon {
   --fond-opacite: 0.18;
   --fond-taille: 200vh;
   position: fixed;
+  /* Plein ecran, et non borne a la page (demande de Baptiste le
+     2026-08-30) : c'est un fond, il n'a pas a s'arreter aux gouttieres.
+     Le filigrane est donc, avec le grain, la seule couche fixe qui ne
+     reprend pas --gouttiere. Consequence voulue : au-dela de 1920 px le
+     X se place par rapport a l'ecran et non a la page, son tiers de
+     decalage se mesure donc sur le moniteur, comme le veut le geste. */
+  left: 0;
+  right: 0;
   top: 0;
   bottom: 0;
-  left: var(--gouttiere);
-  right: var(--gouttiere-d);
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
@@ -4485,4 +4474,37 @@ details.faq[open] summary .icon {
   opacity: var(--fond-opacite);
   transform: translateY(var(--fond-y, 0px));
   will-change: transform;
+}
+
+/* Les fonds traversent les gouttieres, le contenu ne bouge pas (demande
+   de Baptiste le 2026-08-30). Au-dela de 1920 px le flux se centre et se
+   borne, mais une bande coloree ou une photo qui s'arrete au bord de la
+   page laisse deux rubans noirs sur les cotes de l'ecran. Les trois seuls
+   blocs qui peignent un fond pleine largeur ressortent donc dans les
+   gouttieres par une marge negative, et la rendent en marge interieure :
+   leur contenu reste exactement ou il etait, seul le fond s'etend. Le
+   reste de la page est transparent, c'est le noir du body qui se voit, et
+   il occupe deja tout l'ecran.
+
+   --g-l et --g-r sont les deux gouttieres en pixels, republiees par
+   main.js d'apres la marge interieure DEJA RESOLUE du body : la feuille
+   reste seule a decider de leur valeur, le script ne fait que la rendre
+   utilisable ailleurs. C'est necessaire parce que --gouttiere contient un
+   pourcentage, qui se resout contre le bloc conteneur : dans un
+   descendant du body il vaudrait zero (voir le commentaire des jetons).
+   Sans JavaScript les deux valent zero et les fonds s'arretent au bord de
+   la page, comme avant : c'est un repli correct, pas une panne.
+
+   Les bornes tombent juste : a gauche la marge negative vaut exactement
+   la gouttiere gauche, le fond atteint donc x = 0 ; a droite elle vaut la
+   gouttiere droite, qui est ce qui reste une fois la barre de defilement
+   comptee, le fond s'arrete donc au bord de la zone utile et ne cree
+   aucun debordement horizontal. */
+.hero,
+.band,
+.site-footer {
+  margin-left: calc(-1 * var(--g-l, 0px));
+  margin-right: calc(-1 * var(--g-r, 0px));
+  padding-left: var(--g-l, 0px);
+  padding-right: var(--g-r, 0px);
 }

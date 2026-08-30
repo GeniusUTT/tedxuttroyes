@@ -360,6 +360,27 @@
   }
 
   /* ------------------------------------------------------------------
+     Les deux gouttieres, republiees en pixels sur html.
+
+     Au-dela de 1920 px la page se centre et le body prend la gouttiere
+     en marge interieure. Les blocs qui peignent un fond pleine largeur
+     doivent pouvoir la traverser, mais ils ne peuvent pas lire
+     --gouttiere : sa definition contient un pourcentage, qui se
+     resoudrait contre leur propre bloc conteneur et donnerait zero. On
+     relit donc la marge du body, deja resolue par le navigateur, et on
+     la republie telle quelle. La feuille reste seule a decider de la
+     valeur.
+     ------------------------------------------------------------------ */
+  var majGouttieres = function () {
+    var cs = window.getComputedStyle(doc.body);
+    var st = doc.documentElement.style;
+    st.setProperty("--g-l", cs.paddingLeft);
+    st.setProperty("--g-r", cs.paddingRight);
+  };
+  majGouttieres();
+  window.addEventListener("resize", majGouttieres, { passive: true });
+
+  /* ------------------------------------------------------------------
      Le filigrane de la dixieme edition : le X moire en fond, du premier
      versant du theme jusqu'a la billetterie.
 
@@ -398,31 +419,51 @@
      Le X accompagne la fin de la page et le pied de page.
      ------------------------------------------------------------------ */
   var fond = doc.querySelector(".fond-marque");
-  var fondA = doc.getElementById("moment-2");
-  var fondB = doc.getElementById("billetterie");
   var fondWrap = doc.querySelector(".jscroll");
   var fondMain = doc.getElementById("contenu");
-  if (fond && fondA && fondB && fondWrap && fondMain) {
+  /* La zone : sur l'accueil, du premier versant du theme a la
+     billetterie. Ailleurs, le contenu entier de la page : une page
+     interieure n'a pas de seuil pleine page a menager, le filigrane y
+     est la des le titre. */
+  var fondA = doc.getElementById("moment-2") || fondMain;
+  var fondB = doc.getElementById("billetterie") || fondMain;
+  if (fond && fondA && fondB && fondMain) {
     var fondImg = fond.querySelector("img");
     var sDebut = 0;
     var sFin = 0;
     var fondY = null;
     var rafFond = 0;
     var fondJusqua = 0;
+    /* Le defilement minimum, en hauteurs de dessin, sous lequel le
+       parallaxe est fige. Voir majFond. */
+    var FOND_COURSE = 1;
     /* Sa propre borne : celle de l'interlude n'est affectee que si ce
        module-la tourne, et il ne tourne pas en reduced motion. */
     var borne = function (v) {
       return v < 0 ? 0 : v > 1 ? 1 : v;
     };
 
+    /* Position d'un bloc dans le contenu, en remontant la chaine des
+       parents positionnes. Sur l'accueil en bureau elle s'arrete au
+       wrapper, qui est fixe : on obtient la position dans le contenu
+       translate. Ailleurs elle remonte jusqu'au document. */
+    var offsetTotal = function (el) {
+      var y = 0;
+      while (el) {
+        y += el.offsetTop;
+        el = el.offsetParent;
+      }
+      return y;
+    };
+
     var mesurerFond = function () {
       var vh = window.innerHeight;
-      /* Position de la zone dans le contenu : main est positionne, les
-         deux sections en sont filles directes, et main lui-meme se
-         mesure dans le wrapper. */
-      var haut = fondMain.offsetTop + fondA.offsetTop;
-      var bas = fondMain.offsetTop + fondB.offsetTop + fondB.offsetHeight;
-      var courseContenu = Math.max(1, fondWrap.offsetHeight - vh);
+      var haut = offsetTotal(fondA);
+      var bas = offsetTotal(fondB) + fondB.offsetHeight;
+      var courseContenu = Math.max(
+        1,
+        (fondWrap ? fondWrap.offsetHeight : doc.documentElement.scrollHeight) - vh
+      );
       var courseBarre = Math.max(1, doc.documentElement.scrollHeight - vh);
       var f0 = haut / courseContenu;
       var f1 = (bas - vh) / courseContenu;
@@ -443,12 +484,24 @@
       }
       var vh = window.innerHeight;
       var p = borne((window.pageYOffset - sDebut) / (sFin - sDebut));
-      /* p = 0 : on voit le haut du dessin. p = 1 : on voit sa base.
-         En reduced motion la fenetre ne se deplace plus : elle se pose
-         au milieu du dessin et l'y reste, le filigrane parait alors
-         immobile a l'ecran. Son apparition, elle, reste pilotee par p :
-         sans cela il se verrait sur le seuil et sur le pied de page. */
-      var pPan = reduceMotion.matches ? 0.5 : p;
+      /* Le parallaxe ne se joue que si la page en a la place. La fenetre
+         doit parcourir hImg - vh pixels de dessin ; si la zone offre
+         moins de defilement que la hauteur du dessin, le X file plus
+         vite que la moitie de la page et le geste devient une glissade
+         (demande de Baptiste le 2026-08-30). On le fige alors, comme en
+         reduced motion : la fenetre se pose au milieu du dessin, sur la
+         croisee du X, et n'en bouge plus.
+
+         FOND_COURSE est le seul reglage : 1 exige une hauteur de dessin
+         de defilement (le X ne depasse jamais la moitie de la vitesse de
+         la page), 1,5 ou 2 rendent la regle plus severe et figent
+         davantage de pages.
+
+         L'apparition, elle, reste pilotee par p dans les deux cas : sans
+         cela le filigrane se verrait sur le seuil et sur le pied de
+         page. */
+      var hFige = hImg - vh <= 0 || sFin - sDebut < hImg * FOND_COURSE;
+      var pPan = reduceMotion.matches || hFige ? 0.5 : p;
       var y = Math.round(-pPan * (hImg - vh));
       if (y !== fondY) {
         fondY = y;
@@ -488,7 +541,7 @@
        changement de taille du contenu, et une derniere fois au
        chargement complet. */
     if (window.ResizeObserver) {
-      new window.ResizeObserver(refaireFond).observe(fondWrap);
+      new window.ResizeObserver(refaireFond).observe(fondWrap || fondMain);
     }
     window.addEventListener("load", refaireFond);
     refaireFond();
