@@ -2990,7 +2990,7 @@ details.faq[open] summary .icon {
 /* Le releve de terrain : la photo du lieu, la carte et la presentation
    du batiment au meme niveau (trois colonnes sur grand ecran). Le plan
    est un SVG local trace a la main : aucun service de cartes avant que
-   map.js ne s'en mele. */
+   map-v2.js ne s'en mele. */
 
 .lieu-photo {
   position: relative;
@@ -3174,7 +3174,7 @@ details.faq[open] summary .icon {
   margin-top: 14px;
 }
 
-/* La carte interactive : chargee paresseusement par map.js, elle occupe
+/* La carte interactive : chargee paresseusement par map-v2.js, elle occupe
    tout le cadre et fond par-dessus le plan de situation.
    Le plan SVG reste la version par defaut tant que la carte n'est pas la.
    Le selecteur est double car mapbox-gl.css, charge apres ce fichier,

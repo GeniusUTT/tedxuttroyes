@@ -3,7 +3,7 @@
    Modules : etat du header, interlude de l'accueil, filigrane de la
    dixieme edition, menu mobile accessible, telescripteur du compte a
    rebours, trace du dixieme baton. L'allumage de la feuille de salle de l'accueil est
-   pilote par line-v8.js (la pointe du trait franchit les pastilles). */
+   pilote par line-v9.js (la pointe du trait franchit les pastilles). */
 
 (function () {
   "use strict";
@@ -128,7 +128,7 @@
 
      1. la revelation, samedi 31 octobre 2026 a 18h00 a Paris. L'heure
         d'hiver est revenue le 25 octobre (UTC+1), soit 17h00 UTC. Quand
-        elle tombe, le telescripteur demande a reveal.js de devoiler la
+        elle tombe, le telescripteur demande a reveal-v2.js de devoiler la
         page, puis enchaine sur la cible suivante ;
      2. le jour J, jeudi 18 mars 2027 a 18h00 (ouverture des portes et
         mini forum de recrutement), heure d'hiver aussi, soit 17h00 UTC.
