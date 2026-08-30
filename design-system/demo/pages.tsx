@@ -29,6 +29,7 @@ import {
   Heading,
   Hero,
   InterludeEspace,
+  Filigrane,
   HofYear,
   INSTAGRAM_URL,
   Lead,
@@ -105,6 +106,8 @@ const accueil: DemoPage = {
           Voir le programme
         </Button>
       </Hero>
+
+      <Filigrane />
 
       <InterludeEspace />
 

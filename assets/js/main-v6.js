@@ -1,7 +1,8 @@
 /* TEDxUTTroyes 2027 - script principal ("Le releve")
    Zero dependance, charge en defer.
-   Modules : etat du header, menu mobile accessible, telescripteur
-   du compte a rebours, trace du dixieme baton. L'allumage de la feuille de salle de l'accueil est
+   Modules : etat du header, interlude de l'accueil, filigrane de la
+   dixieme edition, menu mobile accessible, telescripteur du compte a
+   rebours, trace du dixieme baton. L'allumage de la feuille de salle de l'accueil est
    pilote par line-v8.js (la pointe du trait franchit les pastilles). */
 
 (function () {
@@ -229,6 +230,7 @@
     var jusqua = 0;
     var derniere = -1;
     var dernierZoom = -1;
+    var vu = 0;
 
     var majInterlude = function () {
       var r = espace.getBoundingClientRect();
@@ -254,6 +256,20 @@
          temps. */
       var total = r.height + vh;
       var q = clamp01((vh - r.top) / total);
+
+      /* Une fois par jour : des que le panneau a tenu l'ecran, on note
+         l'instant. Le script en tete d'index.html relit cette date au
+         chargement et ne saute l'interlude que si elle a moins de
+         vingt-quatre heures (86 400 000 ms), sinon il le rejoue. Le
+         temoin s'ecrit ici et non au chargement : quelqu'un qui repart
+         du seuil sans avoir defile jusque-la n'a rien vu, il aura droit
+         au panneau. */
+      if (!vu && q > 0.5) {
+        vu = 1;
+        try {
+          localStorage.setItem("tedx-interlude-vu", String(Date.now()));
+        } catch (e) {}
+      }
       var o = Math.min(
         lisse(clamp01(q / 0.34)),
         1 - lisse(clamp01((q - 0.60) / 0.26))
@@ -341,6 +357,116 @@
     window.addEventListener("scroll", reveiller, { passive: true });
     window.addEventListener("resize", reveiller, { passive: true });
     majInterlude();
+  }
+
+  /* ------------------------------------------------------------------
+     Le filigrane de la dixieme edition : le X moire en fond, du premier
+     versant du theme jusqu'a la billetterie.
+
+     Le geste : la fenetre de l'ecran parcourt le dessin du haut vers sa
+     base. Au sommet de la zone on voit le haut du X, au bas on voit sa
+     base. Cela demande un dessin plus haut que l'ecran (la feuille lui
+     donne deux hauteurs d'ecran), sans quoi il n'y aurait rien a
+     parcourir.
+
+     On lit la position A L'ECRAN (getBoundingClientRect) et non le
+     scroll : sur l'accueil en bureau le contenu est translate par
+     line.js avec un lissage et des fenetres de gel, et le rect en tient
+     compte tout seul.
+     ------------------------------------------------------------------ */
+  var fond = doc.querySelector(".fond-marque");
+  var fondA = doc.getElementById("moment-2");
+  var fondB = doc.getElementById("billetterie");
+  if (fond && fondA && fondB) {
+    var fondImg = fond.querySelector("img");
+    var fondH = 0;
+    var fondY = null;
+    var rafFond = 0;
+    var fondJusqua = 0;
+
+    /* La zone se mesure dans le repere du contenu : main est positionne
+       et les deux sections en sont filles directes, offsetTop suffit. */
+    var mesurerFond = function () {
+      var t = fondA.offsetTop;
+      fondH = fondB.offsetTop + fondB.offsetHeight - t;
+      fond.style.setProperty("--fond-t", t + "px");
+      fond.style.setProperty("--fond-h", fondH + "px");
+    };
+
+    var majFond = function () {
+      if (!fondH || !fondImg) {
+        return;
+      }
+      var hImg = fondImg.offsetHeight;
+      if (!hImg) {
+        return;
+      }
+      var vh = window.innerHeight;
+      var r = fond.getBoundingClientRect();
+      var course = Math.max(1, r.height - vh);
+      var s = -r.top;
+      if (s < 0) {
+        s = 0;
+      } else if (s > course) {
+        s = course;
+      }
+      /* p vaut 0 au sommet du dessin, 1 a sa base. En reduced motion la
+         fenetre ne se deplace plus : elle se pose au milieu du dessin et
+         l'y reste, le filigrane parait alors immobile a l'ecran. */
+      var p = reduceMotion.matches ? 0.5 : s / course;
+      var y = Math.round(s - p * (hImg - vh));
+      if (y !== fondY) {
+        /* Tant que la position bouge, on prolonge la boucle : sur
+           l'accueil en bureau, la translation du contenu est lissee et
+           peut mettre plus longtemps a se poser que le sursis fixe qui
+           suit le dernier evenement de defilement. Sans cela le
+           filigrane se figeait avant le contenu et paraissait en
+           retard. */
+        fondJusqua = Math.max(fondJusqua, Date.now() + 200);
+        fondY = y;
+        fondImg.style.setProperty("--fond-y", y + "px");
+      }
+    };
+
+    var boucleFond = function () {
+      majFond();
+      rafFond = Date.now() < fondJusqua ? window.requestAnimationFrame(boucleFond) : 0;
+    };
+
+    /* On replace le filigrane des l'evenement de defilement, avant meme
+       d'armer la boucle : un navigateur qui bride ses images (onglet en
+       arriere-plan, economie d'energie) le laisserait sinon en arriere
+       d'autant d'images qu'il en saute. La boucle prend ensuite le
+       relais pour suivre le lissage de la translation du contenu. */
+    var reveillerFond = function () {
+      majFond();
+      fondJusqua = Date.now() + 400;
+      if (!rafFond) {
+        rafFond = window.requestAnimationFrame(boucleFond);
+      }
+    };
+
+    var refaireFond = function () {
+      mesurerFond();
+      majFond();
+    };
+
+    window.addEventListener("scroll", reveillerFond, { passive: true });
+    window.addEventListener("resize", function () {
+      refaireFond();
+      reveillerFond();
+    }, { passive: true });
+    /* La geometrie bouge encore apres le premier rendu (polices, images,
+       build de line.js) : on remesure a chaque changement de taille du
+       contenu, et une derniere fois au chargement complet. */
+    if (window.ResizeObserver) {
+      var contenu = doc.getElementById("contenu");
+      if (contenu) {
+        new window.ResizeObserver(refaireFond).observe(contenu);
+      }
+    }
+    window.addEventListener("load", refaireFond);
+    refaireFond();
   }
 
   /* ------------------------------------------------------------------

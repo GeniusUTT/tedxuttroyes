@@ -30,6 +30,7 @@ export * from "./base/VisuallyHidden";
 
 /* Accueil : les stations de la ligne continue */
 export * from "./accueil/Interlude";
+export * from "./accueil/Filigrane";
 export * from "./accueil/Hero";
 export * from "./accueil/Ticker";
 export * from "./accueil/Moment";

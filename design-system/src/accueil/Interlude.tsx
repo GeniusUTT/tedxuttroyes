@@ -1,6 +1,6 @@
 export interface InterludeProps {
   /** Le message, seul texte du panneau. */
-  children?: string;
+  children?: React.ReactNode;
 }
 
 /**
@@ -27,17 +27,23 @@ export interface InterludeProps {
  * aria-hidden : le message porte sur un dispositif purement visuel (le
  * trait rouge), il n'a rien a dire a un lecteur d'ecran, comme le voile.
  */
-export function Interlude({
-  children = "La ligne sera votre guide pour toute la durée de la 10e édition"
-}: InterludeProps) {
+export function Interlude({ children }: InterludeProps) {
+  const defaut = (
+    <>
+      La ligne sera votre guide
+      <br />
+      pour toute la durée de la 10e édition
+    </>
+  );
+
   return (
     <div className="interlude" aria-hidden="true">
       <div className="interlude-scene">
         <div className="interlude-col interlude-col--logo">
-          <video className="interlude-mark" muted playsInline preload="none" width={2160} height={2160} />
+          <video className="interlude-mark" muted playsInline preload="none" width={576} height={576} />
         </div>
         <div className="interlude-col interlude-col--texte">
-          <h2 className="interlude-titre">{children}</h2>
+          <h2 className="interlude-titre">{children ?? defaut}</h2>
         </div>
       </div>
     </div>

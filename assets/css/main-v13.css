@@ -1472,6 +1472,18 @@ body.nav-open {
   margin-block: 60vh;
 }
 
+/* L'interlude ne se joue qu'a la premiere visite (demande de Baptiste
+   le 2026-08-30). Un script en tete d'index.html pose interlude-off sur
+   html quand la memoire locale garde la trace d'un passage : panneau ET
+   espaceur disparaissent alors, la page enchaine le seuil et le theme,
+   exactement comme en reduced motion. La decision se prend au
+   chargement, jamais en cours de route : retirer l'espaceur sous les
+   pieds du lecteur ferait sauter la page. */
+.interlude-off .interlude,
+.interlude-off .interlude-espace {
+  display: none;
+}
+
 /* La disposition : la ligne principale coupe l'ecran en deux, le logo a
    sa gauche, le texte a sa droite (demande de Baptiste le 2026-08-28).
    L'axe tombe au milieu du panneau, donc au milieu de la page, la ou
@@ -1573,12 +1585,18 @@ body.nav-open {
     text-align: center;
   }
 
+  /* justify-self prime sur justify-items : sans cette remise a zero,
+     le end du palier bureau survivait a l'empilement et collait la
+     marque au bord droit de la scene au lieu de la centrer dans la
+     page (trouve le 2026-08-30, demande de Baptiste). */
   .interlude-col--logo {
     align-self: end;
+    justify-self: center;
   }
 
   .interlude-col--texte {
     align-self: start;
+    justify-self: center;
     max-width: none;
   }
 
@@ -4385,4 +4403,77 @@ details.faq[open] summary .icon {
   .voile-on .voile {
     display: none !important;
   }
+}
+
+/* Le filigrane de la dixieme edition : le X moire en fond, du premier
+   versant du theme (#moment-2) jusqu'a la billetterie (#billetterie),
+   parcouru du haut vers sa base au fil du defilement (demande de
+   Baptiste le 2026-08-30).
+
+   ------------------------------------------------------------------
+   LE SEUL REGLAGE A TOUCHER : --fond-opacite, juste en dessous.
+   0 le fait disparaitre, 1 le rend plein. --fond-taille change sa
+   taille, en hauteurs d'ecran (200vh = deux ecrans de haut).
+   ------------------------------------------------------------------
+
+   C'est une couche FIXE, posee hors de .jscroll comme le voile et
+   l'interlude : un position: fixed pose a l'interieur se calerait sur
+   le wrapper transforme du regime virtuel et defilerait avec le
+   contenu. Et surtout, le filigrane ne suit plus le contenu mais LA
+   BARRE DE DEFILEMENT (demande de Baptiste le 2026-08-30) : il continue
+   d'avancer pendant les fenetres de gel, quand la page est figee et que
+   la pointe du trait balaie une horizontale. Le script ne lit donc plus
+   que pageYOffset, jamais la position a l'ecran du contenu, qui est
+   lissee par line.js : plus rien a rattraper, le mouvement est le meme
+   sur toutes les plateformes.
+
+   Il est decale d'un tiers vers la droite : son centre tombe aux deux
+   tiers de la page et il deborde donc du bord droit, quelle que soit la
+   taille de l'ecran. C'est le geste demande.
+
+   Sa taille se donne en hauteur d'ecran et non en largeur, et elle est
+   deliberement de deux ecrans : c'est ce qui donne au parallaxe sa
+   course. Sans dessin plus haut que l'ecran, il n'y a rien a parcourir.
+   Consequence assumee sur un telephone, ou l'ecran est etroit et haut :
+   un carre de deux hauteurs d'ecran y fait pres de quatre largeurs, le
+   filigrane y est donc coupe des deux cotes et se lit comme une texture
+   plutot que comme un X. C'est le prix de la course verticale, il n'y a
+   pas de taille qui satisfasse les deux a la fois.
+
+   L'opacite de la couche est pilotee par main.js : zero hors de la
+   zone, un fondu a chaque bout. Sans JavaScript elle reste a zero et
+   rien ne s'affiche : c'est un decor, pas un contenu, et il porte
+   aria-hidden. L'opacite propre du dessin, elle, est --fond-opacite :
+   les deux se multiplient, le reglage reste donc une seule valeur.
+
+   z-index 0 et pose AVANT le wrapper dans le document : au-dessus du
+   fond de page, sous le contenu et sous le trace de la ligne. */
+.fond-marque {
+  --fond-opacite: 0.18;
+  --fond-taille: 200vh;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: var(--gouttiere);
+  right: var(--gouttiere-d);
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.fond-marque img {
+  position: absolute;
+  top: 0;
+  left: calc(50% + 100% / 3);
+  width: var(--fond-taille);
+  /* max-width: none est indispensable : la regle globale des images les
+     borne a la largeur de leur conteneur, ce qui ecrasait le carre en
+     1265 x 1440 et cassait le dessin. */
+  max-width: none;
+  height: var(--fond-taille);
+  margin-left: calc(var(--fond-taille) / -2);
+  opacity: var(--fond-opacite);
+  transform: translateY(var(--fond-y, 0px));
+  will-change: transform;
 }

@@ -1013,20 +1013,25 @@
 
     buildTable(pts, virtual, budgets, 1);
     /* La course est calee sur ce que la page offre a defiler.
-       Avec un bouton final : le trait doit l'atteindre aux DEUX TIERS de
-       la page (demande de Baptiste le 2026-08-26). Le trait se dessine
-       donc un peu plus vite que la lecture et le dernier tiers se
-       parcourt avec la prise deja allumee, au lieu de voir le trait
-       arriver au moment ou l'on touche le bas (mesure avant : 96 a 99 %
-       du defilement). Sans bouton, la course se termine au bas de la
-       page.
+       Avec un bouton final : le trait doit l'atteindre aux TROIS QUARTS
+       de la page, autrement dit quand le bouton est a un quart du bas
+       (demande de Baptiste le 2026-08-30 ; c'etait les deux tiers depuis
+       le 2026-08-26). Le trait se dessine donc un peu plus vite que la
+       lecture et le dernier quart se parcourt avec la prise deja
+       allumee, au lieu de voir le trait arriver au moment ou l'on touche
+       le bas (mesure avant toute retouche : 96 a 99 % du defilement).
+       Sans bouton, la course se termine au bas de la page.
+
+       Viser plus tard resserre moins : l'avance de la pointe decrite
+       plus bas vaut (t - t0) x (1 - kSec), elle diminue donc, et le
+       plafond mord sur moins de pages qu'aux deux tiers.
 
        Hors regime virtuel seulement : sur l'accueil en bureau, la table
        partage son axe avec les fenetres de gel et la translation du
        contenu, les toucher desynchroniserait la choregraphie. */
     if (!virtual && tableM.length > 1) {
       var dispo = Math.max(1, html.scrollHeight - vh);
-      var cible = plugEl ? dispo * (2 / 3) : dispo - 40;
+      var cible = plugEl ? dispo * (3 / 4) : dispo - 40;
       var t0 = tableM[0].t;
       var finT = tableM[tableM.length - 1].t;
       if (finT - t0 > 1 && cible > t0) {

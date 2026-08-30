@@ -39,11 +39,11 @@ export function SiteHeader({ current }: SiteHeaderProps) {
             ))}
             <a
               className="btn btn--ghost btn--sm"
-              href="https://forms.gle/MWD7mHLfomYf2RUj6"
+              href="https://linktr.ee/tedxuttroyes"
               target="_blank"
               rel="noopener"
             >
-              Nous rejoindre
+              Nos liens
             </a>
             <a className="btn btn--ghost btn--sm" href="/devenir-speaker/">
               Postuler
@@ -114,11 +114,11 @@ export function SiteHeader({ current }: SiteHeaderProps) {
         <div className="mobile-menu-foot">
           <a
             className="btn btn--ghost"
-            href="https://forms.gle/MWD7mHLfomYf2RUj6"
+            href="https://linktr.ee/tedxuttroyes"
             target="_blank"
             rel="noopener"
           >
-            Nous rejoindre
+            Nos liens
           </a>
           <a className="btn btn--ghost" href="/devenir-speaker/">
             Postuler comme speaker

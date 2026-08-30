@@ -44,6 +44,7 @@
   <link rel="stylesheet" href="/assets/css/main-v13.css">
   <script>document.documentElement.classList.add("js");</script>
   <script>try { if (!sessionStorage.getItem("tedx-ouverture") && !matchMedia("(prefers-reduced-motion: reduce)").matches) { var v = document.documentElement; v.classList.add("voile-on"); if (localStorage.getItem("tedx-ouverture-vue")) { v.classList.add("voile-court") } sessionStorage.setItem("tedx-ouverture", "1"); localStorage.setItem("tedx-ouverture-vue", "1") } } catch (e) { }</script>
+  <script>try { var iv = +localStorage.getItem("tedx-interlude-vu"); if (iv && Date.now() - iv < 864e5) { document.documentElement.classList.add("interlude-off") } } catch (e) { }</script>
   <script src="/assets/js/reveal.js" defer></script>
   <script src="/assets/js/main-v6.js" defer></script>
   <script src="/assets/js/line-v8.js" defer></script>
@@ -113,7 +114,7 @@
           height="576"></video>
       </div>
       <div class="interlude-col interlude-col--texte">
-        <h2 class="interlude-titre">La ligne sera votre guide pour toute la durée de la 10e édition</h2>
+        <h2 class="interlude-titre">Suivez cette ligne,<br>elle vous guidera tout au long de votre visite</h2>
       </div>
     </div>
   </div>
@@ -133,8 +134,7 @@
         <a href="/partenaires/">Partenaires</a>
         <a href="/a-propos/">À propos</a>
         <a href="/faq/">FAQ</a>
-        <a class="btn btn--ghost btn--sm" href="https://forms.gle/MWD7mHLfomYf2RUj6" target="_blank" rel="noopener">Nous
-          rejoindre</a>
+        <a class="btn btn--ghost btn--sm" href="https://linktr.ee/tedxuttroyes" target="_blank" rel="noopener">Nos liens</a>
         <a class="btn btn--ghost btn--sm" href="/devenir-speaker/">Postuler</a>
         <a class="btn btn--primary btn--sm" href="https://www.billetweb.fr/tedxuttroyes-2027-10e-edition"
           target="_blank" rel="noopener">Réserver</a>
@@ -172,14 +172,17 @@
       </ul>
     </nav>
     <div class="mobile-menu-foot">
-      <a class="btn btn--ghost" href="https://forms.gle/MWD7mHLfomYf2RUj6" target="_blank" rel="noopener">Nous
-        rejoindre</a>
+      <a class="btn btn--ghost" href="https://linktr.ee/tedxuttroyes" target="_blank" rel="noopener">Nos liens</a>
       <a class="btn btn--ghost" href="/devenir-speaker/">Postuler comme speaker</a>
       <a class="btn btn--primary" href="https://www.billetweb.fr/tedxuttroyes-2027-10e-edition" target="_blank"
         rel="noopener">Réserver ma place</a>
       <p class="mobile-menu-date"><span class="msk" data-c="Jeudi 18 mars 2027">***** ** **** ****</span> · 18h00 ·
         Centre de Congrès de l'Aube, Troyes</p>
     </div>
+  </div>
+
+  <div class="fond-marque" aria-hidden="true">
+    <img src="/assets/img/logo-10e.svg" alt="" width="600" height="600" decoding="async">
   </div>
 
   <div class="jscroll">
