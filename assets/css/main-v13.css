@@ -3880,17 +3880,33 @@ details.faq[open] summary .icon {
 }
 
 .ppl-name a {
-  position: relative;
   color: inherit;
   text-decoration: none;
 }
 
-/* Zone tactile de 45 px : 12 px la separent du portrait au-dessus,
-   elle mord de 2 px sur le role en dessous, qui n'est pas cliquable. */
+/* La fiche entiere est cliquable, portrait compris (demande de Baptiste
+   le 2026-08-30) : c'est le motif du lien etire, deja employe par le
+   registre des editions. Le ::after du nom couvre toute la carte, la
+   cible au doigt fait donc la hauteur du portrait au lieu des 45 px
+   qu'elle mesurait, et il reste un seul lien et un seul arret de
+   tabulation par fiche.
+
+   Deux choses a ne pas defaire : .ppl-card doit rester en position
+   relative, sinon le ::after se cale sur un autre ancetre et recouvre la
+   page ; et rien d'autre dans la fiche ne doit devenir cliquable, un
+   ::after etire recouvrant tout ce qui passe dessous. Le role, sous le
+   nom, n'est pas un lien : il passe donc sous la surface sans dommage.
+
+   Le focus clavier cerne la fiche entiere, pas le seul nom : c'est elle
+   que l'on active. */
+.ppl-card {
+  position: relative;
+}
+
 .ppl-name a::after {
   content: "";
   position: absolute;
-  inset: -8px 0;
+  inset: 0;
 }
 
 .ppl-name a:hover,
@@ -3898,6 +3914,15 @@ details.faq[open] summary .icon {
   text-decoration: underline;
   text-decoration-color: var(--rouge-vif);
   text-underline-offset: 3px;
+}
+
+.ppl-name a:focus-visible {
+  outline: none;
+}
+
+.ppl-name a:focus-visible::after {
+  outline: 2px solid var(--rouge);
+  outline-offset: 4px;
 }
 
 @media (max-width: 1023px) {

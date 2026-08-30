@@ -89,6 +89,7 @@
   var SVG_NS = "http://www.w3.org/2000/svg";
   var LEN = 1000;   /* pathLength normalise : dashoffset independant de la geometrie */
   var TIP = 0.5;    /* la pointe du trait vit au centre de la hauteur du viewport */
+  var PRISE = 0.75; /* mais elle atteint le bouton final a un quart du bas de l'ecran */
 
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
   var wide = window.matchMedia("(min-width: 1024px)");
@@ -1012,59 +1013,68 @@
     }
 
     buildTable(pts, virtual, budgets, 1);
-    /* La course est calee sur ce que la page offre a defiler.
-       Avec un bouton final : le trait doit l'atteindre aux TROIS QUARTS
-       de la page, autrement dit quand le bouton est a un quart du bas
-       (demande de Baptiste le 2026-08-30 ; c'etait les deux tiers depuis
-       le 2026-08-26). Le trait se dessine donc un peu plus vite que la
-       lecture et le dernier quart se parcourt avec la prise deja
-       allumee, au lieu de voir le trait arriver au moment ou l'on touche
-       le bas (mesure avant toute retouche : 96 a 99 % du defilement).
-       Sans bouton, la course se termine au bas de la page.
+    /* LA PRISE SE JOUE A L'ECRAN, PAS EN FRACTION DE PAGE (demande de
+       Baptiste le 2026-08-30). Le trait doit atteindre le bouton final
+       quand ce bouton est a UN QUART DU BAS DE L'ECRAN : il est alors
+       bien en vue, dans le bas de l'image, et la pointe le rejoint sous
+       les yeux du lecteur.
 
-       Viser plus tard resserre moins : l'avance de la pointe decrite
-       plus bas vaut (t - t0) x (1 - kSec), elle diminue donc, et le
-       plafond mord sur moins de pages qu'aux deux tiers.
+       Les deux regles precedentes visaient une fraction du defilement,
+       les deux tiers puis les trois quarts. C'etait une erreur de repere.
+       buildTable cale chaque point sur TIP, le centre de l'ecran ; viser
+       une fraction de page ETIRE la table sur les pages courtes, ce qui
+       retarde la pointe et la fait sortir par le HAUT. Mesure sur le
+       programme en mobile avant correction : facteur 1,278, pointe a
+       96 px au-dessus du bord superieur, bouton deja passe hors champ
+       quand la prise s'allumait. Le trait se perdait, litteralement.
+
+       La cible est donc une position d'ecran, et elle se deduit d'une
+       soustraction : amener le dernier point de TIP a PRISE revient a
+       finir la course un quart d'ecran plus tot. Le facteur reste
+       toujours inferieur a 1, la pointe ne recule jamais : elle avance
+       doucement du centre au trois quarts sur toute la longueur de la
+       page, et l'avance vaut exactement un quart d'ecran au dernier
+       point, quelle que soit la page.
+
+       Consequence : la fraction de defilement a laquelle la prise
+       s'allume n'est plus la meme partout, et c'est normal. Elle depend
+       de l'endroit ou le bouton se trouve dans la page : tot sur une
+       page dont le pied est long, tard sur une page dont le bouton est
+       tout en bas.
+
+       Sans bouton (les mentions legales), la course se termine au bas de
+       la page comme avant.
 
        Hors regime virtuel seulement : sur l'accueil en bureau, la table
        partage son axe avec les fenetres de gel et la translation du
        contenu, les toucher desynchroniserait la choregraphie. */
     if (!virtual && tableM.length > 1) {
       var dispo = Math.max(1, html.scrollHeight - vh);
-      var cible = plugEl ? dispo * (3 / 4) : dispo - 40;
       var t0 = tableM[0].t;
       var finT = tableM[tableM.length - 1].t;
+      /* Sans bouton (les mentions legales), on ne retouche rien : la
+         course garde son calage naturel, pointe au centre, et le trait
+         meurt au bas du contenu. L'etirer jusqu'au bas de la PAGE, ce
+         que faisait l'ancienne regle, poussait la pointe une demi-hauteur
+         d'ecran au-dessus du bord superieur. On ne resserre que si le
+         trace est plus long que ce que la page offre a defiler, sans quoi
+         il n'arriverait jamais au bout. */
+      var cible = plugEl
+        ? finT - (PRISE - TIP) * vh
+        : Math.min(finT, dispo - 40);
+      /* Une page qui tient dans un ecran (la 404) a son bouton au-dessus
+         de la ligne de flottaison des l'arrivee : la course y est nulle,
+         pas negative. */
+      if (cible < 0) {
+        cible = 0;
+      }
       if (finT - t0 > 1 && cible > t0) {
         var kSec = (cible - t0) / (finT - t0);
-        /* Plafond d'avance (2026-08-28, demande de Baptiste : la ligne
-           doit accompagner la lecture d'un bout a l'autre).
-
-           buildTable cale chaque point vertical sur le centre du
-           viewport : sans retouche, la pointe y vit. Le resserrement
-           ci-dessus la tire en avant d'exactement (t - t0) x (1 - kSec)
-           pixels, un ecart qui croit jusqu'au dernier point. Sur une
-           page courte il ne se voit pas ; sur une page longue il
-           devient enorme, la pointe passe sous le bas de l'ecran et le
-           trait est deja entierement dessine quand on arrive. Mesure
-           avant ce plafond, en fractions de hauteur d'ecran (0,5 = le
-           centre, au-dela de 1 la pointe est sortie par le bas) :
-           accueil en mobile 3,12 ; Hall of Fame 2,73 ; fiche edition
-           1,33 ; registre 1,06.
-
-           On borne donc l'avance a 0,35 hauteur d'ecran, ce qui garde
-           la pointe au-dessus de 0,85 : elle reste dans le cadre en
-           toutes circonstances. La regle des deux tiers continue de
-           s'appliquer partout ou elle ne coute rien (les pages courtes,
-           soit la grande majorite) ; sur les pages longues la prise
-           s'allume plus tard, vers 80 a 90 %, ce qui est le prix
-           assume. */
-        var kPlafond = 1 - (vh * 0.35) / (finT - t0);
-        if (kSec < kPlafond) {
-          kSec = kPlafond;
-        }
-        /* La fin de course prime sur le plafond : si la course ne tient
-           plus dans ce que la page offre a defiler, la prise ne
-           s'allumerait jamais. */
+        /* La fin de course prime : si la course ne tenait plus dans ce
+           que la page offre a defiler, la prise ne s'allumerait jamais.
+           Il n'y a plus de plafond d'avance : l'avance vaut au plus un
+           quart d'ecran par construction, la pointe reste donc toujours
+           dans le cadre. */
         var kFin = (dispo - 40 - t0) / (finT - t0);
         if (kSec > kFin) {
           kSec = kFin;
