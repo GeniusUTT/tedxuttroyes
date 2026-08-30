@@ -1453,18 +1453,34 @@ body.nav-open {
   padding: 16px 20px;
   border: 1px solid var(--filet);
   border-left: 2px solid var(--rouge);
-  background-color: rgba(8, 8, 8, 0.92);
+  background-color: rgba(8, 8, 8, 0.96);
   opacity: 0;
   animation: aIn 0.65s var(--ease-out) 1.15s forwards;
 }
 
-/* Sur telephone le seuil est serre : au milieu pile, le bloc recouvrait
-   la ligne de date et le bouton « Reserver ma place ». On le descend
-   d'un cran (demande de Baptiste le 2026-08-28), il se pose alors sous
-   les deux boutons sans quitter le milieu de l'ecran. */
+/* Sur telephone le seuil remplit tout le premier ecran, du kicker au
+   bouton d'agenda : il n'y a aucun creux de la hauteur du bloc, donc
+   pas de place ou l'overlay ne recouvrirait rien. Au milieu pile il
+   masquait la ligne de date et « Reserver ma place » (demande de
+   Baptiste le 2026-08-28 : ne pas cacher le bouton).
+
+   On le descend donc sous la rangee d'actions, calé par le haut et non
+   par le centre : il ne recouvre plus que le telescripteur et le haut
+   du bouton d'agenda, que le premier defilement rend aussitot. Le
+   titre, la ligne de date et les deux boutons du seuil restent lisibles.
+   Au-dessus de 640 px le bloc reprend le milieu exact de l'ecran : il
+   n'y effleure que la ligne de date. */
 @media (max-width: 639px) {
   .journey .repere {
-    top: 62%;
+    top: 72%;
+    transform: translate(-50%, 0);
+  }
+
+  /* A cette place le bloc se pose sur le telescripteur, dont les
+     chiffres sont clairs : les 4 % de transparence qui passent bien
+     au-dessus d'une photo sombre y laissaient un fantome. Fond plein. */
+  .journey .repere-box {
+    background-color: var(--noir);
   }
 }
 
@@ -3522,6 +3538,20 @@ details.faq[open] summary .icon {
   .alb-lbl {
     grid-row: 3;
     padding-top: 14px;
+  }
+
+  /* Le theme se resserre avec sa colonne. Sa taille etait figee a
+     1,5rem des 1000 px de large (le clamp global butait sur son
+     plafond) alors que les colonnes, elles, continuaient de retrecir :
+     dix colonnes a se partager la page. En dessous de 1430 px les mots
+     que rien ne coupe (« Circulation », « Impacting ») debordaient donc
+     de leur colonne et mordaient sur la voisine, jusqu'a 39 px de
+     chevauchement a 1024 px (signale par Baptiste le 2026-08-28).
+     Le 1,6vw suit la largeur de colonne : mesure, le debordement
+     restant tient sous la gouttiere de la grille a toutes les largeurs,
+     et au-dela de 1500 px la taille d'origine revient intacte. */
+  .alb-lbl .fr-t {
+    font-size: clamp(1rem, 1.55vw, 1.5rem);
   }
 
   /* Le terminus n'a pas d'affiche : son etiquette vit au-dessus du fil,
