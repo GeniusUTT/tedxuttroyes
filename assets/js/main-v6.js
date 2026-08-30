@@ -283,10 +283,15 @@
          et playsinline, elle n'est jamais lue : on ne fait que la
          deplacer dans le temps.
 
-         Deux fichiers, choisis a l'usage : la marque fait 420 px de
-         large en bureau et 150 px sur telephone, servir les 6,4 Mo de
-         la grande version a un telephone serait une facture pour rien.
-         Le seuil est celui du repli empile de la feuille. */
+         Deux fichiers, choisis a l'usage : la marque fait 391 px de
+         large en bureau et 140 px sur telephone, servir la grande
+         version a un telephone serait une facture pour rien. Le seuil
+         est celui du repli empile de la feuille, les deux doivent
+         rester d'accord.
+
+         Le format est du H.264 en MP4, pas du VP9 en WebM : c'est le
+         seul que tous les appareils lisent, iPhone compris, et il se
+         trouve qu'il est ici plus leger a qualite egale. */
       if (video) {
         if (q > 0.02 && !video.getAttribute("src")) {
           var petit = video.getAttribute("data-src-petit");

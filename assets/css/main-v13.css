@@ -1501,9 +1501,21 @@ body.nav-open {
    n'a pas de couche alpha : son fond noir se confond avec celui de la
    page. Consequence assumee : si elle ne charge pas, ou que le
    navigateur refuse le VP9, la colonne de gauche reste vide. */
+/* La marque est bornee par la hauteur autant que par la largeur : sur un
+   telephone couche, 375 px de haut ne laissent que 239 px sous le
+   header, et un logo cale sur la seule largeur debordait du panneau.
+   Le 52vh ne mord que sur les ecrans bas, ailleurs c'est le clamp qui
+   decide. */
 .interlude-mark {
   display: block;
-  width: clamp(150px, 30vw, 420px);
+  width: min(clamp(150px, 30vw, 420px), 52vh);
+  /* height: auto est indispensable : sans lui, l'attribut height du
+     <video> (pose pour reserver la place avant chargement) fige la
+     boite a 576 px de haut, aspect-ratio ne remplissant qu'une
+     dimension laissee a auto. La marque se retrouvait alors dans une
+     boite 391 x 536, la video centree dans du vide, et la scene
+     debordait du panneau sur un ecran bas. */
+  height: auto;
   aspect-ratio: 1 / 1;
 }
 
@@ -1515,6 +1527,24 @@ body.nav-open {
   line-height: 1.06;
   letter-spacing: -0.025em;
   color: var(--papier);
+}
+
+/* Ecran bas (telephone couche, petit portable) : le panneau resserre
+   ses marges interieures et le titre descend d'un cran, pour que la
+   scene tienne sans deborder sous le header. */
+@media (max-height: 560px) {
+  .js .interlude {
+    padding-top: calc(var(--header-h) + 12px);
+    padding-bottom: 20px;
+  }
+
+  .interlude-titre {
+    font-size: clamp(1.15rem, 2.6vw, 1.8rem);
+  }
+
+  .interlude-scene {
+    gap: clamp(20px, 3vw, 44px);
+  }
 }
 
 /* Sous 768 px, deux colonnes ne tiennent plus : le texte y serait a
@@ -2633,6 +2663,10 @@ details.faq[open] summary .icon {
    la variable vaut zero et le trait garde ses 2,5. */
 .jline path {
   stroke: var(--rouge);
+  /* Repli d'abord : un moteur qui refuserait le calc sur une propriete
+     de geometrie SVG garde le trait a sa juste epaisseur au lieu de
+     retomber sur le 1 par defaut du SVG. */
+  stroke-width: 2.5;
   stroke-width: calc(2.5 + var(--ligne-zoom, 0) * 7);
   fill: none;
 }
