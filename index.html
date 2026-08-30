@@ -102,9 +102,11 @@
   <a class="skip-link" href="#contenu">Aller au contenu</a>
 
   <div class="voile" aria-hidden="true">
-    <img class="voile-mark voile-mark--trace" src="/assets/img/logo-10e-intro.svg" alt="" width="2160" height="2160">
+    <video class="voile-mark voile-mark--trace" data-src="/assets/video/logo-10e-intro-1120.mp4" autoplay muted
+      playsinline preload="auto" width="1120" height="1120"></video>
     <img class="voile-mark voile-mark--fixe" src="/assets/img/logo-10e.svg" alt="" width="2160" height="2160">
   </div>
+  <script>try { var vm = document.querySelector(".voile-mark--trace"), vh = document.documentElement; if (vm && vh.classList.contains("voile-on") && !vh.classList.contains("voile-court")) { vm.src = vm.getAttribute("data-src") } } catch (e) { }</script>
 
   <div class="interlude" aria-hidden="true">
     <div class="interlude-scene">
@@ -743,7 +745,7 @@
             aria-label="La dixième édition en chiffres">
             <li><strong>61</strong><span>talks partagés sur la scène troyenne depuis 2016</span></li>
             <li><strong>2500</strong><span>spectateurs cumulés sur 9 éditions</span></li>
-            <li><strong>750</strong><span>fauteuils le <span class="msk" data-c="18 mars 2027">** **** ****</span>, pas
+            <li><strong>750</strong><span>fauteuils le <span class="msk" data-c="18 mars 2027">** **** ****</span> pas
                 un de plus</span></li>
           </ul>
           <p class="colL more-row">

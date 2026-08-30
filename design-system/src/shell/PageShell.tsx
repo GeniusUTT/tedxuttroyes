@@ -3,6 +3,7 @@ import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
 import { Interlude } from "../accueil/Interlude";
 import { VoileOuverture } from "../marque/Marque10";
+import { Filigrane } from "../accueil/Filigrane";
 import type { NavKey } from "../types";
 
 export interface PageShellProps {
@@ -38,6 +39,12 @@ export interface PageShellProps {
    * main.js qui pilote l'opacite au fil du scroll.
    */
   interlude?: boolean;
+  /**
+   * Le filigrane, reserve a l'accueil : le X moire en fond, du premier
+   * versant du theme jusqu'a la billetterie. Couche fixe posee hors du
+   * contenu, comme le voile et l'interlude.
+   */
+  filigrane?: boolean;
 }
 
 /**
@@ -52,7 +59,8 @@ export function PageShell({
   variant = "page",
   footer = true,
   voile = false,
-  interlude = false
+  interlude = false,
+  filigrane = false
 }: PageShellProps) {
   return (
     <div className={variant === "journey" ? "journey" : "parcours"}>
@@ -61,6 +69,7 @@ export function PageShell({
       </a>
       {voile ? <VoileOuverture /> : null}
       {interlude ? <Interlude /> : null}
+      {filigrane ? <Filigrane /> : null}
       <SiteHeader current={current} />
       <main id="contenu">{children}</main>
       {footer ? <SiteFooter finale={variant === "journey"} /> : null}

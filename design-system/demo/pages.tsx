@@ -29,7 +29,6 @@ import {
   Heading,
   Hero,
   InterludeEspace,
-  Filigrane,
   HofYear,
   INSTAGRAM_URL,
   Lead,
@@ -91,7 +90,7 @@ const accueil: DemoPage = {
   slug: "accueil",
   title: "Accueil",
   element: (
-    <PageShell current="accueil" variant="journey" voile interlude>
+    <PageShell current="accueil" variant="journey" voile interlude filigrane>
       <Hero
         cote="Dixième édition"
         word="Franchir"
@@ -106,8 +105,6 @@ const accueil: DemoPage = {
           Voir le programme
         </Button>
       </Hero>
-
-      <Filigrane />
 
       <InterludeEspace />
 

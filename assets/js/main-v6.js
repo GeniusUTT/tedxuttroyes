@@ -369,32 +369,72 @@
      donne deux hauteurs d'ecran), sans quoi il n'y aurait rien a
      parcourir.
 
-     On lit la position A L'ECRAN (getBoundingClientRect) et non le
-     scroll : sur l'accueil en bureau le contenu est translate par
-     line.js avec un lissage et des fenetres de gel, et le rect en tient
-     compte tout seul.
+     IL SUIT LA BARRE DE DEFILEMENT, PAS LE CONTENU (demande de Baptiste
+     le 2026-08-30). C'est tout ce que ce module lit : pageYOffset. Il
+     ne regarde jamais la position du contenu a l'ecran, qui est
+     translatee et lissee par line.js sur l'accueil en bureau. Deux
+     consequences voulues : le filigrane continue d'avancer pendant les
+     fenetres de gel, quand la page est figee et que la pointe du trait
+     balaie une horizontale ; et il n'a plus rien a rattraper, son
+     mouvement est le meme sur toutes les plateformes.
+
+     Les bornes se prennent en FRACTION de la course, pas en pixels : en
+     regime virtuel la barre est plus longue que le contenu de tout le
+     budget de gel, les deux axes ne se superposent pas. La zone occupe
+     donc la meme fraction de la barre qu'elle occupe du contenu.
+
+     L'APPARITION EST UNE AUTRE AFFAIRE QUE LA COURSE, et elle ne se
+     calcule pas : elle s'observe. Un IntersectionObserver pose sur la
+     section Franchir dit exactement quand le X doit etre la, avec ou
+     sans l'ecran de presentation de la ligne, en regime virtuel comme
+     en flux normal. La fraction, elle, se trompait d'environ huit cents
+     pixels sur cette borne, parce que le budget de gel n'est pas
+     reparti proportionnellement : le X finissait son apparition bien
+     avant Franchir. Sur la course du dessin le meme ecart ne pese que
+     quelques dizaines de pixels, invisible, la fraction y reste donc.
+
+     Une fois allume, il le reste : il n'y a pas de disparition a
+     l'arrivee sur la billetterie (demande de Baptiste le 2026-08-30).
+     Le X accompagne la fin de la page et le pied de page.
      ------------------------------------------------------------------ */
   var fond = doc.querySelector(".fond-marque");
   var fondA = doc.getElementById("moment-2");
   var fondB = doc.getElementById("billetterie");
-  if (fond && fondA && fondB) {
+  var fondWrap = doc.querySelector(".jscroll");
+  var fondMain = doc.getElementById("contenu");
+  if (fond && fondA && fondB && fondWrap && fondMain) {
     var fondImg = fond.querySelector("img");
-    var fondH = 0;
+    var sDebut = 0;
+    var sFin = 0;
     var fondY = null;
     var rafFond = 0;
     var fondJusqua = 0;
+    /* Sa propre borne : celle de l'interlude n'est affectee que si ce
+       module-la tourne, et il ne tourne pas en reduced motion. */
+    var borne = function (v) {
+      return v < 0 ? 0 : v > 1 ? 1 : v;
+    };
 
-    /* La zone se mesure dans le repere du contenu : main est positionne
-       et les deux sections en sont filles directes, offsetTop suffit. */
     var mesurerFond = function () {
-      var t = fondA.offsetTop;
-      fondH = fondB.offsetTop + fondB.offsetHeight - t;
-      fond.style.setProperty("--fond-t", t + "px");
-      fond.style.setProperty("--fond-h", fondH + "px");
+      var vh = window.innerHeight;
+      /* Position de la zone dans le contenu : main est positionne, les
+         deux sections en sont filles directes, et main lui-meme se
+         mesure dans le wrapper. */
+      var haut = fondMain.offsetTop + fondA.offsetTop;
+      var bas = fondMain.offsetTop + fondB.offsetTop + fondB.offsetHeight;
+      var courseContenu = Math.max(1, fondWrap.offsetHeight - vh);
+      var courseBarre = Math.max(1, doc.documentElement.scrollHeight - vh);
+      var f0 = haut / courseContenu;
+      var f1 = (bas - vh) / courseContenu;
+      if (f1 < f0 + 0.01) {
+        f1 = f0 + 0.01;
+      }
+      sDebut = f0 * courseBarre;
+      sFin = f1 * courseBarre;
     };
 
     var majFond = function () {
-      if (!fondH || !fondImg) {
+      if (sFin <= sDebut || !fondImg) {
         return;
       }
       var hImg = fondImg.offsetHeight;
@@ -402,27 +442,15 @@
         return;
       }
       var vh = window.innerHeight;
-      var r = fond.getBoundingClientRect();
-      var course = Math.max(1, r.height - vh);
-      var s = -r.top;
-      if (s < 0) {
-        s = 0;
-      } else if (s > course) {
-        s = course;
-      }
-      /* p vaut 0 au sommet du dessin, 1 a sa base. En reduced motion la
-         fenetre ne se deplace plus : elle se pose au milieu du dessin et
-         l'y reste, le filigrane parait alors immobile a l'ecran. */
-      var p = reduceMotion.matches ? 0.5 : s / course;
-      var y = Math.round(s - p * (hImg - vh));
+      var p = borne((window.pageYOffset - sDebut) / (sFin - sDebut));
+      /* p = 0 : on voit le haut du dessin. p = 1 : on voit sa base.
+         En reduced motion la fenetre ne se deplace plus : elle se pose
+         au milieu du dessin et l'y reste, le filigrane parait alors
+         immobile a l'ecran. Son apparition, elle, reste pilotee par p :
+         sans cela il se verrait sur le seuil et sur le pied de page. */
+      var pPan = reduceMotion.matches ? 0.5 : p;
+      var y = Math.round(-pPan * (hImg - vh));
       if (y !== fondY) {
-        /* Tant que la position bouge, on prolonge la boucle : sur
-           l'accueil en bureau, la translation du contenu est lissee et
-           peut mettre plus longtemps a se poser que le sursis fixe qui
-           suit le dernier evenement de defilement. Sans cela le
-           filigrane se figeait avant le contenu et paraissait en
-           retard. */
-        fondJusqua = Math.max(fondJusqua, Date.now() + 200);
         fondY = y;
         fondImg.style.setProperty("--fond-y", y + "px");
       }
@@ -433,14 +461,13 @@
       rafFond = Date.now() < fondJusqua ? window.requestAnimationFrame(boucleFond) : 0;
     };
 
-    /* On replace le filigrane des l'evenement de defilement, avant meme
-       d'armer la boucle : un navigateur qui bride ses images (onglet en
-       arriere-plan, economie d'energie) le laisserait sinon en arriere
-       d'autant d'images qu'il en saute. La boucle prend ensuite le
-       relais pour suivre le lissage de la translation du contenu. */
+    /* On replace le filigrane des l'evenement de defilement, et la
+       boucle prend le relais le temps de l'inertie : sur un telephone,
+       le defilement continue apres le doigt sans forcement emettre un
+       evenement par image. */
     var reveillerFond = function () {
       majFond();
-      fondJusqua = Date.now() + 400;
+      fondJusqua = Date.now() + 300;
       if (!rafFond) {
         rafFond = window.requestAnimationFrame(boucleFond);
       }
@@ -457,16 +484,39 @@
       reveillerFond();
     }, { passive: true });
     /* La geometrie bouge encore apres le premier rendu (polices, images,
-       build de line.js) : on remesure a chaque changement de taille du
-       contenu, et une derniere fois au chargement complet. */
+       spacer du regime virtuel pose par line.js) : on remesure a chaque
+       changement de taille du contenu, et une derniere fois au
+       chargement complet. */
     if (window.ResizeObserver) {
-      var contenu = doc.getElementById("contenu");
-      if (contenu) {
-        new window.ResizeObserver(refaireFond).observe(contenu);
-      }
+      new window.ResizeObserver(refaireFond).observe(fondWrap);
     }
     window.addEventListener("load", refaireFond);
     refaireFond();
+
+    /* L'apparition : des que le premier versant du theme touche l'ecran,
+       et pour de bon. Le test sur top < 0 rattrape le cas ou la section
+       est deja passee au-dessus (rechargement au milieu de la page) ;
+       au-dessus d'elle, le X reste eteint, il n'a rien a faire sur le
+       seuil. */
+    if ("IntersectionObserver" in window) {
+      new window.IntersectionObserver(
+        function (entrees) {
+          for (var k = 0; k < entrees.length; k++) {
+            var e = entrees[k];
+            fond.classList.toggle(
+              "fond-marque--on",
+              e.isIntersecting || e.boundingClientRect.top < 0
+            );
+          }
+        },
+        /* Le quart bas de l'ecran ne compte pas : sans l'ecran de
+           presentation de la ligne, Franchir commence pile au bas du
+           premier ecran et le X s'allumerait des le seuil. Il s'allume
+           donc quand la section est montee d'un quart, et le fondu de
+           0,7 s se termine pendant qu'elle finit d'arriver. */
+        { rootMargin: "0px 0px -25% 0px" }
+      ).observe(fondA);
+    }
   }
 
   /* ------------------------------------------------------------------

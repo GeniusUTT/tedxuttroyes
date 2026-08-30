@@ -4459,7 +4459,16 @@ details.faq[open] summary .icon {
   z-index: 0;
   overflow: hidden;
   pointer-events: none;
+  /* L'apparition : invisible tant que le premier versant du theme n'est
+     pas arrive, puis en place pour de bon. Il n'y a pas de disparition
+     a l'autre bout (demande de Baptiste le 2026-08-30) : le X reste
+     jusqu'au bas de la page. */
   opacity: 0;
+  transition: opacity 0.7s linear;
+}
+
+.fond-marque--on {
+  opacity: 1;
 }
 
 .fond-marque img {

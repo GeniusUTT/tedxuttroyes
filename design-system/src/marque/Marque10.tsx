@@ -44,20 +44,23 @@ export function Marque10({ plein, alt = "", step }: Marque10Props) {
  * Le paquet n'en rejoue que le markup. Sur le site, le voile n'est pose
  * qu'une fois par onglet par un script en ligne du head (classe voile-on
  * sur html, cle de session tedx-ouverture), et il sort tout seul par une
- * animation CSS. Il porte deux images : le dessin qui se trace
- * (logo-10ans-intro.svg) pour une premiere venue, et le logo deja fini
- * pour la version courte servie ensuite (classe voile-court sur html,
- * cle locale tedx-ouverture-vue). Le CSS n'en montre qu'une.
+ * animation CSS. Il porte deux marques : le dessin qui se trace, une
+ * video (logo-10e-intro-1120.mp4) depuis le 2026-08-30, pour une
+ * premiere venue ; et le logo deja fini pour la version courte servie
+ * ensuite (classe voile-court sur html, cle locale tedx-ouverture-vue).
+ * Le CSS n'en montre qu'une. Le paquet pose la balise video sans source,
+ * comme pour l'interlude : il n'embarque pas de megaoctets en data URI.
  */
 export function VoileOuverture() {
   return (
     <div className="voile" aria-hidden="true">
-      <img
+      <video
         className="voile-mark voile-mark--trace"
-        src={MARQUE_10E}
-        alt=""
-        width={MARQUE_10E_TAILLE}
-        height={MARQUE_10E_TAILLE}
+        muted
+        playsInline
+        preload="none"
+        width={1120}
+        height={1120}
       />
       <img
         className="voile-mark voile-mark--fixe"
