@@ -41,11 +41,11 @@
   <link rel="preload" href="/assets/fonts/bricolage-var-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/dm-sans-var-latin.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/space-mono-400-latin.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/assets/css/main-v12.css">
+  <link rel="stylesheet" href="/assets/css/main-v13.css">
   <script>document.documentElement.classList.add("js");</script>
   <script>try { if (!sessionStorage.getItem("tedx-ouverture") && !matchMedia("(prefers-reduced-motion: reduce)").matches) { var v = document.documentElement; v.classList.add("voile-on"); if (localStorage.getItem("tedx-ouverture-vue")) { v.classList.add("voile-court") } sessionStorage.setItem("tedx-ouverture", "1"); localStorage.setItem("tedx-ouverture-vue", "1") } } catch (e) { }</script>
   <script src="/assets/js/reveal.js" defer></script>
-  <script src="/assets/js/main-v5.js" defer></script>
+  <script src="/assets/js/main-v6.js" defer></script>
   <script src="/assets/js/line-v8.js" defer></script>
   <script src="/assets/js/map.js" defer></script>
 
@@ -105,12 +105,16 @@
     <img class="voile-mark voile-mark--fixe" src="/assets/img/logo-10e.svg" alt="" width="2160" height="2160">
   </div>
 
-  <div class="repere">
-    <div class="repere-box">
-      <p class="cote">Repère</p>
-      <p class="repere-t"
-        data-reveal="Suivez la ligne rouge : c'est la limite, et elle vous guide de page en page jusqu'au jour J.">Suivez
-        la ligne rouge : elle vous guide de page en page jusqu'au jour J.</p>
+  <div class="interlude" aria-hidden="true">
+    <div class="interlude-scene">
+      <div class="interlude-col interlude-col--logo">
+        <video class="interlude-mark" data-src="/assets/video/logo-10e-texte-scrub-576.webm"
+          data-src-petit="/assets/video/logo-10e-texte-scrub-384.webm" muted playsinline preload="none" width="576"
+          height="576"></video>
+      </div>
+      <div class="interlude-col interlude-col--texte">
+        <h2 class="interlude-titre">La ligne sera votre guide pour toute la durée de la 10e édition</h2>
+      </div>
     </div>
   </div>
 
@@ -242,6 +246,8 @@
           </div>
         </div>
       </section>
+
+      <div class="interlude-espace" aria-hidden="true"></div>
 
       <section class="mom" id="moment-2" data-line="cross">
         <div class="mwrap">

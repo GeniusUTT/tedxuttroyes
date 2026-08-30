@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
-import { Repere } from "../accueil/Repere";
+import { Interlude } from "../accueil/Interlude";
 import { VoileOuverture } from "../marque/Marque10";
 import type { NavKey } from "../types";
 
@@ -31,12 +31,13 @@ export interface PageShellProps {
    */
   voile?: boolean;
   /**
-   * Le repere d'ouverture, reserve a l'accueil : la phrase posee au
-   * milieu de l'ecran qui dit ce que le trait rouge fait la. Sur le
-   * site, main.js la fait fondre au premier defilement ; le paquet ne
-   * rejoue que le markup, la boite y reste donc visible.
+   * L'interlude, reserve a l'accueil : le panneau fixe qui recouvre le
+   * contenu entre le seuil et le theme. Il va de pair avec un
+   * <InterludeEspace /> pose dans le flux, qui lui donne sa hauteur de
+   * defilement. Le paquet ne rejoue que le markup : sur le site, c'est
+   * main.js qui pilote l'opacite au fil du scroll.
    */
-  repere?: boolean;
+  interlude?: boolean;
 }
 
 /**
@@ -51,7 +52,7 @@ export function PageShell({
   variant = "page",
   footer = true,
   voile = false,
-  repere = false
+  interlude = false
 }: PageShellProps) {
   return (
     <div className={variant === "journey" ? "journey" : "parcours"}>
@@ -59,7 +60,7 @@ export function PageShell({
         Aller au contenu
       </a>
       {voile ? <VoileOuverture /> : null}
-      {repere ? <Repere /> : null}
+      {interlude ? <Interlude /> : null}
       <SiteHeader current={current} />
       <main id="contenu">{children}</main>
       {footer ? <SiteFooter finale={variant === "journey"} /> : null}

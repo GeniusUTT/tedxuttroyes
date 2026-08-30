@@ -29,7 +29,7 @@ export * from "./base/Redact";
 export * from "./base/VisuallyHidden";
 
 /* Accueil : les stations de la ligne continue */
-export * from "./accueil/Repere";
+export * from "./accueil/Interlude";
 export * from "./accueil/Hero";
 export * from "./accueil/Ticker";
 export * from "./accueil/Moment";

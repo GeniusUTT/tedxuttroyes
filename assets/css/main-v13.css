@@ -13,7 +13,7 @@
    05. Typographie : display, cote, donnees mono
    06. Boutons, liens, icones
    07. Header et navigation
-   08. Hero, telescripteur et repere d'ouverture
+   08. Hero, telescripteur et interlude
    09. Diptyque des deux versants du theme
    10. Frise des editions (sur la marge)
    11. Le dix en batons (tally) et lignes de donnees
@@ -146,7 +146,7 @@
   --line-x: calc(var(--m-left) + var(--rail-w));
   --body-pad: 20px;   /* distance ligne > contenu (mobile) */
 
-  --z-repere: 120;
+  --z-interlude: 140;
   --z-menu: 150;
   --z-header: 200;
   --z-skip: 300;
@@ -1407,94 +1407,151 @@ body.nav-open {
   }
 }
 
-/* Le repere d'ouverture : une phrase au milieu de l'ecran qui dit ce que
-   le trait rouge fait la, et qui s'efface au premier defilement (demande
-   de Baptiste le 2026-08-28). main.js pose repere-off sur html des que la
-   page a bouge de plus de 4 px, le meme signal que le fond du header.
+/* L'interlude : un ecran entier qui recouvre le contenu entre le seuil
+   et le diptyque du theme, le temps d'un message (demande de Baptiste
+   le 2026-08-28). Il ne defile pas : le panneau est fixe, son opacite
+   suit la course d'un espaceur pose dans le flux. On voit donc le
+   seuil, l'interlude recouvre tout, puis il s'efface et la page reprend
+   son defilement la ou elle l'avait laisse.
 
-   Trois choses la rendent inoffensive : elle est en position: fixed,
-   donc elle ne peut pas pousser le seuil hors du premier ecran (regle
-   dure) ; elle est en pointer-events: none, donc elle n'intercepte aucun
-   clic ; et elle ne vit que sur l'accueil (.journey), les pages
-   interieures n'ayant pas d'ouverture a expliquer. Sous le menu mobile
-   (z 150) et sous le header (z 200), qui la recouvrent proprement.
+   Le panneau vit hors de .jscroll, en frere du wrapper, comme le voile
+   d'ouverture : un position: fixed pose a l'interieur se calerait sur
+   le wrapper transforme (regime virtuel du bureau) et defilerait avec
+   le contenu au lieu de rester colle au viewport. Meme raison qui
+   interdit position: sticky dans main sur l'accueil.
 
-   Le 50vw vise le milieu du moniteur et non celui de la zone utile,
-   comme --axis-b : au-dessous de 1920 px le bloc se centre donc pile sur
-   l'axe que suit le trait rouge, ce qui est tout le propos.
+   Il passe sous le header (z 140 contre 200) : la navigation reste
+   visible et utilisable pendant l'interlude, et le panneau est en
+   pointer-events: none, il n'intercepte donc jamais un clic.
 
-   Le texte est a deux temps : la version servie ne nomme pas le theme,
-   masque jusqu'au 31 octobre 2026 ; data-reveal porte celle qui dit
-   "c'est la limite". Retoucher l'une oblige a retoucher l'autre.
+   Sans JavaScript l'opacite ne serait jamais pilotee et le panneau
+   resterait en travers de la page : il est masque par defaut et
+   n'apparait que sous .js. En reduced motion, ni panneau ni espaceur :
+   la page enchaine le seuil et le theme, sans interlude. */
+.interlude,
+.interlude-espace {
+  display: none;
+}
 
-   L'entree et la sortie vivent sur deux elements expres : la boite
-   interieure porte l'animation d'apparition (forwards, calee juste apres
-   le dernier palier du seuil), l'enveloppe porte la transition de
-   disparition. Les melanger ferait sauter le bloc au lieu de le fondre,
-   une animation forwards ne se laissant pas transitionner. */
-.journey .repere {
+.js .interlude {
+  display: flex;
   position: fixed;
-  z-index: var(--z-repere);
-  top: 50%;
-  left: 50vw;
-  width: min(560px, calc(100vw - 40px));
-  transform: translate(-50%, -50%);
+  top: 0;
+  bottom: 0;
+  left: var(--gouttiere);
+  right: var(--gouttiere-d);
+  z-index: var(--z-interlude);
+  align-items: center;
+  justify-content: center;
+  padding: calc(var(--header-h) + 24px) var(--m-left) 40px;
+  opacity: 0;
   pointer-events: none;
-  transition: opacity 0.45s var(--ease-out), visibility 0s linear 0.45s;
 }
 
-.repere-off .journey .repere {
-  opacity: 0;
-  visibility: hidden;
+/* L'espaceur ne porte aucun contenu : il donne au parcours la hauteur
+   de scroll pendant laquelle l'interlude tient l'ecran.
+
+   Toute la duree de l'interlude tient dans cette hauteur : la course
+   totale vaut l'espaceur PLUS une hauteur d'ecran (le temps qu'il monte
+   du bas de l'ecran avant de commencer a le quitter par le haut). A
+   80vh, la course vaut 1,8 ecran et la sequence visible en fait une et
+   demie (demande de Baptiste le 2026-08-28). C'est le seul reglage a
+   toucher pour l'allonger ou la raccourcir ; les bornes du trapeze dans
+   main.js sont des fractions de cette course et suivent d'elles-memes.
+
+   Les marges sont la place demandee avant et apres l'ecran (Baptiste,
+   2026-08-28) : du vide ou le seuil finit de partir et ou le theme
+   n'est pas encore arrive, pour que le panneau ne se leve pas sur l'un
+   et ne s'efface pas sur l'autre. Elles ne changent rien au calcul :
+   getBoundingClientRect ignore les marges, la course reste celle de la
+   hauteur de l'espaceur. */
+.js .interlude-espace {
+  display: block;
+  height: 80vh;
+  height: 80svh;
+  margin-block: 60vh;
 }
 
-.journey .repere-box {
-  margin: 0;
-  padding: 16px 20px;
-  border: 1px solid var(--filet);
-  border-left: 2px solid var(--rouge);
-  background-color: rgba(8, 8, 8, 0.96);
-  opacity: 0;
-  animation: aIn 0.65s var(--ease-out) 1.15s forwards;
+/* La disposition : la ligne principale coupe l'ecran en deux, le logo a
+   sa gauche, le texte a sa droite (demande de Baptiste le 2026-08-28).
+   L'axe tombe au milieu du panneau, donc au milieu de la page, la ou
+   passe --axis-b : c'est le meme trait, arrete le temps d'un ecran. */
+.interlude-scene {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(28px, 5vw, 76px);
+  align-items: center;
+  width: 100%;
+  /* Le zoom : la scene s'avance pendant que l'axe grossit. Sur GPU, ni
+     l'un ni l'autre ne declenche de calcul de mise en page. */
+  transform: scale(calc(0.93 + var(--zoom, 0) * 0.11));
 }
 
-/* Sur telephone le seuil remplit tout le premier ecran, du kicker au
-   bouton d'agenda : il n'y a aucun creux de la hauteur du bloc, donc
-   pas de place ou l'overlay ne recouvrirait rien. Au milieu pile il
-   masquait la ligne de date et « Reserver ma place » (demande de
-   Baptiste le 2026-08-28 : ne pas cacher le bouton).
-
-   On le descend donc sous la rangee d'actions, calé par le haut et non
-   par le centre : il ne recouvre plus que le telescripteur et le haut
-   du bouton d'agenda, que le premier defilement rend aussitot. Le
-   titre, la ligne de date et les deux boutons du seuil restent lisibles.
-   Au-dessus de 640 px le bloc reprend le milieu exact de l'ecran : il
-   n'y effleure que la ligne de date. */
-@media (max-width: 639px) {
-  .journey .repere {
-    top: 72%;
-    transform: translate(-50%, 0);
-  }
-
-  /* A cette place le bloc se pose sur le telescripteur, dont les
-     chiffres sont clairs : les 4 % de transparence qui passent bien
-     au-dessus d'une photo sombre y laissaient un fantome. Fond plein. */
-  .journey .repere-box {
-    background-color: var(--noir);
-  }
+.interlude-col--logo {
+  justify-self: end;
 }
 
-.journey .repere-box .cote {
-  margin-bottom: 8px;
+.interlude-col--texte {
+  justify-self: start;
+  max-width: 34rem;
 }
 
-.repere-t {
+/* La marque : la video seule (demande de Baptiste le 2026-08-28, la
+   video etant deja le logo anime, le dessin fini faisait doublon). Elle
+   n'a pas de couche alpha : son fond noir se confond avec celui de la
+   page. Consequence assumee : si elle ne charge pas, ou que le
+   navigateur refuse le VP9, la colonne de gauche reste vide. */
+.interlude-mark {
+  display: block;
+  width: clamp(150px, 30vw, 420px);
+  aspect-ratio: 1 / 1;
+}
+
+.interlude-titre {
   margin: 0;
   font-family: var(--font-disp);
-  font-weight: 600;
-  font-size: clamp(1rem, 2.2vw, 1.2rem);
-  line-height: 1.3;
+  font-weight: 800;
+  font-size: clamp(1.4rem, 3.6vw, 3.1rem);
+  line-height: 1.06;
+  letter-spacing: -0.025em;
   color: var(--papier);
+}
+
+/* Sous 768 px, deux colonnes ne tiennent plus : le texte y serait a
+   sept signes par ligne. La scene s'empile et l'axe se couche, il coupe
+   alors l'ecran en deux dans l'autre sens. Le geste est le meme, le
+   format change.
+
+   L'axe reste pose sur le panneau, a sa moitie. Pour qu'il tombe dans
+   la gouttiere et non en travers du logo, deux choses doivent tenir
+   ensemble : le panneau prend une marge interieure haute et basse
+   egale, et la scene remplit sa hauteur en deux rangees egales. Le
+   milieu de la scene coincide alors avec le milieu du panneau, donc
+   avec l'axe. Sans cela, la rangee du logo etant plus haute que celle
+   du texte, la gouttiere descend et l'axe coupe le logo. */
+@media (max-width: 767px) {
+  .js .interlude {
+    padding-block: calc(var(--header-h) + 24px);
+  }
+
+  .interlude-scene {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+    height: 100%;
+    justify-items: center;
+    gap: clamp(30px, 9vw, 56px);
+    text-align: center;
+  }
+
+  .interlude-col--logo {
+    align-self: end;
+  }
+
+  .interlude-col--texte {
+    align-self: start;
+    max-width: none;
+  }
+
 }
 
 /* 09 et 10 : le diptyque et l'ancienne frise en marge ont ete dissous
@@ -2570,9 +2627,13 @@ details.faq[open] summary .icon {
   pointer-events: none;
 }
 
+/* L'epaisseur suit --ligne-zoom, pose sur html par main.js pendant
+   l'interlude de l'accueil : c'est LA ligne du site qui grossit, pas un
+   trait de decor (demande de Baptiste le 2026-08-28). Partout ailleurs
+   la variable vaut zero et le trait garde ses 2,5. */
 .jline path {
   stroke: var(--rouge);
-  stroke-width: 2.5;
+  stroke-width: calc(2.5 + var(--ligne-zoom, 0) * 7);
   fill: none;
 }
 
@@ -4109,11 +4170,10 @@ details.faq[open] summary .icon {
     opacity: 1;
   }
 
-  /* Le repere d'ouverture est la d'emblee : il disparait toujours au
-     premier defilement, mais sans fondu. */
-  .journey .repere-box {
-    animation: none;
-    opacity: 1;
+  /* Pas d'interlude : la page enchaine le seuil et le theme. */
+  .js .interlude,
+  .js .interlude-espace {
+    display: none;
   }
 
   /* La ligne continue : entierement tracee, immobile. La pliure,

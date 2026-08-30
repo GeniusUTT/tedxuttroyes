@@ -28,6 +28,7 @@ import {
   FinalCta,
   Heading,
   Hero,
+  InterludeEspace,
   HofYear,
   INSTAGRAM_URL,
   Lead,
@@ -89,7 +90,7 @@ const accueil: DemoPage = {
   slug: "accueil",
   title: "Accueil",
   element: (
-    <PageShell current="accueil" variant="journey" voile repere>
+    <PageShell current="accueil" variant="journey" voile interlude>
       <Hero
         cote="Dixième édition"
         word="Franchir"
@@ -104,6 +105,8 @@ const accueil: DemoPage = {
           Voir le programme
         </Button>
       </Hero>
+
+      <InterludeEspace />
 
       <Moment
         id="franchir"
