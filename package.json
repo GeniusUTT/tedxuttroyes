@@ -1,0 +1,27 @@
+{
+  "name": "tedxuttroyes",
+  "version": "1.0.0",
+  "description": "Site statique de la dixième édition de TEDxUTTroyes (jeudi 18 mars 2027, portes à 18h00 avec mini forum de recrutement, talks à 19h30, Centre de Congrès de l'Aube, Troyes). HTML, CSS et JavaScript purs : aucun framework, aucun build, aucun tracker, aucune donnée collectée.",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"No tests specified\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GeniusUTT/tedxuttroyes.git"
+  },
+  "keywords": [
+    "tedx",
+    "tedxuttroyes",
+    "static-site"
+  ],
+  "author": "TEDxUTTroyes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GeniusUTT/tedxuttroyes/issues"
+  },
+  "homepage": "https://github.com/GeniusUTT/tedxuttroyes#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
