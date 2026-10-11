@@ -26,11 +26,12 @@ export type Partage = {
   carte?: 'summary' | 'summary_large_image';
 };
 
-// L'aperçu de partage de la dixième édition, commun à la plupart des pages.
-// L'image porte la date masquée : le 31 octobre, il faudra la remplacer par
-// og-2027-revele.jpg, ce que reveal-v2.js ne peut pas faire sur un JPEG.
+// L'aperçu de partage de la dixième édition, commun à la plupart des pages et
+// aux données structurées de l'accueil. Depuis le 31 octobre 2026, l'image
+// porte le thème et la vraie date (og-2027-revele.jpg) : reveal-v2.js ne peut
+// rien sur un JPEG, il a fallu la remplacer ici.
 export const PARTAGE_2027: Partage = {
-  image: '/assets/img/og/og-2027.jpg',
+  image: '/assets/img/og/og-2027-revele.jpg',
   largeur: 1200,
   hauteur: 630,
   alt: {

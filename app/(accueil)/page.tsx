@@ -71,7 +71,7 @@ export default function Accueil() {
             },
             geo: { '@type': 'GeoCoordinates', latitude: 48.298433, longitude: 4.077912 },
           },
-          image: [`${SITE}/assets/img/og/og-2027.jpg`],
+          image: [SITE + PARTAGE_2027.image],
           organizer: { '@type': 'Organization', name: 'TEDxUTTroyes', url: `${SITE}/`, sameAs: [INSTAGRAM, LINKEDIN] },
           offers: { '@type': 'Offer', url: BILLETTERIE, priceCurrency: 'EUR', availability: 'https://schema.org/PreOrder' },
           maximumAttendeeCapacity: 750,
