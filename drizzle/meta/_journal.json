@@ -29,6 +29,13 @@
       "when": 1791709480742,
       "tag": "0003_archive",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791748945154,
+      "tag": "0004_espace_speakers",
+      "breakpoints": true
     }
   ]
 }

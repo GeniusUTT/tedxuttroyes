@@ -15,10 +15,17 @@ test('la page de connexion est en noindex et hors cache', async ({ page }) => {
 
 test('une adresse inconnue reçoit la réponse neutre', async ({ page }, info) => {
   test.skip(info.project.name !== 'bureau');
-  await page.goto('/espace/connexion/');
+  await page.goto('/espace/connexion/oubli/');
   await page.getByLabel('Adresse e-mail').fill('adresse-inconnue-verification@geniusutt.fr');
-  await page.getByRole('button', { name: 'Recevoir un code' }).click();
-  await expect(page.locator('p.message[role=status]')).toContainText('Si cette adresse a un compte');
+  await page.getByRole('button', { name: 'Recevoir le lien' }).click();
+  await expect(page.locator('p.esp-message[role=status]')).toContainText('Si cette adresse a un compte');
+});
+
+test('l’en-tête du site mène à l’espace, plus à « Postuler »', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.site-header a[href="/espace/"]')).toHaveText('Espace');
+  await expect(page.locator('.site-header').getByText('Postuler', { exact: true })).toHaveCount(0);
+  await expect(page.locator('.mobile-menu-foot a[href="/espace/"]')).toHaveCount(1);
 });
 
 test('sans session, l’espace est fermé', async ({ page, request }) => {

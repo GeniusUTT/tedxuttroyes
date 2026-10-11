@@ -1,11 +1,11 @@
 import { randomUUID } from 'node:crypto';
 import { and, eq } from 'drizzle-orm';
-import { categorie } from './categories';
+import { categorie, JALON_FICHE, lienValide } from './categories';
 import { base, schema } from './db';
 import { noter } from './journal';
 
-// Éditions, jalons, pôles : réservé aux admins (la garde est dans les
-// actions, exigerAdmin). Les données sont rattachées à une édition, pour
+// Éditions, jalons, album photo : réservé à l'équipe (la garde est dans les
+// actions, exigerMembre). Les données sont rattachées à une édition, pour
 // que l'outil serve aux suivantes.
 
 export class RefusAdministration extends Error {}
@@ -37,9 +37,10 @@ export async function nouvelleEdition(annee: number, libelle: string, jour: stri
 }
 
 export async function enregistrerJalon(editionId: string, j: { id?: string; libelle: string; echeance: string; categorie: string; ordre: number }, parId: string) {
-  const cat = j.categorie ? categorie(j.categorie) : null;
-  if (j.categorie && (!cat || cat.sens !== 'du_speaker')) throw new RefusAdministration('Catégorie invalide.');
-  const valeurs = { libelle: j.libelle.trim() || 'Jalon', echeance: date(j.echeance), categorie: cat?.slug ?? null, ordre: j.ordre };
+  const fiche = j.categorie === JALON_FICHE;
+  const cat = j.categorie && !fiche ? categorie(j.categorie) : null;
+  if (j.categorie && !fiche && (!cat || cat.sens !== 'du_speaker')) throw new RefusAdministration('Catégorie invalide.');
+  const valeurs = { libelle: j.libelle.trim() || 'Jalon', echeance: date(j.echeance), categorie: fiche ? JALON_FICHE : cat?.slug ?? null, ordre: j.ordre };
   const b = await base();
   if (j.id) await b.update(schema.jalon).set(valeurs).where(and(eq(schema.jalon.id, j.id), eq(schema.jalon.editionId, editionId)));
   else await b.insert(schema.jalon).values({ id: randomUUID(), editionId, ...valeurs });
@@ -52,9 +53,12 @@ export async function supprimerJalon(editionId: string, id: string, parId: strin
   await noter('jalon.modifie', { acteurId: parId, cibleType: 'jalon', cibleId: id, editionId, details: { supprime: true } });
 }
 
-export async function renommerPole(id: string, nom: string, parId: string) {
-  if (!nom.trim()) throw new RefusAdministration('Nom vide.');
+// L'album photo de la soirée : un lien pour toute l'édition, vide pour le
+// retirer.
+export async function enregistrerLienPhotos(editionId: string, url: string, parId: string) {
+  const lien = url.trim();
+  if (lien && !lienValide(lien)) throw new RefusAdministration('Le lien doit commencer par https://.');
   const b = await base();
-  await b.update(schema.pole).set({ nom: nom.trim().slice(0, 80) }).where(eq(schema.pole.id, id));
-  await noter('pole.modifie', { acteurId: parId, cibleType: 'pole', cibleId: id });
+  await b.update(schema.edition).set({ lienPhotos: lien || null }).where(eq(schema.edition.id, editionId));
+  await noter('edition.modifiee', { acteurId: parId, cibleType: 'edition', cibleId: editionId, details: { lienPhotos: !!lien } });
 }

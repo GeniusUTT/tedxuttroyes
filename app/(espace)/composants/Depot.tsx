@@ -11,10 +11,9 @@ import { actionConfirmer, actionPreparer } from '../espace/documents/actions';
 
 type Choix = { slug: string; libelle: string; formats: string[]; maxMo: number; attestation?: boolean; aide?: string };
 
-export function Depot({ rattachement, speakerId, poleId, documentId, categories, titreLibre, libelleBouton }: {
+export function Depot({ rattachement, speakerId, documentId, categories, titreLibre, libelleBouton }: {
   rattachement: Rattachement;
   speakerId?: string;
-  poleId?: string;
   documentId?: string;
   categories: Choix[];
   titreLibre?: boolean;
@@ -41,7 +40,7 @@ export function Depot({ rattachement, speakerId, poleId, documentId, categories,
     if (c.attestation && !atteste) return setErreur('Cochez l’attestation sur les droits.');
     if (f.size > c.maxMo * 1024 * 1024) return setErreur(`Fichier trop lourd : ${c.maxMo} Mo au plus.`);
     setProgres(0);
-    const p = await actionPreparer({ rattachement, speakerId, poleId, documentId, categorie: cat, titre, nom: f.name, taille: f.size });
+    const p = await actionPreparer({ rattachement, speakerId, documentId, categorie: cat, titre, nom: f.name, taille: f.size });
     if (!p.ok) {
       setProgres(null);
       return setErreur(p.erreur);
@@ -72,7 +71,7 @@ export function Depot({ rattachement, speakerId, poleId, documentId, categories,
   }
 
   return (
-    <form onSubmit={envoyer} className="depot">
+    <form onSubmit={envoyer} className="depot formulaire">
       {categories.length > 1 && (
         <div className="champ">
           <label htmlFor={`${id}-cat`}>Type de document</label>
@@ -93,15 +92,15 @@ export function Depot({ rattachement, speakerId, poleId, documentId, categories,
       </div>
       {c.aide && <p className="muet">{c.aide}</p>}
       {c.attestation && (
-        <label className="case champ">
+        <label className="case">
           <input type="checkbox" checked={atteste} onChange={(e) => setAtteste(e.target.checked)} required />
           J’atteste détenir les droits sur les images, musiques et vidéos utilisées dans ces slides (règles de copyright TEDx).
         </label>
       )}
-      {erreur && <p className="message" role="alert">{erreur}</p>}
-      {fait && <p className="message message--ok" role="status">{fait}</p>}
+      {erreur && <p className="esp-message" role="alert">{erreur}</p>}
+      {fait && <p className="esp-message esp-message--ok" role="status">{fait}</p>}
       {progres !== null && <progress max={100} value={progres} aria-label="Progression de l’envoi" />}
-      <button className="btn btn--petit" type="submit" disabled={progres !== null}>{progres !== null ? `Envoi… ${progres} %` : libelleBouton ?? 'Déposer'}</button>
+      <button className="btn btn--primary btn--sm" type="submit" disabled={progres !== null}>{progres !== null ? `Envoi… ${progres} %` : libelleBouton ?? 'Déposer'}</button>
     </form>
   );
 }

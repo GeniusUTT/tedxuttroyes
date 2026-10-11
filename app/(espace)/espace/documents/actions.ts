@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { exigerSession } from '@/lib/acces';
-import { confirmerDepot, contexte, enregistrerLien, modifierFiche, preparerDepot, RefusDocument, supprimerDocument, type DemandeDepot } from '@/lib/documents';
+import { confirmerDepot, contexte, enregistrerLienVideo, modifierFiche, preparerDepot, RefusDocument, supprimerDocument, type DemandeDepot } from '@/lib/documents';
 import type { FormulaireEnvoi } from '@/lib/storage';
 
 export type Preparation = { ok: true; envoiId: string; formulaire: FormulaireEnvoi } | { ok: false; erreur: string };
@@ -44,22 +44,29 @@ export async function actionSupprimer(documentId: string, retour: string) {
   redirect(`${retour}?ok=${encodeURIComponent('Document supprimé.')}`);
 }
 
-export async function actionLien(speakerId: string, retour: string, form: FormData) {
+export async function actionLienVideo(speakerId: string, retour: string, form: FormData) {
   try {
-    await enregistrerLien(await ctx(), speakerId, String(form.get('lien') ?? '').trim());
+    await enregistrerLienVideo(await ctx(), speakerId, String(form.get('lien') ?? ''));
   } catch (e) {
     if (e instanceof RefusDocument) redirect(`${retour}?erreur=${encodeURIComponent(e.message)}`);
     throw e;
   }
-  redirect(`${retour}?ok=${encodeURIComponent('Lien enregistré.')}`);
+  redirect(`${retour}?ok=${encodeURIComponent('Lien de la vidéo enregistré.')}`);
 }
+
+const texte = (form: FormData, cle: string) => String(form.get(cle) ?? '');
 
 export async function actionFiche(speakerId: string, retour: string, form: FormData) {
   try {
     await modifierFiche(await ctx(), speakerId, {
-      nomAffiche: String(form.get('nomAffiche') ?? ''),
-      biographie: String(form.get('biographie') ?? ''),
-      titreProvisoire: String(form.get('titreProvisoire') ?? ''),
+      prenom: texte(form, 'prenom'),
+      nom: texte(form, 'nom'),
+      emailContact: texte(form, 'emailContact'),
+      telephone: texte(form, 'telephone'),
+      titreProvisoire: texte(form, 'titreProvisoire'),
+      resume: texte(form, 'resume'),
+      biographie: texte(form, 'biographie'),
+      nomAffiche: form.has('nomAffiche') ? texte(form, 'nomAffiche') : undefined,
     });
   } catch (e) {
     if (e instanceof RefusDocument) redirect(`${retour}?erreur=${encodeURIComponent(e.message)}`);

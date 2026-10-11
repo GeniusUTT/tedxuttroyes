@@ -5,12 +5,13 @@ import { base, schema } from './db';
 import { noter } from './journal';
 import { envoyer } from './mail';
 import { courrielInvitation } from './mail/gabarits';
-import { DUREE_INVITATION_MS, etatInvitation, invitationAutorisee, normaliserEmail, type Role } from './regles';
+import { hashPassword } from 'better-auth/crypto';
+import { DUREE_INVITATION_MS, etatInvitation, invitationAutorisee, motDePasseRefuse, normaliserEmail, type Role } from './regles';
 import { urlDeBase } from './url';
 
-// Le seul chemin vers un compte : un admin invite, la personne accepte.
-// Le jeton ne vit qu'en empreinte dans la base, il sert une fois et expire
-// au bout de sept jours.
+// Le seul chemin vers un compte : un membre invite, la personne accepte en
+// choisissant son mot de passe. Le jeton ne vit qu'en empreinte dans la
+// base, il sert une fois et expire au bout de sept jours.
 
 export class RefusInvitation extends Error {}
 
@@ -18,7 +19,6 @@ type Demande = {
   email: string;
   role: Role;
   editionId: string;
-  poles: string[];
   nomAffiche: string;
   derogation: boolean;
   parId: string;
@@ -52,7 +52,6 @@ export async function inviter(d: Demande): Promise<string> {
     email,
     role: d.role,
     editionId: d.editionId,
-    poles: d.role === 'speaker' ? [] : d.poles,
     nomAffiche: d.nomAffiche.trim(),
     derogationDomaine: d.derogation,
     jetonEmpreinte: empreinte(jetonAleatoire(), 'invitation'),
@@ -86,16 +85,20 @@ export async function lireInvitation(jeton: string) {
   return { ...inv, etat: etatInvitation(inv) };
 }
 
-// Crée le compte et clôt l'invitation, d'un seul tenant. Renvoie l'adresse,
-// à laquelle on envoie aussitôt un code de connexion.
-export async function accepter(jeton: string): Promise<string> {
+// Crée le compte avec son mot de passe et clôt l'invitation, d'un seul
+// tenant. Renvoie l'adresse, avec laquelle on ouvre aussitôt la session.
+export async function accepter(jeton: string, mdp: string, confirmation: string): Promise<string> {
   const inv = await lireInvitation(jeton);
   if (!inv || inv.etat !== 'valide') {
     await noter('invitation.refusee', { cibleType: 'invitation', cibleId: inv?.id, details: { etat: inv?.etat ?? 'inconnue' } });
     throw new RefusInvitation(inv?.etat === 'expiree'
-      ? 'Cette invitation a expiré. Demandez à un admin de vous la renvoyer.'
+      ? "Cette invitation a expiré. Demandez à l'équipe de vous la renvoyer."
       : "Cette invitation n'est plus valable.");
   }
+  if (mdp !== confirmation) throw new RefusInvitation('Les deux mots de passe ne sont pas identiques.');
+  const refus = motDePasseRefuse(mdp, inv.email);
+  if (refus) throw new RefusInvitation(refus);
+  const hache = await hashPassword(mdp);
   const b = await base();
   const userId = randomUUID();
   await b.transaction(async (tx) => {
@@ -110,11 +113,9 @@ export async function accepter(jeton: string): Promise<string> {
       emailVerified: true,
       role: inv.role,
     });
-    if (inv.poles.length) {
-      await tx.insert(schema.membrePole).values(inv.poles.map((poleId) => ({ userId, poleId, editionId: inv.editionId })));
-    }
+    await tx.insert(schema.account).values({ id: randomUUID(), accountId: userId, providerId: 'credential', userId, password: hache });
     if (inv.role === 'speaker') {
-      await tx.insert(schema.speaker).values({ id: randomUUID(), userId, editionId: inv.editionId, nomAffiche: inv.nomAffiche || inv.email });
+      await tx.insert(schema.speaker).values({ id: randomUUID(), userId, editionId: inv.editionId, nomAffiche: inv.nomAffiche || inv.email, emailContact: inv.email });
     }
   });
   await noter('invitation.acceptee', { acteurId: userId, cibleType: 'invitation', cibleId: inv.id, editionId: inv.editionId });

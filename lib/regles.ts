@@ -1,6 +1,10 @@
 // Règles pures de l'espace, sans base ni réseau : testées unitairement.
 
-export type Role = 'speaker' | 'membre' | 'admin';
+// Deux rôles seulement : le speaker, et le membre de l'équipe, qui a tous
+// les droits (il n'y a plus ni admin ni pôles depuis le 2026-10-11).
+export type Role = 'speaker' | 'membre';
+
+export const ROLES: Role[] = ['speaker', 'membre'];
 
 export const DOMAINE_MEMBRES = (process.env.ESPACE_DOMAINE_MEMBRES ?? 'geniusutt.fr').toLowerCase();
 
@@ -24,8 +28,8 @@ export function domaineMembreAccepte(email: string, domaine = DOMAINE_MEMBRES): 
   return domaineDe(normaliserEmail(email)) === domaine;
 }
 
-// Un membre ou un admin doit avoir une adresse du domaine, sauf dérogation
-// accordée par un admin. Un speaker n'a aucune restriction.
+// Un membre doit avoir une adresse du domaine, sauf dérogation accordée par
+// un autre membre. Un speaker n'a aucune restriction.
 export function invitationAutorisee(role: Role, email: string, derogation: boolean, domaine = DOMAINE_MEMBRES): boolean {
   if (!emailValide(normaliserEmail(email))) return false;
   if (role === 'speaker') return true;
@@ -33,6 +37,7 @@ export function invitationAutorisee(role: Role, email: string, derogation: boole
 }
 
 export const DUREE_INVITATION_MS = 7 * 24 * 3600 * 1000;
+export const DUREE_REINITIALISATION_MS = 3600 * 1000;
 
 export type EtatInvitation = 'valide' | 'expiree' | 'utilisee' | 'revoquee';
 
@@ -43,9 +48,37 @@ export function etatInvitation(inv: { expireLe: Date; accepteeLe: Date | null; r
   return 'valide';
 }
 
-// Au moins deux admins actifs à tout moment.
-export const ADMINS_MINIMUM = 2;
+// Au moins deux membres actifs à tout moment : un membre a tous les droits,
+// l'espace ne doit jamais se retrouver sans personne pour le tenir.
+export const MEMBRES_MINIMUM = 2;
 
-export function retraitAdminPermis(adminsActifs: number, cibleEstAdminActif: boolean): boolean {
-  return !cibleEstAdminActif || adminsActifs - 1 >= ADMINS_MINIMUM;
+export function retraitMembrePermis(membresActifs: number, cibleEstMembreActif: boolean): boolean {
+  return !cibleEstMembreActif || membresActifs - 1 >= MEMBRES_MINIMUM;
+}
+
+// Mot de passe : douze caractères au moins. Pas de règle de composition
+// (majuscule, chiffre…) : la longueur protège mieux et se retient plus
+// facilement. On refuse seulement l'évident : l'identifiant de l'adresse
+// dans le mot de passe, ou un caractère répété.
+export const MDP_MIN = 12;
+export const MDP_MAX = 128;
+
+export function motDePasseRefuse(mdp: string, email = ''): string | null {
+  if (mdp.length < MDP_MIN) return `Le mot de passe doit faire au moins ${MDP_MIN} caractères.`;
+  if (mdp.length > MDP_MAX) return `Le mot de passe ne doit pas dépasser ${MDP_MAX} caractères.`;
+  const identifiant = normaliserEmail(email).split('@')[0] ?? '';
+  if (identifiant.length >= 4 && mdp.toLowerCase().includes(identifiant)) return 'Le mot de passe ne doit pas reprendre votre adresse e-mail.';
+  if (new Set(mdp).size < 5) return 'Ce mot de passe est trop répétitif.';
+  return null;
+}
+
+// Téléphone : on garde ce que la personne a saisi, à condition qu'il
+// ressemble à un numéro (chiffres, espaces, points, traits d'union,
+// parenthèses et un + initial), de 6 à 20 chiffres. Vide est permis.
+export function telephoneValide(t: string): boolean {
+  const s = t.trim();
+  if (!s) return true;
+  if (!/^\+?[\d\s.()-]+$/.test(s)) return false;
+  const chiffres = s.replace(/\D/g, '').length;
+  return chiffres >= 6 && chiffres <= 20;
 }

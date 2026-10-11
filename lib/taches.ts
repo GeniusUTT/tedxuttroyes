@@ -19,8 +19,7 @@ const MOIS = 30 * JOUR;
 // codes, compteurs de débit et envois en cours sont éphémères : ils ne sont
 // pas sauvegardés.
 export const TABLES_SAUVEGARDEES = [
-  schema.edition, schema.pole, schema.user, schema.membrePole, schema.speaker, schema.invitation, schema.totp,
-  schema.preference, schema.document, schema.version, schema.commentaire, schema.jalon, schema.jalonSpeaker, schema.journal,
+  schema.edition, schema.user, schema.speaker, schema.invitation, schema.preference, schema.document, schema.version, schema.commentaire, schema.jalon, schema.jalonSpeaker, schema.journal,
 ] as const;
 
 export async function stockageSauvegardes(): Promise<{ s: Stockage; prefixe: string }> {
@@ -36,10 +35,24 @@ export async function exporterBase(): Promise<Record<string, unknown[]>> {
   return sortie;
 }
 
+// Une sauvegarde d'avant le 2026-10-11 porte encore des admins, des pôles et
+// des documents d'équipe : les admins redeviennent membres, les documents de
+// pôle et de l'espace commun ne sont pas restaurés (les tables qui les
+// portaient n'existent plus).
+function compatible(table: string, l: Record<string, unknown>): boolean {
+  if ((table === 'user' || table === 'invitation') && l.role === 'admin') l.role = 'membre';
+  if (table === 'document' && (l.rattachement === 'pole' || l.rattachement === 'commun')) return false;
+  return true;
+}
+
 export async function restaurerBase(donnees: Record<string, Record<string, unknown>[]>) {
   const b = await base();
+  const ecartes = new Set<unknown>();
   for (const t of TABLES_SAUVEGARDEES) {
-    const lignes = donnees[getTableName(t)] ?? [];
+    const nom = getTableName(t);
+    const toutes = donnees[nom] ?? [];
+    for (const l of toutes) if (!compatible(nom, l)) ecartes.add(l.id);
+    const lignes = toutes.filter((l) => !ecartes.has(l.id) && !(nom === 'version' || nom === 'commentaire' ? ecartes.has(l.documentId) : false));
     const colonnes = getTableColumns(t);
     const dates = Object.entries(colonnes).filter(([, c]) => c.columnType === 'PgTimestamp').map(([k]) => k);
     for (let i = 0; i < lignes.length; i += 200) {

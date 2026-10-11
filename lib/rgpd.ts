@@ -1,21 +1,23 @@
 import { and, desc, eq, gte, inArray } from 'drizzle-orm';
 import { base, schema } from './db';
-import { RefusCompte } from './comptes';
+import { estMembreActif, membresActifs, RefusCompte } from './comptes';
 import { noter } from './journal';
-import { retraitAdminPermis } from './regles';
+import { retraitMembrePermis } from './regles';
 import { stockage } from './storage';
 
-// Export et suppression d'un compte. La suppression efface tout ce qui est
-// personnel, sauf la Speaker Release : elle fonde le droit de diffuser la
-// vidéo, elle passe dans une archive réservée aux admins, sans limite de
-// durée. Le contenu publié sur le site public n'est pas concerné.
+// Export, suppression d'un compte, suppression d'un speaker. Effacer un
+// speaker efface tout ce qui est personnel, sauf les deux documents signés :
+// la Speaker Release fonde le droit de diffuser la vidéo, le droit à l'image
+// celui d'utiliser les photos et les images de la soirée. Ils passent dans
+// une archive réservée à l'équipe, sans limite de durée. Le contenu publié
+// sur le site public n'est pas concerné.
+
+export const ARCHIVES = ['release', 'droit_image'];
 
 export async function exporter(userId: string) {
   const b = await base();
   const [u] = await b.select().from(schema.user).where(eq(schema.user.id, userId));
   if (!u) throw new RefusCompte('Compte introuvable.');
-  const poles = await b.select({ nom: schema.pole.nom, edition: schema.membrePole.editionId }).from(schema.membrePole)
-    .innerJoin(schema.pole, eq(schema.pole.id, schema.membrePole.poleId)).where(eq(schema.membrePole.userId, userId));
   const speakers = await b.select().from(schema.speaker).where(eq(schema.speaker.userId, userId));
   const docs = speakers.length
     ? await b.select().from(schema.document).where(and(inArray(schema.document.speakerId, speakers.map((s) => s.id)), eq(schema.document.archive, false)))
@@ -34,8 +36,10 @@ export async function exporter(userId: string) {
   return {
     exporteLe: new Date().toISOString(),
     compte: { nom: u.name, email: u.email, role: u.role, creeLe: u.createdAt, derniereConnexion: u.derniereConnexion },
-    poles,
-    fiches: speakers.map((s) => ({ nomAffiche: s.nomAffiche, biographie: s.biographie, titreProvisoire: s.titreProvisoire })),
+    fiches: speakers.map((s) => ({
+      nomAffiche: s.nomAffiche, prenom: s.prenom, nom: s.nom, emailContact: s.emailContact, telephone: s.telephone,
+      titre: s.titreProvisoire, resume: s.resume, biographie: s.biographie, lienVideo: s.lienVideo,
+    })),
     documents: docs.map((d) => ({ titre: d.titre, categorie: d.categorie, lien: d.lienExterne, versions: versions.filter((v) => v.documentId === d.id).map(fichier) })),
     fichiersDeposes: deposes.map(fichier),
     commentaires,
@@ -54,25 +58,46 @@ async function effacerVersions(documentIds: string[]) {
   await b.delete(schema.document).where(inArray(schema.document.id, documentIds));
 }
 
+// Vide un dossier speaker : documents signés archivés, tout le reste effacé
+// (fichiers compris), fiche remise à blanc. La ligne reste, marquée
+// supprimée, pour nommer les documents archivés.
+async function effacerDossier(speakerId: string) {
+  const b = await base();
+  const docs = await b.select().from(schema.document).where(eq(schema.document.speakerId, speakerId));
+  const signes = docs.filter((d) => ARCHIVES.includes(d.categorie) && !d.supprimeLe);
+  if (signes.length) await b.update(schema.document).set({ archive: true }).where(inArray(schema.document.id, signes.map((d) => d.id)));
+  await effacerVersions(docs.filter((d) => !signes.includes(d)).map((d) => d.id));
+  await b.delete(schema.jalonSpeaker).where(eq(schema.jalonSpeaker.speakerId, speakerId));
+  await b.update(schema.speaker).set({
+    prenom: '', nom: '', emailContact: '', telephone: '', biographie: '', titreProvisoire: '', resume: '',
+    lienVideo: null, referentId: null, supprimeLe: new Date(), updatedAt: new Date(),
+  }).where(eq(schema.speaker.id, speakerId));
+  return signes.length;
+}
+
 export async function supprimerCompte(userId: string, parId: string | null) {
   const b = await base();
   const [u] = await b.select().from(schema.user).where(eq(schema.user.id, userId));
   if (!u) return;
-  if (u.role === 'admin' && !u.desactiveLe) {
-    const actifs = (await b.select({ id: schema.user.id, d: schema.user.desactiveLe }).from(schema.user).where(eq(schema.user.role, 'admin'))).filter((x) => !x.d).length;
-    if (!retraitAdminPermis(actifs, true)) throw new RefusCompte('Il faut au moins deux admins actifs : nommez-en un autre avant de supprimer celui-ci.');
+  if (!retraitMembrePermis(await membresActifs(), estMembreActif(u))) {
+    throw new RefusCompte('Il faut au moins deux membres actifs : invitez-en un autre avant de supprimer celui-ci.');
   }
   const speakers = await b.select().from(schema.speaker).where(eq(schema.speaker.userId, userId));
-  for (const s of speakers) {
-    const docs = await b.select().from(schema.document).where(eq(schema.document.speakerId, s.id));
-    const releases = docs.filter((d) => d.categorie === 'release' && !d.supprimeLe);
-    if (releases.length) await b.update(schema.document).set({ archive: true }).where(inArray(schema.document.id, releases.map((d) => d.id)));
-    await effacerVersions(docs.filter((d) => !releases.includes(d)).map((d) => d.id));
-    await b.delete(schema.jalonSpeaker).where(eq(schema.jalonSpeaker.speakerId, s.id));
-    await b.update(schema.speaker).set({ biographie: '', titreProvisoire: '', referentId: null, updatedAt: new Date() }).where(eq(schema.speaker.id, s.id));
-  }
+  let archives = 0;
+  for (const s of speakers) archives += await effacerDossier(s.id);
   await b.update(schema.speaker).set({ referentId: null }).where(eq(schema.speaker.referentId, userId));
   await b.delete(schema.invitation).where(eq(schema.invitation.email, u.email));
   await b.delete(schema.user).where(eq(schema.user.id, userId));
-  await noter('compte.supprime', { acteurId: parId, cibleType: 'user', cibleId: userId, details: { role: u.role, releasesArchivees: speakers.length > 0 } });
+  await noter('compte.supprime', { acteurId: parId, cibleType: 'user', cibleId: userId, details: { role: u.role, documentsArchives: archives } });
+}
+
+// Retirer un speaker de l'édition : son compte s'il en a un, son dossier
+// dans tous les cas.
+export async function supprimerSpeaker(speakerId: string, editionId: string, parId: string) {
+  const b = await base();
+  const [s] = await b.select().from(schema.speaker).where(and(eq(schema.speaker.id, speakerId), eq(schema.speaker.editionId, editionId)));
+  if (!s || s.supprimeLe) throw new RefusCompte('Speaker introuvable.');
+  if (s.userId) await supprimerCompte(s.userId, parId);
+  else await effacerDossier(s.id);
+  await noter('speaker.supprime', { acteurId: parId, cibleType: 'speaker', cibleId: speakerId, editionId });
 }

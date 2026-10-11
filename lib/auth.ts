@@ -1,17 +1,18 @@
 import { betterAuth } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { emailOTP } from 'better-auth/plugins/email-otp';
 import { eq } from 'drizzle-orm';
 import { base, schema } from './db';
 import { noter } from './journal';
-import { envoyer } from './mail';
-import { courrielCode } from './mail/gabarits';
+import { MDP_MAX, MDP_MIN } from './regles';
 import { urlDeBase } from './url';
 
-// Better Auth, sans mot de passe : un code à six chiffres par e-mail. Aucune
-// inscription libre (un compte naît d'une invitation acceptée) et aucune
-// route HTTP publique : les actions serveur de /espace appellent auth.api
-// après leurs propres contrôles (débit, compte actif).
+// Better Auth, par adresse et mot de passe (depuis le 2026-10-11 ; un code
+// par e-mail auparavant). Aucune inscription libre : un compte naît d'une
+// invitation, où la personne choisit son mot de passe. Aucune route HTTP
+// publique : les actions serveur de /espace appellent auth.api après leurs
+// propres contrôles (débit, compte actif). Le mot de passe est haché par la
+// fonction par défaut de Better Auth (scrypt), la même que lib/motdepasse.ts
+// emploie pour le poser.
 
 export const NOM_COOKIE = '__Host-tedx-session';
 export const DUREE_SESSION_S = 7 * 24 * 3600;
@@ -35,7 +36,13 @@ async function construire() {
         rateLimit: schema.rateLimit,
       },
     }),
-    emailAndPassword: { enabled: false },
+    emailAndPassword: {
+      enabled: true,
+      disableSignUp: true,
+      autoSignIn: false,
+      minPasswordLength: MDP_MIN,
+      maxPasswordLength: MDP_MAX,
+    },
     user: {
       additionalFields: {
         role: { type: 'string', input: false, defaultValue: 'membre' },
@@ -47,7 +54,6 @@ async function construire() {
       expiresIn: DUREE_SESSION_S,
       updateAge: 24 * 3600,
       cookieCache: { enabled: false },
-      additionalFields: { totpValideLe: { type: 'date', input: false, required: false } },
     },
     rateLimit: { enabled: true, storage: 'database', window: 60, max: 30 },
     advanced: {
@@ -71,20 +77,6 @@ async function construire() {
         },
       },
     },
-    plugins: [
-      emailOTP({
-        otpLength: 6,
-        expiresIn: 600,
-        allowedAttempts: 5,
-        storeOTP: 'hashed',
-        disableSignUp: true,
-        async sendVerificationOTP({ email, otp, type }) {
-          if (type !== 'sign-in') return;
-          const lien = `${url}/espace/connexion/code/?email=${encodeURIComponent(email)}&code=${otp}`;
-          await envoyer({ a: email, ...courrielCode(otp, lien) });
-        },
-      }),
-    ],
   });
 }
 

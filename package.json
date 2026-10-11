@@ -11,7 +11,7 @@
     "test:e2e": "playwright test",
     "migrer": "tsx scripts/migrer.ts",
     "generer": "drizzle-kit generate",
-    "admin-secours": "tsx scripts/admin-secours.ts",
+    "secours": "tsx scripts/secours.ts",
     "instantane": "node scripts/instantane-public.mjs",
     "test:public": "playwright test -c playwright.public.config.ts"
   },
@@ -27,7 +27,6 @@
     "drizzle-orm": "0.45.4",
     "next": "16.4.0",
     "nodemailer": "10.1.0",
-    "qrcode": "1.5.4",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "zod": "4.6.5"
@@ -37,7 +36,6 @@
     "@playwright/test": "1.64.0",
     "@types/node": "24.19.2",
     "@types/nodemailer": "8.0.2",
-    "@types/qrcode": "1.5.6",
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "drizzle-kit": "0.31.11",

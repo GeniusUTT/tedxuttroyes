@@ -1,8 +1,9 @@
 import { defineConfig, devices } from '@playwright/test';
 
 // Parcours de l'espace, en local sur une base PGlite neuve : aucun e-mail ne
-// part, les codes sont lus dans le fichier où le serveur les écrit. Deux
-// admins fictifs sont créés par la procédure de secours avant le démarrage.
+// part, les liens sont lus dans le fichier où le serveur les écrit. Deux
+// membres fictifs sont créés par la procédure de secours avant le
+// démarrage, avec le mot de passe des essais.
 
 const PORT = 3200;
 const ENV = {
@@ -13,6 +14,7 @@ const ENV = {
   ESPACE_FICHIER_COURRIELS: '.e2e-courriels.jsonl',
   STORAGE_DRIVER: 'local',
   STOCKAGE_LOCAL_DOSSIER: '.e2e-stockage',
+  SECOURS_MOT_DE_PASSE: 'phrase de passe des essais',
 };
 
 export default defineConfig({
@@ -38,8 +40,8 @@ export default defineConfig({
     command: [
       'node tests/e2e/nettoyer.mjs',
       'npx tsx scripts/migrer.ts',
-      'npx tsx scripts/admin-secours.ts admin-un@utt.fr "Admin Un"',
-      'npx tsx scripts/admin-secours.ts admin-deux@utt.fr "Admin Deux"',
+      'npx tsx scripts/secours.ts membre-un@utt.fr "Membre Un"',
+      'npx tsx scripts/secours.ts membre-deux@utt.fr "Membre Deux"',
       `npx next start -p ${PORT}`,
     ].join(' && '),
     url: `http://localhost:${PORT}/espace/connexion/`,
