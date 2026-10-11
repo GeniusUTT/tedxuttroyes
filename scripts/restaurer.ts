@@ -18,10 +18,11 @@ async function principal() {
     console.error('Usage : restaurer.ts <clé du seau ou fichier .json.gz>');
     process.exit(2);
   }
-  await migrer();
+  await migrer({ amorcer: false });
   const b = await base();
   const [n] = await b.select({ n: count() }).from(schema.user);
-  if ((n?.n ?? 0) > 0) {
+  const [e] = await b.select({ n: count() }).from(schema.edition);
+  if ((n?.n ?? 0) > 0 || (e?.n ?? 0) > 0) {
     console.error('La base cible contient déjà des comptes : restauration refusée. Utilisez une base neuve (nouvelle branche Neon).');
     process.exit(1);
   }

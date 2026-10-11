@@ -88,10 +88,13 @@ describe('tâche quotidienne et sauvegarde', () => {
     const origine = await base();
     const { PGlite } = await import('@electric-sql/pglite');
     const { drizzle } = await import('drizzle-orm/pglite');
-    const { migrate } = await import('drizzle-orm/pglite/migrator');
     const neuve = drizzle({ client: new PGlite(), schema, casing: 'snake_case' });
-    await migrate(neuve, { migrationsFolder: 'drizzle' });
     fixerBase(neuve as unknown as Base);
+    // Même chemin que scripts/restaurer.ts : migrations sans amorçage. Un
+    // amorçage avant la restauration poserait des pôles neufs et casserait
+    // les affectations (défaut trouvé sur une vraie sauvegarde Neon).
+    const { migrer } = await import('../../scripts/migrer');
+    await migrer({ amorcer: false });
     await restaurerBase(depaqueter(paquet));
     const apres = await exporterBase();
     fixerBase(origine);

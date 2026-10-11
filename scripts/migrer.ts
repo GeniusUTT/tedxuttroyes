@@ -22,7 +22,9 @@ const JALONS = [
   { libelle: 'Speaker Release signé', echeance: new Date('2027-03-04T23:00:00Z'), categorie: 'release' },
 ];
 
-export async function migrer() {
+// amorcer : faux pour une restauration, qui doit retrouver la base telle
+// qu'elle était, sans édition ni pôles neufs posés avant elle.
+export async function migrer({ amorcer: avecAmorce = true }: { amorcer?: boolean } = {}) {
   const url = process.env.DATABASE_URL_UNPOOLED ?? process.env.DATABASE_URL;
   if (!url) {
     console.warn('[migrer] aucune base configurée : migrations ignorées.');
@@ -35,6 +37,10 @@ export async function migrer() {
     await migrate(b as never, { migrationsFolder: 'drizzle' });
   } else {
     await migrerNeon(b, { migrationsFolder: 'drizzle' });
+  }
+  if (!avecAmorce) {
+    console.info('[migrer] migrations appliquées, sans amorçage.');
+    return;
   }
   await amorcer();
   await amorcerAdmins();
