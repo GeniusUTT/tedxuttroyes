@@ -56,7 +56,11 @@ function extraire() {
     if (el.tagName === 'TEMPLATE' && el.hasAttribute('data-dgst')) return true;
     return false;
   };
+  // Les liens vers la billetterie ouvrent tous un nouvel onglet depuis le
+  // passage à Next ; l'ancien site le faisait sur certaines pages seulement.
+  const billetterie = (el) => el.tagName === 'A' && (el.getAttribute('href') ?? '').startsWith('https://www.billetweb.fr/');
   const attributs = (el) => [...el.attributes]
+    .filter((a) => !(billetterie(el) && (a.name === 'target' || a.name === 'rel')))
     .map((a) => {
       let v = a.value;
       if (a.name === 'style') v = el.style.cssText;
@@ -95,6 +99,8 @@ function extraire() {
     if (deNext(el)) return;
     const indent = '  '.repeat(profondeur);
     if (el.tagName === 'SCRIPT') {
+      // Les données structurées sont comparées avec la tête, où qu'elles soient.
+      if (el.type === 'application/ld+json') return;
       corps.push(`${indent}<script ${attributs(el)}> ${JSON.stringify((el.textContent ?? '').replace(/\s+/g, ' ').trim())}`);
       return;
     }
@@ -102,14 +108,23 @@ function extraire() {
     corps.push(`${indent}<${el.tagName.toLowerCase()} ${attributs(el)}>`);
     boites.push(`${indent}${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''}${el.classList.length ? '.' + [...el.classList].join('.') : ''} ${Math.round(r.left)},${Math.round(r.top + window.scrollY)} ${Math.round(r.width)}x${Math.round(r.height)}`);
     const racine = el.tagName === 'TEMPLATE' ? el.content : el;
+    // React sépare deux morceaux de texte voisins par un commentaire vide :
+    // le texte se recolle jusqu'au prochain élément, comme à l'écran.
+    let texte = '';
+    const vider = () => {
+      const t = texte.replace(/\s+/g, ' ').trim();
+      if (t) corps.push(`${indent}  "${t}"`);
+      texte = '';
+    };
     for (const n of racine.childNodes) {
       if (n.nodeType === Node.TEXT_NODE) {
-        const t = n.textContent.replace(/\s+/g, ' ').trim();
-        if (t) corps.push(`${indent}  "${t}"`);
+        texte += n.textContent;
       } else if (n.nodeType === Node.ELEMENT_NODE) {
+        vider();
         parcourir(n, profondeur + 1);
       }
     }
+    vider();
   };
   parcourir(document.body, 0);
   return { tete: tete.join('\n') + '\n', corps: corps.join('\n') + '\n', boites: boites.join('\n') + '\n' };
@@ -142,6 +157,10 @@ for (const chemin of liste) {
       const page = await contexte.newPage();
       const reponse = await page.goto(base + chemin, { waitUntil: 'load' });
       await page.evaluate(() => document.fonts.ready);
+      // Les animations d'entrée sont menées à leur terme : mesurées en cours
+      // de route, elles donneraient une position différente à chaque essai.
+      // Une animation sans fin (les pulsations) refuse finish() : on la laisse.
+      await page.evaluate(() => document.getAnimations().forEach((a) => { try { a.finish(); } catch { /* sans fin */ } }));
       vues[cote] = { statut: reponse?.status(), ...(await page.evaluate(extraire)) };
       await contexte.close();
     }

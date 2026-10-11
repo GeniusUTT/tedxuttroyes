@@ -22,6 +22,21 @@ export type Partage = {
   hauteur?: number;
   alt?: Voile;
   type?: 'website' | 'article' | 'profile';
+  // Grande image par défaut ; « summary » pour un portrait carré.
+  carte?: 'summary' | 'summary_large_image';
+};
+
+// L'aperçu de partage de la dixième édition, commun à la plupart des pages.
+// L'image porte la date masquée : le 31 octobre, il faudra la remplacer par
+// og-2027-revele.jpg, ce que reveal-v2.js ne peut pas faire sur un JPEG.
+export const PARTAGE_2027: Partage = {
+  image: '/assets/img/og/og-2027.jpg',
+  largeur: 1200,
+  hauteur: 630,
+  alt: {
+    masque: "TEDxUTTroyes 2027, dixième édition, au Centre de Congrès de l'Aube, Troyes.",
+    vrai: "TEDxUTTroyes 2027, dixième édition : Franchir ou s'adapter ? Jeudi 18 mars 2027 au Centre de Congrès de l'Aube, Troyes.",
+  },
 };
 
 export function Tete({
@@ -58,7 +73,7 @@ export function Tete({
           {partage.largeur && <meta property="og:image:width" content={String(partage.largeur)} />}
           {partage.hauteur && <meta property="og:image:height" content={String(partage.hauteur)} />}
           {partage.alt && <Meta cle={{ property: 'og:image:alt' }} valeur={partage.alt} />}
-          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:card" content={partage.carte ?? 'summary_large_image'} />
           <meta name="twitter:title" content={partage.titre ?? titre} />
           {(partage.description ?? description) && (
             <Meta cle={{ name: 'twitter:description' }} valeur={(partage.description ?? description)!} />
@@ -68,4 +83,9 @@ export function Tete({
       )}
     </>
   );
+}
+
+// Les données structurées d'une page (schema.org), telles quelles.
+export function JsonLd({ donnees }: { donnees: object }) {
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(donnees) }} />;
 }
