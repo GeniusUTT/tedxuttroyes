@@ -31,3 +31,7 @@ next-env.d.ts
 *.tsbuildinfo
 test-results/
 playwright-report/
+.tests-courriels.jsonl
+.e2e-base/
+.e2e-courriels.jsonl
+.pglite*/
