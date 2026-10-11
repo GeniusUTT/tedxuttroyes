@@ -13,6 +13,11 @@ const config: NextConfig = {
   outputFileTracingIncludes: {
     '/[...introuvable]': ['./public/404.html'],
   },
+  // Les fonctions n'ont besoin d'aucun asset public : sans cette exclusion,
+  // les vidéos et les images partiraient dans chaque fonction.
+  outputFileTracingExcludes: {
+    '*': ['./public/assets/**', './migration/**', './.e2e-*/**', './.tests-*/**', './.stockage-local/**', './.pglite*/**'],
+  },
   async redirects() {
     const r = (source: string, destination: string) => ({ source, destination, statusCode: 301 as const });
     return [
