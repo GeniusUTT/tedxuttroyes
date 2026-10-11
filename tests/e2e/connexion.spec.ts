@@ -1,20 +1,20 @@
 import { expect, test } from '@playwright/test';
-import { accepterInvitation, attendreCourriel, inviter, nombreCourriels, secondFacteur, seConnecter } from './outils';
+import { accepterInvitation, attendreCourriel, inviter, nombreCourriels, secondFacteur, seConnecter, ADMIN_1, ADMIN_2, DOMAINE } from './outils';
 
 // Un seul projet suffit pour ces parcours (ils créent des comptes) : le
 // projet mobile rejoue seulement la connexion et l'affichage.
 test.describe.configure({ mode: 'serial' });
 
 const suffixe = Date.now().toString(36);
-const membre = `membre-${suffixe}@utt.fr`;
+const membre = `membre-${suffixe}@${DOMAINE}`;
 const speaker = `speaker-${suffixe}@exemple.com`;
 
 test('un admin se connecte, valide son second facteur et invite', async ({ page }, info) => {
   test.skip(info.project.name !== 'bureau');
-  await seConnecter(page, 'admin-un@utt.fr');
+  await seConnecter(page, ADMIN_1);
   await page.goto('/espace/admin/');
   await expect(page).toHaveURL(/\/espace\/admin\/verification\//);
-  await secondFacteur(page, 'admin-un@utt.fr');
+  await secondFacteur(page, ADMIN_1);
   await expect(page.getByRole('heading', { name: 'Comptes et invitations' })).toBeVisible();
 
   await inviter(page, { email: `externe-${suffixe}@exemple.com`, nom: 'Membre Hors Domaine', role: 'membre' });
@@ -45,7 +45,7 @@ test('les invités acceptent ; ni membre ni speaker n’entrent dans l’adminis
 });
 
 test('une adresse inconnue reçoit la même réponse et aucun e-mail', async ({ page }) => {
-  const inconnue = `personne-${suffixe}@utt.fr`;
+  const inconnue = `personne-${suffixe}@${DOMAINE}`;
   await page.goto('/espace/connexion/');
   await page.getByLabel('Adresse e-mail').fill(inconnue);
   await page.getByRole('button', { name: 'Recevoir un code' }).click();
@@ -54,7 +54,7 @@ test('une adresse inconnue reçoit la même réponse et aucun e-mail', async ({ 
 });
 
 test('un mauvais code est refusé, la page ne dit rien de plus', async ({ page }) => {
-  await page.goto(`/espace/connexion/code/?email=${encodeURIComponent('admin-deux@utt.fr')}`);
+  await page.goto(`/espace/connexion/code/?email=${encodeURIComponent(ADMIN_2)}`);
   await page.getByLabel('Code reçu par e-mail').fill('000000');
   await page.getByRole('button', { name: 'Se connecter' }).click();
   await expect(page.locator('p.message[role=alert]')).toContainText('Code incorrect ou expiré');
@@ -67,14 +67,14 @@ test('sans session, l’espace renvoie vers la connexion', async ({ page }) => {
 
 test('le cookie de session est __Host-, HttpOnly, SameSite=Lax', async ({ page, context }, info) => {
   test.skip(info.project.name !== 'bureau');
-  await seConnecter(page, 'admin-deux@utt.fr');
+  await seConnecter(page, ADMIN_2);
   const c = (await context.cookies()).find((x) => x.name === '__Host-tedx-session');
   expect(c).toBeTruthy();
   expect(c!.httpOnly).toBe(true);
   expect(c!.secure).toBe(true);
   expect(c!.sameSite).toBe('Lax');
   expect(c!.path).toBe('/');
-  expect(c!.domain).toBe('localhost');
+  expect(c!.domain).toBe(new URL(page.url()).hostname);
 });
 
 test('un admin désactive un membre : sa session tombe aussitôt', async ({ browser }, info) => {
@@ -86,8 +86,8 @@ test('un admin désactive un membre : sa session tombe aussitôt', async ({ brow
 
   const ctxAdmin = await browser.newContext();
   const pa = await ctxAdmin.newPage();
-  await seConnecter(pa, 'admin-un@utt.fr');
-  await secondFacteur(pa, 'admin-un@utt.fr');
+  await seConnecter(pa, ADMIN_1);
+  await secondFacteur(pa, ADMIN_1);
   const ligne = pa.getByRole('row').filter({ hasText: membre });
   await ligne.getByText('Modifier').click();
   await ligne.getByRole('button', { name: 'Désactiver' }).click();
@@ -106,7 +106,7 @@ test('un admin désactive un membre : sa session tombe aussitôt', async ({ brow
 });
 
 test('l’e-mail de code porte la mention de licence', async () => {
-  const c = await attendreCourriel('admin-un@utt.fr', /code/);
+  const c = await attendreCourriel(ADMIN_1, /code/);
   expect(c.texte).toContain('Cet événement TEDx indépendant est organisé sous licence de TED.');
   expect(c.sujet).toMatch(/^Votre code de connexion : \d{6}$/);
 });

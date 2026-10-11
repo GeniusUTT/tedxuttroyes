@@ -1,18 +1,18 @@
 import { expect, test } from '@playwright/test';
-import { accepterInvitation, inviter, secondFacteur, seConnecter } from './outils';
+import { accepterInvitation, inviter, secondFacteur, seConnecter, ADMIN_1, ADMIN_2, DOMAINE } from './outils';
 
 test.describe.configure({ mode: 'serial' });
 
 const suffixe = Date.now().toString(36);
 const speaker = `orateur-${suffixe}@exemple.com`;
-const membre = `logistique-${suffixe}@utt.fr`;
+const membre = `logistique-${suffixe}@${DOMAINE}`;
 const PDF = Buffer.from('%PDF-1.7\n% slides fictives\n');
 
 test('un speaker dépose ses slides avec attestation ; l’équipe les télécharge', async ({ browser }, info) => {
   test.skip(info.project.name !== 'bureau');
   const ad = await (await browser.newContext()).newPage();
-  await seConnecter(ad, 'admin-deux@utt.fr');
-  await secondFacteur(ad, 'admin-deux@utt.fr');
+  await seConnecter(ad, ADMIN_2);
+  await secondFacteur(ad, ADMIN_2);
   await inviter(ad, { email: speaker, nom: 'Orateur Fictif', role: 'speaker' });
   await inviter(ad, { email: membre, nom: 'Logisticien Fictif', role: 'membre', poles: ['Logistique'] });
 

@@ -1,3 +1,4 @@
+import { spawnSync } from 'node:child_process';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { expect, type Page } from '@playwright/test';
@@ -5,7 +6,32 @@ import { codeAuPas, pasCourant } from '../../lib/totp';
 
 const FICHIER = '.e2e-courriels.jsonl';
 
+export const DISTANT = !!process.env.E2E_URL;
+export const DOMAINE = process.env.E2E_DOMAINE ?? 'utt.fr';
+export const ADMIN_1 = process.env.E2E_ADMIN_1 ?? 'admin-un@utt.fr';
+export const ADMIN_2 = process.env.E2E_ADMIN_2 ?? 'admin-deux@utt.fr';
+
+type Courriel = { a: string; sujet: string; texte: string; le: number };
+
+// Sur un déploiement, les e-mails ne partent pas : le serveur les écrit dans
+// ses journaux, que l'on relit par le CLI Vercel.
+function courrielsDistants(): Courriel[] {
+  const r = spawnSync('npx', ['--yes', 'vercel@63.1.2', 'logs', '--deployment', process.env.E2E_URL!, '--json', '--since', '30m', '--limit', '500', '--scope', 'ted-x-uttroyes', '--query', '"courriel non envoyé"'], { encoding: 'utf8', shell: true, maxBuffer: 20 * 1024 * 1024 });
+  const sortie: Courriel[] = [];
+  for (const ligne of (r.stdout ?? '').split('\n')) {
+    try {
+      const j = JSON.parse(ligne);
+      const m = String(j.message ?? '').match(/\[courriel non envoyé\] à (\S+) : ([^\n]*)\n([\s\S]*)/);
+      if (m) sortie.push({ a: m[1]!, sujet: m[2]!, texte: m[3]!, le: Number(j.timestamp ?? 0) });
+    } catch {
+      continue;
+    }
+  }
+  return sortie.sort((x, y) => x.le - y.le);
+}
+
 async function courriels(): Promise<{ a: string; sujet: string; texte: string }[]> {
+  if (DISTANT) return courrielsDistants();
   try {
     return (await readFile(FICHIER, 'utf8')).trim().split('\n').filter(Boolean).map((l) => JSON.parse(l));
   } catch {
@@ -14,10 +40,10 @@ async function courriels(): Promise<{ a: string; sujet: string; texte: string }[
 }
 
 export async function attendreCourriel(a: string, motif: RegExp, apres = 0) {
-  for (let i = 0; i < 50; i++) {
+  for (let i = 0; i < (DISTANT ? 25 : 50); i++) {
     const m = (await courriels()).filter((c) => c.a === a && motif.test(c.sujet));
     if (m.length > apres) return m.at(-1)!;
-    await new Promise((r) => setTimeout(r, 200));
+    await new Promise((r) => setTimeout(r, DISTANT ? 4000 : 200));
   }
   throw new Error(`pas de courriel ${motif} pour ${a}`);
 }

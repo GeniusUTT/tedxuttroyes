@@ -69,6 +69,7 @@ export async function amorcer() {
 // des virgules. Ne sert qu'à démarrer : rien n'est fait dès qu'un admin
 // existe, la suite passe par les invitations.
 export async function amorcerAdmins() {
+  await amorcerAdminsEssai();
   const liste = (process.env.ESPACE_ADMINS_INITIAUX ?? '').split(',').map((x) => x.trim().toLowerCase()).filter(Boolean);
   if (!liste.length) return;
   const b = await base();
@@ -78,6 +79,20 @@ export async function amorcerAdmins() {
     await b.insert(schema.user).values({ id: crypto.randomUUID(), email, name: email.slice(0, email.indexOf('@')), emailVerified: true, role: 'admin' }).onConflictDoNothing();
   }
   console.info(`[migrer] ${liste.length} admin(s) initial(aux) créé(s).`);
+}
+
+// Admins fictifs pour rejouer les parcours sur une prévisualisation, qui a sa
+// propre branche de base. Jamais en production, même si la variable y était
+// posée par erreur.
+async function amorcerAdminsEssai() {
+  if (process.env.VERCEL_ENV !== 'preview') return;
+  const liste = (process.env.ESPACE_ADMINS_ESSAI ?? '').split(',').map((x) => x.trim().toLowerCase()).filter(Boolean);
+  if (!liste.length) return;
+  const b = await base();
+  for (const email of liste) {
+    await b.insert(schema.user).values({ id: crypto.randomUUID(), email, name: `Essai ${email.slice(0, email.indexOf('@'))}`, emailVerified: true, role: 'admin' }).onConflictDoNothing();
+  }
+  console.info(`[migrer] ${liste.length} admin(s) d'essai présents sur la prévisualisation.`);
 }
 
 // La branche Neon d'une prévisualisation est une copie de la production. On
