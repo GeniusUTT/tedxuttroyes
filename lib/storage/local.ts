@@ -1,5 +1,5 @@
-import { mkdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
-import { dirname, join, resolve } from 'node:path';
+import { mkdir, readdir, readFile, rm, stat, writeFile } from 'node:fs/promises';
+import { dirname, join, resolve, sep } from 'node:path';
 import { empreinte } from '../chiffrement';
 import { urlDeBase } from '../url';
 import type { FormulaireEnvoi, Stockage } from './index';
@@ -60,6 +60,20 @@ export class StockageLocal implements Stockage {
 
   async supprimer(cle: string) {
     await rm(cheminLocal(cle), { force: true });
+  }
+
+  async lister(prefixe: string) {
+    const sortie: { cle: string; date: Date }[] = [];
+    try {
+      for (const f of await readdir(DOSSIER_LOCAL, { recursive: true, withFileTypes: true })) {
+        if (!f.isFile()) continue;
+        const cle = join(f.parentPath, f.name).slice(DOSSIER_LOCAL.length + 1).replaceAll(sep, '/');
+        if (cle.startsWith(prefixe)) sortie.push({ cle, date: (await stat(join(f.parentPath, f.name))).mtime });
+      }
+    } catch {
+      return [];
+    }
+    return sortie;
   }
 }
 

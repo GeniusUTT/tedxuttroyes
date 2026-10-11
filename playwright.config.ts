@@ -27,7 +27,7 @@ export default defineConfig({
   ],
   webServer: process.env.E2E_URL ? undefined : {
     command: [
-      'node -e "require(\'fs\').rmSync(\'.e2e-base\',{recursive:true,force:true});require(\'fs\').rmSync(\'.e2e-courriels.jsonl\',{force:true})"',
+      'node tests/e2e/nettoyer.mjs',
       'npx tsx scripts/migrer.ts',
       'npx tsx scripts/admin-secours.ts admin-un@utt.fr "Admin Un"',
       'npx tsx scripts/admin-secours.ts admin-deux@utt.fr "Admin Deux"',

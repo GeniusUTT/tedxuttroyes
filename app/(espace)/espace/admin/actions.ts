@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation';
 import { editionCourante, exigerAdmin } from '@/lib/acces';
 import { changerEmail, changerRole, definirPoles, desactiver, reactiver, RefusCompte } from '@/lib/comptes';
 import { inviter, RefusInvitation, renvoyer, revoquer } from '@/lib/invitations';
+import { supprimerCompte } from '@/lib/rgpd';
 import type { Role } from '@/lib/regles';
 
 const ROLES: Role[] = ['speaker', 'membre', 'admin'];
@@ -75,4 +76,11 @@ export async function actionDesactiver(userId: string) {
 export async function actionReactiver(userId: string) {
   const a = await exigerAdmin();
   await tenter(() => reactiver(userId, a.id), 'Compte réactivé.');
+}
+
+export async function actionSupprimerCompte(userId: string, form: FormData) {
+  const a = await exigerAdmin();
+  if (form.get('confirmer') !== 'oui') retour(undefined, 'Cochez la confirmation.');
+  if (userId === a.id) retour(undefined, 'Un admin ne supprime pas son propre compte.');
+  await tenter(() => supprimerCompte(userId, a.id), 'Compte supprimé.');
 }

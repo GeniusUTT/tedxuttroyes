@@ -1,3 +1,4 @@
+import { readFileSync, writeFileSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import { expect, type Page } from '@playwright/test';
 import { codeAuPas, pasCourant } from '../../lib/totp';
@@ -38,8 +39,15 @@ export async function seConnecter(page: Page, email: string) {
   await expect(page).not.toHaveURL(/connexion/);
 }
 
-// Premier passage d'un admin : lit la clé affichée, calcule le code.
-const secrets = new Map<string, string>();
+// Premier passage d'un admin : lit la clé affichée, calcule le code. Les
+// clés sont gardées dans un fichier : chaque fichier de test a son module.
+const FICHIER_SECRETS = '.e2e-secrets.json';
+const secrets = {
+  lire(): Record<string, string> { try { return JSON.parse(readFileSync(FICHIER_SECRETS, 'utf8')); } catch { return {}; } },
+  get(k: string) { return this.lire()[k]; },
+  has(k: string) { return k in this.lire(); },
+  set(k: string, v: string) { writeFileSync(FICHIER_SECRETS, JSON.stringify({ ...this.lire(), [k]: v })); },
+};
 
 export async function secondFacteur(page: Page, email: string) {
   await page.goto('/espace/admin/');

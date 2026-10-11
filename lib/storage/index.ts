@@ -14,6 +14,7 @@ export interface Stockage {
   lire(cle: string): Promise<Uint8Array>;
   ecrire(cle: string, corps: Uint8Array, typeMime: string): Promise<void>;
   supprimer(cle: string): Promise<void>;
+  lister(prefixe: string): Promise<{ cle: string; date: Date }[]>;
 }
 
 let instance: Stockage | undefined;

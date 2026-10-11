@@ -161,6 +161,8 @@ export const document = pgTable('document', {
   sens: sens().notNull(),
   titre: text().notNull(),
   lienExterne: text(),
+  // Archivé : réservé aux admins (Speaker Release d'un compte supprimé).
+  archive: boolean().notNull().default(false),
   creeParId: text().references(() => user.id, { onDelete: 'set null' }),
   createdAt: creeLe(),
   modifieLe: creeLe(),

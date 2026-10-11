@@ -95,3 +95,13 @@ describe('commentaires, suppression, tableau, jalons', () => {
     expect(peutModifierFicheSpeaker(admin, 's-a')).toBe(true);
   });
 });
+
+describe('archive des Speaker Releases', () => {
+  it('réservée aux admins, jamais supprimable depuis l’interface', () => {
+    const archive = doc({ archive: true, sens: 'du_speaker' });
+    expect(peutLire(admin, archive)).toBe(true);
+    expect(peutLire(logistique, archive)).toBe(false);
+    expect(peutLire(speakerA, archive)).toBe(false);
+    expect(peutSupprimer(admin, archive)).toBe(false);
+  });
+});

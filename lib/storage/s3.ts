@@ -1,4 +1,4 @@
-import { DeleteObjectCommand, GetObjectCommand, HeadObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, GetObjectCommand, HeadObjectCommand, ListObjectsV2Command, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { disposition, type FormulaireEnvoi, type Stockage } from './index';
@@ -67,5 +67,16 @@ export class StockageS3 implements Stockage {
 
   async supprimer(cle: string) {
     await this.client.send(new DeleteObjectCommand({ Bucket: this.seau, Key: cle }));
+  }
+
+  async lister(prefixe: string) {
+    const sortie: { cle: string; date: Date }[] = [];
+    let jeton: string | undefined;
+    do {
+      const r = await this.client.send(new ListObjectsV2Command({ Bucket: this.seau, Prefix: prefixe, ContinuationToken: jeton }));
+      for (const o of r.Contents ?? []) if (o.Key) sortie.push({ cle: o.Key, date: o.LastModified ?? new Date(0) });
+      jeton = r.IsTruncated ? r.NextContinuationToken : undefined;
+    } while (jeton);
+    return sortie;
   }
 }
