@@ -6,10 +6,15 @@ import { join } from 'node:path';
 
 let page: Buffer | undefined;
 
-async function introuvable(): Promise<Response> {
+type Contexte = { params: Promise<{ introuvable: string[] }> };
+
+async function introuvable(_requete: Request, { params }: Contexte): Promise<Response> {
   page ??= await readFile(join(process.cwd(), 'public', '404.html'));
+  // Demandée par son nom, la page existe : Apache la servait en 200.
+  const { introuvable: chemin } = await params;
+  const direct = chemin.length === 1 && chemin[0] === '404.html';
   return new Response(new Uint8Array(page), {
-    status: 404,
+    status: direct ? 200 : 404,
     headers: {
       'Content-Type': 'text/html; charset=utf-8',
       'Cache-Control': 'public, max-age=0, must-revalidate',
