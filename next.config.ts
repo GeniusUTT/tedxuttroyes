@@ -9,8 +9,14 @@ const BILLETTERIE = 'https://www.billetweb.fr/tedxuttroyes-2027-10e-edition';
 const config: NextConfig = {
   trailingSlash: true,
   poweredByHeader: false,
+  serverExternalPackages: ['@electric-sql/pglite'],
   outputFileTracingIncludes: {
     '/[...introuvable]': ['./public/404.html'],
+  },
+  // Les fonctions n'ont besoin d'aucun asset public : sans cette exclusion,
+  // les vidéos et les images partiraient dans chaque fonction.
+  outputFileTracingExcludes: {
+    '*': ['./public/assets/**', './migration/**', './.e2e-*/**', './.tests-*/**', './.stockage-local/**', './.pglite*/**'],
   },
   async redirects() {
     const r = (source: string, destination: string) => ({ source, destination, statusCode: 301 as const });
@@ -46,6 +52,15 @@ const config: NextConfig = {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
+        ],
+      },
+      {
+        // L'espace : jamais indexé, jamais mis en cache, jamais encadré.
+        source: '/espace/:chemin*',
+        headers: [
+          { key: 'X-Robots-Tag', value: 'noindex, nofollow' },
+          { key: 'Cache-Control', value: 'private, no-store' },
+          { key: 'X-Frame-Options', value: 'DENY' },
         ],
       },
       {
