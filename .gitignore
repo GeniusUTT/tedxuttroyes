@@ -26,3 +26,8 @@ skills-lock.json
 .env*
 !.env.example
 .vercel
+.next/
+next-env.d.ts
+*.tsbuildinfo
+test-results/
+playwright-report/

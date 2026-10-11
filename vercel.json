@@ -1,39 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "trailingSlash": true,
-  "redirects": [
-    { "source": "/images/edition-2026/logo_genius.png", "destination": "/assets/img/partenaires/logo-genius-utt.webp", "statusCode": 301 },
-    { "source": "/images/logo-black.png", "destination": "/assets/img/logo-black.png", "statusCode": 301 },
-    { "source": "/billetterie.html", "destination": "https://www.billetweb.fr/tedxuttroyes-2027-10e-edition", "statusCode": 301 },
-    { "source": "/contact.html", "destination": "/faq/", "statusCode": 301 },
-    { "source": "/detail_localisation.html", "destination": "/", "statusCode": 301 },
-    { "source": "/tous-les-speakers.html", "destination": "/speakers/", "statusCode": 301 },
-    { "source": "/toutes-les-editions.html", "destination": "/editions/", "statusCode": 301 },
-    { "source": "/speakers/:annee(\\d{4})/:fichier(speaker-\\d{4}).html", "destination": "/editions/edition-:annee/", "statusCode": 301 },
-    { "source": "/index.html", "destination": "/", "statusCode": 301 },
-    { "source": "/:chemin*/index.html", "destination": "/:chemin*/", "statusCode": 301 },
-    { "source": "/:chemin((?!404\\.html$).+).html", "destination": "/:chemin/", "statusCode": 301 }
-  ],
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "X-Frame-Options", "value": "SAMEORIGIN" }
-      ]
-    },
-    {
-      "source": "/assets/:fichier*.:ext(woff2|png|webp|jpg|jpeg|svg)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000" }]
-    },
-    {
-      "source": "/assets/:fichier*.:ext(css|js)",
-      "headers": [{ "key": "Cache-Control", "value": "public, max-age=2592000" }]
-    },
-    {
-      "source": "/assets/agenda/:fichier*.ics",
-      "headers": [{ "key": "Content-Type", "value": "text/calendar; charset=utf-8" }]
-    }
-  ]
+  "framework": "nextjs",
+  "regions": ["fra1"]
 }

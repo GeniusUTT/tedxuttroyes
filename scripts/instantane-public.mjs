@@ -46,6 +46,7 @@ async function lister(racine, dossier = racine, sortie = []) {
 }
 
 async function cookieDePartage(base) {
+  if (process.env.COOKIE) return process.env.COOKIE;
   if (!process.env.VERCEL_SHARE) return '';
   const r = await fetch(`${base}/?_vercel_share=${process.env.VERCEL_SHARE}`, { redirect: 'manual' });
   return (r.headers.getSetCookie?.() ?? []).map((c) => c.split(';')[0]).join('; ');
@@ -92,8 +93,12 @@ async function compare(a, b) {
     const diff = [];
     if (!x || !y) diff.push(x ? 'absente après' : 'absente avant');
     else {
+      // Une redirection se juge sur son statut et sa cible ; Vercel pose de
+      // lui-même x-robots-tag: noindex sur toute prévisualisation.
+      const redirection = x.statut >= 300 && x.statut < 400;
+      const ignores = new Set((process.env.IGNORER ?? '').split(',').filter(Boolean));
+      if (!redirection) for (const k of ENTETES) if (!ignores.has(k) && k !== 'set-cookie' && (x.entetes[k] ?? '') !== (y.entetes[k] ?? '')) diff.push(`${k} : ${x.entetes[k] ?? '(absent)'} => ${y.entetes[k] ?? '(absent)'}`);
       for (const k of ['statut', 'cible', 'empreinte']) if (x[k] !== y[k]) diff.push(`${k} : ${x[k]} => ${y[k]}`);
-      for (const k of ENTETES) if (k !== 'set-cookie' && (x.entetes[k] ?? '') !== (y.entetes[k] ?? '')) diff.push(`${k} : ${x.entetes[k] ?? '(absent)'} => ${y.entetes[k] ?? '(absent)'}`);
       if (y.entetes['set-cookie']) diff.push('cookie déposé après');
     }
     if (diff.length) { ecarts++; console.log(u, '\n  ' + diff.join('\n  ')); }
