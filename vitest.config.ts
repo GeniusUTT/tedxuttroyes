@@ -14,6 +14,8 @@ export default defineConfig({
       ESPACE_URL: 'http://localhost:3000',
       ESPACE_DOMAINE_MEMBRES: 'utt.fr',
       ESPACE_FICHIER_COURRIELS: '.tests-courriels.jsonl',
+      STORAGE_DRIVER: 'local',
+      STOCKAGE_LOCAL_DOSSIER: '.tests-stockage',
     },
   },
 });

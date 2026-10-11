@@ -11,6 +11,8 @@ const ENV = {
   ESPACE_URL: `http://localhost:${PORT}`,
   ESPACE_DOMAINE_MEMBRES: 'utt.fr',
   ESPACE_FICHIER_COURRIELS: '.e2e-courriels.jsonl',
+  STORAGE_DRIVER: 'local',
+  STOCKAGE_LOCAL_DOSSIER: '.e2e-stockage',
 };
 
 export default defineConfig({
