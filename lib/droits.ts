@@ -21,6 +21,7 @@ export type RefDocument = {
   poleId: string | null;
   sens: Sens;
   creeParId: string | null;
+  archive?: boolean;
 };
 
 export type Cible = { rattachement: Rattachement; speakerId?: string | null; poleId?: string | null; sens: Sens };
@@ -45,6 +46,7 @@ export function peutModifierFicheSpeaker(c: Contexte, speakerId: string): boolea
 
 export function peutLire(c: Contexte, d: RefDocument): boolean {
   if (estAdmin(c)) return true;
+  if (d.archive) return false;
   switch (d.rattachement) {
     case 'speaker': return sonDossier(c, d.speakerId) || (estMembre(c) && aUnPole(c));
     case 'tous_speakers': return c.role === 'speaker' || (estMembre(c) && aUnPole(c));
@@ -73,6 +75,7 @@ export function peutCommenter(c: Contexte, d: RefDocument): boolean {
 }
 
 export function peutSupprimer(c: Contexte, d: RefDocument): boolean {
+  if (d.archive) return false;
   if (estAdmin(c)) return true;
   return peutLire(c, d) && d.creeParId === c.id;
 }

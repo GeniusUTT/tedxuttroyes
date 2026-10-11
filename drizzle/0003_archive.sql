@@ -1,0 +1,1 @@
+ALTER TABLE "document" ADD COLUMN "archive" boolean DEFAULT false NOT NULL;

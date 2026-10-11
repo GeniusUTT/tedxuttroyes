@@ -38,3 +38,4 @@ playwright-report/
 .tests-stockage/
 .stockage-local/
 .e2e-stockage/
+.e2e-secrets.json

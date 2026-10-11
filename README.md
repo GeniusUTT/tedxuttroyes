@@ -1,6 +1,6 @@
 # Site TEDxUTTroyes 2027 : "Le relevé"
 
-Site statique de la dixième édition de TEDxUTTroyes (jeudi 18 mars 2027, portes à 18h00 avec mini forum de recrutement, talks à 19h30, Centre de Congrès de l'Aube, Troyes). HTML, CSS et JavaScript purs : aucun framework, aucun build, aucun tracker, aucune donnée collectée.
+Site de la dixième édition de TEDxUTTroyes (jeudi 18 mars 2027, portes à 18h00 avec mini forum de recrutement, talks à 19h30, Centre de Congrès de l'Aube, Troyes). Le site public est en HTML, CSS et JavaScript purs, sans framework ni cookie, dans `public/`. L'espace connecté de l'équipe et des speakers (`/espace/`) est une application Next.js : voir « Espace connecté » plus bas.
 
 ## La direction artistique en deux mots
 
@@ -10,7 +10,7 @@ Le site est construit autour d'un concept directeur unique : **la ligne continue
 
 ## Structure
 
-Chaque page vit dans son dossier sous le nom `index.html` et se sert en URL sans extension (`/editions/`, `/speakers/2019/alexandre-dana/`). Les anciennes adresses en `.html` (ancien site inclus) sont redirigées en 301 par le `.htaccess`. Tous les liens internes sont absolus depuis la racine (`/editions/`, `/assets/...`).
+Toutes les pages et les assets ci-dessous vivent dans `public/`, servis tels quels. Chaque page vit dans son dossier sous le nom `index.html` et se sert en URL sans extension (`/editions/`, `/speakers/2019/alexandre-dana/`). Les anciennes adresses en `.html` (ancien site inclus) sont redirigées en 301 par `next.config.ts`. Tous les liens internes sont absolus depuis la racine (`/editions/`, `/assets/...`).
 
 ```
 index.html               Accueil (le parcours de la ligne : seuil, franchir,
@@ -36,10 +36,8 @@ mentions-legales/        Mentions légales (LCEN)
 tedx-utt-10e/            La page cachée du jeu de piste : hors menu, hors
                          plan du site, en noindex. Une place à gagner (voir
                          « Le jeu de piste » plus bas). Ne pas la lier.
-404.html                 Page d'erreur (reste à la racine : cible du
-                         ErrorDocument d'Apache)
-.htaccess                HTTPS, URL en dossiers + redirections 301, cache,
-                         compression, 404 (OVH mutualisé)
+404.html                 Page d'erreur (à la racine de public/ : servie avec le
+                         statut 404 par app/[...introuvable]/route.ts)
 robots.txt, sitemap.xml  SEO technique
 assets/
   css/main-v14.css        Feuille unique (sommaire commenté en tête de fichier)
@@ -92,19 +90,90 @@ On y arrive sans ouvrir le code source ni la console : la charade est posée en 
 
 ## Tester en local
 
-Les liens du site sont absolus depuis la racine (`/editions/`, `/assets/...`) : ouvrir les fichiers directement dans un navigateur ne fonctionne pas, servez le dossier (le serveur Python sert bien les `index.html` des dossiers, comme Apache) :
+Le site public seul, sans rien installer (les liens sont absolus depuis la racine) :
 
 ```
-python -m http.server 8000
+cd public && python -m http.server 8000
 ```
 
-## Déploiement OVH
+Le site complet, espace compris :
 
-Poussez le contenu du dossier tel quel à la racine du site (www). Trois points d'attention :
+```
+npm install
+DATABASE_URL=pglite:.pglite-dev BETTER_AUTH_SECRET=<32 caractères au moins> STORAGE_DRIVER=local npm run dev
+```
 
-1. **SSL** : la redirection HTTPS du `.htaccess` suppose un certificat actif (Let's Encrypt gratuit dans l'espace client OVH). Sinon, commentez temporairement les lignes indiquées dans le fichier.
-2. **Cache** : la feuille et le script communs sont mis en cache un mois. Si vous les modifiez après la mise en ligne, renommez le fichier (les cinq portent un numéro : `main-v14.css`, `main-v7.js`, `line-v9.js`, `reveal-v2.js` et `map-v2.js` ; passez au numéro suivant) et mettez à jour les références dans toutes les pages HTML.
-3. **Fichiers du dépôt** : `README.md`, `CLAUDE.md`, `.gitignore` et `.git/` suivent le site à la racine du www sans en faire partie. Le `.htaccess` les refuse en 404, parce que ce fichier-ci donne l'adresse de la page cachée et son mot de passe. Si vous ajoutez un fichier de travail à la racine, ajoutez-le à cette règle.
+En local, aucun e-mail ne part : le code de connexion s'affiche dans le terminal. Pour se créer un compte admin : `DATABASE_URL=pglite:.pglite-dev npx tsx scripts/admin-secours.ts vous@utt.fr "Votre Nom"`.
+
+Tests : `npm test` (unitaires et intégration sur une base PGlite en mémoire) et `npm run test:e2e` (parcours Playwright en bureau et en mobile, base neuve à chaque série).
+
+## Déploiement
+
+Le site est hébergé sur Vercel (équipe `ted-x-uttroyes`, projet `tedxuttroyes`, région des fonctions `fra1`). Une fusion dans `main` part en production ; chaque branche a sa prévisualisation, protégée par l'authentification Vercel. Le domaine principal est `tedxuttroyes.fr`, `www` redirige vers lui.
+
+Le build (`npm run build`) applique d'abord les migrations de la base, puis construit Next.js. Les redirections 301, les en-têtes de sécurité et la politique de cache vivent dans `next.config.ts` ; `vercel.json` ne porte que la région et la tâche quotidienne.
+
+**Cache** : la feuille et les scripts sont mis en cache un mois, les images et les polices un an. Après une mise en ligne, une retouche de ces fichiers exige de les renommer (`main-v14.css`, `main-v7.js`, `line-v9.js`, `reveal-v2.js` et `map-v2.js` ; passer au numéro suivant) et de mettre à jour les références dans toutes les pages.
+
+**Ne jamais publier** : `README.md`, `CLAUDE.md`, `migration/` et les fichiers de travail restent hors de `public/`. Tout ce qui est dans `public/` est en ligne.
+
+**Comparatif avant une mise en production qui touche au service du site public** : `node scripts/instantane-public.mjs capture <url> public avant.json`, puis la même chose sur la prévisualisation, puis `compare avant.json apres.json` (avec `IGNORER=x-robots-tag` pour une prévisualisation).
+
+## Espace connecté
+
+L'espace (`/espace/`) sert à l'équipe et aux speakers pour échanger leurs documents. Accès sur invitation seulement, connexion par code envoyé par e-mail, aucun mot de passe. Aucun lien n'y mène depuis le site public : l'adresse est donnée dans l'invitation.
+
+**Rôles** : speaker (son dossier seulement), membre (rattaché à un ou plusieurs pôles ; sans pôle, il ne voit que le tableau et l'espace commun), admin (le bureau, avec second facteur obligatoire). Les membres et les admins doivent avoir une adresse du domaine `ESPACE_DOMAINE_MEMBRES` (`utt.fr`), sauf dérogation cochée par un admin.
+
+**Variables d'environnement** (modèle sans valeur dans `.env.example`, valeurs dans les réglages du projet Vercel, jamais dans le dépôt) :
+
+| Variable | Où | Rôle |
+|---|---|---|
+| `DATABASE_URL`, `DATABASE_URL_UNPOOLED` | intégration Neon | base poolée pour l'exécution, directe pour les migrations |
+| `ESPACE_HOTE_BASE_PRODUCTION` | toutes | hôte de la base de production : l'anonymisation des prévisualisations ne s'y applique jamais |
+| `BETTER_AUTH_SECRET` | production, prévisualisation (deux valeurs) | signature des sessions, chiffrement des secrets TOTP |
+| `ESPACE_DOMAINE_MEMBRES` | toutes | domaine des membres (`utt.fr`) |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` | production | Scaleway Transactional Email |
+| `MAIL_FROM`, `MAIL_REPLY_TO` | toutes | `TEDxUTTroyes <noreply@tedxuttroyes.fr>`, réponses vers `geniusutt@utt.fr` |
+| `S3_ENDPOINT`, `S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | production, prévisualisation (seaux distincts) | Scaleway Object Storage, région `fr-par` |
+| `S3_BUCKET_SAUVEGARDES` | production | seau des sauvegardes quotidiennes |
+| `CRON_SECRET` | production | protège la tâche quotidienne |
+
+Seule la production envoie de vrais e-mails. En prévisualisation et en local, le message (et donc le code) est écrit dans les journaux du serveur.
+
+**Réglage des seaux**, une fois : `npx tsx --env-file=.env.local scripts/stockage-config.ts` (CORS, versionnage du seau des documents, effacement à 30 jours des sauvegardes).
+
+**DNS de l'expéditeur** (zone `tedxuttroyes.fr` chez IONOS) : SPF `v=spf1 include:_spf.tem.scaleway.com -all`, MX `blackhole.tem.scaleway.com`, DMARC `v=DMARC1; p=none`, et la clé DKIM donnée par la console Scaleway (`<id-projet>._domainkey`).
+
+### Procédure de secours (plus aucun admin ne peut entrer)
+
+Il faut l'URL **directe** de la base de production (console Neon, ou variable `DATABASE_URL_UNPOOLED` du projet Vercel), à mettre dans un fichier local `.env.secours` qui ne sera jamais commis :
+
+```
+DATABASE_URL_UNPOOLED=postgres://...
+BETTER_AUTH_SECRET=<la valeur de production>
+```
+
+puis :
+
+```
+npx tsx --env-file=.env.secours scripts/admin-secours.ts prenom.nom@utt.fr "Prénom Nom"
+```
+
+Le compte devient admin et actif (il est créé s'il n'existait pas), son second facteur est remis à zéro et ses sessions fermées ; l'opération est inscrite au journal. La personne se connecte ensuite normalement et reconfigure son application d'authentification. Supprimer `.env.secours` après usage.
+
+### Sauvegardes et restauration
+
+Chaque nuit, la tâche quotidienne exporte la base (tous les comptes, documents, versions, retours, jalons et le journal ; pas les sessions ni les codes) en JSON compressé dans le seau `S3_BUCKET_SAUVEGARDES`, sous `base/AAAA-MM-JJ.json.gz`. Les sauvegardes de plus de 30 jours sont effacées. Les fichiers eux-mêmes ne sont pas recopiés : le seau des documents est versionné, une suppression se rattrape pendant 30 jours.
+
+Restaurer :
+
+1. Créer une base **neuve** : une nouvelle branche Neon vide (ou un nouveau projet), et noter son URL directe.
+2. Dans un fichier local `.env.restauration` (jamais commis) : `DATABASE_URL_UNPOOLED` de cette base neuve, `S3_ENDPOINT`, `S3_REGION`, `S3_BUCKET_SAUVEGARDES`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, et `BETTER_AUTH_SECRET` de production (sans lui, les secrets TOTP des admins sont illisibles : ils devront passer par la procédure de secours).
+3. `npx tsx --env-file=.env.restauration scripts/restaurer.ts base/AAAA-MM-JJ.json.gz` (ou un fichier `.json.gz` local). Le script applique les migrations et refuse une base qui contient déjà des comptes.
+4. Vérifier les comptes affichés, puis faire pointer la production sur cette base (intégration Neon du projet Vercel) et redéployer.
+
+La procédure est testée à chaque `npm test` : une sauvegarde est restaurée dans une base neuve et comparée table par table.
 
 ## Placeholders à compléter avant mise en ligne
 
@@ -119,7 +188,7 @@ Les pages HTML ne portent plus aucun commentaire depuis le nettoyage du 2026-08-
 | Playlists YouTube par édition | `editions/index.html`, `editions/edition-XXXX/` | aucune playlist n'existe côté chaîne : les liens pointent vers une recherche YouTube « TEDxUTTroyes + année ». À remplacer le jour où des playlists sont créées. |
 | Jeton Mapbox | `assets/js/map-v2.js` | le jeton public et le style rouge viennent du compte personnel `solene-drnx` (ancien site). Laissé tel quel à la demande de Baptiste le 2026-08-18 ; à basculer un jour sur un compte Mapbox de l'association, restreint au domaine tedxuttroyes.fr. |
 | Déroulé du jour J | `programme/index.html` | horaires type (portes 18h00 avec mini forum, talks 19h30, fin vers 22h30) à figer quand le programme sera arrêté. |
-| Image de partage (Open Graph) | `assets/img/og/og-2027.jpg` | carte 1200x630 composée le 2026-08-25 autour du X moiré de la dixième édition : elle porte la date masquée et la mention « date et thème révélés le 31 octobre 2026 ». La version d'après le dévoilement est déjà faite, `assets/img/og/og-2027-revele.jpg` (thème et vraie date) : le 31 octobre 2026, un seul remplacement suffit dans les 79 pages qui portent une balise `og:image`, `sed -i 's#og/og-2027.jpg#og/og-2027-revele.jpg#g'`. Une image étant statique, `reveal-v2.js` ne peut rien y faire. L'ancienne capture `og-default.jpg` reste sur le serveur pour ne pas casser les partages déjà publiés, mais plus aucune page ne la référence. |
+| Image de partage (Open Graph) | `public/assets/img/og/og-2027.jpg` | carte 1200x630 composée le 2026-08-25 autour du X moiré de la dixième édition : elle porte la date masquée et la mention « date et thème révélés le 31 octobre 2026 ». La version d'après le dévoilement est déjà faite, `assets/img/og/og-2027-revele.jpg` (thème et vraie date) : le 31 octobre 2026 à 18h00, il suffit de fusionner la branche `devoilement-og`, prête depuis le 2026-10-11, qui fait ce remplacement dans les 79 pages qui portent une balise `og:image`. Une image étant statique, `reveal-v2.js` ne peut rien y faire. L'ancienne capture `og-default.jpg` reste sur le serveur pour ne pas casser les partages déjà publiés, mais plus aucune page ne la référence. |
 
 Réglé le 2026-08-28 : les onze biographies manquantes (les sept fiches 2021, et Karim Hechmi, Léo Techmaker, Marcel Soh et Serge Rohmer pour 2023) ont été fournies par Baptiste et posées avec leur ligne `Domaine :`. Plus aucune fiche ne porte le texte de remplacement « Les archives du site n'ont pas conservé de biographie ».
 

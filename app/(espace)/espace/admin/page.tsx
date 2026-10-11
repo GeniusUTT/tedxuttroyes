@@ -5,7 +5,7 @@ import { base, schema } from '@/lib/db';
 import { DOMAINE_MEMBRES, etatInvitation } from '@/lib/regles';
 import { Bouton } from '../../composants/Bouton';
 import { Cadre, Message } from '../../composants/Cadre';
-import { actionDesactiver, actionEmail, actionInviter, actionPoles, actionReactiver, actionRenvoyer, actionRevoquer, actionRole } from './actions';
+import { actionDesactiver, actionSupprimerCompte, actionEmail, actionInviter, actionPoles, actionReactiver, actionRenvoyer, actionRevoquer, actionRole } from './actions';
 
 export const metadata: Metadata = { title: 'Administration' };
 
@@ -31,7 +31,7 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
       <p className="cote">Administration · {e.libelle}</p>
       <h1>Comptes et invitations</h1>
       <Message ok={ok} erreur={erreur} />
-      <p className="actions"><a className="btn btn--sobre btn--petit" href="/espace/admin/journal/">Journal</a> <a className="btn btn--sobre btn--petit" href="/espace/admin/edition/">Édition et jalons</a></p>
+      <p className="actions"><a className="btn btn--sobre btn--petit" href="/espace/admin/journal/">Journal</a> <a className="btn btn--sobre btn--petit" href="/espace/admin/edition/">Édition et jalons</a> <a className="btn btn--sobre btn--petit" href="/espace/admin/archive/">Archive des Releases</a></p>
 
       <h2>Inviter</h2>
       <form action={actionInviter} className="carte">
@@ -114,6 +114,12 @@ export default async function Admin({ searchParams }: { searchParams: Promise<{ 
                 {u.desactiveLe
                   ? <form action={actionReactiver.bind(null, u.id)}><Bouton variante="sobre" petit>Réactiver</Bouton></form>
                   : u.id !== a.id && <form action={actionDesactiver.bind(null, u.id)}><Bouton variante="danger" petit>Désactiver</Bouton></form>}
+                {u.id !== a.id && (
+                  <form action={actionSupprimerCompte.bind(null, u.id)} className="champ" style={{ marginTop: 12 }}>
+                    <label className="case"><input type="checkbox" name="confirmer" value="oui" required /> Supprimer définitivement ce compte et ses documents (la Speaker Release est archivée)</label>
+                    <Bouton variante="danger" petit>Supprimer le compte</Bouton>
+                  </form>
+                )}
               </details>
             </td>
           </tr>
