@@ -3,7 +3,7 @@
    Modules : etat du header, interlude de l'accueil, filigrane de la
    dixieme edition, menu mobile accessible, telescripteur du compte a
    rebours, trace du dixieme baton. L'allumage de la feuille de salle de l'accueil est
-   pilote par line-v9.js (la pointe du trait franchit les pastilles). */
+   pilote par line-v10.js (la pointe du trait franchit les pastilles). */
 
 (function () {
   "use strict";
@@ -258,7 +258,7 @@
       var q = clamp01((vh - r.top) / total);
 
       /* Une fois par jour : des que le panneau a tenu l'ecran, on note
-         l'instant. Le script en tete d'index.html relit cette date au
+         l'instant. Le script en tete de l'accueil (app/(accueil)/layout.tsx) relit cette date au
          chargement et ne saute l'interlude que si elle a moins de
          vingt-quatre heures (86 400 000 ms), sinon il le rejoue. Le
          temoin s'ecrit ici et non au chargement : quelqu'un qui repart

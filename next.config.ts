@@ -1,19 +1,10 @@
-import { globSync } from 'node:fs';
-import { sep } from 'node:path';
 import type { NextConfig } from 'next';
+import { BILLETTERIE } from './app/_site/liens';
 
-// Le site public passe à Next.js page par page (app/(pages)/) ; celles qui
-// restent écrites à la main vivent dans public/ et sont servies telles
-// quelles. Les redirections et les en-têtes reprennent l'ancien .htaccess.
-
-const BILLETTERIE = 'https://www.billetweb.fr/tedxuttroyes-2027-10e-edition';
-
-// Les pages encore écrites à la main dans public/, servies telles quelles le
-// temps du passage à Next : une réécriture chacune, et seulement pour elles.
-// Une règle générale enverrait aussi vers un index.html inexistant les pages
-// que Next précalcule (fiches speakers, éditions), avant qu'il ne les trouve.
-const PAGES_HTML = globSync('public/**/index.html', { exclude: ['public/assets/**'] })
-  .map((f) => f.split(sep).join('/').replace(/^public/, '').replace(/index\.html$/, ''));
+// Next.js sert tout le site : les pages publiques (app/(accueil)/,
+// app/(pages)/) et l'espace connecté (app/(espace)/). public/ ne garde que les
+// fichiers statiques. Les redirections et les en-têtes reprennent l'ancien
+// .htaccess d'OVH.
 
 const config: NextConfig = {
   trailingSlash: true,
@@ -42,13 +33,6 @@ const config: NextConfig = {
       r('/:chemin*/index.html', '/:chemin*/'),
       r('/:chemin((?!404\.html$).+).html', '/:chemin/'),
     ];
-  },
-  async rewrites() {
-    return {
-      beforeFiles: [],
-      afterFiles: PAGES_HTML.map((chemin) => ({ source: chemin, destination: `${chemin}index.html` })),
-      fallback: [],
-    };
   },
   async headers() {
     return [

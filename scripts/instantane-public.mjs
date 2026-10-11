@@ -6,8 +6,9 @@
 //
 // Accès aux prévisualisations protégées : VERCEL_AUTOMATION_BYPASS_SECRET
 // (en-tête de contournement) ou VERCEL_SHARE (jeton _vercel_share d'un lien
-// de partage). La liste des URL se déduit des fichiers de la racine, plus la
-// table des redirections héritée du .htaccess et quelques adresses absentes.
+// de partage). La liste des URL se déduit des fichiers de la racine et du plan
+// du site, plus la table des redirections héritée du .htaccess et quelques
+// adresses absentes.
 
 import { createHash } from 'node:crypto';
 import { readdir, readFile, writeFile } from 'node:fs/promises';
@@ -45,6 +46,19 @@ async function lister(racine, dossier = racine, sortie = []) {
   return sortie;
 }
 
+// Les pages ne sont plus des fichiers depuis le passage à Next.js : leur
+// liste vient du plan du site (sitemap.xml, cherché à la racine ou dans
+// public/), plus la page cachée, qui n'y figure pas exprès.
+async function pagesDuPlan(racine) {
+  for (const f of [join(racine, 'sitemap.xml'), join(racine, 'public', 'sitemap.xml')]) {
+    try {
+      const plan = await readFile(f, 'utf8');
+      return [...[...plan.matchAll(/<loc>https:\/\/[^/<]+(\/[^<]*)<\/loc>/g)].map((m) => m[1]), '/tedx-utt-10e/'];
+    } catch { /* pas ici */ }
+  }
+  return [];
+}
+
 async function cookieDePartage(base) {
   if (process.env.COOKIE) return process.env.COOKIE;
   if (!process.env.VERCEL_SHARE) return '';
@@ -54,7 +68,7 @@ async function cookieDePartage(base) {
 
 async function capture(base, racine, sortie) {
   base = base.replace(/\/$/, '');
-  const urls = [...new Set([...(await lister(racine)), ...REDIRECTIONS, ...ABSENTES])].sort();
+  const urls = [...new Set([...(await lister(racine)), ...(await pagesDuPlan(racine)), ...REDIRECTIONS, ...ABSENTES])].sort();
   const entetes = {};
   if (process.env.VERCEL_AUTOMATION_BYPASS_SECRET) entetes['x-vercel-protection-bypass'] = process.env.VERCEL_AUTOMATION_BYPASS_SECRET;
   const cookie = await cookieDePartage(base);
@@ -98,7 +112,11 @@ async function compare(a, b) {
       const redirection = x.statut >= 300 && x.statut < 400;
       const ignores = new Set((process.env.IGNORER ?? '').split(',').filter(Boolean));
       if (!redirection) for (const k of ENTETES) if (!ignores.has(k) && k !== 'set-cookie' && (x.entetes[k] ?? '') !== (y.entetes[k] ?? '')) diff.push(`${k} : ${x.entetes[k] ?? '(absent)'} => ${y.entetes[k] ?? '(absent)'}`);
-      for (const k of ['statut', 'cible', 'empreinte']) if (x[k] !== y[k]) diff.push(`${k} : ${x[k]} => ${y[k]}`);
+      // Une page HTML change d'empreinte à chaque construction de Next (noms
+      // des morceaux de JavaScript) : son contenu se compare avec
+      // scripts/comparer-public.mjs, ici on ne juge que statut et en-têtes.
+      const html = (y.entetes['content-type'] ?? '').startsWith('text/html');
+      for (const k of ['statut', 'cible', 'empreinte']) if (!(k === 'empreinte' && html) && x[k] !== y[k]) diff.push(`${k} : ${x[k]} => ${y[k]}`);
       if (y.entetes['set-cookie']) diff.push('cookie déposé après');
     }
     if (diff.length) { ecarts++; console.log(u, '\n  ' + diff.join('\n  ')); }

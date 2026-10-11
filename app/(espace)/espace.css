@@ -1,6 +1,6 @@
 /* Espace connecté : mêmes polices et mêmes tokens que le site public, même
    DA « le relevé » : zéro border-radius, zéro ombre. Aucune dépendance à
-   main-v14.css ni à line-v9.js. */
+   main-v14.css ni à line-v10.js. */
 
 @font-face { font-family: "Bricolage Grotesque"; font-weight: 200 800; font-display: swap; src: url("/assets/fonts/bricolage-var-latin.woff2") format("woff2"); }
 @font-face { font-family: "DM Sans"; font-weight: 100 1000; font-display: swap; src: url("/assets/fonts/dm-sans-var-latin.woff2") format("woff2"); }
