@@ -46,6 +46,7 @@ async function lister(racine, dossier = racine, sortie = []) {
 }
 
 async function cookieDePartage(base) {
+  if (process.env.COOKIE) return process.env.COOKIE;
   if (!process.env.VERCEL_SHARE) return '';
   const r = await fetch(`${base}/?_vercel_share=${process.env.VERCEL_SHARE}`, { redirect: 'manual' });
   return (r.headers.getSetCookie?.() ?? []).map((c) => c.split(';')[0]).join('; ');
