@@ -110,14 +110,15 @@
             <p>Contact : <a href="mailto:geniusutt@utt.fr">geniusutt@utt.fr</a></p>
 
             <h2>Hébergement</h2>
-            <p>Le site est hébergé par OVH SAS, 2 rue Kellermann, 59100 Roubaix, France. Téléphone : 1007.</p>
+            <p>Le site est hébergé par Vercel Inc., 440 N Barranca Avenue #4133, Covina, CA 91723, États-Unis (vercel.com). Les pages sont servies depuis son réseau, au plus près du visiteur.</p>
 
             <h2>Propriété intellectuelle</h2>
             <p>TED et TEDx sont des marques de TED Conferences LLC. Cet événement TEDx indépendant est organisé sous licence de TED.</p>
             <p>Les contenus de ce site (textes, visuels, identité graphique) sont la propriété de leurs auteurs respectifs et ne peuvent être réutilisés sans autorisation.</p>
 
             <h2>Données personnelles et cookies</h2>
-            <p>Ce site ne dépose aucun cookie, n'embarque aucun outil de mesure d'audience et ne collecte aucune donnée personnelle. Aucune bannière de consentement n'est donc nécessaire.</p>
+            <p>Le site public ne dépose aucun cookie. Aucune bannière de consentement n'est donc nécessaire.</p>
+            <p>Pour savoir quelles pages sont lues, le site utilise Vercel Web Analytics, l'outil de mesure d'audience de son hébergeur (Vercel Inc., États-Unis, adhérent au Data Privacy Framework). La mesure fonctionne sans cookie et sans rien écrire sur votre appareil : à chaque page vue, le script, servi depuis tedxuttroyes.fr, transmet l'adresse de la page, le site d'où vous venez, votre pays, ainsi que le type de navigateur, de système et d'appareil. Pour compter les visiteurs sans les identifier, Vercel calcule à partir de votre adresse IP et de votre navigateur une empreinte qu'il efface au bout de vingt-quatre heures ; l'adresse IP elle-même n'est pas conservée. Seules des statistiques agrégées sont consultées par l'équipe, sur le fondement de son intérêt légitime à connaître l'audience du site.</p>
             <p>Seule exception, sans rapport avec vos données : la page d'accueil s'ouvre sur une brève animation du logo de la dixième édition. Pour ne pas vous la rejouer à chaque passage, des indicateurs techniques sont écrits dans la mémoire de votre navigateur : le premier, dans la mémoire de session (<span lang="en">sessionStorage</span>), disparaît à la fermeture de l'onglet et évite de rejouer l'animation d'une page à l'autre ; le second, dans la mémoire locale (<span lang="en">localStorage</span>), retient seulement que vous avez déjà vu l'animation, pour vous en servir une version courte lors d'une prochaine visite. Un troisième indicateur, dans la même mémoire locale, retient de la même façon l'instant où le message d'accueil sur la ligne rouge vous a été présenté, pour ne pas vous le remontrer pendant vingt-quatre heures. Aucun des trois ne quitte votre appareil et aucun ne contient d'information vous concernant.</p>
             <p>La page d'accueil affiche une carte interactive fournie par Mapbox (Mapbox Inc., États-Unis). Les données cartographiques ne sont chargées depuis les serveurs de Mapbox qu'au moment où la carte approche de l'écran ; Mapbox reçoit alors votre adresse IP et des données techniques liées à l'affichage de la carte. Sans JavaScript, un plan dessiné localement s'affiche à la place et aucune requête n'est envoyée.</p>
             <p>Les pages d'archives des speakers intègrent un lecteur vidéo YouTube en mode de confidentialité renforcée (youtube-nocookie.com, Google Ireland Ltd.). Le lecteur est chargé en différé : au moment où il s'affiche puis lors de la lecture, Google reçoit votre adresse IP et des données techniques. Tant que la vidéo n'est pas lue, aucun cookie n'est déposé.</p>
@@ -178,13 +179,13 @@
       <div class="footer-bottom">
         <span>&copy; 2027 TEDxUTTroyes · Genius UTT, Université de Technologie de Troyes</span>
         <a href="/mentions-legales/">Mentions légales</a>
-        <span>Site statique, sans cookies ni traceurs</span>
+        <span>Site public sans cookie</span>
       </div>
     </div>
   </footer>
-  <script type="module">
-    import { inject } from 'https://cdn.jsdelivr.net/npm/@vercel/analytics@2/+esm';
-    inject();
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>

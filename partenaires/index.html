@@ -234,13 +234,13 @@
       <div class="footer-bottom">
         <span>&copy; 2027 TEDxUTTroyes · Genius UTT, Université de Technologie de Troyes</span>
         <a href="/mentions-legales/">Mentions légales</a>
-        <span>Site statique, sans cookies ni traceurs</span>
+        <span>Site public sans cookie</span>
       </div>
     </div>
   </footer>
-  <script type="module">
-    import { inject } from 'https://cdn.jsdelivr.net/npm/@vercel/analytics@2/+esm';
-    inject();
+  <script>
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
   </script>
+  <script defer src="/_vercel/insights/script.js"></script>
 </body>
 </html>

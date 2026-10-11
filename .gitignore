@@ -21,3 +21,8 @@ dist/
 .agents/skills/writing-guidelines/SKILL.md
 skills-lock.json
 /migration
+
+# Secrets : jamais dans le dépôt (il est public)
+.env*
+!.env.example
+.vercel
