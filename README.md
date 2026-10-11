@@ -103,7 +103,7 @@ npm install
 DATABASE_URL=pglite:.pglite-dev BETTER_AUTH_SECRET=<32 caractères au moins> STORAGE_DRIVER=local npm run dev
 ```
 
-En local, aucun e-mail ne part : le code de connexion s'affiche dans le terminal. Pour se créer un compte admin : `DATABASE_URL=pglite:.pglite-dev npx tsx scripts/admin-secours.ts vous@utt.fr "Votre Nom"`.
+En local, aucun e-mail ne part : le code de connexion s'affiche dans le terminal. Pour se créer un compte admin : `DATABASE_URL=pglite:.pglite-dev npx tsx scripts/admin-secours.ts vous@geniusutt.fr "Votre Nom"`.
 
 Tests : `npm test` (unitaires et intégration sur une base PGlite en mémoire) et `npm run test:e2e` (parcours Playwright en bureau et en mobile, base neuve à chaque série).
 
@@ -123,7 +123,7 @@ Le build (`npm run build`) applique d'abord les migrations de la base, puis cons
 
 L'espace (`/espace/`) sert à l'équipe et aux speakers pour échanger leurs documents. Accès sur invitation seulement, connexion par code envoyé par e-mail, aucun mot de passe. Aucun lien n'y mène depuis le site public : l'adresse est donnée dans l'invitation.
 
-**Rôles** : speaker (son dossier seulement), membre (rattaché à un ou plusieurs pôles ; sans pôle, il ne voit que le tableau et l'espace commun), admin (le bureau, avec second facteur obligatoire). Les membres et les admins doivent avoir une adresse du domaine `ESPACE_DOMAINE_MEMBRES` (`utt.fr`), sauf dérogation cochée par un admin.
+**Rôles** : speaker (son dossier seulement), membre (rattaché à un ou plusieurs pôles ; sans pôle, il ne voit que le tableau et l'espace commun), admin (le bureau, avec second facteur obligatoire). Les membres et les admins doivent avoir une adresse du domaine `ESPACE_DOMAINE_MEMBRES` (`geniusutt.fr`), sauf dérogation cochée par un admin.
 
 **Variables d'environnement** (modèle sans valeur dans `.env.example`, valeurs dans les réglages du projet Vercel, jamais dans le dépôt) :
 
@@ -132,7 +132,7 @@ L'espace (`/espace/`) sert à l'équipe et aux speakers pour échanger leurs doc
 | `DATABASE_URL`, `DATABASE_URL_UNPOOLED` | intégration Neon | base poolée pour l'exécution, directe pour les migrations |
 | `ESPACE_HOTE_BASE_PRODUCTION` | toutes | hôte de la base de production : l'anonymisation des prévisualisations ne s'y applique jamais |
 | `BETTER_AUTH_SECRET` | production, prévisualisation (deux valeurs) | signature des sessions, chiffrement des secrets TOTP |
-| `ESPACE_DOMAINE_MEMBRES` | toutes | domaine des membres (`utt.fr`) |
+| `ESPACE_DOMAINE_MEMBRES` | toutes | domaine des membres (`geniusutt.fr`) |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` | production | Scaleway Transactional Email |
 | `MAIL_FROM`, `MAIL_REPLY_TO` | toutes | `TEDxUTTroyes <noreply@tedxuttroyes.fr>`, réponses vers `geniusutt@utt.fr` |
 | `S3_ENDPOINT`, `S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | production, prévisualisation (seaux distincts) | Scaleway Object Storage, région `fr-par` |
@@ -157,7 +157,7 @@ BETTER_AUTH_SECRET=<la valeur de production>
 puis :
 
 ```
-npx tsx --env-file=.env.secours scripts/admin-secours.ts prenom.nom@utt.fr "Prénom Nom"
+npx tsx --env-file=.env.secours scripts/admin-secours.ts prenom.nom@geniusutt.fr "Prénom Nom"
 ```
 
 Le compte devient admin et actif (il est créé s'il n'existait pas), son second facteur est remis à zéro et ses sessions fermées ; l'opération est inscrite au journal. La personne se connecte ensuite normalement et reconfigure son application d'authentification. Supprimer `.env.secours` après usage.

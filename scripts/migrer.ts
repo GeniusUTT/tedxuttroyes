@@ -37,6 +37,7 @@ export async function migrer() {
     await migrerNeon(b, { migrationsFolder: 'drizzle' });
   }
   await amorcer();
+  await amorcerAdmins();
   await anonymiserSiPrevisualisation(url);
   console.info('[migrer] base à jour.');
 }
@@ -62,6 +63,21 @@ export async function amorcer() {
   for (const p of POLES) {
     await b.insert(schema.pole).values({ id: crypto.randomUUID(), ...p }).onConflictDoNothing({ target: schema.pole.slug });
   }
+}
+
+// Premiers admins : ESPACE_ADMINS_INITIAUX liste des adresses séparées par
+// des virgules. Ne sert qu'à démarrer : rien n'est fait dès qu'un admin
+// existe, la suite passe par les invitations.
+export async function amorcerAdmins() {
+  const liste = (process.env.ESPACE_ADMINS_INITIAUX ?? '').split(',').map((x) => x.trim().toLowerCase()).filter(Boolean);
+  if (!liste.length) return;
+  const b = await base();
+  const [deja] = await b.select({ id: schema.user.id }).from(schema.user).where(eq(schema.user.role, 'admin')).limit(1);
+  if (deja) return;
+  for (const email of liste) {
+    await b.insert(schema.user).values({ id: crypto.randomUUID(), email, name: email.slice(0, email.indexOf('@')), emailVerified: true, role: 'admin' }).onConflictDoNothing();
+  }
+  console.info(`[migrer] ${liste.length} admin(s) initial(aux) créé(s).`);
 }
 
 // La branche Neon d'une prévisualisation est une copie de la production. On

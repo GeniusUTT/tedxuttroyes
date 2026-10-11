@@ -2,7 +2,7 @@
 
 export type Role = 'speaker' | 'membre' | 'admin';
 
-export const DOMAINE_MEMBRES = (process.env.ESPACE_DOMAINE_MEMBRES ?? 'utt.fr').toLowerCase();
+export const DOMAINE_MEMBRES = (process.env.ESPACE_DOMAINE_MEMBRES ?? 'geniusutt.fr').toLowerCase();
 
 export function normaliserEmail(brut: string): string {
   return brut.normalize('NFKC').trim().toLowerCase();

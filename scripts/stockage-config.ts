@@ -37,7 +37,7 @@ async function documents(nom: string, origines: string[]) {
 
 async function principal() {
   const prod = process.env.S3_BUCKET, preview = process.env.S3_BUCKET_PREVIEW, sauvegardes = process.env.S3_BUCKET_SAUVEGARDES;
-  if (prod) await documents(prod, ['https://tedxuttroyes.fr']);
+  if (prod) await documents(prod, ['https://tedxuttroyes.fr', 'https://www.tedxuttroyes.fr']);
   if (preview) await documents(preview, ['https://*-ted-x-uttroyes.vercel.app', 'http://localhost:3000']);
   if (sauvegardes) {
     await seau(sauvegardes);

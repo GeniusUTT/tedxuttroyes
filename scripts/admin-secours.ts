@@ -2,7 +2,7 @@
 // (passation, appareils perdus). Il faut l'URL directe de la base de
 // production, jamais commise :
 //
-//   npx tsx --env-file=.env.secours scripts/admin-secours.ts prenom.nom@utt.fr "Prénom Nom"
+//   npx tsx --env-file=.env.secours scripts/admin-secours.ts prenom.nom@geniusutt.fr "Prénom Nom"
 //
 // Le compte devient admin et actif, son second facteur est remis à zéro (il
 // le reconfigurera à sa prochaine connexion) et ses sessions sont fermées.
