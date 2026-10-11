@@ -39,3 +39,4 @@ playwright-report/
 .stockage-local/
 .e2e-stockage/
 .e2e-secrets.json
+.comparaison-public/

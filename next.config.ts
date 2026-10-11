@@ -1,18 +1,18 @@
 import type { NextConfig } from 'next';
+import { BILLETTERIE } from './app/_site/liens';
 
-// Le site public vit dans public/ et se sert tel quel : Next.js ne possède que
-// /espace. Les réécritures servent l'index.html de chaque dossier, les
-// redirections et les en-têtes reprennent l'ancien .htaccess d'OVH.
-
-const BILLETTERIE = 'https://www.billetweb.fr/tedxuttroyes-2027-10e-edition';
+// Next.js sert tout le site : les pages publiques (app/(accueil)/,
+// app/(pages)/) et l'espace connecté (app/(espace)/). public/ ne garde que les
+// fichiers statiques. Les redirections et les en-têtes reprennent l'ancien
+// .htaccess d'OVH.
 
 const config: NextConfig = {
   trailingSlash: true,
   poweredByHeader: false,
+  // Une seule 404 pour tout le site, pages publiques et espace : voir
+  // app/global-not-found.tsx.
+  experimental: { globalNotFound: true },
   serverExternalPackages: ['@electric-sql/pglite'],
-  outputFileTracingIncludes: {
-    '/[...introuvable]': ['./public/404.html'],
-  },
   // Les fonctions n'ont besoin d'aucun asset public : sans cette exclusion,
   // les vidéos et les images partiraient dans chaque fonction.
   outputFileTracingExcludes: {
@@ -33,16 +33,6 @@ const config: NextConfig = {
       r('/:chemin*/index.html', '/:chemin*/'),
       r('/:chemin((?!404\.html$).+).html', '/:chemin/'),
     ];
-  },
-  async rewrites() {
-    return {
-      beforeFiles: [],
-      afterFiles: [
-        { source: '/', destination: '/index.html' },
-        { source: '/:chemin((?!espace(?:/|$)).+)/', destination: '/:chemin/index.html' },
-      ],
-      fallback: [],
-    };
   },
   async headers() {
     return [
