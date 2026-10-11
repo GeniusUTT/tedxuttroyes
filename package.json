@@ -4,22 +4,41 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "tsx scripts/migrer.ts && next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "migrer": "tsx scripts/migrer.ts",
+    "generer": "drizzle-kit generate",
+    "admin-secours": "tsx scripts/admin-secours.ts",
     "instantane": "node scripts/instantane-public.mjs"
   },
   "engines": {
     "node": "24.x"
   },
   "dependencies": {
+    "@neondatabase/serverless": "1.2.0",
+    "better-auth": "1.7.7",
+    "drizzle-orm": "0.45.4",
     "next": "16.4.0",
+    "nodemailer": "10.1.0",
+    "qrcode": "1.5.4",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "zod": "4.6.5"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.8",
+    "@playwright/test": "1.64.0",
     "@types/node": "24.19.2",
+    "@types/nodemailer": "8.0.2",
+    "@types/qrcode": "1.5.6",
     "@types/react": "19.3.0",
-    "typescript": "5.9.3"
+    "@types/react-dom": "19.3.0",
+    "drizzle-kit": "0.31.11",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "vitest": "5.0.3"
   }
 }
