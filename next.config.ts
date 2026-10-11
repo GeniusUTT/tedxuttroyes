@@ -18,10 +18,10 @@ const PAGES_HTML = globSync('public/**/index.html', { exclude: ['public/assets/*
 const config: NextConfig = {
   trailingSlash: true,
   poweredByHeader: false,
+  // Une seule 404 pour tout le site, pages publiques et espace : voir
+  // app/global-not-found.tsx.
+  experimental: { globalNotFound: true },
   serverExternalPackages: ['@electric-sql/pglite'],
-  outputFileTracingIncludes: {
-    '/[...introuvable]': ['./public/404.html'],
-  },
   // Les fonctions n'ont besoin d'aucun asset public : sans cette exclusion,
   // les vidéos et les images partiraient dans chaque fonction.
   outputFileTracingExcludes: {

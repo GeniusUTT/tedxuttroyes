@@ -6,6 +6,9 @@
 //
 //   node scripts/comparer-public.mjs <url-reference> <url-candidate> [chemin...]
 //
+// Un chemin de la forme « candidat|reference » compare deux adresses
+// différentes : la 404 de Next contre le 404.html d'origine, par exemple.
+//
 // Sans chemin, toutes les URL de public/sitemap.xml, plus la page cachée et
 // une adresse inconnue pour la 404. Les scripts de la page sont coupés : on
 // compare ce que le serveur envoie, pas ce que les scripts en font (les
@@ -30,7 +33,7 @@ async function chemins() {
   if (demandes.length) return demandes;
   const plan = await readFile('public/sitemap.xml', 'utf8');
   const liste = [...plan.matchAll(/<loc>https:\/\/tedxuttroyes\.fr([^<]*)<\/loc>/g)].map((m) => m[1]);
-  return [...liste, '/tedx-utt-10e/', '/adresse-qui-n-existe-pas/'];
+  return [...liste, '/tedx-utt-10e/', '/adresse-qui-n-existe-pas/|/404.html'];
 }
 
 // Exécuté dans la page. Tout ce que Next ajoute de lui-même (ses scripts, ses
@@ -131,7 +134,7 @@ function extraire() {
 }
 
 function nom(chemin) {
-  return chemin.replace(/^\/|\/$/g, '').replace(/\//g, '__') || 'accueil';
+  return chemin.split('|')[0].replace(/^\/|\/$/g, '').replace(/\//g, '__') || 'accueil';
 }
 
 function ecart(a, b) {
@@ -152,10 +155,11 @@ for (const chemin of liste) {
   const rapports = [];
   for (const largeur of LARGEURS) {
     const vues = {};
-    for (const [cote, base] of [['ref', reference], ['new', candidate]]) {
+    const [cheminNew, cheminRef = cheminNew] = chemin.split('|');
+    for (const [cote, url] of [['ref', reference + cheminRef], ['new', candidate + cheminNew]]) {
       const contexte = await navigateur.newContext({ javaScriptEnabled: false, viewport: { width: largeur, height: 900 } });
       const page = await contexte.newPage();
-      const reponse = await page.goto(base + chemin, { waitUntil: 'load' });
+      const reponse = await page.goto(url, { waitUntil: 'load' });
       await page.evaluate(() => document.fonts.ready);
       // Les animations d'entrée sont menées à leur terme : mesurées en cours
       // de route, elles donneraient une position différente à chaque essai.
