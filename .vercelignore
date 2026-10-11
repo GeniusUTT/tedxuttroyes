@@ -1,0 +1,12 @@
+README.md
+CLAUDE.md
+SECURITY.md
+.htaccess
+.gitignore
+.vercelignore
+.claude
+.agents
+skills-lock.json
+migration
+marque-2027
+.env*

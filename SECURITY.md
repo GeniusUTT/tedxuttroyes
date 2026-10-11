@@ -1,21 +1,11 @@
-# Security Policy
+# Sécurité
 
-## Supported Versions
+## Signaler une faille
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+Écrivez à **geniusutt@utt.fr** en décrivant le problème et la manière de le reproduire. N'ouvrez pas d'issue publique pour une faille de sécurité : le dépôt est public, une issue la publierait avant qu'elle soit corrigée.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+Nous accusons réception sous une semaine et vous tenons informé de la correction.
 
-## Reporting a Vulnerability
+## Versions maintenues
 
-Use this section to tell people how to report a vulnerability.
-
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+Seule la branche `main`, celle qui est en production sur tedxuttroyes.fr, est maintenue.
