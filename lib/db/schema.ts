@@ -145,6 +145,64 @@ export const journal = pgTable('journal', {
   details: jsonb().$type<Record<string, unknown>>().notNull().default({}),
 }, (t) => [index('journal_le_idx').on(t.le), index('journal_cible_idx').on(t.cibleType, t.cibleId)]);
 
+export const rattachement = pgEnum('rattachement', ['speaker', 'tous_speakers', 'pole', 'commun']);
+export const sens = pgEnum('sens', ['du_speaker', 'vers_speaker', 'interne']);
+
+// Un document porte ses versions : on n'écrase jamais, on ajoute. La
+// suppression est logique (supprimeLe) ; le seau de production est
+// versionné, une erreur se rattrape.
+export const document = pgTable('document', {
+  id: text().primaryKey(),
+  editionId: text().notNull().references(() => edition.id),
+  rattachement: rattachement().notNull(),
+  speakerId: text().references(() => speaker.id),
+  poleId: text().references(() => pole.id),
+  categorie: text().notNull(),
+  sens: sens().notNull(),
+  titre: text().notNull(),
+  lienExterne: text(),
+  creeParId: text().references(() => user.id, { onDelete: 'set null' }),
+  createdAt: creeLe(),
+  modifieLe: creeLe(),
+  supprimeLe: horodatage(),
+  supprimeParId: text().references(() => user.id, { onDelete: 'set null' }),
+}, (t) => [index('document_speaker_idx').on(t.speakerId), index('document_pole_idx').on(t.poleId), index('document_edition_idx').on(t.editionId, t.rattachement)]);
+
+export const version = pgTable('version', {
+  id: text().primaryKey(),
+  documentId: text().notNull().references(() => document.id, { onDelete: 'cascade' }),
+  numero: integer().notNull(),
+  cleStockage: text().notNull().unique(),
+  nomOrigine: text().notNull(),
+  typeMime: text().notNull(),
+  taille: integer().notNull(),
+  deposeParId: text().references(() => user.id, { onDelete: 'set null' }),
+  deposeLe: creeLe(),
+  droitsAttestesLe: horodatage(),
+}, (t) => [uniqueIndex('version_numero_idx').on(t.documentId, t.numero)]);
+
+// Envoi en cours : la place est réservée avant que le navigateur envoie, la
+// version n'existe qu'après confirmation. Les envois jamais confirmés sont
+// purgés chaque nuit, fichier compris.
+export const envoi = pgTable('envoi', {
+  id: text().primaryKey(),
+  userId: text().notNull().references(() => user.id, { onDelete: 'cascade' }),
+  documentId: text().references(() => document.id, { onDelete: 'cascade' }),
+  editionId: text().notNull(),
+  rattachement: rattachement().notNull(),
+  speakerId: text(),
+  poleId: text(),
+  categorie: text().notNull(),
+  sens: sens().notNull(),
+  titre: text().notNull(),
+  cle: text().notNull().unique(),
+  nomOrigine: text().notNull(),
+  typeMime: text().notNull(),
+  tailleMax: integer().notNull(),
+  expireLe: horodatage().notNull(),
+  createdAt: creeLe(),
+});
+
 export const userRelations = relations(user, ({ many }) => ({ sessions: many(session), poles: many(membrePole) }));
 export const sessionRelations = relations(session, ({ one }) => ({ user: one(user, { fields: [session.userId], references: [user.id] }) }));
 export const membrePoleRelations = relations(membrePole, ({ one }) => ({
