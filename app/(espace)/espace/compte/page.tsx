@@ -5,6 +5,8 @@ import { base, schema } from '@/lib/db';
 import { Bouton } from '../../composants/Bouton';
 import { Cadre, Message } from '../../composants/Cadre';
 import { fermerAutresSessions, fermerSession } from './actions';
+import { actionPreferences } from '../documents/suivi-actions';
+import { preferences } from '@/lib/suivi';
 
 export const metadata: Metadata = { title: 'Mon compte' };
 
@@ -22,6 +24,7 @@ export default async function Compte({ searchParams }: { searchParams: Promise<{
   const a = await exigerSession();
   const { ok, erreur } = await searchParams;
   const b = await base();
+  const prefs = await preferences(a.id);
   const sessions = await b.select().from(schema.session).where(eq(schema.session.userId, a.id)).orderBy(desc(schema.session.updatedAt));
   return (
     <Cadre acteur={a} actif="/espace/compte/">
@@ -30,6 +33,13 @@ export default async function Compte({ searchParams }: { searchParams: Promise<{
       <Message ok={ok} erreur={erreur} />
       <p>{a.email} · {ROLES[a.role]}</p>
       <p className="muet">Seul un admin peut changer l’adresse e-mail d’un compte.</p>
+
+      <h2>Notifications par e-mail</h2>
+      <form action={actionPreferences} className="carte">
+        <label className="case champ"><input type="checkbox" name="depot" value="oui" defaultChecked={prefs.notifDepot} /> M’écrire à chaque nouveau document qui me concerne</label>
+        <label className="case champ"><input type="checkbox" name="commentaire" value="oui" defaultChecked={prefs.notifCommentaire} /> M’écrire à chaque nouveau retour qui me concerne</label>
+        <Bouton variante="sobre">Enregistrer</Bouton>
+      </form>
 
       <h2>Sessions ouvertes</h2>
       <p className="muet">Une session dure sept jours et se prolonge tant que vous l’utilisez.</p>

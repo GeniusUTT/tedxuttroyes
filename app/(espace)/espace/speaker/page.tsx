@@ -10,6 +10,8 @@ import { Cadre, Message } from '../../composants/Cadre';
 import { CarteDocument, choix } from '../../composants/Documents';
 import { Depot } from '../../composants/Depot';
 import { actionFiche, actionLien } from '../documents/actions';
+import { echeance, Pastille } from '../../composants/Jalons';
+import { etats, jalons } from '@/lib/suivi';
 
 export const metadata: Metadata = { title: 'Mon dossier' };
 
@@ -29,12 +31,22 @@ export default async function Speaker({ searchParams }: { searchParams: Promise<
   const recus = [...miens.filter((d) => d.sens === 'vers_speaker'), ...pourTous];
   const lien = deposes.find((d) => d.categorie === 'video_repetition');
   const categoriesSpeaker = CATEGORIES.filter((c) => c.sens === 'du_speaker' && !c.lien);
+  const lesJalons = await jalons(ctx.editionId);
+  const mesEtats = await etats([speakerId]);
 
   return (
     <Cadre acteur={a} actif={RETOUR}>
       <p className="cote">Mon dossier</p>
       <h1>Bonjour {fiche?.nomAffiche ?? a.nom}</h1>
       <Message ok={ok} erreur={erreur} />
+
+      <h2>Mes jalons</h2>
+      <div className="tableau-defile"><table className="tableau">
+        <thead><tr><th>Jalon</th><th>Échéance</th><th>État</th></tr></thead>
+        <tbody>{lesJalons.map((j) => (
+          <tr key={j.id}><td>{j.libelle}</td><td>{echeance(j.echeance)}</td><td><Pastille etat={mesEtats.find((e) => e.jalonId === j.id)?.etat ?? 'a_faire'} echeance={j.echeance} /></td></tr>
+        ))}</tbody>
+      </table></div>
 
       <h2>Ma fiche</h2>
       <form action={actionFiche.bind(null, speakerId, RETOUR)} className="carte">

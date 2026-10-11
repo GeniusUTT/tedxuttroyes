@@ -26,7 +26,7 @@ export default async function Document({ params, searchParams }: { params: Promi
       <Message ok={ok} erreur={erreur} />
       <CarteDocument d={d} ctx={ctx} retour={`/espace/documents/${d.id}/`} />
       <h2>Retours</h2>
-      <Commentaires documentId={d.id} ctx={ctx} />
+      <Commentaires documentId={d.id} ctx={ctx} doc={d} />
     </Cadre>
   );
 }

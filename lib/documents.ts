@@ -6,6 +6,7 @@ import { base, schema } from './db';
 import { peutDeposer, peutLire, peutModifierFicheSpeaker, peutSupprimer, type Cible, type Contexte, type RefDocument } from './droits';
 import { noter } from './journal';
 import { stockage } from './storage';
+import { apresDepot } from './suivi';
 
 // Dépôt, versions, téléchargement. Chaque fonction reçoit le contexte de
 // l'acteur et redemande ses droits : rien ne se fie à ce que la page a
@@ -157,6 +158,7 @@ export async function confirmerDepot(ctx: Ctx, envoiId: string, attestation: boo
     await tx.delete(schema.envoi).where(eq(schema.envoi.id, e.id));
   });
   await noter('document.depose', { acteurId: ctx.id, cibleType: 'document', cibleId: documentId!, editionId: e.editionId, details: { categorie: cat.slug, version: versionId } });
+  await apresDepot(ctx.id, documentId!);
   return { documentId: documentId!, versionId };
 }
 
@@ -172,6 +174,7 @@ export async function enregistrerLien(ctx: Ctx, speakerId: string, url: string) 
   if (existant) await b.update(schema.document).set({ lienExterne: url, modifieLe: new Date() }).where(eq(schema.document.id, id));
   else await b.insert(schema.document).values({ id, editionId: ctx.editionId, rattachement: 'speaker', speakerId, categorie: cat.slug, sens: cat.sens, titre: cat.libelle, lienExterne: url, creeParId: ctx.id });
   await noter('document.depose', { acteurId: ctx.id, cibleType: 'document', cibleId: id, editionId: ctx.editionId, details: { categorie: cat.slug, lien: true } });
+  await apresDepot(ctx.id, id);
   return id;
 }
 

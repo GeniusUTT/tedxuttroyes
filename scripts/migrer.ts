@@ -15,6 +15,13 @@ const POLES = [
   { slug: 'communication', nom: 'Communication', ordre: 4 },
 ];
 
+const JALONS = [
+  { libelle: 'Premier jet du script', echeance: new Date('2026-12-15T23:00:00Z'), categorie: 'script' },
+  { libelle: 'Répétition filmée', echeance: new Date('2027-02-15T23:00:00Z'), categorie: 'video_repetition' },
+  { libelle: 'Version finale des slides', echeance: new Date('2027-03-04T23:00:00Z'), categorie: 'slides' },
+  { libelle: 'Speaker Release signé', echeance: new Date('2027-03-04T23:00:00Z'), categorie: 'release' },
+];
+
 export async function migrer() {
   const url = process.env.DATABASE_URL_UNPOOLED ?? process.env.DATABASE_URL;
   if (!url) {
@@ -45,6 +52,12 @@ export async function amorcer() {
       courante: true,
       dateEvenement: new Date('2027-03-18T17:00:00Z'),
     }).onConflictDoNothing();
+  }
+  const [e] = await b.select().from(schema.edition).where(eq(schema.edition.courante, true));
+  const jalons = await b.select({ id: schema.jalon.id }).from(schema.jalon).where(eq(schema.jalon.editionId, e!.id));
+  if (!jalons.length) {
+    // Échéances par défaut, à ajuster par un admin depuis l'administration.
+    await b.insert(schema.jalon).values(JALONS.map((j, i) => ({ id: crypto.randomUUID(), editionId: e!.id, ordre: i + 1, ...j })));
   }
   for (const p of POLES) {
     await b.insert(schema.pole).values({ id: crypto.randomUUID(), ...p }).onConflictDoNothing({ target: schema.pole.slug });

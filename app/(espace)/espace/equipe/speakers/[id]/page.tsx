@@ -11,6 +11,11 @@ import { Cadre, Message } from '../../../../composants/Cadre';
 import { CarteDocument, choix } from '../../../../composants/Documents';
 import { Depot } from '../../../../composants/Depot';
 import { actionFiche } from '../../../documents/actions';
+import { actionJalon, actionReferent } from '../../../documents/suivi-actions';
+import { echeance, Pastille } from '../../../../composants/Jalons';
+import { etats, jalons } from '@/lib/suivi';
+import { peutValiderJalon } from '@/lib/droits';
+import { ne } from 'drizzle-orm';
 
 export const metadata: Metadata = { title: 'Dossier speaker' };
 
@@ -29,6 +34,10 @@ export default async function DossierSpeaker({ params, searchParams }: { params:
   const duSpeaker = docs.filter((d) => d.sens === 'du_speaker');
   const versLui = docs.filter((d) => d.sens === 'vers_speaker');
   const modifiable = peutModifierFicheSpeaker(ctx, id);
+  const lesJalons = await jalons(ctx.editionId);
+  const lesEtats = await etats([id]);
+  const valideur = peutValiderJalon(ctx);
+  const equipe = valideur ? await b.select({ id: schema.user.id, name: schema.user.name }).from(schema.user).where(ne(schema.user.role, 'speaker')) : [];
 
   return (
     <Cadre acteur={a} actif="/espace/equipe/">
@@ -47,6 +56,34 @@ export default async function DossierSpeaker({ params, searchParams }: { params:
           <p><strong>Titre provisoire :</strong> {s.titreProvisoire || 'à venir'}</p>
           <p style={{ whiteSpace: 'pre-line' }}>{s.biographie || 'Biographie à venir.'}</p>
         </div>
+      )}
+
+      <h2>Jalons</h2>
+      <div className="tableau-defile"><table className="tableau">
+        <thead><tr><th>Jalon</th><th>Échéance</th><th>État</th>{valideur && <th>Changer</th>}</tr></thead>
+        <tbody>{lesJalons.map((j) => {
+          const e = lesEtats.find((x) => x.jalonId === j.id)?.etat ?? 'a_faire';
+          return (
+            <tr key={j.id}>
+              <td>{j.libelle}</td><td>{echeance(j.echeance)}</td><td><Pastille etat={e} echeance={j.echeance} /></td>
+              {valideur && <td><form action={actionJalon.bind(null, id, j.id)} className="actions">
+                <label className="visually-hidden" htmlFor={`etat-${j.id}`}>État</label>
+                <select id={`etat-${j.id}`} name="etat" defaultValue={e} style={{ width: 'auto' }}><option value="a_faire">à faire</option><option value="depose">déposé</option><option value="valide">validé</option></select>
+                <Bouton variante="sobre" petit>Enregistrer</Bouton>
+              </form></td>}
+            </tr>
+          );
+        })}</tbody>
+      </table></div>
+      {valideur && (
+        <form action={actionReferent.bind(null, id)} className="actions" style={{ marginTop: 16 }}>
+          <label htmlFor="referent" style={{ margin: 0 }}>Référent</label>
+          <select id="referent" name="referent" defaultValue={s.referentId ?? ''} style={{ width: 'auto' }}>
+            <option value="">Aucun (pôle Prospection Speakers)</option>
+            {equipe.map((u) => <option key={u.id} value={u.id}>{u.name}</option>)}
+          </select>
+          <Bouton variante="sobre" petit>Enregistrer</Bouton>
+        </form>
       )}
 
       <h2>Déposé par le speaker</h2>

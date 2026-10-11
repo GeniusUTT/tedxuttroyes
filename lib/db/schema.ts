@@ -203,6 +203,43 @@ export const envoi = pgTable('envoi', {
   createdAt: creeLe(),
 });
 
+export const etatJalon = pgEnum('etat_jalon', ['a_faire', 'depose', 'valide']);
+
+// Les jalons d'une édition (premier jet, répétition…) et leur état pour
+// chaque speaker. Un dépôt dans la catégorie liée passe le jalon à
+// « déposé » ; seule l'équipe le passe à « validé ».
+export const jalon = pgTable('jalon', {
+  id: text().primaryKey(),
+  editionId: text().notNull().references(() => edition.id, { onDelete: 'cascade' }),
+  libelle: text().notNull(),
+  echeance: horodatage().notNull(),
+  categorie: text(),
+  ordre: integer().notNull().default(0),
+});
+
+export const jalonSpeaker = pgTable('jalon_speaker', {
+  speakerId: text().notNull().references(() => speaker.id, { onDelete: 'cascade' }),
+  jalonId: text().notNull().references(() => jalon.id, { onDelete: 'cascade' }),
+  etat: etatJalon().notNull().default('a_faire'),
+  valideParId: text().references(() => user.id, { onDelete: 'set null' }),
+  majLe: creeLe(),
+}, (t) => [primaryKey({ columns: [t.speakerId, t.jalonId] })]);
+
+export const commentaire = pgTable('commentaire', {
+  id: text().primaryKey(),
+  documentId: text().notNull().references(() => document.id, { onDelete: 'cascade' }),
+  auteurId: text().references(() => user.id, { onDelete: 'set null' }),
+  texte: text().notNull(),
+  createdAt: creeLe(),
+  supprimeLe: horodatage(),
+}, (t) => [index('commentaire_document_idx').on(t.documentId)]);
+
+export const preference = pgTable('preference', {
+  userId: text().primaryKey().references(() => user.id, { onDelete: 'cascade' }),
+  notifDepot: boolean().notNull().default(true),
+  notifCommentaire: boolean().notNull().default(true),
+});
+
 export const userRelations = relations(user, ({ many }) => ({ sessions: many(session), poles: many(membrePole) }));
 export const sessionRelations = relations(session, ({ one }) => ({ user: one(user, { fields: [session.userId], references: [user.id] }) }));
 export const membrePoleRelations = relations(membrePole, ({ one }) => ({

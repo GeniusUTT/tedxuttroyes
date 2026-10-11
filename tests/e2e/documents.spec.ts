@@ -37,6 +37,15 @@ test('un speaker dépose ses slides avec attestation ; l’équipe les télécha
   expect(telechargement.suggestedFilename()).toBe('mes-slides.pdf');
   const lien = await me.getByRole('link', { name: 'mes-slides.pdf' }).getAttribute('href');
 
+  // Un retour de l'équipe, lu par le speaker.
+  await me.getByRole('link', { name: 'Retours et historique' }).first().click();
+  await me.getByLabel('Votre retour').fill('Slide 4 : la source de la photo ?');
+  await me.getByRole('button', { name: 'Publier le retour' }).click();
+  await expect(me.getByText('Slide 4 : la source de la photo ?')).toBeVisible();
+  await sp.goto('/espace/speaker/');
+  await sp.getByRole('region', { name: 'Slides' }).getByRole('link', { name: 'Retours et historique' }).click();
+  await expect(sp.getByText('Slide 4 : la source de la photo ?')).toBeVisible();
+
   // Le lien de téléchargement n'ouvre rien sans session.
   const anonyme = await (await browser.newContext()).request.get(lien!, { maxRedirects: 0 });
   expect(anonyme.status()).toBe(404);

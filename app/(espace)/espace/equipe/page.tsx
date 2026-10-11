@@ -1,4 +1,4 @@
-import { and, asc, eq, inArray, isNull } from 'drizzle-orm';
+import { asc, eq } from 'drizzle-orm';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { exigerRole } from '@/lib/acces';
@@ -8,11 +8,11 @@ import { peutDeposer } from '@/lib/droits';
 import { Cadre, Message } from '../../composants/Cadre';
 import { CarteDocument, choix } from '../../composants/Documents';
 import { Depot } from '../../composants/Depot';
+import { Pastille } from '../../composants/Jalons';
+import { etats, jalons } from '@/lib/suivi';
 
 export const metadata: Metadata = { title: 'Équipe' };
 
-const SUIVI = ['script', 'slides', 'photo_hd', 'release', 'fiche_technique'];
-const LIBELLES: Record<string, string> = { script: 'Script', slides: 'Slides', photo_hd: 'Photo', release: 'Release', fiche_technique: 'Fiche tech.' };
 
 export default async function Equipe({ searchParams }: { searchParams: Promise<{ ok?: string; erreur?: string }> }) {
   const a = await exigerRole('membre', 'admin');
@@ -20,11 +20,10 @@ export default async function Equipe({ searchParams }: { searchParams: Promise<{
   const ctx = await contexte(a);
   const b = await base();
   const speakers = await b.select().from(schema.speaker).where(eq(schema.speaker.editionId, ctx.editionId)).orderBy(asc(schema.speaker.nomAffiche));
-  const docs = speakers.length
-    ? await b.select({ speakerId: schema.document.speakerId, categorie: schema.document.categorie }).from(schema.document)
-      .where(and(inArray(schema.document.speakerId, speakers.map((s) => s.id)), isNull(schema.document.supprimeLe)))
-    : [];
-  const a_ = (s: string, c: string) => docs.some((d) => d.speakerId === s && d.categorie === c);
+  const lesJalons = await jalons(ctx.editionId);
+  const lesEtats = await etats(speakers.map((s) => s.id));
+  const etat = (s: string, j: string) => lesEtats.find((e) => e.speakerId === s && e.jalonId === j)?.etat ?? 'a_faire';
+  const referents = new Map((await b.select({ id: schema.user.id, name: schema.user.name }).from(schema.user)).map((u) => [u.id, u.name]));
   const tousPoles = await b.select().from(schema.pole).orderBy(asc(schema.pole.ordre));
   const mesPoles = a.role === 'admin' ? tousPoles : tousPoles.filter((p) => ctx.poles.some((x) => x.id === p.id));
   const pourTous = await documents(ctx, { rattachement: 'tous_speakers' });
@@ -45,12 +44,13 @@ export default async function Equipe({ searchParams }: { searchParams: Promise<{
       <h2>Speakers</h2>
       {speakers.length === 0 ? <p className="muet">Aucun speaker invité pour l’instant.</p> : (
         <div className="tableau-defile"><table className="tableau">
-          <thead><tr><th>Speaker</th><th>Titre provisoire</th>{SUIVI.map((c) => <th key={c}>{LIBELLES[c]}</th>)}</tr></thead>
+          <thead><tr><th>Speaker</th><th>Titre provisoire</th><th>Référent</th>{lesJalons.map((j) => <th key={j.id}>{j.libelle}</th>)}</tr></thead>
           <tbody>{speakers.map((s) => (
             <tr key={s.id}>
               <td>{dossiersOuverts ? <Link href={`/espace/equipe/speakers/${s.id}/`}>{s.nomAffiche}</Link> : s.nomAffiche}{!s.userId && <> <span className="pastille">sans compte</span></>}</td>
               <td>{s.titreProvisoire || <span className="muet">à venir</span>}</td>
-              {SUIVI.map((c) => <td key={c}>{a_(s.id, c) ? <span className="pastille pastille--vert">déposé</span> : <span className="pastille">attendu</span>}</td>)}
+              <td>{s.referentId ? referents.get(s.referentId) : <span className="muet">pôle</span>}</td>
+              {lesJalons.map((j) => <td key={j.id}><Pastille etat={etat(s.id, j.id)} echeance={j.echeance} /></td>)}
             </tr>
           ))}</tbody>
         </table></div>
