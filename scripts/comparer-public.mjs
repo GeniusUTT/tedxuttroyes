@@ -6,6 +6,9 @@
 //
 //   node scripts/comparer-public.mjs <url-reference> <url-candidate> [chemin...]
 //
+// Une prévisualisation Vercel protégée se passe avec VERCEL_SHARE, le jeton
+// _vercel_share d'un lien de partage.
+//
 // Un chemin de la forme « candidat|reference » compare deux adresses
 // différentes : la 404 de Next contre le 404.html d'origine, par exemple.
 //
@@ -159,6 +162,11 @@ for (const chemin of liste) {
     for (const [cote, url] of [['ref', reference + cheminRef], ['new', candidate + cheminNew]]) {
       const contexte = await navigateur.newContext({ javaScriptEnabled: false, viewport: { width: largeur, height: 900 } });
       const page = await contexte.newPage();
+      // Prévisualisation protégée : le jeton d'un lien de partage pose le
+      // cookie d'accès dans ce contexte, puis on va à la page.
+      if (process.env.VERCEL_SHARE && /\.vercel\.app/.test(url)) {
+        await page.goto(`${new URL(url).origin}/?_vercel_share=${process.env.VERCEL_SHARE}`);
+      }
       const reponse = await page.goto(url, { waitUntil: 'load' });
       await page.evaluate(() => document.fonts.ready);
       // Les animations d'entrée sont menées à leur terme : mesurées en cours
