@@ -5,12 +5,12 @@ import { base, schema } from './db';
 // jamais un code ou un jeton.
 
 export type Action =
-  | 'connexion' | 'connexion.echec' | 'connexion.code_demande' | 'deconnexion'
+  | 'connexion' | 'connexion.echec' | 'connexion.lien_demande' | 'deconnexion'
   | 'invitation.creee' | 'invitation.renvoyee' | 'invitation.revoquee' | 'invitation.acceptee' | 'invitation.refusee'
-  | 'compte.role' | 'compte.poles' | 'compte.email' | 'compte.desactive' | 'compte.reactive' | 'compte.supprime' | 'compte.export'
-  | 'session.fermee' | 'totp.active' | 'totp.echec' | 'totp.valide' | 'admin.secours'
-  | 'document.depose' | 'document.lu' | 'document.supprime' | 'commentaire.cree' | 'commentaire.supprime'
-  | 'jalon.valide' | 'jalon.modifie' | 'edition.modifiee' | 'pole.modifie' | 'speaker.modifie'
+  | 'compte.mot_de_passe' | 'compte.email' | 'compte.desactive' | 'compte.reactive' | 'compte.supprime' | 'compte.export'
+  | 'session.fermee' | 'compte.secours'
+  | 'document.depose' | 'document.lu' | 'document.supprime' | 'document.modele_refuse' | 'commentaire.cree' | 'commentaire.supprime'
+  | 'jalon.valide' | 'jalon.modifie' | 'edition.modifiee' | 'speaker.modifie' | 'speaker.supprime'
   | 'purge' | 'sauvegarde';
 
 export async function noter(action: Action, o: { acteurId?: string | null; cibleType?: string; cibleId?: string; editionId?: string; details?: Record<string, unknown> } = {}) {

@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 // connexion. Aucun contrôle de droit ici, ils sont tous refaits côté serveur
 // dans chaque page, action et route de l'espace.
 
-const LIBRES = ['/espace/connexion', '/espace/invitation', '/espace/api/'];
+const LIBRES = ['/espace/connexion', '/espace/invitation', '/espace/mot-de-passe', '/espace/api/'];
 
 export function proxy(req: NextRequest) {
   const chemin = req.nextUrl.pathname;

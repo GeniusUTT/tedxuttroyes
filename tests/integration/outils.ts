@@ -43,14 +43,6 @@ export async function preparer() {
   await migrer();
 }
 
-export async function dernierCode(email: string): Promise<string> {
-  const lignes = (await readFile(process.env.ESPACE_FICHIER_COURRIELS!, 'utf8')).trim().split('\n').map((l) => JSON.parse(l));
-  const m = lignes.filter((l) => l.a === email).at(-1);
-  const code = m?.texte.match(/\n(\d{6})\n/)?.[1];
-  if (!code) throw new Error(`aucun code pour ${email}`);
-  return code;
-}
-
 export async function courrielsPour(email: string): Promise<number> {
   try {
     const t = await readFile(process.env.ESPACE_FICHIER_COURRIELS!, 'utf8');
@@ -66,4 +58,29 @@ export async function lienInvitation(email: string): Promise<string> {
   const jeton = m?.texte.match(/\/espace\/invitation\/([^/\s]+)\//)?.[1];
   if (!jeton) throw new Error(`aucune invitation pour ${email}`);
   return jeton;
+}
+
+export async function lienReinitialisation(email: string): Promise<string> {
+  const lignes = (await readFile(process.env.ESPACE_FICHIER_COURRIELS!, 'utf8')).trim().split('\n').map((l) => JSON.parse(l));
+  const m = lignes.filter((l) => l.a === email && /mot de passe/.test(l.sujet)).at(-1);
+  const jeton = m?.texte.match(/\/espace\/mot-de-passe\/([^/\s]+)\//)?.[1];
+  if (!jeton) throw new Error(`aucun lien de mot de passe pour ${email}`);
+  return jeton;
+}
+
+// Le mot de passe de tous les comptes fictifs.
+export const MDP = 'une phrase de passe fictive';
+
+// Un compte naît d'une invitation acceptée, mot de passe compris.
+export async function creerCompte(editionId: string, email: string, role: 'speaker' | 'membre', nom = 'Personne Fictive') {
+  const { inviter, accepter } = await import('../../lib/invitations');
+  await inviter({ email, role, editionId, nomAffiche: nom, derogation: false, parId: 'systeme' });
+  await accepter(await lienInvitation(email), MDP, MDP);
+}
+
+// Ouvre une session neuve : les cookies de la requête simulée sont remplacés.
+export async function connecter(email: string, mdp = MDP) {
+  requete.cookies = new Map();
+  const { seConnecter } = await import('../../lib/connexion');
+  return seConnecter(email, mdp);
 }

@@ -1,8 +1,8 @@
-import { createCipheriv, createDecipheriv, createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
+import { createHash, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 
 // Clé dérivée du secret de Better Auth : un secret de plus à gérer serait un
-// secret de plus à perdre. Chiffrement AES-256-GCM pour les secrets TOTP,
-// empreinte HMAC-SHA-256 pour les jetons d'invitation et les clés de débit.
+// secret de plus à perdre. Empreinte HMAC-SHA-256 pour les jetons
+// d'invitation et de réinitialisation, et pour les clés de débit.
 
 function secret(): string {
   const s = process.env.BETTER_AUTH_SECRET;
@@ -12,21 +12,6 @@ function secret(): string {
 
 function cle(usage: string): Buffer {
   return createHash('sha256').update(`${usage}:${secret()}`).digest();
-}
-
-export function chiffrer(clair: string): string {
-  const iv = randomBytes(12);
-  const c = createCipheriv('aes-256-gcm', cle('totp'), iv);
-  const corps = Buffer.concat([c.update(clair, 'utf8'), c.final()]);
-  return [iv, c.getAuthTag(), corps].map((b) => b.toString('base64url')).join('.');
-}
-
-export function dechiffrer(chiffre: string): string {
-  const [iv, tag, corps] = chiffre.split('.').map((p) => Buffer.from(p, 'base64url'));
-  if (!iv || !tag || !corps) throw new Error('secret chiffré illisible');
-  const d = createDecipheriv('aes-256-gcm', cle('totp'), iv);
-  d.setAuthTag(tag);
-  return Buffer.concat([d.update(corps), d.final()]).toString('utf8');
 }
 
 export function empreinte(valeur: string, usage = 'jeton'): string {

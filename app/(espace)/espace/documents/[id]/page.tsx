@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { exigerSession } from '@/lib/acces';
+import { categorie } from '@/lib/categories';
 import { contexte, documentLisible } from '@/lib/documents';
-import { Cadre, Message } from '../../../composants/Cadre';
+import { Cadre, Message, Section } from '../../../composants/Cadre';
 import { CarteDocument } from '../../../composants/Documents';
 import { Commentaires } from '../../../composants/Commentaires';
 
@@ -16,17 +17,21 @@ export default async function Document({ params, searchParams }: { params: Promi
   const ctx = await contexte(a);
   const d = await documentLisible(ctx, id);
   if (!d) notFound();
-  const retour = d.rattachement === 'speaker'
-    ? (a.role === 'speaker' ? '/espace/speaker/' : `/espace/equipe/speakers/${d.speakerId}/`)
-    : d.rattachement === 'pole' ? '/espace/equipe/' : d.rattachement === 'commun' ? '/espace/equipe/commun/' : a.role === 'speaker' ? '/espace/speaker/' : '/espace/equipe/';
+  const retour = a.role === 'speaker' ? '/espace/speaker/' : d.rattachement === 'speaker' ? `/espace/equipe/speakers/${d.speakerId}/` : '/espace/equipe/';
   return (
-    <Cadre acteur={a}>
-      <p className="cote"><Link href={retour}>Retour</Link></p>
-      <h1>{d.titre}</h1>
-      <Message ok={ok} erreur={erreur} />
-      <CarteDocument d={d} ctx={ctx} retour={`/espace/documents/${d.id}/`} />
-      <h2>Retours</h2>
-      <Commentaires documentId={d.id} ctx={ctx} doc={d} />
+    <Cadre
+      acteur={a}
+      cote={<Link href={retour}>{a.role === 'speaker' ? 'Mon dossier' : 'Retour au dossier'}</Link>}
+      titre={d.titre}
+      chapo={categorie(d.categorie)?.libelle}
+      avant={<Message ok={ok} erreur={erreur} />}
+    >
+      <Section cote="Fichier">
+        <CarteDocument d={d} ctx={ctx} retour={`/espace/documents/${d.id}/`} signer={!!categorie(d.categorie)?.modele} />
+      </Section>
+      <Section cote="Retours" titre="Retours" alt>
+        <Commentaires documentId={d.id} ctx={ctx} doc={d} />
+      </Section>
     </Cadre>
   );
 }

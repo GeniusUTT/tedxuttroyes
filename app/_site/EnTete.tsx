@@ -28,8 +28,11 @@ export type DateDuMenu = 'masquee' | 'claire' | 'aucune';
 const DATE = 'Jeudi 18 mars 2027';
 const LIEU = " · 18h00 · Centre de Congrès de l'Aube, Troyes";
 
-export function EnTete({ actif, date = 'masquee' }: { actif?: Actif; date?: DateDuMenu }) {
+// L'espace connecté reprend cet en-tête tel quel : « espace » marque alors
+// son bouton comme la rubrique courante.
+export function EnTete({ actif, date = 'masquee', espace = false }: { actif?: Actif; date?: DateDuMenu; espace?: boolean }) {
   const courant = (href: string) => (actif?.rubrique === href ? actif.courant : undefined);
+  const dansEspace = espace ? 'page' as const : undefined;
   return (
     <>
       <header className="site-header">
@@ -43,7 +46,7 @@ export function EnTete({ actif, date = 'masquee' }: { actif?: Actif; date?: Date
               <a key={l.href} href={l.href} aria-current={courant(l.href)}>{l.texte}</a>
             ))}
             <a className="btn btn--ghost btn--sm" href={NOS_LIENS} target="_blank" rel="noopener">Nos liens</a>
-            <a className="btn btn--ghost btn--sm" href="/devenir-speaker/">Postuler</a>
+            <a className="btn btn--ghost btn--sm" href="/espace/" aria-current={dansEspace}>Espace</a>
             <a className="btn btn--primary btn--sm" href={BILLETTERIE} target="_blank" rel="noopener">Réserver</a>
           </nav>
 
@@ -76,7 +79,7 @@ export function EnTete({ actif, date = 'masquee' }: { actif?: Actif; date?: Date
         </nav>
         <div className="mobile-menu-foot">
           <a className="btn btn--ghost" href={NOS_LIENS} target="_blank" rel="noopener">Nos liens</a>
-          <a className="btn btn--ghost" href="/devenir-speaker/">Postuler comme speaker</a>
+          <a className="btn btn--ghost" href="/espace/" aria-current={dansEspace}>Espace speakers et équipe</a>
           <a className="btn btn--primary" href={BILLETTERIE} target="_blank" rel="noopener">Réserver ma place</a>
           {date !== 'aucune' && (
             <p className="mobile-menu-date">

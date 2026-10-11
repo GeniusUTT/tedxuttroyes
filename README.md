@@ -96,7 +96,7 @@ npm install
 DATABASE_URL=pglite:.pglite-dev BETTER_AUTH_SECRET=<32 caractères au moins> STORAGE_DRIVER=local npm run dev
 ```
 
-En local, aucun e-mail ne part : le code de connexion s'affiche dans le terminal. Pour se créer un compte admin : `DATABASE_URL=pglite:.pglite-dev npx tsx scripts/admin-secours.ts vous@geniusutt.fr "Votre Nom"`.
+En local, aucun e-mail ne part : les liens (invitation, mot de passe) s'affichent dans le terminal. Pour se créer un compte membre : `DATABASE_URL=pglite:.pglite-dev npx tsx scripts/secours.ts vous@geniusutt.fr "Votre Nom"`, puis ouvrir le lien affiché pour choisir le mot de passe.
 
 Le site public n'a pas besoin de la base : `npm run dev` suffit pour lui. Pour juger le rendu réel (scripts injectés après l'hydratation), préférer `npx next build` puis `npx next start`. Le petit serveur Python d'autrefois ne sert plus : il n'y a plus de pages HTML dans `public/`.
 
@@ -119,9 +119,19 @@ Le build (`npm run build`) applique d'abord les migrations de la base, puis cons
 
 ## Espace connecté
 
-L'espace (`/espace/`) sert à l'équipe et aux speakers pour échanger leurs documents. Accès sur invitation seulement, connexion par code envoyé par e-mail, aucun mot de passe. Aucun lien n'y mène depuis le site public : l'adresse est donnée dans l'invitation.
+L'espace (`/espace/`) est dédié au lien avec les speakers (recentré le 2026-10-11) : calendrier des jalons, pièces à fournir, documents à signer, échanges avec l'équipe. On y entre par le bouton « Espace » de l'en-tête du site (il remplace « Postuler »). Accès sur invitation seulement : le lien de l'invitation mène à une page où la personne choisit son mot de passe, et c'est avec lui qu'elle se connecte ensuite. Mot de passe oublié, ou compte créé avant le passage aux mots de passe : un lien d'une heure, par e-mail, depuis la page de connexion.
 
-**Rôles** : speaker (son dossier seulement), membre (rattaché à un ou plusieurs pôles ; sans pôle, il ne voit que le tableau et l'espace commun), admin (le bureau, avec second facteur obligatoire). Les membres et les admins doivent avoir une adresse du domaine `ESPACE_DOMAINE_MEMBRES` (`geniusutt.fr`), sauf dérogation cochée par un admin.
+**Rôles** : deux seulement. Le speaker voit son dossier et ce que l'équipe met à disposition de tous. Le membre de l'équipe a tous les droits (il n'y a plus ni admin, ni pôles, ni second facteur) ; il faut toujours au moins deux membres actifs. Les membres doivent avoir une adresse du domaine `ESPACE_DOMAINE_MEMBRES` (`geniusutt.fr`), sauf dérogation cochée à l'invitation.
+
+**Le dossier speaker** : coordonnées (prénom, nom, e-mail, téléphone), titre et résumé du talk, biographie complète, photos haute qualité, Speaker Release et droit à l'image signés ; en plus, script, slides (avec attestation des droits) et justificatifs de transport. Une liste « à fournir » dit ce qui manque. Les jalons d'une édition se règlent dans la page Édition ; un jalon lié à une catégorie (ou à la fiche) passe tout seul à « déposé ».
+
+**Documents à signer** : l'équipe dépose une fois le modèle vierge de la Speaker Release et celui du droit à l'image (page Speakers, « Les modèles à signer »). Le speaker le télécharge, le signe, le redépose. Au dépôt, le SHA-256 du fichier est comparé à celui de toutes les versions du modèle : un fichier identique (le modèle renvoyé sans signature) est refusé et effacé. Les deux documents signés survivent à la suppression du speaker, dans l'archive.
+
+**Après la soirée** : le lien YouTube du talk se pose dans le dossier de chaque speaker, l'album photo une fois pour toute l'édition (page Édition). Le speaker les retrouve dans son dossier.
+
+**Supprimer un speaker** : bouton en bas de son dossier. Son compte, sa fiche et ses fichiers sont effacés ; la ligne reste, marquée supprimée, pour nommer les documents signés archivés.
+
+**DA** : l'espace est une rubrique du site, pas un second site. Il charge `main-v14.css`, l'en-tête, le menu, le filigrane et le pied de page du site public, la structure des pages intérieures (marge technique en mono, dorsale rouge statique) ; il ne charge jamais `line-v10.js`, ni la mesure d'audience. `app/(espace)/espace.css` n'ajoute que ce que la feuille publique n'a pas (champs, tableaux, calendrier), avec ses jetons et préfixé par `.espace`.
 
 **Variables d'environnement** (modèle sans valeur dans `.env.example`, valeurs dans les réglages du projet Vercel, jamais dans le dépôt) :
 
@@ -129,21 +139,22 @@ L'espace (`/espace/`) sert à l'équipe et aux speakers pour échanger leurs doc
 |---|---|---|
 | `DATABASE_URL`, `DATABASE_URL_UNPOOLED` | intégration Neon | base poolée pour l'exécution, directe pour les migrations |
 | `ESPACE_HOTE_BASE_PRODUCTION` | toutes | hôte de la base de production : l'anonymisation des prévisualisations ne s'y applique jamais |
-| `BETTER_AUTH_SECRET` | production, prévisualisation (deux valeurs) | signature des sessions, chiffrement des secrets TOTP |
+| `BETTER_AUTH_SECRET` | production, prévisualisation (deux valeurs) | signature des sessions, empreinte des jetons d'invitation et de mot de passe |
 | `ESPACE_DOMAINE_MEMBRES` | toutes | domaine des membres (`geniusutt.fr`) |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD` | production | Scaleway Transactional Email |
 | `MAIL_FROM`, `MAIL_REPLY_TO` | toutes | `TEDxUTTroyes <noreply@tedxuttroyes.fr>`, réponses vers `geniusutt@utt.fr` |
 | `S3_ENDPOINT`, `S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY` | production, prévisualisation (seaux distincts) | Scaleway Object Storage, région `fr-par` |
 | `S3_BUCKET_SAUVEGARDES` | production | seau des sauvegardes quotidiennes |
 | `CRON_SECRET` | production | protège la tâche quotidienne |
+| `ESPACE_ADMINS_ESSAI`, `ESPACE_MDP_ESSAI` | prévisualisation | membres fictifs des parcours rejoués (le nom de la première date du temps des admins) et leur mot de passe |
 
-Seule la production envoie de vrais e-mails. En prévisualisation et en local, le message (et donc le code) est écrit dans les journaux du serveur.
+Seule la production envoie de vrais e-mails. En prévisualisation et en local, le message (et donc le lien) est écrit dans les journaux du serveur.
 
 **Réglage des seaux**, une fois : `npx tsx --env-file=.env.local scripts/stockage-config.ts` (CORS, versionnage du seau des documents, effacement à 30 jours des sauvegardes).
 
 **DNS de l'expéditeur** (zone `tedxuttroyes.fr` chez IONOS) : SPF `v=spf1 include:_spf.tem.scaleway.com -all`, MX `blackhole.tem.scaleway.com`, DMARC `v=DMARC1; p=none`, et la clé DKIM donnée par la console Scaleway (`<id-projet>._domainkey`).
 
-### Procédure de secours (plus aucun admin ne peut entrer)
+### Procédure de secours (plus aucun membre ne peut entrer)
 
 Il faut l'URL **directe** de la base de production (console Neon, ou variable `DATABASE_URL_UNPOOLED` du projet Vercel), à mettre dans un fichier local `.env.secours` qui ne sera jamais commis :
 
@@ -155,10 +166,10 @@ BETTER_AUTH_SECRET=<la valeur de production>
 puis :
 
 ```
-npx tsx --env-file=.env.secours scripts/admin-secours.ts prenom.nom@geniusutt.fr "Prénom Nom"
+ESPACE_URL=https://tedxuttroyes.fr npx tsx --env-file=.env.secours scripts/secours.ts prenom.nom@geniusutt.fr "Prénom Nom"
 ```
 
-Le compte devient admin et actif (il est créé s'il n'existait pas), son second facteur est remis à zéro et ses sessions fermées ; l'opération est inscrite au journal. La personne se connecte ensuite normalement et reconfigure son application d'authentification. Supprimer `.env.secours` après usage.
+Le compte devient membre et actif (il est créé s'il n'existait pas), ses sessions sont fermées, et le script affiche un lien d'une heure pour choisir le mot de passe (aucun e-mail ne part) ; l'opération est inscrite au journal. Supprimer `.env.secours` après usage.
 
 ### Sauvegardes et restauration
 
@@ -167,7 +178,7 @@ Chaque nuit, la tâche quotidienne exporte la base (tous les comptes, documents,
 Restaurer :
 
 1. Créer une base **neuve** : une nouvelle branche Neon vide (ou un nouveau projet), et noter son URL directe.
-2. Dans un fichier local `.env.restauration` (jamais commis) : `DATABASE_URL_UNPOOLED` de cette base neuve, `S3_ENDPOINT`, `S3_REGION`, `S3_BUCKET_SAUVEGARDES`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, et `BETTER_AUTH_SECRET` de production (sans lui, les secrets TOTP des admins sont illisibles : ils devront passer par la procédure de secours).
+2. Dans un fichier local `.env.restauration` (jamais commis) : `DATABASE_URL_UNPOOLED` de cette base neuve, `S3_ENDPOINT`, `S3_REGION`, `S3_BUCKET_SAUVEGARDES`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, et `BETTER_AUTH_SECRET` de production (sans lui, les liens d'invitation en cours ne valent plus rien ; les mots de passe, eux, restent valables). Une sauvegarde d'avant le 2026-10-11 se restaure : ses admins redeviennent membres, ses documents de pôle et de l'espace commun sont écartés.
 3. `npx tsx --env-file=.env.restauration scripts/restaurer.ts base/AAAA-MM-JJ.json.gz` (ou un fichier `.json.gz` local). Le script applique les migrations et refuse une base qui contient déjà des comptes.
 4. Vérifier les comptes affichés, puis faire pointer la production sur cette base (intégration Neon du projet Vercel) et redéployer.
 

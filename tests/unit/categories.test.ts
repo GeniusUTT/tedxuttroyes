@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { extensionDe, lienValide, signatureValide } from '../../lib/categories';
+import { categorie, CATEGORIES, extensionDe, lienValide, signatureValide } from '../../lib/categories';
 
 const octets = (...x: number[]) => new Uint8Array(x);
 const texte = (s: string) => new TextEncoder().encode(s);
@@ -23,5 +23,25 @@ describe('formats', () => {
     expect(lienValide('https://youtu.be/x')).toBe(true);
     expect(lienValide('http://youtu.be/x')).toBe(false);
     expect(lienValide('javascript:alert(1)')).toBe(false);
+  });
+});
+
+describe('catalogue', () => {
+  it('ni fiche technique ni vidéo de répétition', () => {
+    expect(categorie('fiche_technique')).toBeUndefined();
+    expect(categorie('video_repetition')).toBeUndefined();
+  });
+  it('chaque document à signer a son modèle, déposé pour tous par l’équipe', () => {
+    const aSigner = CATEGORIES.filter((c) => c.modele);
+    expect(aSigner.map((c) => c.slug).sort()).toEqual(['droit_image', 'release']);
+    for (const c of aSigner) {
+      const m = categorie(c.modele!);
+      expect(m?.estModele).toBe(true);
+      expect(m?.sens).toBe('vers_speaker');
+      expect(c.sens).toBe('du_speaker');
+    }
+  });
+  it('les pièces requises sont celles du dossier speaker', () => {
+    expect(CATEGORIES.filter((c) => c.requis).map((c) => c.slug)).toEqual(['release', 'droit_image', 'photo_hd']);
   });
 });

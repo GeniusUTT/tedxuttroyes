@@ -1,5 +1,5 @@
-// Gabarits des e-mails : texte court, en français, le code bien visible et
-// la mention de licence en pied. Aucun nom de speaker dans un objet de
+// Gabarits des e-mails : texte court, en français, un seul bouton et la
+// mention de licence en pied. Aucun nom de speaker dans un objet de
 // message : l'objet s'affiche dans les notifications d'un téléphone.
 
 const LICENCE = 'Cet événement TEDx indépendant est organisé sous licence de TED.';
@@ -20,46 +20,45 @@ function enveloppe(corps: string): string {
 </table></td></tr></table></body></html>`;
 }
 
-export function courrielCode(code: string, lien: string) {
-  const texte = [
-    "Votre code de connexion à l'espace TEDxUTTroyes :",
-    '',
-    code,
-    '',
-    'Il est valable 10 minutes. Vous pouvez aussi ouvrir ce lien puis cliquer sur « Se connecter » :',
-    lien,
-    '',
-    "Si vous n'avez rien demandé, ignorez ce message : personne ne peut se connecter sans ce code.",
-    '',
-    LICENCE,
-  ].join('\n');
-  const html = enveloppe(`<p style="margin:0 0 16px;color:#edeae4;">Votre code de connexion à l'espace TEDxUTTroyes :</p>
-<p style="margin:0 0 16px;font-family:'Courier New',monospace;font-size:34px;letter-spacing:8px;color:#edeae4;font-weight:bold;">${echapper(code)}</p>
-<p style="margin:0 0 16px;">Il est valable 10 minutes. Vous pouvez aussi <a href="${echapper(lien)}" style="color:#ff2e4d;">ouvrir ce lien</a> puis cliquer sur « Se connecter ».</p>
-<p style="margin:0;font-size:13px;color:#7e7a73;">Si vous n'avez rien demandé, ignorez ce message : personne ne peut se connecter sans ce code.</p>`);
-  return { sujet: `Votre code de connexion : ${code}`, texte, html };
-}
-
-const LIBELLES_ROLE = { speaker: 'speaker', membre: "membre de l'équipe", admin: 'admin' } as const;
-
-export function courrielInvitation(lien: string, role: keyof typeof LIBELLES_ROLE, annee: number) {
-  const r = LIBELLES_ROLE[role];
+export function courrielReinitialisation(lien: string) {
   const texte = [
     'Bonjour,',
     '',
-    `Vous êtes invité à rejoindre l'espace TEDxUTTroyes ${annee} en tant que ${r}. C'est là que l'équipe et les speakers échangent leurs documents.`,
-    '',
-    "Pour accepter l'invitation, ouvrez ce lien (valable 7 jours, une seule fois) :",
+    "Pour choisir le mot de passe de votre compte sur l'espace TEDxUTTroyes, ouvrez ce lien (valable une heure, une seule fois) :",
     lien,
     '',
-    'Aucun mot de passe : à chaque connexion, un code vous sera envoyé à cette adresse.',
+    "Si vous n'avez rien demandé, ignorez ce message : votre mot de passe actuel reste valable.",
     '',
     LICENCE,
   ].join('\n');
   const html = enveloppe(`<p style="margin:0 0 16px;color:#edeae4;">Bonjour,</p>
-<p style="margin:0 0 16px;">Vous êtes invité à rejoindre l'espace TEDxUTTroyes ${annee} en tant que ${echapper(r)}. C'est là que l'équipe et les speakers échangent leurs documents.</p>
+<p style="margin:0 0 16px;">Pour choisir le mot de passe de votre compte sur l'espace TEDxUTTroyes, ouvrez ce lien.</p>
+<p style="margin:0 0 24px;"><a href="${echapper(lien)}" style="display:inline-block;background:#eb0028;color:#ffffff;text-decoration:none;padding:12px 20px;font-weight:bold;">Choisir mon mot de passe</a></p>
+<p style="margin:0;font-size:13px;color:#7e7a73;">Le lien est valable une heure et ne sert qu'une fois. Si vous n'avez rien demandé, ignorez ce message : votre mot de passe actuel reste valable.</p>`);
+  return { sujet: 'Espace TEDxUTTroyes : votre mot de passe', texte, html };
+}
+
+const LIBELLES_ROLE = { speaker: 'speaker', membre: "membre de l'équipe" } as const;
+
+export function courrielInvitation(lien: string, role: keyof typeof LIBELLES_ROLE, annee: number) {
+  const r = LIBELLES_ROLE[role];
+  const quoi = role === 'speaker'
+    ? "C'est là que vous retrouverez le calendrier de l'événement, les documents à fournir et ceux que l'équipe met à votre disposition."
+    : "C'est là que l'équipe suit les speakers : leurs dossiers, leurs documents, le calendrier.";
+  const texte = [
+    'Bonjour,',
+    '',
+    `Vous êtes invité à rejoindre l'espace TEDxUTTroyes ${annee} en tant que ${r}. ${quoi}`,
+    '',
+    "Pour accepter l'invitation et choisir votre mot de passe, ouvrez ce lien (valable 7 jours, une seule fois) :",
+    lien,
+    '',
+    LICENCE,
+  ].join('\n');
+  const html = enveloppe(`<p style="margin:0 0 16px;color:#edeae4;">Bonjour,</p>
+<p style="margin:0 0 16px;">Vous êtes invité à rejoindre l'espace TEDxUTTroyes ${annee} en tant que ${echapper(r)}. ${echapper(quoi)}</p>
 <p style="margin:0 0 24px;"><a href="${echapper(lien)}" style="display:inline-block;background:#eb0028;color:#ffffff;text-decoration:none;padding:12px 20px;font-weight:bold;">Accepter l'invitation</a></p>
-<p style="margin:0;font-size:13px;color:#7e7a73;">Le lien est valable 7 jours et ne sert qu'une fois. Aucun mot de passe : à chaque connexion, un code vous sera envoyé à cette adresse.</p>`);
+<p style="margin:0;font-size:13px;color:#7e7a73;">Le lien est valable 7 jours et ne sert qu'une fois. Vous y choisirez le mot de passe de votre compte.</p>`);
   return { sujet: `Invitation à l'espace TEDxUTTroyes ${annee}`, texte, html };
 }
 

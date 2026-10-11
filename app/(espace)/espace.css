@@ -1,99 +1,702 @@
-/* Espace connecté : mêmes polices et mêmes tokens que le site public, même
-   DA « le relevé » : zéro border-radius, zéro ombre. Aucune dépendance à
-   main-v14.css ni à line-v10.js. */
+/* Espace connecté : ce que main-v14.css n'a pas, et rien d'autre.
+   Polices, jetons, en-tête, pied de page, sections (.sec, .inner, .cote,
+   .sec-body), titres (.page-title, .h-md, .lead) et boutons (.btn,
+   .btn--primary, .btn--ghost, .btn--sm) viennent de la feuille du site :
+   l'espace est une rubrique du site, il ne doit pas avoir l'air d'un
+   autre. Tout ici est écrit avec ses jetons, et la DA « le relevé » vaut
+   comme partout : zéro border-radius, zéro ombre, libellés en mono, filets
+   fins, rouge réservé à l'annotation. Toutes les règles sont préfixées par
+   .espace (la classe du body) : elles l'emportent sur la feuille du site
+   quel que soit l'ordre de chargement des deux fichiers.
 
-@font-face { font-family: "Bricolage Grotesque"; font-weight: 200 800; font-display: swap; src: url("/assets/fonts/bricolage-var-latin.woff2") format("woff2"); }
-@font-face { font-family: "DM Sans"; font-weight: 100 1000; font-display: swap; src: url("/assets/fonts/dm-sans-var-latin.woff2") format("woff2"); }
-@font-face { font-family: "Space Mono"; font-weight: 400; font-display: swap; src: url("/assets/fonts/space-mono-400-latin.woff2") format("woff2"); }
-@font-face { font-family: "Space Mono"; font-weight: 700; font-display: swap; src: url("/assets/fonts/space-mono-700-latin.woff2") format("woff2"); }
+   Sommaire :
+   01. Rythme vertical
+   02. Navigation de l'espace et messages
+   03. Champs de formulaire
+   04. Boutons (variante danger, état occupé)
+   05. Cartes et grilles
+   06. Tableaux et pastilles d'état
+   07. Liste « à fournir »
+   08. Calendrier : un registre par mois
+   09. Fiche en lecture, fil des retours, dépôt */
 
-:root {
-  --noir: #080808;
-  --surface: #0e0d0c;
-  --surface-2: #141210;
-  --papier: #edeae4;
-  --encre: #b7b2a9;
-  --encre-2: #7e7a73;
-  --rouge: #eb0028;
-  --rouge-vif: #ff2e4d;
-  --vert: #6fbf73;
-  --filet: rgba(237, 234, 228, 0.12);
-  --font-disp: "Bricolage Grotesque", "Arial Black", Arial, sans-serif;
-  --font-body: "DM Sans", "Segoe UI", Arial, sans-serif;
-  --font-mono: "Space Mono", "Courier New", monospace;
-  color-scheme: dark;
+/* 01. Rythme vertical
+   La feuille du site remet toutes les marges à zéro : les blocs de l'espace
+   se suivent à intervalle régulier, les titres de section reprennent du
+   champ. */
+
+.espace .sec-body > * + * {
+  margin-top: 20px;
 }
 
-*, *::before, *::after { box-sizing: border-box; border-radius: 0; box-shadow: none; }
-html { background: var(--noir); }
-body { margin: 0; min-height: 100vh; display: flex; flex-direction: column; background: var(--noir); color: var(--encre); font: 16px/1.6 var(--font-body); }
-a { color: var(--papier); text-decoration-color: var(--rouge); text-underline-offset: 3px; }
-a:hover { color: var(--rouge-vif); }
-:focus-visible { outline: 2px solid var(--rouge); outline-offset: 2px; }
-h1, h2, h3 { font-family: var(--font-disp); color: var(--papier); line-height: 1.15; margin: 0 0 0.6em; }
-h1 { font-size: clamp(1.8rem, 4vw, 2.6rem); font-weight: 700; }
-h2 { font-size: 1.35rem; font-weight: 650; margin-top: 2em; }
-h3 { font-size: 1.05rem; font-weight: 650; }
-p { margin: 0 0 1em; }
-.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-
-.entete { display: flex; align-items: center; gap: 24px; padding: 14px clamp(16px, 4vw, 48px); border-bottom: 1px solid var(--filet); flex-wrap: wrap; }
-.marque { font-family: var(--font-disp); font-weight: 800; font-size: 1.15rem; color: var(--papier); text-decoration: none; }
-.marque span { color: var(--rouge); }
-.marque small { font-family: var(--font-mono); font-weight: 400; font-size: 0.72rem; color: var(--encre-2); margin-left: 10px; letter-spacing: 0.08em; text-transform: uppercase; }
-.nav { display: flex; gap: 18px; flex-wrap: wrap; margin-left: auto; align-items: center; font-family: var(--font-mono); font-size: 0.82rem; }
-.nav a { text-decoration: none; color: var(--encre); padding: 10px 0; border-bottom: 2px solid transparent; }
-.nav a[aria-current="page"], .nav a:hover { color: var(--papier); border-bottom-color: var(--rouge); }
-
-main { flex: 1; width: 100%; max-width: 1080px; margin: 0 auto; padding: clamp(24px, 5vw, 56px) clamp(16px, 4vw, 48px); }
-main.etroit { max-width: 520px; }
-.cote { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--rouge-vif); margin-bottom: 8px; }
-.chapo { color: var(--encre); font-size: 1.05rem; max-width: 60ch; }
-
-.pied { border-top: 1px solid var(--filet); padding: 20px clamp(16px, 4vw, 48px); font-size: 0.8rem; color: var(--encre-2); display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
-.pied a { color: var(--encre-2); }
-
-label { display: block; font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.04em; color: var(--encre); margin: 0 0 6px; }
-input[type="text"], input[type="email"], input[type="url"], input[type="date"], input[type="datetime-local"], input[type="file"], select, textarea {
-  width: 100%; background: var(--surface); color: var(--papier); border: 1px solid var(--filet); padding: 12px 14px; font: inherit; min-height: 46px;
+.espace .sec-body > * + .h-md {
+  margin-top: 56px;
 }
-input:focus, select:focus, textarea:focus { border-color: var(--rouge); outline: none; }
-textarea { min-height: 120px; resize: vertical; }
-.champ { margin-bottom: 18px; }
-.code { font-family: var(--font-mono); font-size: 1.8rem; letter-spacing: 0.4em; text-align: center; }
-.case { display: flex; gap: 10px; align-items: flex-start; font-family: var(--font-body); font-size: 0.92rem; letter-spacing: 0; }
-.case input { margin-top: 5px; accent-color: var(--rouge); width: 18px; height: 18px; flex: none; }
-fieldset { border: 1px solid var(--filet); padding: 14px 16px; margin: 0 0 18px; }
-legend { font-family: var(--font-mono); font-size: 0.78rem; padding: 0 6px; }
 
-.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 46px; padding: 0 20px; border: 1px solid var(--rouge); background: var(--rouge); color: #fff; font: 600 0.95rem var(--font-body); cursor: pointer; text-decoration: none; }
-.btn:hover { background: var(--rouge-vif); border-color: var(--rouge-vif); color: #fff; }
-.btn[disabled] { opacity: 0.5; cursor: progress; }
-.btn--sobre { background: transparent; color: var(--papier); border-color: var(--filet); }
-.btn--sobre:hover { background: var(--surface-2); color: var(--papier); border-color: var(--encre-2); }
-.btn--petit { min-height: 36px; padding: 0 12px; font-size: 0.82rem; }
-.btn--danger { background: transparent; color: var(--rouge-vif); border-color: var(--rouge); }
-.actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-.actions form { margin: 0; }
+.espace .muet {
+  color: var(--encre-2);
+  font-size: 0.875rem;
+}
 
-.message { border-left: 3px solid var(--rouge); background: var(--surface); padding: 12px 16px; margin: 0 0 20px; color: var(--papier); }
-.message--ok { border-color: var(--vert); }
+.espace h3 {
+  font-family: var(--font-disp);
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: -0.01em;
+}
 
-.tableau { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
-.tableau th { text-align: left; font: 400 0.72rem var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--encre-2); border-bottom: 1px solid var(--filet); padding: 8px 10px; }
-.tableau td { border-bottom: 1px solid var(--filet); padding: 10px; vertical-align: top; }
-.tableau-defile { overflow-x: auto; }
-.pastille { display: inline-block; font: 400 0.72rem var(--font-mono); padding: 2px 8px; border: 1px solid var(--filet); color: var(--encre); white-space: nowrap; }
-.pastille--rouge { border-color: var(--rouge); color: var(--rouge-vif); }
-.pastille--vert { border-color: var(--vert); color: var(--vert); }
-.grille { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
-.carte { border: 1px solid var(--filet); background: var(--surface); padding: 18px; }
-.carte h3 { margin-bottom: 6px; }
-.muet { color: var(--encre-2); font-size: 0.88rem; }
-.qr { background: #fff; padding: 12px; width: 220px; height: 220px; }
-.qr img { width: 100%; height: 100%; display: block; }
-.secret { font-family: var(--font-mono); word-break: break-all; background: var(--surface); padding: 8px 10px; display: block; }
-details > summary { cursor: pointer; font-family: var(--font-mono); font-size: 0.82rem; padding: 8px 0; }
-.fil { list-style: none; padding: 0; margin: 0 0 20px; }
-.fil li { border-left: 2px solid var(--filet); padding: 6px 0 10px 14px; }
-.fil li.equipe { border-left-color: var(--rouge); }
+.espace .etiquette {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+}
+
+.espace .etiquette::before {
+  content: "";
+  display: inline-block;
+  width: 18px;
+  height: 2px;
+  background-color: var(--rouge);
+  vertical-align: 0.28em;
+  margin-right: 12px;
+}
+
+@media (max-width: 1023px) {
+  .espace .etiquette {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+  }
+}
+
+/* 02. Navigation de l'espace et messages
+   Une ligne de relevé sous le titre : liens en mono, le courant souligné
+   de rouge comme le lien actif du menu du site. Cibles de 44 px. */
+
+.espace .esp-nav {
+  margin-top: 32px;
+  padding-top: 6px;
+  border-top: 1px solid var(--filet);
+  max-width: 900px;
+}
+
+.espace .esp-nav ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 28px;
+}
+
+.espace .esp-nav form {
+  margin: 0;
+}
+
+.espace .esp-nav a,
+.espace .esp-nav button {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--encre);
+  text-decoration: none;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+
+.espace .esp-nav a:hover,
+.espace .esp-nav button:hover {
+  color: var(--papier);
+}
+
+.espace .esp-nav a[aria-current="page"] {
+  color: var(--papier);
+  border-bottom-color: var(--rouge);
+}
+
+.espace .esp-nav button {
+  color: var(--encre-2);
+}
+
+.espace .esp-qui {
+  margin-top: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--encre-2);
+}
+
+.espace .esp-message {
+  max-width: 760px;
+  padding: 14px 18px;
+  border-left: 2px solid var(--rouge);
+  background-color: var(--surface);
+  color: var(--papier);
+  font-size: 0.9375rem;
+}
+
+.espace .esp-message--ok {
+  border-left-color: var(--papier);
+}
+
+/* 03. Champs de formulaire
+   Fond noir, filet clair, libellé en mono au-dessus : le formulaire se lit
+   comme une feuille de relevé. Focus rouge, 48 px de haut comme les
+   boutons du site. */
+
+.espace .formulaire {
+  max-width: 760px;
+}
+
+.espace .formulaire--etroit {
+  max-width: 460px;
+}
+
+.espace .formulaire > * + * {
+  margin-top: 20px;
+}
+
+.espace .champs {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+}
+
+.espace .champ label,
+.espace .champ .esp-label {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+}
+
+@media (max-width: 1023px) {
+  .espace .champ label,
+  .espace .champ .esp-label {
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+  }
+}
+
+.espace .champ .aide {
+  margin-top: 6px;
+  font-size: 0.8125rem;
+  color: var(--encre-2);
+}
+
+.espace input[type="text"],
+.espace input[type="email"],
+.espace input[type="url"],
+.espace input[type="tel"],
+.espace input[type="password"],
+.espace input[type="date"],
+.espace input[type="number"],
+.espace input[type="file"],
+.espace select,
+.espace textarea {
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 14px;
+  background-color: var(--noir);
+  color: var(--papier);
+  border: 1px solid rgba(237, 234, 228, 0.3);
+  border-radius: 0;
+  font: inherit;
+  font-size: 1rem;
+}
+
+.espace input:focus-visible,
+.espace select:focus-visible,
+.espace textarea:focus-visible {
+  outline: 2px solid var(--rouge);
+  outline-offset: 0;
+  border-color: var(--rouge);
+}
+
+.espace textarea {
+  min-height: 160px;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.espace input[type="file"] {
+  padding: 8px;
+  font-size: 0.875rem;
+  color: var(--encre);
+}
+
+.espace input[type="file"]::file-selector-button {
+  margin-right: 14px;
+  min-height: 32px;
+  padding: 4px 14px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--papier);
+  background: none;
+  border: 1px solid rgba(237, 234, 228, 0.3);
+  border-radius: 0;
+  cursor: pointer;
+}
+
+.espace .case {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  max-width: 760px;
+  font-size: 0.9375rem;
+  color: var(--encre);
+}
+
+.espace .case input {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin-top: 4px;
+  accent-color: var(--rouge);
+}
+
+.espace fieldset {
+  border: 1px solid var(--filet);
+  padding: 16px 18px 18px;
+}
+
+.espace fieldset > * + * {
+  margin-top: 12px;
+}
+
+.espace legend {
+  padding: 0 8px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+}
+
+.espace progress {
+  display: block;
+  width: 100%;
+  height: 2px;
+  appearance: none;
+  border: 0;
+  background-color: var(--filet);
+}
+
+.espace progress::-webkit-progress-bar {
+  background-color: var(--filet);
+}
+
+.espace progress::-webkit-progress-value {
+  background-color: var(--rouge);
+}
+
+.espace progress::-moz-progress-bar {
+  background-color: var(--rouge);
+}
+
+/* 04. Boutons
+   Ceux du site, plus une variante « danger » : filet rouge, texte rouge,
+   plein rouge au survol. Aucune nouvelle forme. */
+
+.espace .btn--danger {
+  color: var(--rouge-vif);
+  border-color: var(--rouge);
+}
+
+.espace .btn--danger:hover {
+  color: #fff;
+  background-color: var(--rouge);
+  border-color: var(--rouge);
+}
+
+.espace .btn[disabled] {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.espace .actions form {
+  margin: 0;
+}
+
+/* 05. Cartes et grilles
+   Une carte est un bloc de relevé : un filet clair en tête, la surface du
+   site, aucune ombre. Les documents à signer portent le filet rouge. */
+
+.espace .grille {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+}
+
+.espace .carte {
+  position: relative;
+  min-width: 0;
+  padding: 20px 22px 24px;
+  background-color: var(--surface);
+  border: 1px solid var(--filet);
+  border-top-color: rgba(237, 234, 228, 0.3);
+}
+
+.espace .carte > * + * {
+  margin-top: 12px;
+}
+
+.espace .carte--signer {
+  border-top: 2px solid var(--rouge);
+}
+
+.espace .carte h3 a {
+  color: var(--papier);
+  text-decoration: none;
+}
+
+.espace .carte h3 a:hover {
+  text-decoration: underline;
+}
+
+.espace .fichier {
+  overflow-wrap: anywhere;
+}
+
+.espace .fichier a {
+  color: var(--papier);
+}
+
+.espace details > summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  cursor: pointer;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--encre);
+}
+
+.espace details > summary:hover {
+  color: var(--papier);
+}
+
+.espace details[open] > summary {
+  margin-bottom: 12px;
+}
+
+/* 06. Tableaux et pastilles d'état */
+
+.espace .tableau-defile {
+  overflow-x: auto;
+}
+
+.espace .tableau {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+
+.espace .tableau th {
+  text-align: left;
+  padding: 10px 16px 10px 0;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+  border-bottom: 1px solid rgba(237, 234, 228, 0.3);
+  white-space: nowrap;
+}
+
+.espace .tableau td {
+  padding: 14px 16px 14px 0;
+  border-bottom: 1px solid var(--filet);
+  vertical-align: top;
+}
+
+.espace .tableau td a {
+  color: var(--papier);
+}
+
+.espace .tableau td > * + * {
+  margin-top: 8px;
+}
+
+.espace .pastille {
+  display: inline-block;
+  padding: 3px 8px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--encre);
+  border: 1px solid rgba(237, 234, 228, 0.3);
+  white-space: nowrap;
+}
+
+.espace .pastille--rouge {
+  color: var(--rouge-vif);
+  border-color: var(--rouge);
+}
+
+.espace .pastille--fait {
+  color: var(--noir);
+  background-color: var(--papier);
+  border-color: var(--papier);
+}
+
+/* 07. Liste « à fournir »
+   Ce que le speaker doit encore donner : une ligne par pièce, son état à
+   droite, le lien vers l'endroit où la déposer. */
+
+.espace .a-fournir {
+  list-style: none;
+  padding: 0;
+  max-width: 760px;
+  border-top: 1px solid rgba(237, 234, 228, 0.3);
+}
+
+.espace .a-fournir li {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 2px 16px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--filet);
+}
+
+.espace .a-fournir a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  color: var(--papier);
+  text-decoration: none;
+}
+
+.espace .a-fournir a:hover {
+  text-decoration: underline;
+}
+
+.espace .a-fournir .muet {
+  grid-column: 1 / -1;
+}
+
+/* 08. Calendrier : un registre par mois
+   Comme le registre des éditions : mois en mono, une rangée par jalon,
+   date à gauche, état à droite. Un repère rouge marque aujourd'hui, la
+   soirée est la seule rangée en display. */
+
+.espace .cal {
+  max-width: 900px;
+}
+
+.espace .cal-mois + .cal-mois {
+  margin-top: 36px;
+}
+
+.espace .cal-mois > h3 {
+  padding-bottom: 10px;
+  font-family: var(--font-mono);
+  font-weight: 400;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+  border-bottom: 1px solid rgba(237, 234, 228, 0.3);
+}
+
+.espace .cal-mois > ol {
+  list-style: none;
+  padding: 0;
+}
+
+.espace .cal-ligne {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr) auto;
+  gap: 4px 20px;
+  align-items: baseline;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--filet);
+}
+
+.espace .cal-jour {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  color: var(--encre);
+}
+
+.espace .cal-libelle {
+  color: var(--papier);
+}
+
+.espace .cal-libelle .muet {
+  display: block;
+}
+
+.espace .cal-ligne--passe .cal-jour,
+.espace .cal-ligne--passe .cal-libelle {
+  color: var(--encre-2);
+}
+
+.espace .cal-ligne--soiree {
+  border-bottom: 2px solid var(--rouge);
+}
+
+.espace .cal-ligne--soiree .cal-libelle {
+  font-family: var(--font-disp);
+  font-weight: 750;
+  font-size: 1.35rem;
+  line-height: 1.15;
+}
+
+.espace .cal-aujourdhui {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rouge-vif);
+}
+
+.espace .cal-aujourdhui::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background-color: var(--rouge);
+}
+
+@media (max-width: 639px) {
+  .espace .cal-ligne {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .espace .cal-jour {
+    grid-column: 1 / -1;
+  }
+}
+
+/* 09. Fiche en lecture, fil des retours, dépôt */
+
+.espace .fiche {
+  display: grid;
+  grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
+  gap: 0 24px;
+  max-width: 900px;
+  border-top: 1px solid rgba(237, 234, 228, 0.3);
+}
+
+.espace .fiche dt,
+.espace .fiche dd {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--filet);
+}
+
+.espace .fiche dt {
+  padding-top: 15px;
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--encre-2);
+}
+
+.espace .fiche dd {
+  color: var(--papier);
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 639px) {
+  .espace .fiche {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .espace .fiche dt {
+    border-bottom: 0;
+    padding-bottom: 0;
+  }
+}
+
+.espace .fil {
+  list-style: none;
+  padding: 0;
+  max-width: 760px;
+}
+
+.espace .fil li {
+  padding: 8px 0 12px 16px;
+  border-left: 2px solid var(--filet);
+}
+
+.espace .fil li + li {
+  margin-top: 12px;
+}
+
+.espace .fil li.equipe {
+  border-left-color: var(--rouge);
+}
+
+.espace .fil li > * + * {
+  margin-top: 6px;
+}
+
+.espace .texte-libre {
+  white-space: pre-line;
+}
+
+.espace .depot > * + * {
+  margin-top: 14px;
+}
+
+.espace textarea.long {
+  min-height: 280px;
+}
+
+.espace .pile > * + * {
+  margin-top: 20px;
+}
+
+.espace details[open] > * + * {
+  margin-top: 16px;
+}
+
+.espace select.select-court {
+  width: auto;
+}
+
+.espace .fiche > div {
+  display: contents;
+}
+
+/* Le bouton « Espace » de l'en-tête, rubrique courante : son filet passe au
+   papier, comme le lien courant du menu passe au souligné rouge. */
+.espace .site-header .btn[aria-current="page"],
+.espace .mobile-menu-foot .btn[aria-current="page"] {
+  border-color: var(--papier);
+}
+
+.espace .cal > .cal-aujourdhui + .cal-mois,
+.espace .cal-mois + .cal-aujourdhui {
+  margin-top: 24px;
+}
+
+.espace .cal-ligne--soiree .cal-libelle .muet {
+  margin-top: 4px;
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.875rem;
+  letter-spacing: 0;
+}

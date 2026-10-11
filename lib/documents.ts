@@ -1,12 +1,13 @@
-import { randomUUID } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
 import { and, asc, desc, eq, inArray, isNull, max } from 'drizzle-orm';
-import { editionCourante, polesDe, type Acteur } from './acces';
+import { editionCourante, type Acteur } from './acces';
 import { categorie, extensionDe, FORMATS, lienValide, signatureValide, type Rattachement } from './categories';
 import { base, schema } from './db';
-import { peutDeposer, peutLire, peutModifierFicheSpeaker, peutSupprimer, type Cible, type Contexte, type RefDocument } from './droits';
+import { peutDeposer, peutLire, peutModifierFicheSpeaker, peutSupprimer, peutValiderJalon, type Cible, type Contexte, type RefDocument } from './droits';
 import { noter } from './journal';
 import { stockage } from './storage';
-import { apresDepot } from './suivi';
+import { emailValide, normaliserEmail, telephoneValide } from './regles';
+import { apresDepot, apresFiche } from './suivi';
 
 // Dépôt, versions, téléchargement. Chaque fonction reçoit le contexte de
 // l'acteur et redemande ses droits : rien ne se fie à ce que la page a
@@ -21,22 +22,21 @@ const NON_AUTORISE = 'Action non autorisée.';
 export async function contexte(a: Acteur): Promise<Contexte & { editionId: string; annee: number }> {
   const e = await editionCourante();
   const b = await base();
-  const poles = a.role === 'speaker' ? [] : await polesDe(a.id, e.id);
   const speakers = a.role === 'speaker'
-    ? (await b.select({ id: schema.speaker.id }).from(schema.speaker).where(and(eq(schema.speaker.userId, a.id), eq(schema.speaker.editionId, e.id)))).map((s) => s.id)
+    ? (await b.select({ id: schema.speaker.id }).from(schema.speaker)
+      .where(and(eq(schema.speaker.userId, a.id), eq(schema.speaker.editionId, e.id), isNull(schema.speaker.supprimeLe)))).map((s) => s.id)
     : [];
-  return { id: a.id, role: a.role, poles: poles.map((p) => ({ id: p.id, slug: p.slug })), speakers, editionId: e.id, annee: e.annee };
+  return { id: a.id, role: a.role, speakers, editionId: e.id, annee: e.annee };
 }
 
 type Ctx = Awaited<ReturnType<typeof contexte>>;
 
 export type DocumentAvecVersions = typeof schema.document.$inferSelect & { versions: (typeof schema.version.$inferSelect)[] };
 
-export async function documents(ctx: Ctx, f: { rattachement: Rattachement; speakerId?: string; poleId?: string }): Promise<DocumentAvecVersions[]> {
+export async function documents(ctx: Ctx, f: { rattachement: Rattachement; speakerId?: string }): Promise<DocumentAvecVersions[]> {
   const b = await base();
   const conditions = [eq(schema.document.editionId, ctx.editionId), eq(schema.document.rattachement, f.rattachement), isNull(schema.document.supprimeLe)];
   if (f.speakerId) conditions.push(eq(schema.document.speakerId, f.speakerId));
-  if (f.poleId) conditions.push(eq(schema.document.poleId, f.poleId));
   const docs = (await b.select().from(schema.document).where(and(...conditions)).orderBy(asc(schema.document.categorie), desc(schema.document.modifieLe)))
     .filter((d) => peutLire(ctx, d));
   if (!docs.length) return [];
@@ -55,14 +55,14 @@ export async function documentLisible(ctx: Ctx, id: string) {
 async function speakerDeLEdition(ctx: Ctx, speakerId: string | null | undefined) {
   if (!speakerId) return false;
   const b = await base();
-  const [s] = await b.select({ id: schema.speaker.id }).from(schema.speaker).where(and(eq(schema.speaker.id, speakerId), eq(schema.speaker.editionId, ctx.editionId)));
+  const [s] = await b.select({ id: schema.speaker.id }).from(schema.speaker)
+    .where(and(eq(schema.speaker.id, speakerId), eq(schema.speaker.editionId, ctx.editionId), isNull(schema.speaker.supprimeLe)));
   return !!s;
 }
 
 export type DemandeDepot = {
   rattachement: Rattachement;
   speakerId?: string | null;
-  poleId?: string | null;
   categorie: string;
   titre?: string;
   documentId?: string | null;
@@ -72,23 +72,23 @@ export type DemandeDepot = {
 
 export async function preparerDepot(ctx: Ctx, d: DemandeDepot) {
   const cat = categorie(d.categorie);
-  if (!cat || cat.lien) throw new RefusDocument('Catégorie inconnue.');
+  if (!cat) throw new RefusDocument('Catégorie inconnue.');
   const b = await base();
-  let cible: Cible & { speakerId: string | null; poleId: string | null };
+  let cible: Cible & { speakerId: string | null };
   let titre = (d.titre ?? '').trim().slice(0, 200) || cat.libelle;
   if (d.documentId) {
     const doc = await documentLisible(ctx, d.documentId);
     if (!doc || doc.categorie !== cat.slug || doc.lienExterne) throw new RefusDocument(NON_AUTORISE);
-    cible = { rattachement: doc.rattachement, speakerId: doc.speakerId, poleId: doc.poleId, sens: doc.sens };
+    cible = { rattachement: doc.rattachement, speakerId: doc.speakerId, sens: doc.sens };
     titre = doc.titre;
   } else {
-    cible = { rattachement: d.rattachement, speakerId: d.speakerId ?? null, poleId: d.poleId ?? null, sens: cat.sens };
+    cible = { rattachement: d.rattachement, speakerId: d.speakerId ?? null, sens: cat.sens };
   }
+  // Un modèle à signer ne se dépose que pour tous les speakers ; tout le
+  // reste ne se range que dans un dossier.
   const coherent =
-    (cible.rattachement === 'speaker' && cat.sens !== 'interne' && (await speakerDeLEdition(ctx, cible.speakerId))) ||
-    (cible.rattachement === 'tous_speakers' && cat.sens === 'vers_speaker') ||
-    (cible.rattachement === 'pole' && cat.sens === 'interne' && !!cible.poleId) ||
-    (cible.rattachement === 'commun' && cat.sens === 'interne');
+    (cible.rattachement === 'speaker' && !cat.estModele && (await speakerDeLEdition(ctx, cible.speakerId))) ||
+    (cible.rattachement === 'tous_speakers' && cat.sens === 'vers_speaker' && cible.speakerId === null);
   if (!coherent || !peutDeposer(ctx, cible)) throw new RefusDocument(NON_AUTORISE);
   const ext = extensionDe(d.nom);
   if (!ext || !cat.formats.includes(ext)) throw new RefusDocument(`Format non accepté pour « ${cat.libelle} ». Formats possibles : ${[...new Set(cat.formats)].join(', ')}.`);
@@ -103,7 +103,6 @@ export async function preparerDepot(ctx: Ctx, d: DemandeDepot) {
     editionId: ctx.editionId,
     rattachement: cible.rattachement,
     speakerId: cible.speakerId,
-    poleId: cible.poleId,
     categorie: cat.slug,
     sens: cat.sens,
     titre,
@@ -122,37 +121,58 @@ export async function confirmerDepot(ctx: Ctx, envoiId: string, attestation: boo
   const [e] = await b.select().from(schema.envoi).where(and(eq(schema.envoi.id, envoiId), eq(schema.envoi.userId, ctx.id)));
   if (!e || e.expireLe < new Date()) throw new RefusDocument('Envoi introuvable ou expiré : recommencez.');
   const cat = categorie(e.categorie)!;
-  const cible = { rattachement: e.rattachement, speakerId: e.speakerId, poleId: e.poleId, sens: e.sens };
+  const cible = { rattachement: e.rattachement, speakerId: e.speakerId, sens: e.sens };
   if (!peutDeposer(ctx, cible)) throw new RefusDocument(NON_AUTORISE);
   if (cat.attestation && !attestation) throw new RefusDocument('Cochez l’attestation sur les droits des images, musiques et vidéos.');
   const s = await stockage();
   const infos = await s.infos(e.cle);
   if (!infos) throw new RefusDocument('Le fichier n’est pas arrivé : recommencez l’envoi.');
   const ext = extensionDe(e.nomOrigine)!;
-  if (infos.taille > e.tailleMax || !signatureValide(ext, await s.debut(e.cle, 4100))) {
+  const rejeter = async (message: string): Promise<never> => {
     await s.supprimer(e.cle);
     await b.delete(schema.envoi).where(eq(schema.envoi.id, e.id));
-    throw new RefusDocument('Le contenu du fichier ne correspond pas à son format.');
+    throw new RefusDocument(message);
+  };
+  if (infos.taille > e.tailleMax || !signatureValide(ext, await s.debut(e.cle, 4100))) {
+    await rejeter('Le contenu du fichier ne correspond pas à son format.');
+  }
+  // Les documents à signer et leurs modèles : on calcule l'empreinte du
+  // fichier entier (10 Mo au plus), et un fichier identique au modèle vierge
+  // est refusé. C'est l'erreur la plus courante : renvoyer le fichier
+  // téléchargé, sans l'avoir signé.
+  let empreinteFichier: string | null = null;
+  if (cat.modele || cat.estModele) {
+    empreinteFichier = createHash('sha256').update(await s.lire(e.cle)).digest('hex');
+    if (cat.modele && (await empreintesDuModele(e.editionId, cat.modele)).includes(empreinteFichier)) {
+      await noter('document.modele_refuse', { acteurId: ctx.id, cibleType: 'speaker', cibleId: e.speakerId ?? undefined, editionId: e.editionId, details: { categorie: cat.slug } });
+      await rejeter('Ce fichier est le modèle vierge, sans signature. Signez-le, puis déposez la version signée.');
+    }
   }
   const versionId = randomUUID();
   let documentId = e.documentId;
   await b.transaction(async (tx) => {
-    if (!documentId && cat.unique && e.rattachement === 'speaker') {
+    if (!documentId && cat.unique) {
       const [existant] = await tx.select({ id: schema.document.id }).from(schema.document)
-        .where(and(eq(schema.document.speakerId, e.speakerId!), eq(schema.document.categorie, cat.slug), isNull(schema.document.supprimeLe)));
+        .where(and(
+          eq(schema.document.editionId, e.editionId),
+          eq(schema.document.rattachement, e.rattachement),
+          e.speakerId ? eq(schema.document.speakerId, e.speakerId) : isNull(schema.document.speakerId),
+          eq(schema.document.categorie, cat.slug),
+          isNull(schema.document.supprimeLe),
+        ));
       documentId = existant?.id ?? null;
     }
     if (!documentId) {
       documentId = randomUUID();
       await tx.insert(schema.document).values({
-        id: documentId, editionId: e.editionId, rattachement: e.rattachement, speakerId: e.speakerId, poleId: e.poleId,
+        id: documentId, editionId: e.editionId, rattachement: e.rattachement, speakerId: e.speakerId,
         categorie: cat.slug, sens: e.sens, titre: e.titre, creeParId: ctx.id,
       });
     }
     const [m] = await tx.select({ n: max(schema.version.numero) }).from(schema.version).where(eq(schema.version.documentId, documentId));
     await tx.insert(schema.version).values({
       id: versionId, documentId, numero: (m?.n ?? 0) + 1, cleStockage: e.cle, nomOrigine: e.nomOrigine, typeMime: e.typeMime,
-      taille: infos.taille, deposeParId: ctx.id, droitsAttestesLe: cat.attestation ? new Date() : null,
+      taille: infos.taille, deposeParId: ctx.id, droitsAttestesLe: cat.attestation ? new Date() : null, empreinte: empreinteFichier,
     });
     await tx.update(schema.document).set({ modifieLe: new Date() }).where(eq(schema.document.id, documentId));
     await tx.delete(schema.envoi).where(eq(schema.envoi.id, e.id));
@@ -162,20 +182,25 @@ export async function confirmerDepot(ctx: Ctx, envoiId: string, attestation: boo
   return { documentId: documentId!, versionId };
 }
 
-export async function enregistrerLien(ctx: Ctx, speakerId: string, url: string) {
-  const cat = categorie('video_repetition')!;
-  const cible = { rattachement: 'speaker' as const, speakerId, poleId: null, sens: cat.sens };
-  if (!(await speakerDeLEdition(ctx, speakerId)) || !peutDeposer(ctx, cible)) throw new RefusDocument(NON_AUTORISE);
-  if (!lienValide(url)) throw new RefusDocument('Le lien doit commencer par https://.');
+// Les empreintes de toutes les versions du modèle vierge, pour l'édition :
+// un speaker peut avoir téléchargé une version antérieure.
+export async function empreintesDuModele(editionId: string, slugModele: string): Promise<string[]> {
   const b = await base();
-  const [existant] = await b.select({ id: schema.document.id }).from(schema.document)
-    .where(and(eq(schema.document.speakerId, speakerId), eq(schema.document.categorie, cat.slug), isNull(schema.document.supprimeLe)));
-  const id = existant?.id ?? randomUUID();
-  if (existant) await b.update(schema.document).set({ lienExterne: url, modifieLe: new Date() }).where(eq(schema.document.id, id));
-  else await b.insert(schema.document).values({ id, editionId: ctx.editionId, rattachement: 'speaker', speakerId, categorie: cat.slug, sens: cat.sens, titre: cat.libelle, lienExterne: url, creeParId: ctx.id });
-  await noter('document.depose', { acteurId: ctx.id, cibleType: 'document', cibleId: id, editionId: ctx.editionId, details: { categorie: cat.slug, lien: true } });
-  await apresDepot(ctx.id, id);
-  return id;
+  const r = await b.select({ e: schema.version.empreinte }).from(schema.version)
+    .innerJoin(schema.document, eq(schema.document.id, schema.version.documentId))
+    .where(and(eq(schema.document.editionId, editionId), eq(schema.document.categorie, slugModele), eq(schema.document.rattachement, 'tous_speakers'), isNull(schema.document.supprimeLe)));
+  return r.map((x) => x.e).filter((x): x is string => !!x);
+}
+
+// Le lien du talk sur la chaîne TEDx, posé par l'équipe après l'événement.
+// Vide pour le retirer.
+export async function enregistrerLienVideo(ctx: Ctx, speakerId: string, url: string) {
+  if (!peutValiderJalon(ctx) || !(await speakerDeLEdition(ctx, speakerId))) throw new RefusDocument(NON_AUTORISE);
+  const lien = url.trim();
+  if (lien && !lienValide(lien)) throw new RefusDocument('Le lien doit commencer par https://.');
+  const b = await base();
+  await b.update(schema.speaker).set({ lienVideo: lien || null, updatedAt: new Date() }).where(eq(schema.speaker.id, speakerId));
+  await noter('speaker.modifie', { acteurId: ctx.id, cibleType: 'speaker', cibleId: speakerId, editionId: ctx.editionId, details: { lienVideo: !!lien } });
 }
 
 // Renvoie une URL signée de soixante secondes, ou null : même réponse pour
@@ -200,14 +225,39 @@ export async function supprimerDocument(ctx: Ctx, documentId: string) {
   return doc;
 }
 
-export async function modifierFiche(ctx: Ctx, speakerId: string, f: { nomAffiche: string; biographie: string; titreProvisoire: string }) {
+export type Fiche = {
+  prenom: string;
+  nom: string;
+  emailContact: string;
+  telephone: string;
+  titreProvisoire: string;
+  resume: string;
+  biographie: string;
+  // Réservé à l'équipe : le nom tel qu'il apparaît dans les listes, posé à
+  // l'invitation. Sans lui, prénom et nom le remplacent.
+  nomAffiche?: string;
+};
+
+export async function modifierFiche(ctx: Ctx, speakerId: string, f: Fiche) {
   if (!peutModifierFicheSpeaker(ctx, speakerId) || !(await speakerDeLEdition(ctx, speakerId))) throw new RefusDocument(NON_AUTORISE);
+  const emailContact = normaliserEmail(f.emailContact);
+  if (emailContact && !emailValide(emailContact)) throw new RefusDocument('L’adresse e-mail de contact est invalide.');
+  if (!telephoneValide(f.telephone)) throw new RefusDocument('Le numéro de téléphone est invalide.');
+  const prenom = f.prenom.trim().slice(0, 80), nom = f.nom.trim().slice(0, 80);
   const b = await base();
+  const [actuel] = await b.select({ nomAffiche: schema.speaker.nomAffiche }).from(schema.speaker).where(eq(schema.speaker.id, speakerId));
+  const choisi = ctx.role === 'membre' ? (f.nomAffiche ?? '').trim().slice(0, 120) : '';
   await b.update(schema.speaker).set({
-    nomAffiche: f.nomAffiche.trim().slice(0, 120) || 'Sans nom',
-    biographie: f.biographie.trim().slice(0, 5000),
+    nomAffiche: choisi || `${prenom} ${nom}`.trim() || actuel?.nomAffiche || 'Sans nom',
+    prenom,
+    nom,
+    emailContact,
+    telephone: f.telephone.trim().slice(0, 40),
     titreProvisoire: f.titreProvisoire.trim().slice(0, 200),
+    resume: f.resume.trim().slice(0, 3000),
+    biographie: f.biographie.trim().slice(0, 5000),
     updatedAt: new Date(),
   }).where(eq(schema.speaker.id, speakerId));
   await noter('speaker.modifie', { acteurId: ctx.id, cibleType: 'speaker', cibleId: speakerId, editionId: ctx.editionId });
+  await apresFiche(speakerId);
 }

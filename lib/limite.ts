@@ -24,8 +24,8 @@ export async function consommer(cle: string, max: number, fenetreSecondes: numbe
 }
 
 export const LIMITES = {
-  codeParEmail: { max: 5, fenetre: 3600 },
-  codeParIp: { max: 20, fenetre: 3600 },
+  lienParEmail: { max: 5, fenetre: 3600 },
+  lienParIp: { max: 20, fenetre: 3600 },
+  essaiParEmail: { max: 10, fenetre: 900 },
   essaiParIp: { max: 30, fenetre: 600 },
-  totpParCompte: { max: 5, fenetre: 600 },
 } as const;

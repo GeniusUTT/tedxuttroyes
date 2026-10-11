@@ -23,8 +23,8 @@ export const FORMATS = {
 } as const;
 
 export type Extension = keyof typeof FORMATS;
-export type Sens = 'du_speaker' | 'vers_speaker' | 'interne';
-export type Rattachement = 'speaker' | 'tous_speakers' | 'pole' | 'commun';
+export type Sens = 'du_speaker' | 'vers_speaker';
+export type Rattachement = 'speaker' | 'tous_speakers';
 
 export type Categorie = {
   slug: string;
@@ -34,31 +34,45 @@ export type Categorie = {
   maxMo: number;
   aide?: string;
   attestation?: boolean;
-  lien?: boolean;
   unique?: boolean;
+  // À fournir par chaque speaker : la liste de son dossier les compte.
+  requis?: boolean;
+  // Un document à signer : le slug du modèle vierge que l'équipe met à
+  // disposition. Le fichier renvoyé est comparé à ce modèle (SHA-256).
+  modele?: string;
+  // Le modèle vierge lui-même (déposé pour tous les speakers).
+  estModele?: boolean;
 };
 
 const BUREAUTIQUE: Extension[] = ['pdf', 'docx', 'odt', 'pptx', 'odp', 'xlsx', 'ods', 'txt', 'md', 'jpg', 'jpeg', 'png', 'webp'];
+const IMAGES_HD: Extension[] = ['jpg', 'jpeg', 'png', 'webp', 'heic', 'tif', 'tiff'];
+const SIGNE: Extension[] = ['pdf', 'jpg', 'jpeg', 'png'];
 
 export const CATEGORIES: Categorie[] = [
+  { slug: 'release', libelle: 'Speaker Release signée', sens: 'du_speaker', formats: SIGNE, maxMo: 10, unique: true, requis: true, modele: 'modele_release',
+    aide: 'Téléchargez le modèle, signez-le (à la main puis scanné, ou par signature électronique), puis déposez-le ici.' },
+  { slug: 'droit_image', libelle: 'Droit à l’image signé', sens: 'du_speaker', formats: SIGNE, maxMo: 10, unique: true, requis: true, modele: 'modele_droit_image',
+    aide: 'Il autorise l’équipe à vous photographier et à vous filmer le jour de l’événement, pour sa communication sur les réseaux sociaux et sur le site.' },
+  { slug: 'photo_hd', libelle: 'Photos haute qualité', sens: 'du_speaker', formats: IMAGES_HD, maxMo: 30, requis: true,
+    aide: 'Une ou plusieurs photos de vous, en haute définition : elles servent à la communication sur nos réseaux sociaux et sur le site.' },
   { slug: 'script', libelle: 'Script du talk', sens: 'du_speaker', formats: ['pdf', 'docx', 'odt', 'txt', 'md'], maxMo: 20, unique: true },
   { slug: 'slides', libelle: 'Slides', sens: 'du_speaker', formats: ['pdf', 'pptx', 'key', 'odp'], maxMo: 50, attestation: true, unique: true,
     aide: 'Les règles TEDx interdisent toute image, musique ou vidéo dont vous ne détenez pas les droits.' },
-  { slug: 'photo_hd', libelle: 'Photo HD', sens: 'du_speaker', formats: ['jpg', 'jpeg', 'png', 'webp', 'heic', 'tif', 'tiff'], maxMo: 30, unique: true },
-  { slug: 'portrait', libelle: 'Photo portrait (fiche)', sens: 'du_speaker', formats: ['jpg', 'jpeg', 'png', 'webp'], maxMo: 10, unique: true },
-  { slug: 'release', libelle: 'Speaker Release signé', sens: 'du_speaker', formats: ['pdf', 'jpg', 'jpeg', 'png'], maxMo: 10, unique: true },
-  { slug: 'transport', libelle: 'Justificatifs de transport', sens: 'du_speaker', formats: ['pdf', 'jpg', 'jpeg', 'png'], maxMo: 10,
+  { slug: 'transport', libelle: 'Justificatifs de transport', sens: 'du_speaker', formats: SIGNE, maxMo: 10,
     aide: 'Supprimés de l’espace trois mois après l’édition, une fois transmis à la trésorerie.' },
-  { slug: 'fiche_technique', libelle: 'Fiche technique', sens: 'du_speaker', formats: ['pdf', 'docx', 'odt'], maxMo: 10, unique: true },
-  { slug: 'video_repetition', libelle: 'Vidéo de répétition (lien)', sens: 'du_speaker', formats: [], maxMo: 0, lien: true,
-    aide: 'Un lien vers la vidéo (YouTube non répertorié, Drive…). La vidéo finale passe par le TED Media Uploader, pas par ici.' },
+  { slug: 'modele_release', libelle: 'Speaker Release (modèle à signer)', sens: 'vers_speaker', formats: ['pdf', 'docx', 'odt'], maxMo: 10, unique: true, estModele: true },
+  { slug: 'modele_droit_image', libelle: 'Droit à l’image (modèle à signer)', sens: 'vers_speaker', formats: ['pdf', 'docx', 'odt'], maxMo: 10, unique: true, estModele: true },
   { slug: 'accueil', libelle: 'Dossier d’accueil', sens: 'vers_speaker', formats: BUREAUTIQUE, maxMo: 50 },
   { slug: 'regles_tedx', libelle: 'Règles de contenu TEDx', sens: 'vers_speaker', formats: BUREAUTIQUE, maxMo: 50 },
   { slug: 'planning', libelle: 'Planning du jour J', sens: 'vers_speaker', formats: BUREAUTIQUE, maxMo: 50 },
-  { slug: 'billets', libelle: 'Billets de train', sens: 'vers_speaker', formats: ['pdf', 'jpg', 'jpeg', 'png'], maxMo: 10 },
+  { slug: 'billets', libelle: 'Billets de train', sens: 'vers_speaker', formats: SIGNE, maxMo: 10 },
   { slug: 'autre', libelle: 'Autre document', sens: 'vers_speaker', formats: BUREAUTIQUE, maxMo: 50 },
-  { slug: 'document', libelle: 'Document', sens: 'interne', formats: BUREAUTIQUE, maxMo: 50 },
 ];
+
+// Un jalon peut se rattacher à une catégorie de dépôt, ou à la fiche du
+// speaker : coordonnées, biographie et résumé remplis passent le jalon à
+// « déposé ».
+export const JALON_FICHE = 'fiche';
 
 export function categorie(slug: string): Categorie | undefined {
   return CATEGORIES.find((c) => c.slug === slug);
