@@ -17,10 +17,14 @@ const POLICES = [
 export function Document({
   corps,
   scripts,
+  enTete,
   children,
 }: {
   corps: 'parcours' | 'journey';
   scripts: readonly string[];
+  // Des scripts en ligne de plus, joués avant le premier rendu (l'accueil
+  // décide là du voile et de l'interlude).
+  enTete?: ReactNode;
   children: ReactNode;
 }) {
   // Par l'API de React, pas par une balise : une balise <link rel="preload">
@@ -34,6 +38,7 @@ export function Document({
         <link rel="apple-touch-icon" href="/assets/img/webclip-10e.png" />
         <link rel="stylesheet" href="/assets/css/main-v14.css" />
         <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.classList.add("js");' }} />
+        {enTete}
       </head>
       <body className={corps}>
         {children}

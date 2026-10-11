@@ -4,14 +4,16 @@ import { BILLETTERIE, CONTACT, INSTAGRAM, INSTAGRAM_GENIUS, LINKEDIN, LINKEDIN_G
 
 const NOUVELLE_FENETRE = <span className="visually-hidden"> (nouvelle fenêtre)</span>;
 
-export function PiedDePage() {
+// Sur l'accueil, la mention de licence est le dernier point du tracé de la
+// ligne (data-line="finale").
+export function PiedDePage({ finale = false }: { finale?: boolean }) {
   return (
     <footer className="site-footer">
       <div className="finner">
         <div className="footer-grid">
           <div className="footer-brand">
             <img src="/assets/img/logo-white.png" alt="TEDxUTTroyes" width="500" height="105" />
-            <p className="footer-licence">Cet événement TEDx indépendant est organisé sous licence de TED.</p>
+            <p className="footer-licence" data-line={finale ? 'finale' : undefined}>Cet événement TEDx indépendant est organisé sous licence de TED.</p>
           </div>
           <nav aria-label="Navigation de pied de page">
             <h2 className="footer-title">Explorer</h2>

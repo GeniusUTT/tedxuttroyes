@@ -15,7 +15,7 @@ function Meta({ cle, valeur }: { cle: { name: string } | { property: string }; v
 }
 
 export type Partage = {
-  titre?: string;
+  titre?: Voile;
   description?: Voile;
   image: string;
   largeur?: number;
@@ -46,7 +46,7 @@ export function Tete({
   robots,
   partage,
 }: {
-  titre: string;
+  titre: Voile;
   description?: Voile;
   chemin?: string;
   robots?: string;
@@ -55,7 +55,7 @@ export function Tete({
   const image = partage && (partage.image.startsWith('http') ? partage.image : SITE + partage.image);
   return (
     <>
-      <title>{titre}</title>
+      {typeof titre === 'string' ? <title>{titre}</title> : <title data-reveal={titre.vrai}>{titre.masque}</title>}
       {description && <Meta cle={{ name: 'description' }} valeur={description} />}
       {chemin && <link rel="canonical" href={SITE + chemin} />}
       {robots && <meta name="robots" content={robots} />}
@@ -65,7 +65,7 @@ export function Tete({
           <meta property="og:site_name" content="TEDxUTTroyes" />
           <meta property="og:locale" content="fr_FR" />
           {chemin && <meta property="og:url" content={SITE + chemin} />}
-          <meta property="og:title" content={partage.titre ?? titre} />
+          <Meta cle={{ property: 'og:title' }} valeur={partage.titre ?? titre} />
           {(partage.description ?? description) && (
             <Meta cle={{ property: 'og:description' }} valeur={(partage.description ?? description)!} />
           )}
@@ -74,7 +74,7 @@ export function Tete({
           {partage.hauteur && <meta property="og:image:height" content={String(partage.hauteur)} />}
           {partage.alt && <Meta cle={{ property: 'og:image:alt' }} valeur={partage.alt} />}
           <meta name="twitter:card" content={partage.carte ?? 'summary_large_image'} />
-          <meta name="twitter:title" content={partage.titre ?? titre} />
+          <Meta cle={{ name: 'twitter:title' }} valeur={partage.titre ?? titre} />
           {(partage.description ?? description) && (
             <Meta cle={{ name: 'twitter:description' }} valeur={(partage.description ?? description)!} />
           )}

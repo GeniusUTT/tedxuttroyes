@@ -7,10 +7,12 @@ export function etoiles(texte: string): string {
   return texte.replace(/[\p{L}\p{N}]/gu, '*');
 }
 
-export function Masque({ texte }: { texte: string }) {
+// « masque » ne sert qu'aux rares textes cachés autrement (« Au-delà », dont
+// le trait d'union est lui aussi masqué).
+export function Masque({ texte, masque }: { texte: string; masque?: string }) {
   return (
     <span className="msk" data-c={texte}>
-      {etoiles(texte)}
+      {masque ?? etoiles(texte)}
     </span>
   );
 }
