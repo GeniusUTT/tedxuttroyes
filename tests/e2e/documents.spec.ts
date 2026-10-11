@@ -46,6 +46,22 @@ test('un speaker dépose ses slides avec attestation ; l’équipe les télécha
   await sp.getByRole('region', { name: 'Slides' }).getByRole('link', { name: 'Retours et historique' }).click();
   await expect(sp.getByText('Slide 4 : la source de la photo ?')).toBeVisible();
 
+  // Un autre speaker qui devine les adresses n'obtient rien : ni le fichier,
+  // ni la page du document, ni le dossier.
+  const dossier = new URL(me.url()).pathname;
+  const intrus = `intrus-${suffixe}@exemple.com`;
+  await inviter(ad, { email: intrus, nom: 'Intrus Fictif', role: 'speaker' });
+  const pi = await (await browser.newContext()).newPage();
+  await accepterInvitation(pi, intrus);
+  await sp.goto('/espace/speaker/');
+  const pageDoc = await sp.getByRole('region', { name: 'Slides' }).getByRole('link', { name: 'Retours et historique' }).getAttribute('href');
+  expect((await pi.request.get(lien!, { maxRedirects: 0 })).status()).toBe(404);
+  expect((await pi.goto(pageDoc!))?.status()).toBe(404);
+  await expect(pi.getByRole('heading', { name: 'Page introuvable' })).toBeVisible();
+  expect((await pi.goto(dossier))?.status()).toBe(404);
+  await pi.goto('/espace/speaker/');
+  await expect(pi.getByText('mes-slides.pdf')).toHaveCount(0);
+
   // Le lien de téléchargement n'ouvre rien sans session.
   const anonyme = await (await browser.newContext()).request.get(lien!, { maxRedirects: 0 });
   expect(anonyme.status()).toBe(404);
