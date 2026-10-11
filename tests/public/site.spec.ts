@@ -102,9 +102,13 @@ test('une adresse inconnue reçoit la 404 du site', async ({ page }) => {
   await expect(page).toHaveTitle(/Page introuvable/);
 });
 
-test('une ancienne adresse redirige vers la bonne page', async ({ page }) => {
-  await page.goto('/editions/edition-2016.html');
-  expect(new URL(page.url()).pathname).toBe('/editions/edition-2016/');
-  await page.goto('/speakers/2019/speaker-2019.html');
-  expect(new URL(page.url()).pathname).toBe('/editions/edition-2019/');
+// La redirection se juge sans la suivre : sur une prévisualisation protégée,
+// le navigateur perd le cookie d'accès en suivant un 301.
+test('une ancienne adresse redirige vers la bonne page', async ({ request }) => {
+  const cas: [string, string][] = [['/editions/edition-2016.html', '/editions/edition-2016/'], ['/speakers/2019/speaker-2019.html', '/editions/edition-2019/']];
+  for (const [avant, apres] of cas) {
+    const r = await request.get(avant, { maxRedirects: 0 });
+    expect(r.status()).toBe(301);
+    expect(new URL(r.headers().location!, 'https://x').pathname).toBe(apres);
+  }
 });
