@@ -9,10 +9,10 @@
     { "source": "/detail_localisation.html", "destination": "/", "statusCode": 301 },
     { "source": "/tous-les-speakers.html", "destination": "/speakers/", "statusCode": 301 },
     { "source": "/toutes-les-editions.html", "destination": "/editions/", "statusCode": 301 },
-    { "source": "/speakers/:annee(\\d{4})/speaker-\\d{4}.html", "destination": "/editions/edition-:annee/", "statusCode": 301 },
+    { "source": "/speakers/:annee(\\d{4})/:fichier(speaker-\\d{4}).html", "destination": "/editions/edition-:annee/", "statusCode": 301 },
     { "source": "/index.html", "destination": "/", "statusCode": 301 },
     { "source": "/:chemin*/index.html", "destination": "/:chemin*/", "statusCode": 301 },
-    { "source": "/:chemin((?!404$).+).html", "destination": "/:chemin/", "statusCode": 301 }
+    { "source": "/:chemin((?!404\\.html$).+).html", "destination": "/:chemin/", "statusCode": 301 }
   ],
   "headers": [
     {
