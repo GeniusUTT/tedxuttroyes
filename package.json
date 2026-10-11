@@ -12,7 +12,8 @@
     "migrer": "tsx scripts/migrer.ts",
     "generer": "drizzle-kit generate",
     "admin-secours": "tsx scripts/admin-secours.ts",
-    "instantane": "node scripts/instantane-public.mjs"
+    "instantane": "node scripts/instantane-public.mjs",
+    "test:public": "playwright test -c playwright.public.config.ts"
   },
   "engines": {
     "node": "24.x"
