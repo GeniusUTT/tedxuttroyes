@@ -6,7 +6,7 @@ import { FormulaireInvitation } from './Formulaire';
 
 export const metadata: Metadata = { title: 'Invitation' };
 
-const ROLES = { speaker: 'speaker', membre: 'membre de l’équipe' } as const;
+const ROLES = { speaker: 'speaker', membre: 'membre de l’équipe', prestataire: 'prestataire' } as const;
 
 export default async function Invitation({ params }: { params: Promise<{ jeton: string }> }) {
   const { jeton } = await params;

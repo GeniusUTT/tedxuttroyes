@@ -64,7 +64,7 @@ export async function CarteDocument({ d, ctx, retour, nouvelleVersion = true, si
       {nouvelleVersion && cat && peutDeposer(ctx, d) && (
         <details>
           <summary>Déposer une nouvelle version</summary>
-          <Depot rattachement={d.rattachement} speakerId={d.speakerId ?? undefined} documentId={d.id} categories={choix([d.categorie])} libelleBouton="Déposer la nouvelle version" />
+          <Depot rattachement={d.rattachement} speakerId={d.speakerId ?? undefined} prestataireId={d.prestataireId ?? undefined} documentId={d.id} categories={choix([d.categorie])} libelleBouton="Déposer la nouvelle version" />
         </details>
       )}
     </article>

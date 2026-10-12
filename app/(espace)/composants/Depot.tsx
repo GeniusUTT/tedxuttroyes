@@ -11,9 +11,10 @@ import { actionConfirmer, actionPreparer } from '../espace/documents/actions';
 
 type Choix = { slug: string; libelle: string; formats: string[]; maxMo: number; attestation?: boolean; aide?: string };
 
-export function Depot({ rattachement, speakerId, documentId, categories, titreLibre, libelleBouton }: {
+export function Depot({ rattachement, speakerId, prestataireId, documentId, categories, titreLibre, libelleBouton }: {
   rattachement: Rattachement;
   speakerId?: string;
+  prestataireId?: string;
   documentId?: string;
   categories: Choix[];
   titreLibre?: boolean;
@@ -40,7 +41,7 @@ export function Depot({ rattachement, speakerId, documentId, categories, titreLi
     if (c.attestation && !atteste) return setErreur('Cochez l’attestation sur les droits.');
     if (f.size > c.maxMo * 1024 * 1024) return setErreur(`Fichier trop lourd : ${c.maxMo} Mo au plus.`);
     setProgres(0);
-    const p = await actionPreparer({ rattachement, speakerId, documentId, categorie: cat, titre, nom: f.name, taille: f.size });
+    const p = await actionPreparer({ rattachement, speakerId, prestataireId, documentId, categorie: cat, titre, nom: f.name, taille: f.size });
     if (!p.ok) {
       setProgres(null);
       return setErreur(p.erreur);

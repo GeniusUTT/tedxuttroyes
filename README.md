@@ -119,9 +119,9 @@ Le build (`npm run build`) applique d'abord les migrations de la base, puis cons
 
 ## Espace connecté
 
-L'espace (`/espace/`) est dédié au lien avec les speakers (recentré le 2026-10-11) : calendrier des jalons, pièces à fournir, documents à signer, échanges avec l'équipe. On y entre par le bouton « Espace » de l'en-tête du site (il remplace « Postuler »). Accès sur invitation seulement : le lien de l'invitation mène à une page où la personne choisit son mot de passe, et c'est avec lui qu'elle se connecte ensuite. Mot de passe oublié, ou compte créé avant le passage aux mots de passe : un lien d'une heure, par e-mail, depuis la page de connexion.
+L'espace (`/espace/`) est dédié au lien avec les speakers (recentré le 2026-10-11) : calendrier des jalons, pièces à fournir, documents à signer, échanges avec l'équipe. Depuis le 2026-10-12, il sert aussi aux échanges de documents avec les prestataires. On y entre par le bouton « Espace » de l'en-tête du site (il remplace « Postuler »). Accès sur invitation seulement : le lien de l'invitation mène à une page où la personne choisit son mot de passe, et c'est avec lui qu'elle se connecte ensuite. Mot de passe oublié, ou compte créé avant le passage aux mots de passe : un lien d'une heure, par e-mail, depuis la page de connexion.
 
-**Rôles** : deux seulement. Le speaker voit son dossier et ce que l'équipe met à disposition de tous. Le membre de l'équipe a tous les droits (il n'y a plus ni admin, ni pôles, ni second facteur) ; il faut toujours au moins deux membres actifs. Les membres doivent avoir une adresse du domaine `ESPACE_DOMAINE_MEMBRES` (`geniusutt.fr`), sauf dérogation cochée à l'invitation.
+**Rôles** : trois. Le speaker voit son dossier et ce que l'équipe met à disposition de tous. Le prestataire ne voit que le dossier de sa structure, et rien des speakers. Le membre de l'équipe a tous les droits (il n'y a plus ni admin, ni pôles, ni second facteur) ; il faut toujours au moins deux membres actifs. Les membres doivent avoir une adresse du domaine `ESPACE_DOMAINE_MEMBRES` (`geniusutt.fr`), sauf dérogation cochée à l'invitation ; speakers et prestataires n'ont aucune restriction.
 
 **Le dossier speaker** : coordonnées (prénom, nom, e-mail, téléphone), titre et résumé du talk, biographie complète, photos haute qualité, Speaker Release et droit à l'image signés ; en plus, script, slides (avec attestation des droits) et justificatifs de transport. Une liste « à fournir » dit ce qui manque. Les jalons d'une édition se règlent dans la page Édition ; un jalon lié à une catégorie (ou à la fiche) passe tout seul à « déposé ».
 
@@ -130,6 +130,8 @@ L'espace (`/espace/`) est dédié au lien avec les speakers (recentré le 2026-1
 **Après la soirée** : le lien YouTube du talk se pose dans le dossier de chaque speaker, l'album photo une fois pour toute l'édition (page Édition). Le speaker les retrouve dans son dossier.
 
 **Supprimer un speaker** : bouton en bas de son dossier. Son compte, sa fiche et ses fichiers sont effacés ; la ligne reste, marquée supprimée, pour nommer les documents signés archivés.
+
+**Les prestataires** (page Prestataires de l'équipe) : un dossier par structure (régie, traiteur, imprimeur…), créé par l'équipe, puis une ou plusieurs personnes invitées dans ce dossier depuis sa page ; elles partagent ses documents et sa fiche (structure, prestation, contact, adresse de facturation). Dans un sens : devis, facture, contrat ou bon de commande signé, attestation d'assurance, fiche technique, autre document. Dans l'autre : contrat ou bon de commande, cahier des charges, planning, plan et accès, autre document. Versions, retours et notifications fonctionnent comme pour les speakers ; un référent peut être désigné. Une personne qui dépose prévient son référent (à défaut toute l'équipe) et ses collègues ; l'équipe qui dépose prévient toute la structure. Retirer l'accès d'une personne supprime son compte, ses dépôts restent au dossier. Supprimer le prestataire efface les comptes, la fiche et les fichiers, sauf devis, factures et contrats, archivés pour la trésorerie (page Archive). Un dossier est purgé de même douze mois après l'édition.
 
 **DA** : l'espace est une rubrique du site, pas un second site. Il charge `main-v14.css`, l'en-tête, le menu, le filigrane et le pied de page du site public, la structure des pages intérieures (marge technique en mono, dorsale rouge statique) ; il ne charge jamais `line-v10.js`, ni la mesure d'audience. `app/(espace)/espace.css` n'ajoute que ce que la feuille publique n'a pas (champs, tableaux, calendrier), avec ses jetons et préfixé par `.espace`.
 
@@ -173,7 +175,7 @@ Le compte devient membre et actif (il est créé s'il n'existait pas), ses sessi
 
 ### Sauvegardes et restauration
 
-Chaque nuit, la tâche quotidienne exporte la base (tous les comptes, documents, versions, retours, jalons et le journal ; pas les sessions ni les codes) en JSON compressé dans le seau `S3_BUCKET_SAUVEGARDES`, sous `base/AAAA-MM-JJ.json.gz`. Les sauvegardes de plus de 30 jours sont effacées. Les fichiers eux-mêmes ne sont pas recopiés : le seau des documents est versionné, une suppression se rattrape pendant 30 jours.
+Chaque nuit, la tâche quotidienne exporte la base (tous les comptes, speakers, prestataires, documents, versions, retours, jalons et le journal ; pas les sessions ni les codes) en JSON compressé dans le seau `S3_BUCKET_SAUVEGARDES`, sous `base/AAAA-MM-JJ.json.gz`. Les sauvegardes de plus de 30 jours sont effacées. Les fichiers eux-mêmes ne sont pas recopiés : le seau des documents est versionné, une suppression se rattrape pendant 30 jours.
 
 Restaurer :
 

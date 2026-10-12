@@ -11,6 +11,7 @@ export type Action =
   | 'session.fermee' | 'compte.secours'
   | 'document.depose' | 'document.lu' | 'document.supprime' | 'document.modele_refuse' | 'commentaire.cree' | 'commentaire.supprime'
   | 'jalon.valide' | 'jalon.modifie' | 'edition.modifiee' | 'speaker.modifie' | 'speaker.supprime'
+  | 'prestataire.cree' | 'prestataire.modifie' | 'prestataire.supprime' | 'prestataire.acces_retire'
   | 'purge' | 'sauvegarde';
 
 export async function noter(action: Action, o: { acteurId?: string | null; cibleType?: string; cibleId?: string; editionId?: string; details?: Record<string, unknown> } = {}) {

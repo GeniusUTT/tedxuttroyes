@@ -13,9 +13,12 @@ import { deconnexion } from '../espace/compte/actions';
 // le pied de page avec la mention de licence. La navigation propre à
 // l'espace vit sous le titre, en mono, comme une ligne de relevé.
 
+const QUI: Record<Acteur['role'], string> = { speaker: 'speaker', membre: 'équipe', prestataire: 'prestataire' };
+
 const NAV: Record<Acteur['role'], [string, string][]> = {
   speaker: [['/espace/speaker/', 'Mon dossier'], ['/espace/calendrier/', 'Calendrier'], ['/espace/compte/', 'Mon compte']],
-  membre: [['/espace/equipe/', 'Speakers'], ['/espace/calendrier/', 'Calendrier'], ['/espace/equipe/comptes/', 'Comptes'], ['/espace/equipe/edition/', 'Édition'], ['/espace/compte/', 'Mon compte']],
+  prestataire: [['/espace/prestataire/', 'Mon dossier'], ['/espace/compte/', 'Mon compte']],
+  membre: [['/espace/equipe/', 'Speakers'], ['/espace/equipe/prestataires/', 'Prestataires'], ['/espace/calendrier/', 'Calendrier'], ['/espace/equipe/comptes/', 'Comptes'], ['/espace/equipe/edition/', 'Édition'], ['/espace/compte/', 'Mon compte']],
 };
 
 export function Cadre({ acteur, actif, cote, titre, chapo, avant, children }: {
@@ -51,7 +54,7 @@ export function Cadre({ acteur, actif, cote, titre, chapo, avant, children }: {
                       <form action={deconnexion}><button type="submit">Se déconnecter</button></form>
                     </li>
                   </ul>
-                  <p className="esp-qui">{acteur.nom} · {acteur.role === 'membre' ? 'équipe' : 'speaker'}</p>
+                  <p className="esp-qui">{acteur.nom} · {QUI[acteur.role]}</p>
                 </nav>
               )}
             </div>

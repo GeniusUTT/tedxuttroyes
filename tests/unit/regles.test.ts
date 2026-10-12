@@ -26,8 +26,10 @@ describe('invitations', () => {
     expect(invitationAutorisee('membre', 'x@exemple.com', true, 'utt.fr')).toBe(true);
     expect(invitationAutorisee('membre', 'x@utt.fr', false, 'utt.fr')).toBe(true);
   });
-  it('laisse les speakers libres de leur domaine', () => {
+  it('laisse les speakers et les prestataires libres de leur domaine', () => {
     expect(invitationAutorisee('speaker', 'x@exemple.com', false, 'utt.fr')).toBe(true);
+    expect(invitationAutorisee('prestataire', 'x@exemple.com', false, 'utt.fr')).toBe(true);
+    expect(invitationAutorisee('prestataire', 'pas-une-adresse', false, 'utt.fr')).toBe(false);
   });
   it('calcule l’état', () => {
     const base = { expireLe: new Date(Date.now() + 1000), accepteeLe: null, revoqueeLe: null };

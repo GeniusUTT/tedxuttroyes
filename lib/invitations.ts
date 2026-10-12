@@ -22,7 +22,18 @@ type Demande = {
   nomAffiche: string;
   derogation: boolean;
   parId: string;
+  // Le dossier que rejoint un prestataire : obligatoire pour ce rôle,
+  // interdit pour les autres.
+  prestataireId?: string | null;
 };
+
+async function prestataireOuvert(id: string | null | undefined, editionId: string) {
+  if (!id) return false;
+  const b = await base();
+  const [p] = await b.select({ id: schema.prestataire.id }).from(schema.prestataire)
+    .where(and(eq(schema.prestataire.id, id), eq(schema.prestataire.editionId, editionId), isNull(schema.prestataire.supprimeLe)));
+  return !!p;
+}
 
 async function envoyerLien(id: string, email: string, role: Role, editionId: string) {
   const b = await base();
@@ -40,6 +51,10 @@ export async function inviter(d: Demande): Promise<string> {
       ? 'Adresse invalide.'
       : "Cette adresse n'est pas dans le domaine des membres : cochez la dérogation pour l'inviter quand même.");
   }
+  const prestataireId = d.role === 'prestataire' ? d.prestataireId ?? null : null;
+  if (d.role === 'prestataire' && !(await prestataireOuvert(prestataireId, d.editionId))) {
+    throw new RefusInvitation('Un prestataire s’invite depuis le dossier de sa structure, dans la page Prestataires.');
+  }
   const b = await base();
   const [existant] = await b.select({ id: schema.user.id }).from(schema.user).where(eq(schema.user.email, email));
   if (existant) throw new RefusInvitation('Un compte existe déjà pour cette adresse.');
@@ -52,6 +67,7 @@ export async function inviter(d: Demande): Promise<string> {
     email,
     role: d.role,
     editionId: d.editionId,
+    prestataireId,
     nomAffiche: d.nomAffiche.trim(),
     derogationDomaine: d.derogation,
     jetonEmpreinte: empreinte(jetonAleatoire(), 'invitation'),
@@ -59,7 +75,7 @@ export async function inviter(d: Demande): Promise<string> {
     expireLe: new Date(Date.now() + DUREE_INVITATION_MS),
   });
   await envoyerLien(id, email, d.role, d.editionId);
-  await noter('invitation.creee', { acteurId: d.parId, cibleType: 'invitation', cibleId: id, editionId: d.editionId, details: { role: d.role, derogation: d.derogation } });
+  await noter('invitation.creee', { acteurId: d.parId, cibleType: 'invitation', cibleId: id, editionId: d.editionId, details: { role: d.role, derogation: d.derogation, prestataire: prestataireId } });
   return id;
 }
 
@@ -98,6 +114,10 @@ export async function accepter(jeton: string, mdp: string, confirmation: string)
   if (mdp !== confirmation) throw new RefusInvitation('Les deux mots de passe ne sont pas identiques.');
   const refus = motDePasseRefuse(mdp, inv.email);
   if (refus) throw new RefusInvitation(refus);
+  // Le dossier du prestataire a pu être supprimé entre-temps.
+  if (inv.role === 'prestataire' && !(await prestataireOuvert(inv.prestataireId, inv.editionId))) {
+    throw new RefusInvitation("Cette invitation n'est plus valable.");
+  }
   const hache = await hashPassword(mdp);
   const b = await base();
   const userId = randomUUID();
@@ -116,6 +136,9 @@ export async function accepter(jeton: string, mdp: string, confirmation: string)
     await tx.insert(schema.account).values({ id: randomUUID(), accountId: userId, providerId: 'credential', userId, password: hache });
     if (inv.role === 'speaker') {
       await tx.insert(schema.speaker).values({ id: randomUUID(), userId, editionId: inv.editionId, nomAffiche: inv.nomAffiche || inv.email, emailContact: inv.email });
+    }
+    if (inv.role === 'prestataire') {
+      await tx.insert(schema.prestataireCompte).values({ prestataireId: inv.prestataireId!, userId });
     }
   });
   await noter('invitation.acceptee', { acteurId: userId, cibleType: 'invitation', cibleId: inv.id, editionId: inv.editionId });

@@ -10,7 +10,7 @@ import { actionDesactiver, actionEmail, actionReactiver, actionRenvoyer, actionR
 
 export const metadata: Metadata = { title: 'Comptes' };
 
-const ROLES = { speaker: 'Speaker', membre: 'Équipe' } as const;
+const ROLES = { speaker: 'Speaker', membre: 'Équipe', prestataire: 'Prestataire' } as const;
 const jour = (d: Date | null) => (d ? d.toLocaleDateString('fr-FR', { timeZone: 'Europe/Paris' }) : 'jamais');
 
 export default async function Comptes({ searchParams }: { searchParams: Promise<{ ok?: string; erreur?: string }> }) {
@@ -30,7 +30,7 @@ export default async function Comptes({ searchParams }: { searchParams: Promise<
       actif="/espace/equipe/comptes/"
       cote={e.libelle}
       titre="Comptes"
-      chapo="Un seul rôle dans l’équipe : chaque membre peut tout faire. Il faut toujours au moins deux membres actifs."
+      chapo="Un seul rôle dans l’équipe : chaque membre peut tout faire. Il faut toujours au moins deux membres actifs. Les prestataires s’invitent depuis le dossier de leur structure, dans la page Prestataires."
       avant={<Message ok={ok} erreur={erreur} />}
     >
       <Section cote="Inviter" titre="Inviter quelqu’un">

@@ -121,6 +121,10 @@ async function anonymiserSiPrevisualisation(url: string) {
     nomAffiche: sql`'Speaker ' || left(md5(${schema.speaker.id}), 4)`,
     prenom: '', nom: '', emailContact: '', telephone: '', biographie: '', titreProvisoire: '', resume: '',
   });
+  await b.update(schema.prestataire).set({
+    structure: sql`'Prestataire ' || left(md5(${schema.prestataire.id}), 4)`,
+    contact: '', emailContact: '', telephone: '', adresse: '',
+  });
   await b.update(schema.invitation).set({ email: sql`'i-' || left(md5(${schema.invitation.id}), 10) || '@exemple.invalid'` });
   await b.delete(schema.session);
   console.info('[migrer] prévisualisation anonymisée.');

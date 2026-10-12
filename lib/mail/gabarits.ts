@@ -38,13 +38,17 @@ export function courrielReinitialisation(lien: string) {
   return { sujet: 'Espace TEDxUTTroyes : votre mot de passe', texte, html };
 }
 
-const LIBELLES_ROLE = { speaker: 'speaker', membre: "membre de l'équipe" } as const;
+const LIBELLES_ROLE = { speaker: 'speaker', membre: "membre de l'équipe", prestataire: 'prestataire' } as const;
+
+const QUOI = {
+  speaker: "C'est là que vous retrouverez le calendrier de l'événement, les documents à fournir et ceux que l'équipe met à votre disposition.",
+  membre: "C'est là que l'équipe suit les speakers et les prestataires : leurs dossiers, leurs documents, le calendrier.",
+  prestataire: "C'est là que vous échangerez avec l'équipe les documents de votre prestation : devis, factures, fiches techniques, planning du jour J.",
+} as const;
 
 export function courrielInvitation(lien: string, role: keyof typeof LIBELLES_ROLE, annee: number) {
   const r = LIBELLES_ROLE[role];
-  const quoi = role === 'speaker'
-    ? "C'est là que vous retrouverez le calendrier de l'événement, les documents à fournir et ceux que l'équipe met à votre disposition."
-    : "C'est là que l'équipe suit les speakers : leurs dossiers, leurs documents, le calendrier.";
+  const quoi = QUOI[role];
   const texte = [
     'Bonjour,',
     '',
