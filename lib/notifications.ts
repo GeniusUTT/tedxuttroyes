@@ -7,8 +7,8 @@ import { urlDeBase } from './url';
 
 // Qui prévenir d'un dépôt ou d'un commentaire. Jamais l'auteur lui-même,
 // jamais un compte désactivé, jamais qui a coupé ce type de notification.
-// Ni l'objet ni le corps ne nomment le speaker : un e-mail se transfère, une
-// notification de téléphone se lit par-dessus l'épaule.
+// Ni l'objet ni le corps ne nomment le speaker ou le prestataire : un e-mail
+// se transfère, une notification de téléphone se lit par-dessus l'épaule.
 
 type Evenement = { type: 'depot' | 'commentaire'; documentId: string; acteurId: string };
 
@@ -34,6 +34,19 @@ export async function destinataires(ev: Evenement): Promise<string[]> {
       if (s?.userId) ids.add(s.userId);
       if (s?.referentId) ids.add(s.referentId);
     }
+  } else if (d.rattachement === 'prestataire' && d.prestataireId) {
+    const [p] = await b.select().from(schema.prestataire).where(eq(schema.prestataire.id, d.prestataireId));
+    const comptes = (await b.select({ id: schema.prestataireCompte.userId }).from(schema.prestataireCompte)
+      .where(eq(schema.prestataireCompte.prestataireId, d.prestataireId))).map((x) => x.id);
+    if (comptes.includes(ev.acteurId)) {
+      // Le prestataire agit : son référent, à défaut toute l'équipe, et les
+      // autres personnes de sa structure.
+      if (p?.referentId) ids.add(p.referentId);
+      else for (const id of await membres()) ids.add(id);
+    } else if (p?.referentId) {
+      ids.add(p.referentId);
+    }
+    for (const id of comptes) ids.add(id);
   } else if (d.rattachement === 'tous_speakers') {
     const r = await b.select({ id: schema.speaker.userId }).from(schema.speaker)
       .where(and(eq(schema.speaker.editionId, d.editionId), isNull(schema.speaker.supprimeLe)));
@@ -55,7 +68,7 @@ export async function notifier(ev: Evenement) {
   const b = await base();
   const [d] = await b.select().from(schema.document).where(eq(schema.document.id, ev.documentId));
   const quoi = categorie(d!.categorie)?.libelle ?? 'Document';
-  const ou = d!.rattachement === 'speaker' ? 'dans un dossier speaker' : 'pour tous les speakers';
+  const ou = { speaker: 'dans un dossier speaker', tous_speakers: 'pour tous les speakers', prestataire: 'dans un dossier prestataire' }[d!.rattachement];
   const phrase = ev.type === 'depot' ? `Nouveau dépôt ${ou} : « ${quoi} ».` : `Nouveau retour ${ou}, sur « ${quoi} ».`;
   const titre = ev.type === 'depot' ? 'Espace TEDxUTTroyes : nouveau document' : 'Espace TEDxUTTroyes : nouveau retour';
   const lien = `${urlDeBase()}/espace/documents/${ev.documentId}/`;

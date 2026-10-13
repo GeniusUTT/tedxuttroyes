@@ -11,7 +11,7 @@ import { changerMotDePasse, fermerAutresSessions, fermerSession, supprimerMonCom
 
 export const metadata: Metadata = { title: 'Mon compte' };
 
-const ROLES = { speaker: 'Speaker', membre: 'Membre de l’équipe' } as const;
+const ROLES = { speaker: 'Speaker', membre: 'Membre de l’équipe', prestataire: 'Prestataire' } as const;
 const date = (d: Date) => d.toLocaleString('fr-FR', { dateStyle: 'medium', timeStyle: 'short', timeZone: 'Europe/Paris' });
 
 function appareil(ua: string | null): string {
@@ -83,7 +83,7 @@ export default async function Compte({ searchParams }: { searchParams: Promise<{
         <p><a className="btn btn--ghost" href="/espace/api/export/">Télécharger mes données (JSON)</a></p>
         <p className="muet">Durées de conservation : comptes speakers supprimés douze mois après l’édition, comptes de l’équipe douze mois après la dernière connexion, journal douze mois, justificatifs de transport trois mois après l’édition. La Speaker Release et le droit à l’image signés sont conservés tant que le talk et les photos sont en ligne. Détails dans les <a href="/mentions-legales/">mentions légales</a>.</p>
         <form action={supprimerMonCompte} className="formulaire">
-          <label className="case"><input type="checkbox" name="confirmer" value="oui" required /> Je veux supprimer mon compte et mes documents, définitivement.{a.role === 'speaker' ? ' Ma Speaker Release et mon droit à l’image signés seront conservés par l’équipe, comme le prévoit la licence TEDx.' : ''}</label>
+          <label className="case"><input type="checkbox" name="confirmer" value="oui" required /> Je veux supprimer mon compte et mes documents, définitivement.{a.role === 'speaker' ? ' Ma Speaker Release et mon droit à l’image signés seront conservés par l’équipe, comme le prévoit la licence TEDx.' : ''}{a.role === 'prestataire' ? ' Les documents de ma structure restent dans son dossier, pour les autres personnes qui y ont accès.' : ''}</label>
           <Bouton variante="danger">Supprimer mon compte</Bouton>
         </form>
       </Section>

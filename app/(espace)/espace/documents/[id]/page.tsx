@@ -17,11 +17,15 @@ export default async function Document({ params, searchParams }: { params: Promi
   const ctx = await contexte(a);
   const d = await documentLisible(ctx, id);
   if (!d) notFound();
-  const retour = a.role === 'speaker' ? '/espace/speaker/' : d.rattachement === 'speaker' ? `/espace/equipe/speakers/${d.speakerId}/` : '/espace/equipe/';
+  const retour = a.role === 'speaker' ? '/espace/speaker/'
+    : a.role === 'prestataire' ? '/espace/prestataire/'
+    : d.rattachement === 'speaker' ? `/espace/equipe/speakers/${d.speakerId}/`
+    : d.rattachement === 'prestataire' ? `/espace/equipe/prestataires/${d.prestataireId}/`
+    : '/espace/equipe/';
   return (
     <Cadre
       acteur={a}
-      cote={<Link href={retour}>{a.role === 'speaker' ? 'Mon dossier' : 'Retour au dossier'}</Link>}
+      cote={<Link href={retour}>{a.role === 'membre' ? 'Retour au dossier' : 'Mon dossier'}</Link>}
       titre={d.titre}
       chapo={categorie(d.categorie)?.libelle}
       avant={<Message ok={ok} erreur={erreur} />}

@@ -1,10 +1,11 @@
 // Règles pures de l'espace, sans base ni réseau : testées unitairement.
 
-// Deux rôles seulement : le speaker, et le membre de l'équipe, qui a tous
-// les droits (il n'y a plus ni admin ni pôles depuis le 2026-10-11).
-export type Role = 'speaker' | 'membre';
+// Trois rôles : le speaker, le prestataire (depuis le 2026-10-12), et le
+// membre de l'équipe, qui a tous les droits (il n'y a plus ni admin ni pôles
+// depuis le 2026-10-11).
+export type Role = 'speaker' | 'membre' | 'prestataire';
 
-export const ROLES: Role[] = ['speaker', 'membre'];
+export const ROLES: Role[] = ['speaker', 'membre', 'prestataire'];
 
 export const DOMAINE_MEMBRES = (process.env.ESPACE_DOMAINE_MEMBRES ?? 'geniusutt.fr').toLowerCase();
 
@@ -29,10 +30,10 @@ export function domaineMembreAccepte(email: string, domaine = DOMAINE_MEMBRES): 
 }
 
 // Un membre doit avoir une adresse du domaine, sauf dérogation accordée par
-// un autre membre. Un speaker n'a aucune restriction.
+// un autre membre. Un speaker ou un prestataire n'a aucune restriction.
 export function invitationAutorisee(role: Role, email: string, derogation: boolean, domaine = DOMAINE_MEMBRES): boolean {
   if (!emailValide(normaliserEmail(email))) return false;
-  if (role === 'speaker') return true;
+  if (role !== 'membre') return true;
   return derogation || domaineMembreAccepte(email, domaine);
 }
 

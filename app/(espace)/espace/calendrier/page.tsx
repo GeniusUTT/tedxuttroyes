@@ -1,6 +1,6 @@
 import { and, eq, isNull } from 'drizzle-orm';
 import type { Metadata } from 'next';
-import { editionCourante, exigerSession } from '@/lib/acces';
+import { editionCourante, exigerRole } from '@/lib/acces';
 import { categorie, JALON_FICHE } from '@/lib/categories';
 import { base, schema } from '@/lib/db';
 import { contexte } from '@/lib/documents';
@@ -15,7 +15,8 @@ export const metadata: Metadata = { title: 'Calendrier' };
 // l'état de chacun de ses jalons ; l'équipe, combien de speakers ont déposé
 // et combien sont validés.
 export default async function PageCalendrier() {
-  const a = await exigerSession();
+  // Les jalons sont ceux des speakers : un prestataire n'a rien à y voir.
+  const a = await exigerRole('speaker', 'membre');
   const ctx = await contexte(a);
   const e = await editionCourante();
   const b = await base();

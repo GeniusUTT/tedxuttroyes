@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { and, asc, desc, eq, inArray, isNull, max } from 'drizzle-orm';
 import { editionCourante, type Acteur } from './acces';
-import { categorie, extensionDe, FORMATS, lienValide, signatureValide, type Rattachement } from './categories';
+import { categorie, extensionDe, FORMATS, lienValide, pourPrestataire, signatureValide, type Rattachement } from './categories';
 import { base, schema } from './db';
 import { peutDeposer, peutLire, peutModifierFicheSpeaker, peutSupprimer, peutValiderJalon, type Cible, type Contexte, type RefDocument } from './droits';
 import { noter } from './journal';
@@ -19,24 +19,30 @@ export class RefusDocument extends Error {}
 const MO = 1024 * 1024;
 const NON_AUTORISE = 'Action non autorisée.';
 
-export async function contexte(a: Acteur): Promise<Contexte & { editionId: string; annee: number }> {
+export async function contexte(a: Acteur): Promise<Contexte & { prestataires: string[]; editionId: string; annee: number }> {
   const e = await editionCourante();
   const b = await base();
   const speakers = a.role === 'speaker'
     ? (await b.select({ id: schema.speaker.id }).from(schema.speaker)
       .where(and(eq(schema.speaker.userId, a.id), eq(schema.speaker.editionId, e.id), isNull(schema.speaker.supprimeLe)))).map((s) => s.id)
     : [];
-  return { id: a.id, role: a.role, speakers, editionId: e.id, annee: e.annee };
+  const prestataires = a.role === 'prestataire'
+    ? (await b.select({ id: schema.prestataire.id }).from(schema.prestataireCompte)
+      .innerJoin(schema.prestataire, eq(schema.prestataire.id, schema.prestataireCompte.prestataireId))
+      .where(and(eq(schema.prestataireCompte.userId, a.id), eq(schema.prestataire.editionId, e.id), isNull(schema.prestataire.supprimeLe)))).map((p) => p.id)
+    : [];
+  return { id: a.id, role: a.role, speakers, prestataires, editionId: e.id, annee: e.annee };
 }
 
 type Ctx = Awaited<ReturnType<typeof contexte>>;
 
 export type DocumentAvecVersions = typeof schema.document.$inferSelect & { versions: (typeof schema.version.$inferSelect)[] };
 
-export async function documents(ctx: Ctx, f: { rattachement: Rattachement; speakerId?: string }): Promise<DocumentAvecVersions[]> {
+export async function documents(ctx: Ctx, f: { rattachement: Rattachement; speakerId?: string; prestataireId?: string }): Promise<DocumentAvecVersions[]> {
   const b = await base();
   const conditions = [eq(schema.document.editionId, ctx.editionId), eq(schema.document.rattachement, f.rattachement), isNull(schema.document.supprimeLe)];
   if (f.speakerId) conditions.push(eq(schema.document.speakerId, f.speakerId));
+  if (f.prestataireId) conditions.push(eq(schema.document.prestataireId, f.prestataireId));
   const docs = (await b.select().from(schema.document).where(and(...conditions)).orderBy(asc(schema.document.categorie), desc(schema.document.modifieLe)))
     .filter((d) => peutLire(ctx, d));
   if (!docs.length) return [];
@@ -60,9 +66,18 @@ async function speakerDeLEdition(ctx: Ctx, speakerId: string | null | undefined)
   return !!s;
 }
 
+async function prestataireDeLEdition(ctx: Ctx, prestataireId: string | null | undefined) {
+  if (!prestataireId) return false;
+  const b = await base();
+  const [p] = await b.select({ id: schema.prestataire.id }).from(schema.prestataire)
+    .where(and(eq(schema.prestataire.id, prestataireId), eq(schema.prestataire.editionId, ctx.editionId), isNull(schema.prestataire.supprimeLe)));
+  return !!p;
+}
+
 export type DemandeDepot = {
   rattachement: Rattachement;
   speakerId?: string | null;
+  prestataireId?: string | null;
   categorie: string;
   titre?: string;
   documentId?: string | null;
@@ -74,21 +89,25 @@ export async function preparerDepot(ctx: Ctx, d: DemandeDepot) {
   const cat = categorie(d.categorie);
   if (!cat) throw new RefusDocument('Catégorie inconnue.');
   const b = await base();
-  let cible: Cible & { speakerId: string | null };
+  let cible: Cible & { speakerId: string | null; prestataireId: string | null };
   let titre = (d.titre ?? '').trim().slice(0, 200) || cat.libelle;
   if (d.documentId) {
     const doc = await documentLisible(ctx, d.documentId);
     if (!doc || doc.categorie !== cat.slug || doc.lienExterne) throw new RefusDocument(NON_AUTORISE);
-    cible = { rattachement: doc.rattachement, speakerId: doc.speakerId, sens: doc.sens };
+    cible = { rattachement: doc.rattachement, speakerId: doc.speakerId, prestataireId: doc.prestataireId, sens: doc.sens };
     titre = doc.titre;
+  } else if (d.rattachement === 'prestataire') {
+    cible = { rattachement: 'prestataire', speakerId: null, prestataireId: d.prestataireId ?? null, sens: cat.sens };
   } else {
-    cible = { rattachement: d.rattachement, speakerId: d.speakerId ?? null, sens: cat.sens };
+    cible = { rattachement: d.rattachement, speakerId: d.speakerId ?? null, prestataireId: null, sens: cat.sens };
   }
   // Un modèle à signer ne se dépose que pour tous les speakers ; tout le
-  // reste ne se range que dans un dossier.
+  // reste ne se range que dans un dossier. Les catégories des prestataires
+  // ne vont que dans un dossier prestataire, et réciproquement.
   const coherent =
-    (cible.rattachement === 'speaker' && !cat.estModele && (await speakerDeLEdition(ctx, cible.speakerId))) ||
-    (cible.rattachement === 'tous_speakers' && cat.sens === 'vers_speaker' && cible.speakerId === null);
+    (cible.rattachement === 'speaker' && !cat.estModele && !pourPrestataire(cat.sens) && (await speakerDeLEdition(ctx, cible.speakerId))) ||
+    (cible.rattachement === 'tous_speakers' && cat.sens === 'vers_speaker' && cible.speakerId === null) ||
+    (cible.rattachement === 'prestataire' && pourPrestataire(cat.sens) && cible.speakerId === null && (await prestataireDeLEdition(ctx, cible.prestataireId)));
   if (!coherent || !peutDeposer(ctx, cible)) throw new RefusDocument(NON_AUTORISE);
   const ext = extensionDe(d.nom);
   if (!ext || !cat.formats.includes(ext)) throw new RefusDocument(`Format non accepté pour « ${cat.libelle} ». Formats possibles : ${[...new Set(cat.formats)].join(', ')}.`);
@@ -103,6 +122,7 @@ export async function preparerDepot(ctx: Ctx, d: DemandeDepot) {
     editionId: ctx.editionId,
     rattachement: cible.rattachement,
     speakerId: cible.speakerId,
+    prestataireId: cible.prestataireId,
     categorie: cat.slug,
     sens: cat.sens,
     titre,
@@ -121,7 +141,7 @@ export async function confirmerDepot(ctx: Ctx, envoiId: string, attestation: boo
   const [e] = await b.select().from(schema.envoi).where(and(eq(schema.envoi.id, envoiId), eq(schema.envoi.userId, ctx.id)));
   if (!e || e.expireLe < new Date()) throw new RefusDocument('Envoi introuvable ou expiré : recommencez.');
   const cat = categorie(e.categorie)!;
-  const cible = { rattachement: e.rattachement, speakerId: e.speakerId, sens: e.sens };
+  const cible = { rattachement: e.rattachement, speakerId: e.speakerId, prestataireId: e.prestataireId, sens: e.sens };
   if (!peutDeposer(ctx, cible)) throw new RefusDocument(NON_AUTORISE);
   if (cat.attestation && !attestation) throw new RefusDocument('Cochez l’attestation sur les droits des images, musiques et vidéos.');
   const s = await stockage();
@@ -157,6 +177,7 @@ export async function confirmerDepot(ctx: Ctx, envoiId: string, attestation: boo
           eq(schema.document.editionId, e.editionId),
           eq(schema.document.rattachement, e.rattachement),
           e.speakerId ? eq(schema.document.speakerId, e.speakerId) : isNull(schema.document.speakerId),
+          e.prestataireId ? eq(schema.document.prestataireId, e.prestataireId) : isNull(schema.document.prestataireId),
           eq(schema.document.categorie, cat.slug),
           isNull(schema.document.supprimeLe),
         ));
@@ -165,7 +186,7 @@ export async function confirmerDepot(ctx: Ctx, envoiId: string, attestation: boo
     if (!documentId) {
       documentId = randomUUID();
       await tx.insert(schema.document).values({
-        id: documentId, editionId: e.editionId, rattachement: e.rattachement, speakerId: e.speakerId,
+        id: documentId, editionId: e.editionId, rattachement: e.rattachement, speakerId: e.speakerId, prestataireId: e.prestataireId,
         categorie: cat.slug, sens: e.sens, titre: e.titre, creeParId: ctx.id,
       });
     }

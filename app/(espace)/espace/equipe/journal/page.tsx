@@ -9,7 +9,7 @@ import { noms, quand } from '../../../composants/Documents';
 export const metadata: Metadata = { title: 'Journal' };
 
 const FAMILLES: [string, string][] = [
-  ['', 'Tout'], ['connexion', 'Connexions'], ['invitation', 'Invitations'], ['compte', 'Comptes'], ['speaker', 'Speakers'], ['document', 'Documents'],
+  ['', 'Tout'], ['connexion', 'Connexions'], ['invitation', 'Invitations'], ['compte', 'Comptes'], ['speaker', 'Speakers'], ['prestataire', 'Prestataires'], ['document', 'Documents'],
   ['commentaire', 'Retours'], ['jalon', 'Jalons'], ['purge', 'Purges'], ['sauvegarde', 'Sauvegardes'],
 ];
 
@@ -22,6 +22,8 @@ const LIBELLES: Record<string, string> = {
   'document.depose': 'dépôt', 'document.lu': 'téléchargement', 'document.supprime': 'suppression', 'document.modele_refuse': 'modèle non signé refusé',
   'commentaire.cree': 'retour publié', 'commentaire.supprime': 'retour supprimé', 'jalon.valide': 'jalon changé', 'jalon.modifie': 'jalon modifié',
   'edition.modifiee': 'édition modifiée', 'speaker.modifie': 'fiche speaker modifiée', 'speaker.supprime': 'speaker supprimé',
+  'prestataire.cree': 'prestataire créé', 'prestataire.modifie': 'fiche prestataire modifiée', 'prestataire.supprime': 'prestataire supprimé',
+  'prestataire.acces_retire': 'accès prestataire retiré',
   'purge': 'purge quotidienne', 'sauvegarde': 'sauvegarde',
 };
 

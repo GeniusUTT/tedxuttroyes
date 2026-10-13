@@ -1,10 +1,10 @@
-import { and, eq, inArray, lt, sql } from 'drizzle-orm';
+import { and, eq, inArray, isNull, lt, sql } from 'drizzle-orm';
 import { getTableColumns, getTableName } from 'drizzle-orm';
 import { gunzipSync, gzipSync } from 'node:zlib';
 import { base, schema } from './db';
 import { RefusCompte } from './comptes';
 import { noter } from './journal';
-import { supprimerCompte } from './rgpd';
+import { supprimerCompte, supprimerPrestataire } from './rgpd';
 import { stockage, type Stockage } from './storage';
 
 // La tâche quotidienne : purges selon les durées de conservation, puis
@@ -19,7 +19,7 @@ const MOIS = 30 * JOUR;
 // codes, compteurs de débit et envois en cours sont éphémères : ils ne sont
 // pas sauvegardés.
 export const TABLES_SAUVEGARDEES = [
-  schema.edition, schema.user, schema.speaker, schema.invitation, schema.preference, schema.document, schema.version, schema.commentaire, schema.jalon, schema.jalonSpeaker, schema.journal,
+  schema.edition, schema.user, schema.speaker, schema.prestataire, schema.prestataireCompte, schema.invitation, schema.preference, schema.document, schema.version, schema.commentaire, schema.jalon, schema.jalonSpeaker, schema.journal,
 ] as const;
 
 export async function stockageSauvegardes(): Promise<{ s: Stockage; prefixe: string }> {
@@ -103,9 +103,10 @@ export async function tachesQuotidiennes(maintenant = new Date()) {
   rapport.journal = j.length;
 
   // 3. Justificatifs de transport : trois mois après l'édition. Comptes
-  //    speakers : douze mois après l'édition.
+  //    speakers et dossiers prestataires (comptes compris, pièces
+  //    comptables archivées) : douze mois après l'édition.
   const editions = await b.select().from(schema.edition);
-  let transport = 0, speakers = 0;
+  let transport = 0, speakers = 0, prestataires = 0;
   for (const e of editions) {
     if (!e.dateEvenement) continue;
     const age = maintenant.getTime() - e.dateEvenement.getTime();
@@ -117,10 +118,14 @@ export async function tachesQuotidiennes(maintenant = new Date()) {
     if (age > 12 * MOIS) {
       const r = await b.select({ userId: schema.speaker.userId }).from(schema.speaker).where(eq(schema.speaker.editionId, e.id));
       for (const { userId } of r) if (userId) { await supprimerCompte(userId, null); speakers++; }
+      const p = await b.select({ id: schema.prestataire.id }).from(schema.prestataire)
+        .where(and(eq(schema.prestataire.editionId, e.id), isNull(schema.prestataire.supprimeLe)));
+      for (const { id } of p) { await supprimerPrestataire(id, e.id, null); prestataires++; }
     }
   }
   rapport.transport = transport;
   rapport.speakers = speakers;
+  rapport.prestataires = prestataires;
 
   // 4. Membres : douze mois après leur dernière connexion.
   const inactifs = await b.select({ id: schema.user.id }).from(schema.user)

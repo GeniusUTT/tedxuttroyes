@@ -8,7 +8,7 @@ import { bigint, boolean, index, integer, jsonb, pgEnum, pgTable, primaryKey, te
 const horodatage = () => timestamp({ withTimezone: true, mode: 'date' });
 const creeLe = () => horodatage().notNull().defaultNow();
 
-export const role = pgEnum('role', ['speaker', 'membre']);
+export const role = pgEnum('role', ['speaker', 'membre', 'prestataire']);
 
 export const user = pgTable('user', {
   id: text().primaryKey(),
@@ -104,11 +104,39 @@ export const speaker = pgTable('speaker', {
   updatedAt: creeLe(),
 }, (t) => [uniqueIndex('speaker_user_edition_idx').on(t.userId, t.editionId)]);
 
+// Un prestataire est une structure (régie, traiteur, imprimeur…), pas une
+// personne : l'équipe crée son dossier, puis y invite une ou plusieurs
+// personnes, qui partagent ses documents. La ligne reste après suppression
+// (supprimeLe) pour nommer les pièces comptables archivées.
+export const prestataire = pgTable('prestataire', {
+  id: text().primaryKey(),
+  editionId: text().notNull().references(() => edition.id),
+  structure: text().notNull(),
+  prestation: text().notNull().default(''),
+  contact: text().notNull().default(''),
+  emailContact: text().notNull().default(''),
+  telephone: text().notNull().default(''),
+  adresse: text().notNull().default(''),
+  referentId: text().references(() => user.id, { onDelete: 'set null' }),
+  supprimeLe: horodatage(),
+  createdAt: creeLe(),
+  updatedAt: creeLe(),
+}, (t) => [index('prestataire_edition_idx').on(t.editionId)]);
+
+// Les personnes qui ont accès au dossier d'un prestataire.
+export const prestataireCompte = pgTable('prestataire_compte', {
+  prestataireId: text().notNull().references(() => prestataire.id, { onDelete: 'cascade' }),
+  userId: text().notNull().references(() => user.id, { onDelete: 'cascade' }),
+  createdAt: creeLe(),
+}, (t) => [primaryKey({ columns: [t.prestataireId, t.userId] }), index('prestataire_compte_user_idx').on(t.userId)]);
+
 export const invitation = pgTable('invitation', {
   id: text().primaryKey(),
   email: text().notNull(),
   role: role().notNull(),
   editionId: text().notNull().references(() => edition.id),
+  // Le dossier que rejoint un prestataire invité.
+  prestataireId: text().references(() => prestataire.id, { onDelete: 'cascade' }),
   nomAffiche: text().notNull().default(''),
   derogationDomaine: boolean().notNull().default(false),
   jetonEmpreinte: text().notNull().unique(),
@@ -137,8 +165,8 @@ export const journal = pgTable('journal', {
   details: jsonb().$type<Record<string, unknown>>().notNull().default({}),
 }, (t) => [index('journal_le_idx').on(t.le), index('journal_cible_idx').on(t.cibleType, t.cibleId)]);
 
-export const rattachement = pgEnum('rattachement', ['speaker', 'tous_speakers']);
-export const sens = pgEnum('sens', ['du_speaker', 'vers_speaker']);
+export const rattachement = pgEnum('rattachement', ['speaker', 'tous_speakers', 'prestataire']);
+export const sens = pgEnum('sens', ['du_speaker', 'vers_speaker', 'du_prestataire', 'vers_prestataire']);
 
 // Un document porte ses versions : on n'écrase jamais, on ajoute. La
 // suppression est logique (supprimeLe) ; le seau de production est
@@ -148,18 +176,20 @@ export const document = pgTable('document', {
   editionId: text().notNull().references(() => edition.id),
   rattachement: rattachement().notNull(),
   speakerId: text().references(() => speaker.id),
+  prestataireId: text().references(() => prestataire.id),
   categorie: text().notNull(),
   sens: sens().notNull(),
   titre: text().notNull(),
   lienExterne: text(),
-  // Archivé : réservé à l'équipe (Speaker Release d'un speaker supprimé).
+  // Archivé : réservé à l'équipe (Speaker Release d'un speaker supprimé,
+  // pièces comptables d'un prestataire supprimé).
   archive: boolean().notNull().default(false),
   creeParId: text().references(() => user.id, { onDelete: 'set null' }),
   createdAt: creeLe(),
   modifieLe: creeLe(),
   supprimeLe: horodatage(),
   supprimeParId: text().references(() => user.id, { onDelete: 'set null' }),
-}, (t) => [index('document_speaker_idx').on(t.speakerId), index('document_edition_idx').on(t.editionId, t.rattachement)]);
+}, (t) => [index('document_speaker_idx').on(t.speakerId), index('document_prestataire_idx').on(t.prestataireId), index('document_edition_idx').on(t.editionId, t.rattachement)]);
 
 export const version = pgTable('version', {
   id: text().primaryKey(),
@@ -188,6 +218,7 @@ export const envoi = pgTable('envoi', {
   editionId: text().notNull(),
   rattachement: rattachement().notNull(),
   speakerId: text(),
+  prestataireId: text(),
   categorie: text().notNull(),
   sens: sens().notNull(),
   titre: text().notNull(),

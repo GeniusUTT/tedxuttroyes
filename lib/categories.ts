@@ -23,8 +23,12 @@ export const FORMATS = {
 } as const;
 
 export type Extension = keyof typeof FORMATS;
-export type Sens = 'du_speaker' | 'vers_speaker';
-export type Rattachement = 'speaker' | 'tous_speakers';
+export type Sens = 'du_speaker' | 'vers_speaker' | 'du_prestataire' | 'vers_prestataire';
+export type Rattachement = 'speaker' | 'tous_speakers' | 'prestataire';
+
+// Une catégorie sert soit aux speakers, soit aux prestataires : jamais un
+// document de prestataire dans un dossier speaker, ni l'inverse.
+export const pourPrestataire = (sens: Sens) => sens === 'du_prestataire' || sens === 'vers_prestataire';
 
 export type Categorie = {
   slug: string;
@@ -67,7 +71,24 @@ export const CATEGORIES: Categorie[] = [
   { slug: 'planning', libelle: 'Planning du jour J', sens: 'vers_speaker', formats: BUREAUTIQUE, maxMo: 50 },
   { slug: 'billets', libelle: 'Billets de train', sens: 'vers_speaker', formats: SIGNE, maxMo: 10 },
   { slug: 'autre', libelle: 'Autre document', sens: 'vers_speaker', formats: BUREAUTIQUE, maxMo: 50 },
+  // Les prestataires. Devis, factures et contrats survivent à la
+  // suppression du dossier, dans l'archive de l'équipe (ARCHIVES_PRESTATAIRE).
+  { slug: 'devis', libelle: 'Devis', sens: 'du_prestataire', formats: BUREAUTIQUE, maxMo: 20 },
+  { slug: 'facture', libelle: 'Facture', sens: 'du_prestataire', formats: SIGNE, maxMo: 20 },
+  { slug: 'contrat_signe', libelle: 'Contrat ou bon de commande signé', sens: 'du_prestataire', formats: SIGNE, maxMo: 20 },
+  { slug: 'assurance', libelle: 'Attestation d’assurance', sens: 'du_prestataire', formats: SIGNE, maxMo: 10 },
+  { slug: 'technique', libelle: 'Fiche technique', sens: 'du_prestataire', formats: BUREAUTIQUE, maxMo: 50,
+    aide: 'Besoins en électricité, accès, montage et démontage, matériel apporté.' },
+  { slug: 'piece_prestataire', libelle: 'Autre document', sens: 'du_prestataire', formats: BUREAUTIQUE, maxMo: 50 },
+  { slug: 'contrat', libelle: 'Contrat ou bon de commande', sens: 'vers_prestataire', formats: BUREAUTIQUE, maxMo: 20 },
+  { slug: 'cahier_charges', libelle: 'Cahier des charges', sens: 'vers_prestataire', formats: BUREAUTIQUE, maxMo: 50 },
+  { slug: 'logistique', libelle: 'Planning, plan et accès', sens: 'vers_prestataire', formats: BUREAUTIQUE, maxMo: 50,
+    aide: 'Planning du jour J, plan de salle, horaires et accès de livraison.' },
+  { slug: 'info_prestataire', libelle: 'Autre document', sens: 'vers_prestataire', formats: BUREAUTIQUE, maxMo: 50 },
 ];
+
+export const DU_PRESTATAIRE = CATEGORIES.filter((c) => c.sens === 'du_prestataire').map((c) => c.slug);
+export const VERS_PRESTATAIRE = CATEGORIES.filter((c) => c.sens === 'vers_prestataire').map((c) => c.slug);
 
 // Un jalon peut se rattacher à une catégorie de dépôt, ou à la fiche du
 // speaker : coordonnées, biographie et résumé remplis passent le jalon à

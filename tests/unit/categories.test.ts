@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { categorie, CATEGORIES, extensionDe, lienValide, signatureValide } from '../../lib/categories';
+import { categorie, CATEGORIES, DU_PRESTATAIRE, extensionDe, lienValide, pourPrestataire, signatureValide, VERS_PRESTATAIRE } from '../../lib/categories';
+import { ARCHIVES_PRESTATAIRE } from '../../lib/rgpd';
 
 const octets = (...x: number[]) => new Uint8Array(x);
 const texte = (s: string) => new TextEncoder().encode(s);
@@ -40,6 +41,14 @@ describe('catalogue', () => {
       expect(m?.sens).toBe('vers_speaker');
       expect(c.sens).toBe('du_speaker');
     }
+  });
+  it('les catégories des prestataires sont à part, dans les deux sens', () => {
+    expect(DU_PRESTATAIRE).toEqual(['devis', 'facture', 'contrat_signe', 'assurance', 'technique', 'piece_prestataire']);
+    expect(VERS_PRESTATAIRE).toEqual(['contrat', 'cahier_charges', 'logistique', 'info_prestataire']);
+    for (const c of CATEGORIES.filter((x) => pourPrestataire(x.sens))) {
+      expect(c.requis || c.modele || c.estModele || c.attestation).toBeFalsy();
+    }
+    for (const slug of ARCHIVES_PRESTATAIRE) expect(pourPrestataire(categorie(slug)!.sens)).toBe(true);
   });
   it('les pièces requises sont celles du dossier speaker', () => {
     expect(CATEGORIES.filter((c) => c.requis).map((c) => c.slug)).toEqual(['release', 'droit_image', 'photo_hd']);
