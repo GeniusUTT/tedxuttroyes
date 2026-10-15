@@ -4,6 +4,9 @@ import { Tete } from '../../_site/Tete';
 
 const CONTACT_LIEN = <a href={`mailto:${CONTACT}`}>{CONTACT}</a>;
 
+// noindex voulu : la page reste donc hors de sitemap.xml, où la Search
+// Console la signalait « exclue par la balise noindex » (2026-10-15).
+
 export default function MentionsLegales() {
   return (
     <Cadre>
