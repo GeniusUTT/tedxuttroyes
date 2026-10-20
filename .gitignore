@@ -40,3 +40,6 @@ playwright-report/
 .e2e-stockage/
 .e2e-secrets.json
 .comparaison-public/
+
+# Écrit et réécrit par next dev ; contient des tirets cadratins, interdits dans le dépôt.
+AGENTS.md

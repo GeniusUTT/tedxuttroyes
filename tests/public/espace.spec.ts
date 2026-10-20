@@ -36,7 +36,9 @@ test('sans session, l’espace est fermé', async ({ page, request }) => {
   expect((await request.get('/espace/api/taches/quotidiennes/')).status()).toBe(404);
 });
 
-test('l’espace est interdit aux robots et absent du plan du site', async ({ request }) => {
-  expect(await (await request.get('/robots.txt')).text()).toContain('Disallow: /espace/');
+// Pas de Disallow : un robot bloqué ne voit jamais le noindex, et Google
+// indexait /espace/ sans contenu (« indexée malgré le blocage », 2026-10-15).
+test('l’espace est ouvert aux robots, qui y lisent le noindex, et absent du plan du site', async ({ request }) => {
+  expect(await (await request.get('/robots.txt')).text()).not.toContain('/espace/');
   expect(await (await request.get('/sitemap.xml')).text()).not.toContain('/espace');
 });
