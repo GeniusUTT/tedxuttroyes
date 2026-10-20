@@ -43,7 +43,7 @@ contenu/
 public/
   robots.txt, sitemap.xml
   assets/
-    css/main-v14.css     Feuille unique (sommaire commenté en tête de fichier)
+    css/main-v15.css     Feuille unique (sommaire commenté en tête de fichier)
     js/reveal-v2.js      Le dévoilement automatique du 31 octobre 2026
     js/main-v8.js        Script commun (menu, header, téléscripteur, interlude
                          de l'accueil, filigrane)
@@ -85,7 +85,7 @@ On y arrive sans ouvrir le code source ni la console : la charade est posée en 
 - **Ne pas lier la page**, ne pas l'ajouter au menu, au pied de page ni au `sitemap.xml`, ne rien écrire dans `robots.txt` (un `Disallow` publierait l'adresse à qui lit ce fichier).
 - **Pas de balises Open Graph** sur cette page : un lien partagé sur un réseau ne doit pas afficher d'aperçu qui vend la mèche.
 - Si l'adresse change, la charade de la FAQ change avec elle.
-- La page ne définit aucune règle CSS : elle se compose uniquement de classes existantes (`sec`, `cote`, `prose`, `notice`, `ticker-label`, `ticker-value`, `actions`, `btn`). Pas de renommage `main-v14.css` à prévoir de son fait.
+- La page ne définit aucune règle CSS : elle se compose uniquement de classes existantes (`sec`, `cote`, `prose`, `notice`, `ticker-label`, `ticker-value`, `actions`, `btn`). Pas de renommage `main-v15.css` à prévoir de son fait.
 - La page ne porte aucun `.msk` ni `data-reveal` : date et thème y sont écrits en clair, `reveal-v2.js` n'a donc rien à y dévoiler le 31 octobre. En contrepartie, ne jamais lui donner de balise Open Graph et ne jamais la lier depuis une page publique.
 - Le mot de passe est le seul endroit du site qui force `white-space: normal` en style en ligne sur un `.ticker-value` : la classe est en `nowrap` pour le téléscripteur, et la phrase déborderait sous 400 px sans cela.
 
@@ -108,7 +108,7 @@ Le site est hébergé sur Vercel (équipe `ted-x-uttroyes`, projet `tedxuttroyes
 
 Le build (`npm run build`) applique d'abord les migrations de la base, puis construit Next.js. Les redirections 301, les en-têtes de sécurité et la politique de cache vivent dans `next.config.ts` ; `vercel.json` ne porte que la région et la tâche quotidienne.
 
-**Cache** : la feuille et les scripts sont mis en cache un mois, les images et les polices un an. Après une mise en ligne, une retouche de ces fichiers exige de les renommer (`main-v14.css`, `main-v8.js`, `line-v10.js`, `reveal-v2.js` et `map-v2.js` ; passer au numéro suivant). Leurs noms ne sont écrits qu'à un endroit : `SCRIPTS` dans `app/_site/liens.ts` pour les scripts, `app/_site/Document.tsx` pour la feuille.
+**Cache** : la feuille et les scripts sont mis en cache un mois, les images et les polices un an. Après une mise en ligne, une retouche de ces fichiers exige de les renommer (`main-v15.css`, `main-v8.js`, `line-v10.js`, `reveal-v2.js` et `map-v2.js` ; passer au numéro suivant). Leurs noms ne sont écrits qu'à un endroit : `SCRIPTS` dans `app/_site/liens.ts` pour les scripts, `app/_site/Document.tsx` pour la feuille.
 
 **Ne jamais publier** : `README.md`, `CLAUDE.md`, `migration/` et les fichiers de travail restent hors de `public/`. Tout ce qui est dans `public/` est en ligne.
 
@@ -133,7 +133,7 @@ L'espace (`/espace/`) est dédié au lien avec les speakers (recentré le 2026-1
 
 **Les prestataires** (page Prestataires de l'équipe) : un dossier par structure (régie, traiteur, imprimeur…), créé par l'équipe, puis une ou plusieurs personnes invitées dans ce dossier depuis sa page ; elles partagent ses documents et sa fiche (structure, prestation, contact, adresse de facturation). Dans un sens : devis, facture, contrat ou bon de commande signé, attestation d'assurance, fiche technique, autre document. Dans l'autre : contrat ou bon de commande, cahier des charges, planning, plan et accès, autre document. Versions, retours et notifications fonctionnent comme pour les speakers ; un référent peut être désigné. Une personne qui dépose prévient son référent (à défaut toute l'équipe) et ses collègues ; l'équipe qui dépose prévient toute la structure. Retirer l'accès d'une personne supprime son compte, ses dépôts restent au dossier. Supprimer le prestataire efface les comptes, la fiche et les fichiers, sauf devis, factures et contrats, archivés pour la trésorerie (page Archive). Un dossier est purgé de même douze mois après l'édition.
 
-**DA** : l'espace est une rubrique du site, pas un second site. Il charge `main-v14.css`, l'en-tête, le menu, le filigrane et le pied de page du site public, la structure des pages intérieures (marge technique en mono, dorsale rouge statique) ; il ne charge jamais `line-v10.js`, ni la mesure d'audience. `app/(espace)/espace.css` n'ajoute que ce que la feuille publique n'a pas (champs, tableaux, calendrier), avec ses jetons et préfixé par `.espace`.
+**DA** : l'espace est une rubrique du site, pas un second site. Il charge `main-v15.css`, l'en-tête, le menu, le filigrane et le pied de page du site public, la structure des pages intérieures (marge technique en mono, dorsale rouge statique) ; il ne charge jamais `line-v10.js`, ni la mesure d'audience. `app/(espace)/espace.css` n'ajoute que ce que la feuille publique n'a pas (champs, tableaux, calendrier), avec ses jetons et préfixé par `.espace`.
 
 **Variables d'environnement** (modèle sans valeur dans `.env.example`, valeurs dans les réglages du projet Vercel, jamais dans le dépôt) :
 
@@ -226,16 +226,7 @@ Réglés le 2026-08-18 : mentions légales, sites des partenaires, chiffres de l
 </li>
 ```
 
-**Ajouter un partenaire** (`app/(pages)/partenaires/page.tsx`) : une tuile est un logo enveloppé d'un lien vers le site du partenaire. Le CSS plafonne la taille des logos pour qu'ils restent plus petits que celui de TEDxUTTroyes : règle TEDx, ne pas retirer ces limites.
-
-```tsx
-<li className="partner-tile">
-  <a href="https://exemple.fr" target="_blank" rel="noopener">
-    <img src="/assets/img/partenaires/nom-du-partenaire.webp" alt="Nom du partenaire" width="300" height="120" loading="lazy" />
-    <span className="visually-hidden"> (nouvelle fenêtre)</span>
-  </a>
-</li>
-```
+**Ajouter un partenaire** (`contenu/partenaires.ts`) : un logo se déclare une fois (`L(nom, fichier, largeur, hauteur, lien)`), puis se place dans la liste de son édition ; une édition nouvelle est une entrée de plus en tête de `PARTENAIRES`, la page en fait une section. Le fichier va dans `public/assets/img/partenaires/logos/`, en WebP, **recadré sur son contenu** (sans marge transparente ni blanche autour, sinon il paraîtra plus petit que ses voisins) ; un logo sombre sur fond transparent reçoit une plaque blanche, sinon il disparaît sur le noir. `largeur` et `hauteur` sont celles du fichier : la page en tire une surface égale pour tous les logos, plafonnée à 64 px de haut pour rester sous le logo de TEDxUTTroyes (règle TEDx, ne pas retirer ce plafond). Un partenaire sans site connu n'a pas de lien.
 
 ## À vérifier (préremplis, non garantis)
 

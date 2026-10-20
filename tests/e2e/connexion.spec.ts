@@ -125,7 +125,7 @@ test('un membre désactive un autre membre : sa session tombe aussitôt', async 
 test('l’espace est une rubrique du site : même en-tête, même pied, ni code ni script de la ligne', async ({ page }) => {
   await page.goto('/espace/connexion/');
   await expect(page.locator('header.site-header')).toBeVisible();
-  await expect(page.locator('link[rel=stylesheet][href="/assets/css/main-v14.css"]')).toHaveCount(1);
+  await expect(page.locator('link[rel=stylesheet][href="/assets/css/main-v15.css"]')).toHaveCount(1);
   await expect(page.locator('script[src*="line-"]')).toHaveCount(0);
   await expect(page.locator('footer.site-footer')).toContainText('Cet événement TEDx indépendant est organisé sous licence de TED.');
   await expect(page.locator('body')).toHaveClass(/espace/);
