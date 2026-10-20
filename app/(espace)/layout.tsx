@@ -6,7 +6,7 @@ import { SCRIPTS } from '../_site/liens';
 import './espace.css';
 
 // L'espace connecté est une rubrique du site, pas un second site : même
-// feuille (main-v14.css), mêmes polices, même en-tête, même filigrane, même
+// feuille (main-v15.css), mêmes polices, même en-tête, même filigrane, même
 // pied de page, même dorsale rouge. espace.css n'ajoute que ce que le site
 // public n'a pas (champs, tableaux, dépôt). Un seul script du site,
 // main-v8.js (en-tête au défilement, menu mobile, filigrane) ; jamais
@@ -36,7 +36,7 @@ export default function Racine({ children }: { children: ReactNode }) {
   return (
     <html lang="fr" suppressHydrationWarning>
       <head>
-        <link rel="stylesheet" href="/assets/css/main-v14.css" precedence="site" />
+        <link rel="stylesheet" href="/assets/css/main-v15.css" precedence="site" />
         <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.classList.add("js");' }} />
       </head>
       <body className="espace">
