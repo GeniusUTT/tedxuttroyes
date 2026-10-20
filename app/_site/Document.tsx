@@ -36,7 +36,7 @@ export function Document({
         <link rel="icon" type="image/svg+xml" href="/assets/img/favicon-10e.svg" />
         <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-10e.png" />
         <link rel="apple-touch-icon" href="/assets/img/webclip-10e.png" />
-        <link rel="stylesheet" href="/assets/css/main-v14.css" />
+        <link rel="stylesheet" href="/assets/css/main-v15.css" />
         <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.classList.add("js");' }} />
         {enTete}
       </head>

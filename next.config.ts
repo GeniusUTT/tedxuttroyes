@@ -21,7 +21,6 @@ const config: NextConfig = {
   async redirects() {
     const r = (source: string, destination: string) => ({ source, destination, statusCode: 301 as const });
     return [
-      r('/images/edition-2026/logo_genius.png', '/assets/img/partenaires/logo-genius-utt.webp'),
       r('/images/logo-black.png', '/assets/img/logo-black.png'),
       r('/billetterie.html', BILLETTERIE),
       r('/contact.html', '/faq/'),
