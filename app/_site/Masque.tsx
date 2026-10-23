@@ -1,4 +1,4 @@
-// Le voile du 31 octobre (voir reveal-v2.js) : la date du jour J et le thème
+// Le voile du 3 novembre (voir reveal-v3.js) : la date du jour J et le thème
 // sont remplacés par des étoiles, un caractère pour un caractère, et la
 // version d'origine voyage dans data-c. On n'écrit ici que le texte vrai :
 // les étoiles s'en déduisent, les deux versions ne peuvent plus diverger.

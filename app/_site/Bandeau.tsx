@@ -43,7 +43,7 @@ export function Bandeau({
 }
 
 // Le bandeau des archives (fiches speakers et éditions) : la dixième ligne
-// du registre, date et thème sous embargo jusqu'au 31 octobre.
+// du registre, date et thème sous embargo jusqu'au 3 novembre.
 export function BandeauRegistre() {
   return (
     <Bandeau

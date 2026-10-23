@@ -4,10 +4,10 @@ PRODID:-//TEDxUTTroyes//Site 2027//FR
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
 BEGIN:VEVENT
-UID:revelation-2026-10-31@tedxuttroyes.fr
-DTSTAMP:20260816T000000Z
-DTSTART:20261031T170000Z
-DTEND:20261031T180000Z
+UID:revelation-2026-11-03@tedxuttroyes.fr
+DTSTAMP:20261023T000000Z
+DTSTART:20261103T150000Z
+DTEND:20261103T160000Z
 SUMMARY:TEDxUTTroyes 2027 : révélation de la date et du thème
 DESCRIPTION:La dixième édition de TEDxUTTroyes lève le voile sur sa date
   et son thème.\n\nRendez-vous sur https://tedxuttroyes.fr/

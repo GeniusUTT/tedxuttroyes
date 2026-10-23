@@ -1,7 +1,7 @@
 import { BILLETTERIE, INSTAGRAM, NOS_LIENS } from './liens';
 import { Masque } from './Masque';
 
-// L'en-tête et le menu mobile du site public. main-v8.js les anime (header au
+// L'en-tête et le menu mobile du site public. main-v9.js les anime (header au
 // défilement, ouverture du menu) : rien ici n'est interactif côté React.
 
 const NAVIGATION = [
@@ -21,7 +21,7 @@ export type Rubrique = (typeof NAVIGATION)[number]['href'];
 // est plus bas dans la rubrique (une fiche édition sous Éditions).
 export type Actif = { rubrique: Rubrique; courant: 'page' | 'true' };
 
-// La date dans le pied du menu mobile : masquée jusqu'au 31 octobre, en
+// La date dans le pied du menu mobile : masquée jusqu'au 3 novembre, en
 // clair sur la page cachée, absente sur quelques pages.
 export type DateDuMenu = 'masquee' | 'claire' | 'aucune';
 

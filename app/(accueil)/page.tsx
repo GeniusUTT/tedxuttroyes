@@ -21,8 +21,8 @@ import { JsonLd, PARTAGE_2027, Tete } from '../_site/Tete';
 const SOURCE_DU_VOILE =
   'try { var vm = document.querySelector(".voile-mark--trace"), vh = document.documentElement; if (vm && vh.classList.contains("voile-on") && !vh.classList.contains("voile-court")) { vm.src = vm.getAttribute("data-src") } } catch (e) { }';
 
-// Les deux versants du thème tels qu'ils reviendront le 31 octobre (voir
-// reveal-v2.js). En HTML brut et non en JSX : le navigateur range le contenu
+// Les deux versants du thème tels qu'ils reviendront le 3 novembre (voir
+// reveal-v3.js). En HTML brut et non en JSX : le navigateur range le contenu
 // d'un <template> à part, React ne l'y retrouverait pas à l'hydratation et
 // referait toute la page, effaçant au passage le voile et la ligne.
 const VERSANT_1 =
@@ -36,14 +36,14 @@ export default function Accueil() {
       <Tete
         titre={{ masque: 'TEDxUTTroyes 2027, dixième édition', vrai: "TEDxUTTroyes 2027 : Franchir ou s'adapter ?" }}
         description={{
-          masque: "La dixième édition de TEDxUTTroyes se tiendra au Centre de Congrès de l'Aube, à Troyes, à 18h00. Le thème et la date seront révélés le samedi 31 octobre 2026.",
+          masque: "La dixième édition de TEDxUTTroyes se tiendra au Centre de Congrès de l'Aube, à Troyes, à 18h00. Le thème et la date seront révélés le mardi 3 novembre 2026.",
           vrai: "La dixième édition de TEDxUTTroyes explore la limite : franchir ou s'adapter ? Jeudi 18 mars 2027, 18h00, Centre de Congrès de l'Aube, Troyes.",
         }}
         chemin="/"
         partage={{
           ...PARTAGE_2027,
           description: {
-            masque: "Le thème et la date de la dixième édition seront révélés le samedi 31 octobre 2026. Centre de Congrès de l'Aube, Troyes.",
+            masque: "Le thème et la date de la dixième édition seront révélés le mardi 3 novembre 2026. Centre de Congrès de l'Aube, Troyes.",
             vrai: "La dixième édition de TEDxUTTroyes explore la limite. Jeudi 18 mars 2027, 18h00, Centre de Congrès de l'Aube, Troyes.",
           },
         }}
@@ -71,7 +71,7 @@ export default function Accueil() {
             },
             geo: { '@type': 'GeoCoordinates', latitude: 48.298433, longitude: 4.077912 },
           },
-          image: [`${SITE}/assets/img/og/og-2027.jpg`],
+          image: [`${SITE}/assets/img/og/og-2027-v2.jpg`],
           organizer: { '@type': 'Organization', name: 'TEDxUTTroyes', url: `${SITE}/`, sameAs: [INSTAGRAM, LINKEDIN] },
           offers: { '@type': 'Offer', url: BILLETTERIE, priceCurrency: 'EUR', availability: 'https://schema.org/PreOrder' },
           maximumAttendeeCapacity: 750,
@@ -110,17 +110,17 @@ export default function Accueil() {
           <div className="hero-bg" aria-hidden="true"> <img src="/assets/img/editions/2024/galerie/05.webp" alt="" width="1400" height="933" fetchPriority="high" /> </div>
           <div className="mwrap">
             <p className="cote a a1">Dixième édition</p>
-            <h1 className="hero-title"> <span className="hero-word a a2" aria-hidden="true" data-reveal-unhide="" data-reveal="Franchir">********</span> <span className="hero-sub a a3" aria-hidden="true" data-reveal-unhide="" data-reveal="ou s'adapter ?">** *'*******&nbsp;?</span> <span className="visually-hidden" data-reveal-drop="">Le thème de la dixième édition est sous embargo : il sera révélé le samedi 31 octobre 2026.</span> </h1>
+            <h1 className="hero-title"> <span className="hero-word a a2" aria-hidden="true" data-reveal-unhide="" data-reveal="Franchir">********</span> <span className="hero-sub a a3" aria-hidden="true" data-reveal-unhide="" data-reveal="ou s'adapter ?">** *'*******&nbsp;?</span> <span className="visually-hidden" data-reveal-drop="">Le thème de la dixième édition est sous embargo : il sera révélé le mardi 3 novembre 2026.</span> </h1>
             <p className="hero-fig a a4" aria-hidden="true" data-reveal-unhide="" data-reveal-html={"<span class=\"fig-id\">La limite </span>: Se franchit ou s'apprivoise mais ne s'ignore jamais."}> <span className="fig-id">** ****** </span>: ** ******** ** *'*********** **** ** *'****** *******. </p>
             <p className="hero-meta a a5"> <time dateTime="2027-03-18T18:00:00+01:00"><Masque texte="Jeudi 18 mars 2027" /></time> <span className="sep" aria-hidden="true">·</span> <span>18h00</span> <span className="sep" aria-hidden="true">·</span> <span>Centre de Congrès de l'Aube, Troyes</span> </p>
             <div className="actions a a6"> <a className="btn btn--primary" href="https://www.billetweb.fr/tedxuttroyes-2027-10e-edition" target="_blank" rel="noopener">Réserver ma place</a> <a className="btn btn--ghost" href="/programme/">Voir le programme</a> </div>
-            <p className="visually-hidden" data-reveal="Le compte à rebours est lancé : l'événement commence le jeudi 18 mars 2027 à 18h00.">Le compte à rebours est lancé : la date et le thème de la dixième édition seront révélés le samedi 31 octobre 2026 à 18h00. </p>
+            <p className="visually-hidden" data-reveal="Le compte à rebours est lancé : l'événement commence le jeudi 18 mars 2027 à 18h00.">Le compte à rebours est lancé : la date et le thème de la dixième édition seront révélés le mardi 3 novembre 2026 à 16h00. </p>
             <div className="ticker a a7" aria-hidden="true"> <span className="ticker-label" data-reveal="Temps restant">Révélation de la date et du thème</span> <span className="ticker-value" id="ticker-value">J-000 · 00:00:00</span> </div>
             <div className="ticker-cal a a7">
               <details className="cal">
                 <summary className="btn btn--ghost btn--sm" data-reveal="Ajouter la soirée à mon agenda">Ajouter la révélation à mon agenda</summary>
                 <ul className="cal-list">
-                  <li><a href={"https://calendar.google.com/calendar/render?action=TEMPLATE&text=TEDxUTTroyes%202027%20%3A%20r%C3%A9v%C3%A9lation%20de%20la%20date%20et%20du%20th%C3%A8me&dates=20261031T170000Z%2F20261031T180000Z&details=La%20dixi%C3%A8me%20%C3%A9dition%20de%20TEDxUTTroyes%20l%C3%A8ve%20le%20voile%20sur%20sa%20date%20et%20son%20th%C3%A8me%20%3A%20rendez-vous%20sur%20https%3A%2F%2Ftedxuttroyes.fr%2F&location=https%3A%2F%2Ftedxuttroyes.fr%2F"} target="_blank" rel="noopener" data-reveal-attr="href" data-reveal={"https://calendar.google.com/calendar/render?action=TEMPLATE&text=TEDxUTTroyes%202027%20%3A%20Franchir%20ou%20s%27adapter%20%3F&dates=20270318T170000Z%2F20270318T230000Z&details=Dixi%C3%A8me%20%C3%A9dition%20de%20TEDxUTTroyes%2C%20autour%20du%20th%C3%A8me%20de%20la%20limite%20%3A%20franchir%20ou%20s%27adapter%20%3F%0A%0A18h00%20%3A%20ouverture%20des%20portes%20et%20mini%20forum%20de%20recrutement%0A19h30%20%3A%20ouverture%20de%20la%20soir%C3%A9e%2C%20six%20talks%20en%20deux%20sessions%20et%20un%20entracte%0A22h30%20%3A%20pot%20VIP%2C%20rencontre%20avec%20les%20intervenantes%20et%20intervenants%20jusqu%27%C3%A0%20minuit%0A%0A750%20places%20au%20Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%20%C3%A0%20Troyes.%0AProgramme%20%3A%20https%3A%2F%2Ftedxuttroyes.fr%2Fprogramme%2F%0ABilletterie%20%3A%20https%3A%2F%2Fwww.billetweb.fr%2Ftedxuttroyes-2027-10e-edition&location=Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%202%20rue%20Pierre%20Labonde%2C%2010000%20Troyes"}>Google Agenda<span className="visually-hidden"> (nouvelle fenêtre)</span></a></li>
+                  <li><a href={"https://calendar.google.com/calendar/render?action=TEMPLATE&text=TEDxUTTroyes%202027%20%3A%20r%C3%A9v%C3%A9lation%20de%20la%20date%20et%20du%20th%C3%A8me&dates=20261103T150000Z%2F20261103T160000Z&details=La%20dixi%C3%A8me%20%C3%A9dition%20de%20TEDxUTTroyes%20l%C3%A8ve%20le%20voile%20sur%20sa%20date%20et%20son%20th%C3%A8me%20%3A%20rendez-vous%20sur%20https%3A%2F%2Ftedxuttroyes.fr%2F&location=https%3A%2F%2Ftedxuttroyes.fr%2F"} target="_blank" rel="noopener" data-reveal-attr="href" data-reveal={"https://calendar.google.com/calendar/render?action=TEMPLATE&text=TEDxUTTroyes%202027%20%3A%20Franchir%20ou%20s%27adapter%20%3F&dates=20270318T170000Z%2F20270318T230000Z&details=Dixi%C3%A8me%20%C3%A9dition%20de%20TEDxUTTroyes%2C%20autour%20du%20th%C3%A8me%20de%20la%20limite%20%3A%20franchir%20ou%20s%27adapter%20%3F%0A%0A18h00%20%3A%20ouverture%20des%20portes%20et%20mini%20forum%20de%20recrutement%0A19h30%20%3A%20ouverture%20de%20la%20soir%C3%A9e%2C%20six%20talks%20en%20deux%20sessions%20et%20un%20entracte%0A22h30%20%3A%20pot%20VIP%2C%20rencontre%20avec%20les%20intervenantes%20et%20intervenants%20jusqu%27%C3%A0%20minuit%0A%0A750%20places%20au%20Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%20%C3%A0%20Troyes.%0AProgramme%20%3A%20https%3A%2F%2Ftedxuttroyes.fr%2Fprogramme%2F%0ABilletterie%20%3A%20https%3A%2F%2Fwww.billetweb.fr%2Ftedxuttroyes-2027-10e-edition&location=Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%202%20rue%20Pierre%20Labonde%2C%2010000%20Troyes"}>Google Agenda<span className="visually-hidden"> (nouvelle fenêtre)</span></a></li>
                   <li><a href="/assets/agenda/revelation.ics" data-reveal-attr="href" data-reveal="/assets/agenda/tedxuttroyes-2027.ics">Apple Calendrier</a></li>
                   <li><a href="/assets/agenda/revelation.ics" data-reveal-attr="href" data-reveal="/assets/agenda/tedxuttroyes-2027.ics">Samsung Calendrier</a></li>
                 </ul>
