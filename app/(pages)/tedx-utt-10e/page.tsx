@@ -36,7 +36,7 @@ export default function PageCachee() {
             <p className="ticker-label">La date</p>
             <p className="ticker-value">Jeudi 18 mars 2027</p>
             <div className="prose" data-line-flank="">
-              <p>18h00, Centre de Congrès de l'Aube, à Troyes. Le reste du site ne dira ni l'un ni l'autre avant le samedi 31 octobre 2026 à 18h00 : partout ailleurs, la date et le thème sont encore cachés 🤫.</p>
+              <p>18h00, Centre de Congrès de l'Aube, à Troyes. Le reste du site ne dira ni l'un ni l'autre avant le mardi 3 novembre 2026 à 16h00 : partout ailleurs, la date et le thème sont encore cachés 🤫.</p>
             </div>
             <p className="notice">Gardez-les pour vous jusqu'à la révélation : la charade doit rester à résoudre pour tout le monde.</p>
           </div>

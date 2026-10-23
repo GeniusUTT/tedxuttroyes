@@ -1,12 +1,12 @@
 import { SITE } from './liens';
 
 // Le titre, la description et l'aperçu de partage d'une page. Pas l'API
-// Metadata de Next : une balise masquée jusqu'au 31 octobre porte sa version
-// d'origine dans data-reveal (voir reveal-v2.js), ce que l'API ne sait pas
+// Metadata de Next : une balise masquée jusqu'au 3 novembre porte sa version
+// d'origine dans data-reveal (voir reveal-v3.js), ce que l'API ne sait pas
 // écrire. React place ces balises dans le <head> de lui-même.
 
 // Un texte sous embargo : ce qu'on montre aujourd'hui, ce qui reviendra le
-// 31 octobre. Une simple chaîne quand rien n'est masqué.
+// 3 novembre. Une simple chaîne quand rien n'est masqué.
 export type Voile = string | { masque: string; vrai: string };
 
 function Meta({ cle, valeur }: { cle: { name: string } | { property: string }; valeur: Voile }) {
@@ -27,10 +27,10 @@ export type Partage = {
 };
 
 // L'aperçu de partage de la dixième édition, commun à la plupart des pages.
-// L'image porte la date masquée : le 31 octobre, il faudra la remplacer par
-// og-2027-revele.jpg, ce que reveal-v2.js ne peut pas faire sur un JPEG.
+// L'image porte la date masquée : le 3 novembre, il faudra la remplacer par
+// og-2027-revele.jpg, ce que reveal-v3.js ne peut pas faire sur un JPEG.
 export const PARTAGE_2027: Partage = {
-  image: '/assets/img/og/og-2027.jpg',
+  image: '/assets/img/og/og-2027-v2.jpg',
   largeur: 1200,
   hauteur: 630,
   alt: {

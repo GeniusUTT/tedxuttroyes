@@ -1,13 +1,13 @@
 /* ==========================================================================
    TEDxUTTroyes 2027 - Le devoilement
    --------------------------------------------------------------------------
-   La date du jour J et le theme sont masques jusqu'au samedi 31 octobre
-   2026 a 18h00 (heure de Paris). A cet instant precis, le site se remet de
+   La date du jour J et le theme sont masques jusqu'au mardi 3 novembre
+   2026 a 16h00 (heure de Paris). A cet instant precis, le site se remet de
    lui-meme dans l'etat d'avant le masquage : plus une etoile, plus une
    barre de caviardage, les titres et les descriptions d'origine reviennent.
 
    Cible figee en UTC : Paris est repasse a l'heure d'hiver le 25 octobre
-   2026 (UTC+1), donc 18h00 a Paris = 17h00 UTC. Aucun calcul de fuseau
+   2026 (UTC+1), donc 16h00 a Paris = 15h00 UTC. Aucun calcul de fuseau
    cote client : tout le monde bascule au meme instant, ou que l'on soit.
 
    Le contenu d'origine voyage dans les pages elles-memes :
@@ -28,7 +28,7 @@
 (function () {
   "use strict";
 
-  var REVEAL_UTC = Date.UTC(2026, 9, 31, 17, 0, 0);
+  var REVEAL_UTC = Date.UTC(2026, 10, 3, 15, 0, 0);
   var doc = document;
   var done = false;
 

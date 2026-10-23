@@ -9,7 +9,7 @@ import './espace.css';
 // feuille (main-v15.css), mêmes polices, même en-tête, même filigrane, même
 // pied de page, même dorsale rouge. espace.css n'ajoute que ce que le site
 // public n'a pas (champs, tableaux, dépôt). Un seul script du site,
-// main-v8.js (en-tête au défilement, menu mobile, filigrane) ; jamais
+// main-v9.js (en-tête au défilement, menu mobile, filigrane) ; jamais
 // line-v10.js, la dorsale reste la ligne statique du CSS. Pas de mesure
 // d'audience : ces pages sont privées.
 

@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 
 // Non-régression du site public, en bureau et en mobile, sur un déploiement
 // réel : les pages se chargent sans erreur, la ligne se construit, le voile
-// du 31 octobre tient, l'interlude se déroule, la mesure d'audience part du
+// du 3 novembre tient, l'interlude se déroule, la mesure d'audience part du
 // domaine, aucun cookie n'est déposé.
 
 const PAGES = [
@@ -51,8 +51,8 @@ test('la ligne se construit sur une page intérieure en mobile', async ({ page }
   await expect.poll(async () => page.locator('main svg path').count(), { timeout: 10_000 }).toBeGreaterThan(0);
 });
 
-test('le voile du 31 octobre tient : date et thème masqués', async ({ page }) => {
-  test.skip(Date.now() >= Date.parse('2026-10-31T17:00:00Z'), 'après le dévoilement');
+test('le voile du 3 novembre tient : date et thème masqués', async ({ page }) => {
+  test.skip(Date.now() >= Date.parse('2026-11-03T15:00:00Z'), 'après le dévoilement');
   await page.goto('/', { waitUntil: 'load' });
   const texte = await page.locator('body').innerText();
   expect(texte).not.toContain('18 mars 2027');

@@ -4,7 +4,7 @@ import { PiedDePage } from './PiedDePage';
 
 // Le gabarit d'une page intérieure : lien d'évitement, en-tête et menu,
 // filigrane de la dixième édition (couche fixe posée avant main, voir
-// main-v8.js), contenu, pied de page.
+// main-v9.js), contenu, pied de page.
 
 export function FondMarque() {
   return (

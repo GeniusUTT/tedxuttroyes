@@ -126,9 +126,9 @@
      Deux cibles successives, toutes deux figees en UTC (aucun calcul de
      fuseau cote client) :
 
-     1. la revelation, samedi 31 octobre 2026 a 18h00 a Paris. L'heure
-        d'hiver est revenue le 25 octobre (UTC+1), soit 17h00 UTC. Quand
-        elle tombe, le telescripteur demande a reveal-v2.js de devoiler la
+     1. la revelation, mardi 3 novembre 2026 a 16h00 a Paris. L'heure
+        d'hiver est revenue le 25 octobre (UTC+1), soit 15h00 UTC. Quand
+        elle tombe, le telescripteur demande a reveal-v3.js de devoiler la
         page, puis enchaine sur la cible suivante ;
      2. le jour J, jeudi 18 mars 2027 a 18h00 (ouverture des portes et
         mini forum de recrutement), heure d'hiver aussi, soit 17h00 UTC.
@@ -140,7 +140,7 @@
   if (tickerValue) {
     var REVELATION = window.TEDX_REVEAL
       ? window.TEDX_REVEAL.at
-      : Date.UTC(2026, 9, 31, 17, 0, 0);
+      : Date.UTC(2026, 10, 3, 15, 0, 0);
     var JOUR_J = Date.UTC(2027, 2, 18, 17, 0, 0);
     var DAY = 86400000;
     var HOUR = 3600000;
