@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Billet TEDxUTTroyes</title>
+<style>
+@font-face { font-family: "Bricolage"; src: url("../../public/assets/fonts/bricolage-var-latin.woff2") format("woff2"); font-weight: 200 800; }
+@font-face { font-family: "Bricolage"; src: url("../../public/assets/fonts/bricolage-var-latin-ext.woff2") format("woff2"); font-weight: 200 800; unicode-range: U+0100-024F; }
+@font-face { font-family: "DM Sans"; src: url("../../public/assets/fonts/dm-sans-var-latin.woff2") format("woff2"); font-weight: 100 1000; }
+@font-face { font-family: "Mono"; src: url("../../public/assets/fonts/space-mono-400-latin.woff2") format("woff2"); font-weight: 400; }
+@font-face { font-family: "Mono"; src: url("../../public/assets/fonts/space-mono-700-latin.woff2") format("woff2"); font-weight: 700; }
+:root {
+  --noir: #080808; --papier: #edeae4; --encre: #b7b2a9; --encre-2: #7e7a73;
+  --rouge: #eb0028; --rouge-vif: #ff2e4d; --filet: rgba(237,234,228,.14);
+  --m: 150px; --trait: 9px;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 2480px; height: 3508px; overflow: hidden; background: var(--noir); }
+body { position: relative; color: var(--encre); font-family: "DM Sans", sans-serif; -webkit-font-smoothing: antialiased; }
+
+.fond { position: absolute; width: 2900px; height: 2900px; max-width: none; left: 1050px; top: 260px; opacity: .22; }
+
+svg.ligne { position: absolute; inset: 0; width: 2480px; height: 3508px; }
+.ligne path { fill: none; stroke: var(--rouge); stroke-width: var(--trait); stroke-linecap: square; stroke-linejoin: round; }
+.ligne circle { fill: var(--rouge); }
+
+.mono { font-family: "Mono", monospace; text-transform: uppercase; letter-spacing: .08em; }
+
+.tete { position: absolute; left: var(--m); right: var(--m); top: 140px; display: flex; justify-content: space-between; align-items: flex-start; }
+.tete img { width: 900px; display: block; margin-left: -48px; margin-top: -40px; }
+.tete .ref { text-align: right; font-size: 34px; line-height: 1.55; color: var(--encre-2); }
+.tete .ref b { color: var(--papier); font-weight: 700; }
+.tete .ref .r { color: var(--rouge-vif); }
+
+.cote { position: absolute; width: 46px; height: 46px; border-color: var(--rouge); border-style: solid; border-width: 0; }
+.c1 { left: 30px; top: 486px; border-top-width: 5px; border-left-width: 5px; }
+.c2 { left: 1175px; top: 486px; border-top-width: 5px; border-right-width: 5px; }
+.c3 { left: 30px; top: 1191px; border-bottom-width: 5px; border-left-width: 5px; }
+.c4 { left: 1175px; top: 1191px; border-bottom-width: 5px; border-right-width: 5px; }
+.zone-lbl { position: absolute; left: 1300px; top: 600px; font-size: 30px; color: var(--encre-2); line-height: 1.6; }
+.zone-lbl span { color: var(--rouge-vif); }
+
+.titre { position: absolute; left: 1290px; right: var(--m); top: 960px; }
+.titre .k { font-size: 34px; color: var(--rouge-vif); margin-bottom: 34px; }
+.titre h1 { font-family: "Bricolage", sans-serif; font-weight: 700; color: var(--papier); font-size: 178px; line-height: .9; letter-spacing: -.035em; }
+
+.quand { position: absolute; left: var(--m); right: var(--m); top: 1880px; display: grid; grid-template-columns: 1fr 1fr; column-gap: 200px; border-top: 3px solid var(--filet); padding-top: 64px; }
+.quand .lbl { font-size: 30px; color: var(--encre-2); margin-bottom: 26px; }
+.quand .val { font-family: "Bricolage", sans-serif; color: var(--papier); font-weight: 600; font-size: 92px; line-height: 1; letter-spacing: -.02em; }
+.quand .sous { font-size: 44px; line-height: 1.35; margin-top: 22px; }
+.quand .sous b { color: var(--papier); font-weight: 600; }
+
+.salle { position: absolute; left: var(--m); width: 1010px; top: 2420px; }
+.salle .lbl, .infos .lbl { font-size: 30px; color: var(--encre-2); margin-bottom: 30px; }
+.salle ol { list-style: none; border-top: 3px solid var(--filet); }
+.salle li { display: grid; grid-template-columns: 190px 1fr; align-items: baseline; padding: 25px 0; border-bottom: 3px solid var(--filet); }
+.salle .h { font-family: "Mono", monospace; font-weight: 700; font-size: 40px; color: var(--rouge-vif); }
+.salle .t { font-size: 41px; color: var(--papier); line-height: 1.2; }
+
+.infos { position: absolute; left: 1330px; right: var(--m); top: 2420px; }
+.infos p { font-size: 40px; line-height: 1.45; margin-bottom: 30px; }
+.infos p b { color: var(--papier); font-weight: 600; }
+
+.pied { position: absolute; left: var(--m); right: var(--m); bottom: 120px; display: flex; justify-content: space-between; align-items: flex-end; border-top: 3px solid var(--filet); padding-top: 44px; }
+.pied .lic { font-size: 34px; color: var(--encre); }
+.pied .url { font-size: 34px; color: var(--papier); }
+</style>
+</head>
+<body>
+  <img class="fond" src="../../public/assets/img/logo-10e.svg" alt="">
+
+  <svg class="ligne" viewBox="0 0 2480 3508">
+    <path d="M1250 0 V420 Q1250 450 1280 450 H2330 V1720 Q2330 1750 2300 1750 H95 V3230" />
+    <circle cx="95" cy="3240" r="16" />
+  </svg>
+
+  <header class="tete">
+    <img src="../../public/assets/img/logo-white.png" alt="TEDxUTTroyes">
+    <div class="ref mono">
+      <b>Billet d'entrée</b><br>
+      Dixième édition<br>
+      <span class="r">Troyes, 2027</span>
+    </div>
+  </header>
+
+  <div class="cote c1"></div><div class="cote c2"></div><div class="cote c3"></div><div class="cote c4"></div>
+  <p class="zone-lbl mono"><span>&larr;</span> Votre billet nominatif</p>
+
+  <div class="titre">
+    <p class="k mono">Thème de la soirée</p>
+    <h1>Franchir<br>ou s'adapter&nbsp;?</h1>
+  </div>
+
+  <section class="quand">
+    <div>
+      <p class="lbl mono">Quand</p>
+      <p class="val">Jeudi 18 mars 2027</p>
+      <p class="sous">Portes à <b>18h00</b>, premier talk à <b>19h30</b></p>
+    </div>
+    <div>
+      <p class="lbl mono">Où</p>
+      <p class="val">Centre de Congrès<br>de l'Aube</p>
+      <p class="sous">2 rue Pierre Labonde, 10000 Troyes</p>
+    </div>
+  </section>
+
+  <section class="salle">
+    <p class="lbl mono">Feuille de salle</p>
+    <ol>
+      <li><span class="h">18h00</span><span class="t">L'Avant-Scène : associations, entreprises, cocktail</span></li>
+      <li><span class="h">19h30</span><span class="t">Ouverture de la soirée</span></li>
+      <li><span class="h">19h45</span><span class="t">Première session de talks</span></li>
+      <li><span class="h">20h50</span><span class="t">Entracte</span></li>
+      <li><span class="h">21h20</span><span class="t">Seconde session de talks</span></li>
+      <li><span class="h">22h30</span><span class="t">Pot VIP</span></li>
+    </ol>
+  </section>
+
+  <section class="infos">
+    <p class="lbl mono">À l'entrée</p>
+    <p>Présentez ce billet <b>imprimé ou sur votre téléphone</b> : le code est scanné au contrôle. Une pièce d'identité pourra vous être demandée.</p>
+    <p>Le premier talk commence <b>à 19h30 précises</b> : prévoyez d'être sur place au moins un quart d'heure avant.</p>
+    <p>Le Centre de Congrès est à un quart d'heure à pied de la gare de Troyes.</p>
+  </section>
+
+  <footer class="pied">
+    <p class="lic">Cet événement TEDx indépendant est organisé sous licence de TED.</p>
+    <p class="url" style="font-family:Mono,monospace;letter-spacing:.04em">tedxuttroyes.fr</p>
+  </footer>
+</body>
+</html>
