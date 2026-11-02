@@ -1,7 +1,7 @@
-import { BILLETTERIE, INSTAGRAM, NOS_LIENS } from './liens';
+import { BILLETTERIE, NOS_LIENS } from './liens';
 import { Masque } from './Masque';
 
-// L'en-tête et le menu mobile du site public. main-v9.js les anime (header au
+// L'en-tête et le menu mobile du site public. main-v10.js les anime (header au
 // défilement, ouverture du menu) : rien ici n'est interactif côté React.
 
 const NAVIGATION = [
@@ -51,13 +51,6 @@ export function EnTete({ actif, date = 'masquee', espace = false }: { actif?: Ac
           </nav>
 
           <div className="header-end">
-            <a className="nav-ig" href={INSTAGRAM} target="_blank" rel="noopener" aria-label="Instagram TEDxUTTroyes (nouvelle fenêtre)">
-              <svg className="icon" viewBox="0 0 24 24" aria-hidden="true">
-                <rect x="3" y="3" width="18" height="18" />
-                <circle cx="12" cy="12" r="4.2" />
-                <path d="M17 7h.01" />
-              </svg>
-            </a>
             <button className="nav-toggle" type="button" aria-expanded="false" aria-controls="menu-mobile" aria-label="Menu">
               <span className="bar" aria-hidden="true" />
               <span className="bar" aria-hidden="true" />

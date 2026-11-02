@@ -9,7 +9,7 @@ export default function PageCachee() {
   // Le mot de passe s'affiche en mono grasse : sa police part tout de suite.
   preload('/assets/fonts/space-mono-700-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: '' });
   return (
-    <Cadre date="claire">
+    <Cadre date="claire" invitation={false}>
       <Tete
         titre="Vous l'avez trouvée | TEDxUTTroyes 2027"
         robots="noindex, nofollow"

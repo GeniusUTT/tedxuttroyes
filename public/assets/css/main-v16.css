@@ -28,6 +28,7 @@
    20. Prose, notices, 404
    21. Animations et reduced motion
    22. La marque de la dixieme edition (voile d'ouverture, frise, 404)
+   23. L'invitation Instagram (popup au contour trace)
    ========================================================================== */
 
 /* 01. Polices locales */
@@ -147,6 +148,7 @@
   --body-pad: 20px;   /* distance ligne > contenu (mobile) */
 
   --z-interlude: 140;
+  --z-invite: 145;     /* au-dessus de l'interlude, sous le menu et le header */
   --z-menu: 150;
   --z-header: 200;
   --z-skip: 300;
@@ -695,9 +697,10 @@ main .sec--alt:last-child {
   min-height: 44px;
 }
 
-/* Le bloc de droite : le lien Instagram, et le burger quand il sort.
-   En bureau le burger disparait, il ne reste que l'icone, en bout de
-   navigation. */
+/* Le bloc de droite : le burger, quand il sort. En bureau il est vide.
+   L'icone Instagram qu'il portait a ete retiree le 2026-11-02 (demande
+   de Baptiste) : l'invitation a s'abonner vit desormais dans le popup
+   .invite (section 23). */
 .header-end {
   display: flex;
   align-items: center;
@@ -705,32 +708,8 @@ main .sec--alt:last-child {
   flex: none;
 }
 
-/* Icone au trait comme les autres (.icon), angles vifs : la DA ne veut
-   pas d'arrondi, le carre du glyphe reste donc droit. La cible fait
-   44 px alors que le dessin n'en fait que 20. */
-.nav-ig {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 44px;
-  min-height: 44px;
-  color: var(--encre);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.nav-ig:hover {
-  color: var(--papier);
-}
-
-.nav-ig .icon {
-  width: 20px;
-  height: 20px;
-}
-
-/* Sous le seuil de la barre complete : le logo au centre, Instagram et
-   le burger a droite. Les deux colonnes laterales sont a egalite (1fr), le logo
+/* Sous le seuil de la barre complete : le logo au centre, le burger a
+   droite. Les deux colonnes laterales sont a egalite (1fr), le logo
    tombe donc pile au milieu tant que le bloc de droite tient dans sa
    part ; sous 340 px il la deborde et le logo glisse d'autant. */
 @media (max-width: 1159px) {
@@ -925,12 +904,9 @@ body.nav-open {
     display: none;
   }
 
-  /* L'icone Instagram passe en tete de navigation, juste avant Accueil
-     (demande de Baptiste le 2026-08-26). Les trois blocs sont freres
-     dans le meme flex : la navigation passe en dernier par order, le
-     bloc d'icone reprend la marge automatique qu'elle portait, et le
-     duo reste colle a droite. Le logo garde l'ordre du source, il
-     suffit donc de deplacer la navigation. */
+  /* La navigation passe en dernier par order et le bloc de droite, vide
+     en bureau depuis le retrait de l'icone Instagram (2026-11-02), garde
+     la marge automatique qui la pousse contre le bord droit. */
   .nav-desktop {
     display: flex;
     align-items: center;
@@ -1006,25 +982,6 @@ body.nav-open {
   .nav-desktop .btn--sm {
     padding: 8px 12px;
     font-size: 0.75rem;
-  }
-
-  /* L'icone se resserre a 32 px pour laisser passer la navigation : la
-     barre reclame 992 px de contenu pour 1009 disponibles a 1024, soit
-     18 px de marge, contre 6 seulement si l'icone gardait ses 44 px.
-     Un ::after de 6 px de part
-     et d'autre rend les 44 px au doigt sans rien deplacer, comme
-     .hof-year-link et .ppl-name a : il tient dans les deux gouttieres
-     de 12 px qui la separent du logo et d'Accueil. Piege de mesure :
-     ce pseudo-element n'entre pas dans le getBoundingClientRect() du
-     lien, une sonde qui lit la boite du lien croit encore a 32 px. */
-  .nav-ig {
-    min-width: 32px;
-  }
-
-  .nav-ig::after {
-    content: "";
-    position: absolute;
-    inset: 0 -6px;
   }
 }
 
@@ -4535,4 +4492,185 @@ details.faq[open] summary .icon {
   margin-right: calc(-1 * var(--g-r, 0px));
   padding-left: var(--g-l, 0px);
   padding-right: var(--g-r, 0px);
+}
+
+/* 23. L'invitation Instagram
+   Une carte fixe qui invite a suivre @tedxuttroyes et a partager la page
+   (demande de Baptiste le 2026-11-02, a la place de l'icone de l'en-tete).
+   En bas de l'ecran sur telephone, en bas a droite en bureau, toujours
+   dans la page de 1920 px (gouttiere de droite comprise). Elle nait
+   cachee (hidden) : main.js la montre apres un ecran defile, pose
+   --invite-p (le perimetre du contour, en pixels) puis invite-on, qui
+   fait entrer la carte et dessine son contour d'un seul trait rouge,
+   continu, qui fait le tour et reste. invite-trace retire les tirets une
+   fois le trace fini, pour que le contour tienne si la carte change de
+   taille. Pas d'arrondi, pas d'ombre : le trait rouge est son seul
+   relief. Sur l'accueil elle vit hors de .jscroll (voir la page). */
+
+.invite {
+  position: fixed;
+  z-index: var(--z-invite);
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  padding: 14px 52px 14px 18px;
+  background-color: var(--surface);
+  color: var(--encre);
+  opacity: 0;
+  transform: translateY(16px);
+  transition: opacity 0.35s var(--ease-out), transform 0.35s var(--ease-out);
+}
+
+.invite[hidden] {
+  display: none;
+}
+
+.invite.invite-on {
+  opacity: 1;
+  transform: none;
+}
+
+/* Rentre de 1,25 px de chaque cote : le trait de 2,5 px tient entier
+   dans la carte, le bas n'est donc jamais rogne par le bord de l'ecran. */
+.invite-trait {
+  position: absolute;
+  top: 1.25px;
+  left: 1.25px;
+  width: calc(100% - 2.5px);
+  height: calc(100% - 2.5px);
+  overflow: visible;
+  pointer-events: none;
+}
+
+.invite-trait rect {
+  fill: none;
+  stroke: var(--rouge);
+  stroke-width: 2.5px;
+  stroke-linecap: square;
+  stroke-dasharray: var(--invite-p, 0) var(--invite-p, 0);
+  stroke-dashoffset: var(--invite-p, 0);
+}
+
+.invite-on .invite-trait rect {
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.2s;
+}
+
+.invite-trace .invite-trait rect {
+  stroke-dasharray: none;
+}
+
+.invite-cote {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--rouge-vif);
+}
+
+.invite-titre {
+  margin: 4px 0 0;
+  font-family: var(--font-disp);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--papier);
+}
+
+/* Sur telephone la carte reste basse : le texte d'appui se tait, le
+   titre et les deux boutons suffisent. */
+.invite-texte {
+  display: none;
+  margin: 8px 0 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+
+/* Les boutons reprennent la colonne de la croix (qui est en haut) : sur
+   un telephone de 375 px ils tiennent ainsi sur une seule rangee. */
+.invite-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  margin-right: -34px;
+}
+
+.invite-actions .btn {
+  flex: 1 1 auto;
+}
+
+.invite-etat {
+  margin: 8px 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--papier);
+}
+
+.invite-etat:empty {
+  display: none;
+}
+
+/* La croix : 44 px au doigt pour un dessin de 16. */
+.invite-fermer {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  color: var(--encre);
+  background: none;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.invite-fermer:hover {
+  color: var(--papier);
+}
+
+@media (min-width: 768px) {
+  .invite {
+    left: auto;
+    right: calc(var(--gouttiere-d) + 24px);
+    bottom: 24px;
+    width: 380px;
+    padding: 18px 52px 20px 22px;
+  }
+
+  .invite-titre {
+    font-size: 1.5rem;
+  }
+
+  .invite-texte {
+    display: block;
+  }
+
+  .invite-actions {
+    margin-top: 16px;
+    margin-right: -30px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .invite,
+  .invite-on .invite-trait rect {
+    transition: none;
+  }
+
+  .invite {
+    transform: none;
+  }
+}
+
+@media print {
+  .invite {
+    display: none;
+  }
 }
