@@ -52,7 +52,7 @@ export default function Faq() {
               <details className="faq">
                 <summary>À quelle heure faut-il arriver ?<svg className="icon" viewBox="0 0 24 24" aria-hidden="true"> <path d="M6 9l6 6 6-6" /> </svg></summary>
                 <div className="faq-a">
-                  <p>Les portes ouvrent à 18h00 avec un mini forum de recrutement dans le hall, et les talks commencent à 19h30 précises. Prévoyez d'être sur place au moins un quart d'heure avant les talks.</p>
+                  <p>Les portes ouvrent à 18h00 avec L'Avant-Scène, des rencontres associatives et professionnelles dans le hall, et les talks commencent à 19h30 précises. Prévoyez d'être sur place au moins un quart d'heure avant les talks.</p>
                 </div>
               </details>
               <details className="faq">

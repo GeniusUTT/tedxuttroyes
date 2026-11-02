@@ -120,7 +120,7 @@ export default function Accueil() {
               <details className="cal">
                 <summary className="btn btn--ghost btn--sm" data-reveal="Ajouter la soirée à mon agenda">Ajouter la révélation à mon agenda</summary>
                 <ul className="cal-list">
-                  <li><a href={"https://calendar.google.com/calendar/render?action=TEMPLATE&text=TEDxUTTroyes%202027%20%3A%20r%C3%A9v%C3%A9lation%20de%20la%20date%20et%20du%20th%C3%A8me&dates=20261103T150000Z%2F20261103T160000Z&details=La%20dixi%C3%A8me%20%C3%A9dition%20de%20TEDxUTTroyes%20l%C3%A8ve%20le%20voile%20sur%20sa%20date%20et%20son%20th%C3%A8me%20%3A%20rendez-vous%20sur%20https%3A%2F%2Ftedxuttroyes.fr%2F&location=https%3A%2F%2Ftedxuttroyes.fr%2F"} target="_blank" rel="noopener" data-reveal-attr="href" data-reveal={"https://calendar.google.com/calendar/render?action=TEMPLATE&text=TEDxUTTroyes%202027%20%3A%20Franchir%20ou%20s%27adapter%20%3F&dates=20270318T170000Z%2F20270318T230000Z&details=Dixi%C3%A8me%20%C3%A9dition%20de%20TEDxUTTroyes%2C%20autour%20du%20th%C3%A8me%20de%20la%20limite%20%3A%20franchir%20ou%20s%27adapter%20%3F%0A%0A18h00%20%3A%20ouverture%20des%20portes%20et%20mini%20forum%20de%20recrutement%0A19h30%20%3A%20ouverture%20de%20la%20soir%C3%A9e%2C%20six%20talks%20en%20deux%20sessions%20et%20un%20entracte%0A22h30%20%3A%20pot%20VIP%2C%20rencontre%20avec%20les%20intervenantes%20et%20intervenants%20jusqu%27%C3%A0%20minuit%0A%0A750%20places%20au%20Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%20%C3%A0%20Troyes.%0AProgramme%20%3A%20https%3A%2F%2Ftedxuttroyes.fr%2Fprogramme%2F%0ABilletterie%20%3A%20https%3A%2F%2Fwww.billetweb.fr%2Ftedxuttroyes-2027-10e-edition&location=Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%202%20rue%20Pierre%20Labonde%2C%2010000%20Troyes"}>Google Agenda<span className="visually-hidden"> (nouvelle fenêtre)</span></a></li>
+                  <li><a href={"https://calendar.google.com/calendar/render?action=TEMPLATE&text=TEDxUTTroyes%202027%20%3A%20r%C3%A9v%C3%A9lation%20de%20la%20date%20et%20du%20th%C3%A8me&dates=20261103T150000Z%2F20261103T160000Z&details=La%20dixi%C3%A8me%20%C3%A9dition%20de%20TEDxUTTroyes%20l%C3%A8ve%20le%20voile%20sur%20sa%20date%20et%20son%20th%C3%A8me%20%3A%20rendez-vous%20sur%20https%3A%2F%2Ftedxuttroyes.fr%2F&location=https%3A%2F%2Ftedxuttroyes.fr%2F"} target="_blank" rel="noopener" data-reveal-attr="href" data-reveal={"https://calendar.google.com/calendar/render?action=TEMPLATE&text=TEDxUTTroyes%202027%20%3A%20Franchir%20ou%20s%27adapter%20%3F&dates=20270318T170000Z%2F20270318T230000Z&details=Dixi%C3%A8me%20%C3%A9dition%20de%20TEDxUTTroyes%2C%20autour%20du%20th%C3%A8me%20de%20la%20limite%20%3A%20franchir%20ou%20s%27adapter%20%3F%0A%0A18h00%20%3A%20L%27Avant-Sc%C3%A8ne%2C%20rencontres%20associatives%20et%20professionnelles%0A19h30%20%3A%20ouverture%20de%20la%20soir%C3%A9e%2C%20six%20talks%20en%20deux%20sessions%20et%20un%20entracte%0A22h30%20%3A%20pot%20VIP%2C%20rencontre%20avec%20les%20intervenantes%20et%20intervenants%20jusqu%27%C3%A0%20minuit%0A%0A750%20places%20au%20Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%20%C3%A0%20Troyes.%0AProgramme%20%3A%20https%3A%2F%2Ftedxuttroyes.fr%2Fprogramme%2F%0ABilletterie%20%3A%20https%3A%2F%2Fwww.billetweb.fr%2Ftedxuttroyes-2027-10e-edition&location=Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%202%20rue%20Pierre%20Labonde%2C%2010000%20Troyes"}>Google Agenda<span className="visually-hidden"> (nouvelle fenêtre)</span></a></li>
                   <li><a href="/assets/agenda/revelation.ics" data-reveal-attr="href" data-reveal="/assets/agenda/tedxuttroyes-2027.ics">Apple Calendrier</a></li>
                   <li><a href="/assets/agenda/revelation.ics" data-reveal-attr="href" data-reveal="/assets/agenda/tedxuttroyes-2027.ics">Samsung Calendrier</a></li>
                 </ul>
@@ -222,7 +222,7 @@ export default function Accueil() {
             <p className="cote">Programme</p>
             <div className="colL">
               <h2 className="mom-title">La soirée, réglée au quart d'heure</h2>
-              <p className="lead">Portes à 18h00 avec un mini forum de recrutement, premier talk à 19h30, dernier talk à 22h30. La feuille de salle tient en 6 temps.</p>
+              <p className="lead">L'Avant-Scène dès 18h00, premier talk à 19h30, dernier talk à 22h30. La feuille de salle tient en 6 temps.</p>
             </div>
             <ol data-reveal-attr="aria-label" data-reveal="Le déroulé de la soirée du 18 mars 2027" className="tl" aria-label="Le déroulé de la soirée du ** **** ****">
               <li className="tl-row">
@@ -232,8 +232,8 @@ export default function Accueil() {
                 </div>
                 <span className="tl-dot" aria-hidden="true" />
                 <div className="tl-body">
-                  <p className="tl-title">Ouverture des portes et mini forum de recrutement</p>
-                  <p className="tl-desc">Dans le hall, les entreprises partenaires et les associations rencontrent le public : stages, alternances, premiers emplois. CV bienvenus.</p>
+                  <p className="tl-title">L'Avant-Scène</p>
+                  <p className="tl-desc">Rencontres associatives et professionnelles dans le hall : associations de l'UTT, entreprises (CV, stages, alternances), cocktail d'accueil et photo booth.</p>
                 </div>
               </li>
               <li className="tl-row">
