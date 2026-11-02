@@ -33,16 +33,23 @@ svg.ligne { position: absolute; inset: 0; width: 2480px; height: 3508px; }
 .tete .ref .r { color: var(--rouge-vif); }
 
 .cote { position: absolute; width: 46px; height: 46px; border-color: var(--rouge); border-style: solid; border-width: 0; }
-.c1 { left: 30px; top: 486px; border-top-width: 5px; border-left-width: 5px; }
-.c2 { left: 1175px; top: 486px; border-top-width: 5px; border-right-width: 5px; }
-.c3 { left: 30px; top: 1191px; border-bottom-width: 5px; border-left-width: 5px; }
-.c4 { left: 1175px; top: 1191px; border-bottom-width: 5px; border-right-width: 5px; }
-.zone-lbl { position: absolute; left: 1300px; top: 600px; font-size: 30px; color: var(--encre-2); line-height: 1.6; }
+.c1 { left: 28px; top: 503px; border-top-width: 5px; border-left-width: 5px; }
+.c2 { left: 1161px; top: 503px; border-top-width: 5px; border-right-width: 5px; }
+.c3 { left: 28px; top: 1208px; border-bottom-width: 5px; border-left-width: 5px; }
+.c4 { left: 1161px; top: 1208px; border-bottom-width: 5px; border-right-width: 5px; }
+.zone-lbl { position: absolute; left: 1300px; top: 640px; font-size: 30px; color: var(--encre-2); line-height: 1.6; }
 .zone-lbl span { color: var(--rouge-vif); }
 
 .titre { position: absolute; left: 1290px; right: var(--m); top: 960px; }
 .titre .k { font-size: 34px; color: var(--rouge-vif); margin-bottom: 34px; }
 .titre h1 { font-family: "Bricolage", sans-serif; font-weight: 700; color: var(--papier); font-size: 178px; line-height: .9; letter-spacing: -.035em; }
+
+.scene { position: absolute; left: 56px; width: 1123px; top: 1296px; }
+.scene .lbl { font-size: 30px; color: var(--encre-2); margin-bottom: 24px; }
+.scene ul { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); column-gap: 50px; }
+.scene img { display: block; width: 100%; height: 270px; object-fit: cover; object-position: 50% 18%; }
+.scene .n { font-size: 34px; color: var(--papier); font-weight: 600; line-height: 1.15; margin-top: 18px; white-space: nowrap; }
+.scene .a { font-family: "Mono", monospace; font-size: 26px; color: var(--rouge-vif); letter-spacing: .06em; margin-top: 4px; }
 
 .quand { position: absolute; left: var(--m); right: var(--m); top: 1880px; display: grid; grid-template-columns: 1fr 1fr; column-gap: 200px; border-top: 3px solid var(--filet); padding-top: 64px; }
 .quand .lbl { font-size: 30px; color: var(--encre-2); margin-bottom: 26px; }
@@ -70,7 +77,7 @@ svg.ligne { position: absolute; inset: 0; width: 2480px; height: 3508px; }
   <img class="fond" src="../../public/assets/img/logo-10e.svg" alt="">
 
   <svg class="ligne" viewBox="0 0 2480 3508">
-    <path d="M1250 0 V420 Q1250 450 1280 450 H2330 V1720 Q2330 1750 2300 1750 H95 V3230" />
+    <path d="M1250 0 V420 Q1250 450 1280 450 H2330 V1770 Q2330 1800 2300 1800 H95 V3230" />
     <circle cx="95" cy="3240" r="16" />
   </svg>
 
@@ -85,6 +92,15 @@ svg.ligne { position: absolute; inset: 0; width: 2480px; height: 3508px; }
 
   <div class="cote c1"></div><div class="cote c2"></div><div class="cote c3"></div><div class="cote c4"></div>
   <p class="zone-lbl mono"><span>&larr;</span> Votre billet nominatif</p>
+
+  <section class="scene">
+    <p class="lbl mono">Déjà passés sur notre scène</p>
+    <ul>
+      <li><img src="../../public/assets/img/editions/2017/speakers/jamy-gourmaud.webp" alt=""><p class="n">Jamy Gourmaud</p><p class="a">TEDxUTTroyes 2017</p></li>
+      <li><img src="../../public/assets/img/editions/2023/speakers/vincent-doumeizel.webp" alt=""><p class="n">Vincent Doumeizel</p><p class="a">TEDxUTTroyes 2023</p></li>
+      <li><img src="../../public/assets/img/editions/2023/speakers/leo-techmaker.webp" alt=""><p class="n">Léo Techmaker</p><p class="a">TEDxUTTroyes 2023</p></li>
+    </ul>
+  </section>
 
   <div class="titre">
     <p class="k mono">Thème de la soirée</p>
