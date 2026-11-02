@@ -1,10 +1,12 @@
 import type { ReactNode } from 'react';
 import { EnTete, type Actif, type DateDuMenu } from './EnTete';
+import { Invitation } from './Invitation';
 import { PiedDePage } from './PiedDePage';
 
 // Le gabarit d'une page intérieure : lien d'évitement, en-tête et menu,
 // filigrane de la dixième édition (couche fixe posée avant main, voir
-// main-v9.js), contenu, pied de page.
+// main-v10.js), contenu, pied de page, invitation Instagram (sauf quand
+// invitation vaut false : la page cachée).
 
 export function FondMarque() {
   return (
@@ -14,7 +16,7 @@ export function FondMarque() {
   );
 }
 
-export function Cadre({ actif, date, children }: { actif?: Actif; date?: DateDuMenu; children: ReactNode }) {
+export function Cadre({ actif, date, invitation = true, children }: { actif?: Actif; date?: DateDuMenu; invitation?: boolean; children: ReactNode }) {
   return (
     <>
       <a className="skip-link" href="#contenu">Aller au contenu</a>
@@ -22,6 +24,7 @@ export function Cadre({ actif, date, children }: { actif?: Actif; date?: DateDuM
       <FondMarque />
       <main id="contenu">{children}</main>
       <PiedDePage />
+      {invitation && <Invitation />}
     </>
   );
 }

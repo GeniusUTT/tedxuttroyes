@@ -2,7 +2,7 @@
    Zero dependance, charge en defer.
    Modules : etat du header, interlude de l'accueil, filigrane de la
    dixieme edition, menu mobile accessible, telescripteur du compte a
-   rebours, trace du dixieme baton. L'allumage de la feuille de salle de l'accueil est
+   rebours, trace du dixieme baton, invitation Instagram. L'allumage de la feuille de salle de l'accueil est
    pilote par line-v10.js (la pointe du trait franchit les pastilles). */
 
 (function () {
@@ -596,6 +596,159 @@
         { threshold: 0.6 }
       );
       tallyObserver.observe(tally);
+    }
+  }
+
+  /* ------------------------------------------------------------------
+     L'invitation Instagram (demande de Baptiste le 2026-11-02, a la
+     place de l'icone de l'en-tete) : une carte fixe, en bas de l'ecran
+     sur telephone, en bas a droite en bureau, qui invite a suivre le
+     compte et a partager la page.
+
+     Quand : apres un ecran defile. Sur l'accueil, elle attend que le
+     premier versant du theme (#moment-2) passe les trois quarts de
+     l'ecran, comme le filigrane : avant, il y a le seuil, le voile et
+     l'interlude, qu'elle ne doit pas recouvrir. Sur une page qui n'offre
+     pas un ecran de defilement (la 404), elle vient au bout de 12 s.
+
+     Le contour : un rect SVG dont le trait rouge se dessine d'une seule
+     passe, puis reste. Son perimetre est mesure ici, en pixels, plutot
+     que confie a pathLength, que Safari a longtemps mal lu sur un rect.
+     Une fois le trace fini, invite-trace retire les tirets : le contour
+     tient alors quelle que soit la taille que prend la carte ensuite
+     (rotation du telephone).
+
+     La memoire : fermee a la croix, ou quittee par le lien Instagram ou
+     un partage abouti, elle ne revient pas avant sept jours. Le temoin
+     tedx-invite-vue est une date, dans la memoire locale, decrit dans
+     les mentions legales avec les trois autres. Tant qu'elle n'est pas
+     fermee, elle revient d'une page a l'autre.
+     ------------------------------------------------------------------ */
+  var invite = doc.getElementById("invite");
+  if (invite) {
+    var INVITE_CLE = "tedx-invite-vue";
+    var INVITE_DUREE = 7 * 864e5;
+    var inviteVue = false;
+    try {
+      var inviteDate = +localStorage.getItem(INVITE_CLE);
+      inviteVue = !!inviteDate && Date.now() - inviteDate < INVITE_DUREE;
+    } catch (e) { }
+
+    var inviteTrait = invite.querySelector(".invite-trait rect");
+    var inviteEtat = invite.querySelector(".invite-etat");
+    var inviteMontree = false;
+
+    var inviteRetenir = function () {
+      try {
+        localStorage.setItem(INVITE_CLE, String(Date.now()));
+      } catch (e) { }
+    };
+
+    var inviteMontrer = function () {
+      if (inviteMontree) return;
+      inviteMontree = true;
+      invite.hidden = false;
+      /* Le SVG est rentre de 1,25 px de chaque cote, pour que le trait
+         de 2,5 px tienne entier dans la carte. */
+      var b = invite.getBoundingClientRect();
+      var perimetre = 2 * (b.width + b.height - 5);
+      invite.style.setProperty("--invite-p", perimetre.toFixed(1));
+      void invite.offsetWidth;
+      invite.classList.add("invite-on");
+      if (reduceMotion.matches || !inviteTrait) {
+        invite.classList.add("invite-trace");
+        return;
+      }
+      var fin = function (ev) {
+        if (ev.propertyName !== "stroke-dashoffset") return;
+        inviteTrait.removeEventListener("transitionend", fin);
+        invite.classList.add("invite-trace");
+      };
+      inviteTrait.addEventListener("transitionend", fin);
+    };
+
+    var inviteFermer = function () {
+      inviteRetenir();
+      invite.classList.remove("invite-on");
+      window.setTimeout(function () {
+        invite.hidden = true;
+      }, reduceMotion.matches ? 0 : 400);
+    };
+
+    invite.querySelector(".invite-fermer").addEventListener("click", inviteFermer);
+    invite.querySelector(".invite-suivre").addEventListener("click", inviteFermer);
+    invite.addEventListener("keydown", function (ev) {
+      if (ev.key === "Escape") inviteFermer();
+    });
+
+    /* Le partage : la feuille de partage du systeme quand elle existe
+       (telephones, Safari, Edge), sinon l'adresse copiee dans le
+       presse-papiers. On partage la page en cours, sans parametre ni
+       ancre. */
+    invite.querySelector(".invite-partage").addEventListener("click", function () {
+      var url = location.origin + location.pathname;
+      var dire = function (t) {
+        inviteEtat.textContent = t;
+      };
+      if (navigator.share) {
+        navigator.share({ title: doc.title, url: url }).then(
+          function () {
+            inviteRetenir();
+            dire("Merci pour le partage !");
+          },
+          function () { }
+        );
+        return;
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(
+          function () {
+            dire("Lien copié, il ne reste qu'à le coller.");
+          },
+          function () {
+            dire("Adresse de la page : " + url);
+          }
+        );
+        return;
+      }
+      dire("Adresse de la page : " + url);
+    });
+
+    if (!inviteVue) {
+      var inviteMoment = doc.getElementById("moment-2");
+      if (inviteMoment && "IntersectionObserver" in window) {
+        var inviteObs = new window.IntersectionObserver(
+          function (entrees) {
+            for (var k = 0; k < entrees.length; k++) {
+              var e = entrees[k];
+              if (e.isIntersecting || e.boundingClientRect.top < 0) {
+                inviteObs.disconnect();
+                inviteMontrer();
+              }
+            }
+          },
+          { rootMargin: "0px 0px -25% 0px" }
+        );
+        inviteObs.observe(inviteMoment);
+      } else {
+        var inviteMinuteur = 0;
+        var inviteSeuil = function () {
+          if (window.scrollY > window.innerHeight) {
+            window.removeEventListener("scroll", inviteSeuil);
+            window.clearTimeout(inviteMinuteur);
+            inviteMontrer();
+          }
+        };
+        window.addEventListener("scroll", inviteSeuil, { passive: true });
+        inviteMinuteur = window.setTimeout(function () {
+          var course = doc.documentElement.scrollHeight - window.innerHeight;
+          if (course < window.innerHeight) {
+            window.removeEventListener("scroll", inviteSeuil);
+            inviteMontrer();
+          }
+        }, 12000);
+        inviteSeuil();
+      }
     }
   }
 })();

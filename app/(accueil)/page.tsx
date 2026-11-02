@@ -1,6 +1,7 @@
 import { Bandeau } from '../_site/Bandeau';
 import { FondMarque } from '../_site/Cadre';
 import { EnTete } from '../_site/EnTete';
+import { Invitation } from '../_site/Invitation';
 import { BILLETTERIE, INSTAGRAM, LINKEDIN, SITE } from '../_site/liens';
 import { Masque } from '../_site/Masque';
 import { PiedDePage } from '../_site/PiedDePage';
@@ -13,7 +14,7 @@ import { JsonLd, PARTAGE_2027, Tete } from '../_site/Tete';
 // après toute retouche.
 //
 // Hors de .jscroll, et avant lui, les couches fixes : voile d'ouverture,
-// interlude, filigrane. Posées dedans, elles se caleraient sur le wrapper
+// interlude, filigrane (et, après lui, l'invitation Instagram). Posées dedans, elles se caleraient sur le wrapper
 // translaté du défilement virtuel.
 
 // N'est posé que si le voile joue sa version longue : sans cela, la vidéo
@@ -409,6 +410,8 @@ export default function Accueil() {
 
         <PiedDePage finale />
       </div>
+
+      <Invitation />
     </>
   );
 }
