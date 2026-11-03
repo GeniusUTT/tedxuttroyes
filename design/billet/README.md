@@ -9,7 +9,7 @@ Billetweb ajoute son bloc (nom, tarif, QR code, mentions) en haut à gauche, san
 
 Sous le bloc, trois anciens speakers (Jamy Gourmaud 2017, Vincent Doumeizel et Léo Techmaker 2023), présentés comme « déjà passés sur notre scène » : les speakers 2027 restent sous embargo, le billet ne doit pas laisser croire que ces trois-là reviennent. Portraits repris de `public/assets/img/editions/`.
 
-Le billet porte le thème et la date en clair : ne pas le charger sur Billetweb avant la révélation du mardi 3 novembre 2026 à 16h00.
+Le billet porte le thème et la date en clair : ne pas le charger sur Billetweb avant la révélation du mardi 10 novembre 2026 à 16h00.
 
 Ce dossier n'est pas servi par le site (seul `public/` l'est).
 

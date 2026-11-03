@@ -5,7 +5,7 @@ import { PiedDePage } from './PiedDePage';
 
 // Le gabarit d'une page intérieure : lien d'évitement, en-tête et menu,
 // filigrane de la dixième édition (couche fixe posée avant main, voir
-// main-v10.js), contenu, pied de page, invitation Instagram (sauf quand
+// main-v11.js), contenu, pied de page, invitation Instagram (sauf quand
 // invitation vaut false : la page cachée).
 
 export function FondMarque() {

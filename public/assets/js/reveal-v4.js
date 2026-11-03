@@ -1,7 +1,7 @@
 /* ==========================================================================
    TEDxUTTroyes 2027 - Le devoilement
    --------------------------------------------------------------------------
-   La date du jour J et le theme sont masques jusqu'au mardi 3 novembre
+   La date du jour J et le theme sont masques jusqu'au mardi 10 novembre
    2026 a 16h00 (heure de Paris). A cet instant precis, le site se remet de
    lui-meme dans l'etat d'avant le masquage : plus une etoile, plus une
    barre de caviardage, les titres et les descriptions d'origine reviennent.
@@ -28,7 +28,7 @@
 (function () {
   "use strict";
 
-  var REVEAL_UTC = Date.UTC(2026, 10, 3, 15, 0, 0);
+  var REVEAL_UTC = Date.UTC(2026, 10, 10, 15, 0, 0);
   var doc = document;
   var done = false;
 
