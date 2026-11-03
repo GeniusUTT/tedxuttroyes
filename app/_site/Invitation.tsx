@@ -3,7 +3,7 @@ import { INSTAGRAM } from './liens';
 // L'invitation à suivre le compte Instagram (demande de Baptiste le
 // 2026-11-02, à la place de l'icône de l'en-tête) : une carte fixe, en bas
 // de l'écran sur téléphone, en bas à droite en bureau. Du HTML et rien
-// d'autre : elle naît cachée (hidden), et c'est main-v10.js qui la montre
+// d'autre : elle naît cachée (hidden), et c'est main-v11.js qui la montre
 // après un écran défilé, trace son contour rouge, gère le partage et
 // retient sa fermeture pendant sept jours (clé tedx-invite-vue, décrite
 // dans les mentions légales). Elle vit hors de .jscroll sur l'accueil : un
