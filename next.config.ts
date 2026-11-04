@@ -21,6 +21,10 @@ const config: NextConfig = {
   async redirects() {
     const r = (source: string, destination: string) => ({ source, destination, statusCode: 301 as const });
     return [
+      // Adresse courte du visuel du pull, liée nulle part. En 302 et non en 301 :
+      // un navigateur garde une 301 en mémoire, et une retouche du visuel passe
+      // par un nouveau nom de fichier, images en cache un an oblige.
+      { source: '/pull', destination: '/assets/img/visuel-pull-10e.png', statusCode: 302 as const },
       r('/images/logo-black.png', '/assets/img/logo-black.png'),
       r('/billetterie.html', BILLETTERIE),
       r('/contact.html', '/faq/'),
