@@ -47,7 +47,7 @@ export function EnTete({ actif, date = 'masquee', espace = false }: { actif?: Ac
             ))}
             <a className="btn btn--ghost btn--sm" href={NOS_LIENS} target="_blank" rel="noopener">Nos liens</a>
             <a className="btn btn--ghost btn--sm" href="/espace/" aria-current={dansEspace}>Espace</a>
-            <a className="btn btn--primary btn--sm" href={BILLETTERIE} target="_blank" rel="noopener">Réserver</a>
+            <a className="btn btn--primary btn--sm" href={BILLETTERIE} target="_blank" rel="noopener">Billetterie</a>
           </nav>
 
           <div className="header-end">
