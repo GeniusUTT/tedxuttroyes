@@ -10,7 +10,7 @@ export const dynamic = 'force-static';
 
 export const viewport: Viewport = { themeColor: '#080808' };
 
-const scripts = [SCRIPTS.devoilement, SCRIPTS.principal, SCRIPTS.ligne, SCRIPTS.carte];
+const scripts = [SCRIPTS.principal, SCRIPTS.ligne, SCRIPTS.carte];
 
 // Le voile d'ouverture : joué une fois par session, en version courte si
 // l'animation complète a déjà été vue, jamais en mouvement réduit. Rien ne

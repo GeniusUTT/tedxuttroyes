@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { EnTete, type Actif, type DateDuMenu } from './EnTete';
+import { EnTete, type Actif } from './EnTete';
 import { Invitation } from './Invitation';
 import { PiedDePage } from './PiedDePage';
 
@@ -16,11 +16,11 @@ export function FondMarque() {
   );
 }
 
-export function Cadre({ actif, date, invitation = true, children }: { actif?: Actif; date?: DateDuMenu; invitation?: boolean; children: ReactNode }) {
+export function Cadre({ actif, invitation = true, children }: { actif?: Actif; invitation?: boolean; children: ReactNode }) {
   return (
     <>
       <a className="skip-link" href="#contenu">Aller au contenu</a>
-      <EnTete actif={actif} date={date} />
+      <EnTete actif={actif} />
       <FondMarque />
       <main id="contenu">{children}</main>
       <PiedDePage />

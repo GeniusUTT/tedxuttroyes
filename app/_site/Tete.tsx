@@ -1,42 +1,33 @@
 import { SITE } from './liens';
 
 // Le titre, la description et l'aperçu de partage d'une page. Pas l'API
-// Metadata de Next : une balise masquée jusqu'au 10 novembre porte sa version
-// d'origine dans data-reveal (voir reveal-v4.js), ce que l'API ne sait pas
-// écrire. React place ces balises dans le <head> de lui-même.
+// Metadata de Next, pour garder la main sur chaque balise. React place ces
+// balises dans le <head> de lui-même.
 
-// Un texte sous embargo : ce qu'on montre aujourd'hui, ce qui reviendra le
-// 10 novembre. Une simple chaîne quand rien n'est masqué.
-export type Voile = string | { masque: string; vrai: string };
-
-function Meta({ cle, valeur }: { cle: { name: string } | { property: string }; valeur: Voile }) {
-  if (typeof valeur === 'string') return <meta {...cle} content={valeur} />;
-  return <meta {...cle} content={valeur.masque} data-reveal-attr="content" data-reveal={valeur.vrai} />;
+function Meta({ cle, valeur }: { cle: { name: string } | { property: string }; valeur: string }) {
+  return <meta {...cle} content={valeur} />;
 }
 
 export type Partage = {
-  titre?: Voile;
-  description?: Voile;
+  titre?: string;
+  description?: string;
   image: string;
   largeur?: number;
   hauteur?: number;
-  alt?: Voile;
+  alt?: string;
   type?: 'website' | 'article' | 'profile';
   // Grande image par défaut ; « summary » pour un portrait carré.
   carte?: 'summary' | 'summary_large_image';
 };
 
-// L'aperçu de partage de la dixième édition, commun à la plupart des pages.
-// L'image porte la date masquée : le 10 novembre, il faudra la remplacer par
-// og-2027-revele.jpg, ce que reveal-v4.js ne peut pas faire sur un JPEG.
+// L'aperçu de partage de la dixième édition, commun à la plupart des pages et
+// aux données structurées de l'accueil. Depuis la révélation du 10 novembre
+// 2026, l'image porte le thème et la vraie date.
 export const PARTAGE_2027: Partage = {
-  image: '/assets/img/og/og-2027-v2.jpg',
+  image: '/assets/img/og/og-2027-revele.jpg',
   largeur: 1200,
   hauteur: 630,
-  alt: {
-    masque: "TEDxUTTroyes 2027, dixième édition, au Centre de Congrès de l'Aube, Troyes.",
-    vrai: "TEDxUTTroyes 2027, dixième édition : Franchir ou s'adapter ? Jeudi 18 mars 2027 au Centre de Congrès de l'Aube, Troyes.",
-  },
+  alt: "TEDxUTTroyes 2027, dixième édition : Franchir ou s'adapter ? Jeudi 18 mars 2027 au Centre de Congrès de l'Aube, Troyes.",
 };
 
 export function Tete({
@@ -46,8 +37,8 @@ export function Tete({
   robots,
   partage,
 }: {
-  titre: Voile;
-  description?: Voile;
+  titre: string;
+  description?: string;
   chemin?: string;
   robots?: string;
   partage?: Partage;
@@ -55,7 +46,7 @@ export function Tete({
   const image = partage && (partage.image.startsWith('http') ? partage.image : SITE + partage.image);
   return (
     <>
-      {typeof titre === 'string' ? <title>{titre}</title> : <title data-reveal={titre.vrai}>{titre.masque}</title>}
+      <title>{titre}</title>
       {description && <Meta cle={{ name: 'description' }} valeur={description} />}
       {chemin && <link rel="canonical" href={SITE + chemin} />}
       {robots && <meta name="robots" content={robots} />}

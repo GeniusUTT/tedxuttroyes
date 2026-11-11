@@ -1,5 +1,4 @@
 import { Cadre } from '../../_site/Cadre';
-import { Masque } from '../../_site/Masque';
 import { PARTAGE_2027, Tete } from '../../_site/Tete';
 
 export default function DevenirSpeaker() {
@@ -9,7 +8,7 @@ export default function DevenirSpeaker() {
         titre="Devenir speaker | TEDxUTTroyes 2027"
         description="Une idée qui mérite d'être partagée ? Postulez pour monter sur la scène de TEDxUTTroyes 2027 : dix-huit minutes, 750 personnes, un accompagnement complet par l'équipe."
         chemin="/devenir-speaker/"
-        partage={{ ...PARTAGE_2027, description: { masque: "Une idée qui mérite d'être partagée ? Postulez pour monter sur la scène de la dixième édition, le ** **** **** à Troyes.", vrai: "Une idée qui mérite d'être partagée ? Postulez pour monter sur la scène de la dixième édition, le 18 mars 2027 à Troyes." } }}
+        partage={{ ...PARTAGE_2027, description: "Une idée qui mérite d'être partagée ? Postulez pour monter sur la scène de la dixième édition, le 18 mars 2027 à Troyes." }}
       />
 
       <div className="sec sec--head">
@@ -17,7 +16,7 @@ export default function DevenirSpeaker() {
           <p className="cote a a1">La scène est à vous</p>
           <div className="sec-body">
             <h1 className="page-title a a2">Devenir speaker</h1>
-            <p className="lead a a3">Le <Masque texte="18 mars 2027" />, six personnes monteront sur la scène du Centre de Congrès de l'Aube pour 18 minutes chacune, face à 750 fauteuils. Si vous portez une idée qui mérite d'être partagée, une de ces places peut être la vôtre.</p>
+            <p className="lead a a3">Le 18 mars 2027, six personnes monteront sur la scène du Centre de Congrès de l'Aube pour 18 minutes chacune, face à 750 fauteuils. Si vous portez une idée qui mérite d'être partagée, une de ces places peut être la vôtre.</p>
           </div>
         </div>
       </div>
@@ -31,7 +30,7 @@ export default function DevenirSpeaker() {
             <ul className="facts">
               <li> <strong>Une idée neuve ou un regard neuf</strong> <span className="data">un angle que le public n'a pas déjà entendu cent fois</span> </li>
               <li> <strong>18 minutes, pas une de plus</strong> <span className="data">le format TED, exigeant et libérateur</span> </li>
-              <li> <strong>Un lien avec le thème 2027</strong> <span className="data"><Masque texte="franchir ou s'adapter" /> : <Masque texte="la limite" />, sous toutes ses formes</span> </li>
+              <li> <strong>Un lien avec le thème 2027</strong> <span className="data">franchir ou s'adapter : la limite, sous toutes ses formes</span> </li>
               <li> <strong>De l'envie, pas de l'expérience</strong> <span className="data">l'équipe vous accompagne : coaching, répétitions, écriture</span> </li>
             </ul>
           </div>

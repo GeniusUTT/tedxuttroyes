@@ -9,7 +9,7 @@ export const dynamic = 'force-static';
 
 export const viewport: Viewport = { themeColor: '#080808' };
 
-const scripts = [SCRIPTS.devoilement, SCRIPTS.principal, SCRIPTS.ligne];
+const scripts = [SCRIPTS.principal, SCRIPTS.ligne];
 
 export default function PagesInterieures({ children }: { children: ReactNode }) {
   return (

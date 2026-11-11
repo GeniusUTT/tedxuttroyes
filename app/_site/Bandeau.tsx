@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react';
 import { BILLETTERIE } from './liens';
-import { Masque } from './Masque';
 
 // Le bandeau du bas de page. Son bouton porte data-line="plug" : c'est la
 // prise où la ligne vient se brancher (voir line-v10.js).
@@ -43,12 +42,12 @@ export function Bandeau({
 }
 
 // Le bandeau des archives (fiches speakers et éditions) : la dixième ligne
-// du registre, date et thème sous embargo jusqu'au 10 novembre.
+// du registre, sa date et son thème.
 export function BandeauRegistre() {
   return (
     <Bandeau
-      titre={<>La dixième ligne du registre s'écrira le <Masque texte="18 mars 2027" />.</>}
-      lead={<><Masque texte="Franchir ou s'adapter" />&nbsp;? 750 fauteuils au Centre de Congrès de l'Aube pour en décider.</>}
+      titre={<>La dixième ligne du registre s'écrira le 18 mars 2027.</>}
+      lead={<>Franchir ou s'adapter&nbsp;? 750 fauteuils au Centre de Congrès de l'Aube pour en décider.</>}
     />
   );
 }

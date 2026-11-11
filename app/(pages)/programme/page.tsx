@@ -1,6 +1,5 @@
 import { Bandeau } from '../../_site/Bandeau';
 import { Cadre } from '../../_site/Cadre';
-import { Masque } from '../../_site/Masque';
 import { PARTAGE_2027, Tete } from '../../_site/Tete';
 
 export default function Programme() {
@@ -8,14 +7,14 @@ export default function Programme() {
     <Cadre actif={{ rubrique: "/programme/", courant: "page" }}>
       <Tete
         titre="Programme de la soirée | TEDxUTTroyes 2027"
-        description={{ masque: "La feuille de salle du ** **** **** au Centre de Congrès de l'Aube : L'Avant-Scène dès 18h00, six talks en deux sessions, entracte et pot VIP.", vrai: "La feuille de salle du 18 mars 2027 au Centre de Congrès de l'Aube : L'Avant-Scène dès 18h00, six talks en deux sessions, entracte et pot VIP." }}
+        description={"La feuille de salle du 18 mars 2027 au Centre de Congrès de l'Aube : L'Avant-Scène dès 18h00, six talks en deux sessions, entracte et pot VIP."}
         chemin="/programme/"
-        partage={{ ...PARTAGE_2027, description: { masque: "L'Avant-Scène dès 18h00, premier talk à 19h30, dernier talk à 22h30. La feuille de salle du ** **** ****.", vrai: "L'Avant-Scène dès 18h00, premier talk à 19h30, dernier talk à 22h30. La feuille de salle du 18 mars 2027." } }}
+        partage={{ ...PARTAGE_2027, description: "L'Avant-Scène dès 18h00, premier talk à 19h30, dernier talk à 22h30. La feuille de salle du 18 mars 2027." }}
       />
 
       <div className="sec sec--head">
         <div className="inner">
-          <p className="cote a a1"><Masque texte="Jeudi 18 mars 2027" /></p>
+          <p className="cote a a1">Jeudi 18 mars 2027</p>
           <div className="sec-body">
             <h1 className="page-title a a2">Le programme</h1>
             <p className="lead a a3">L'Avant-Scène dès 18h00, premier talk à 19h30, dernier talk à 22h30. Entre les deux : six talks, un entracte pour en débattre et profiter d'une surprise.</p>
@@ -28,7 +27,7 @@ export default function Programme() {
           <p className="cote">Dès 18h00</p>
           <div className="sec-body">
             <h2 className="h-md" id="titre-avant-scene">L'Avant-Scène</h2>
-            <p className="lead">Rencontres associatives et professionnelles dès 18h. Le <Masque texte="jeudi 18 mars 2027" />, de 18h00 à 19h30, le hall du Centre de Congrès de l'Aube s'anime juste avant l'ouverture de la 10e édition. Un moment convivial et ouvert à tous, pour se retrouver, échanger et entrer dans l'ambiance avant les talks.</p>
+            <p className="lead">Rencontres associatives et professionnelles dès 18h. Le jeudi 18 mars 2027, de 18h00 à 19h30, le hall du Centre de Congrès de l'Aube s'anime juste avant l'ouverture de la 10e édition. Un moment convivial et ouvert à tous, pour se retrouver, échanger et entrer dans l'ambiance avant les talks.</p>
             <ul className="facts">
               <li> <strong>Les associations de l'UTT</strong> <span className="data">des activités culturelles et associatives</span> </li>
               <li> <strong>Des rencontres avec des entreprises</strong> <span className="data">CV, stages, alternances</span> </li>
@@ -56,7 +55,7 @@ export default function Programme() {
                 <span className="sheet-time">19h30</span>
                 <div>
                   <p className="sheet-title">Ouverture de la soirée</p>
-                  <p className="sheet-desc">Le thème est posé : <Masque texte="franchir ou s'adapter" />&nbsp;?</p>
+                  <p className="sheet-desc">Le thème est posé : franchir ou s'adapter&nbsp;?</p>
                 </div>
               </li>
               <li className="sheet-row">
@@ -88,7 +87,7 @@ export default function Programme() {
                 </div>
               </li>
             </ol>
-            <p className="notice">Feuille de salle indicative : les horaires précis seront confirmés à l'approche du <Masque texte="18 mars" />.</p>
+            <p className="notice">Feuille de salle indicative : les horaires précis seront confirmés à l'approche du 18 mars.</p>
           </div>
         </div>
       </section>

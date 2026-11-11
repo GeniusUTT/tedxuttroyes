@@ -3,7 +3,6 @@ import { FondMarque } from '../_site/Cadre';
 import { EnTete } from '../_site/EnTete';
 import { Invitation } from '../_site/Invitation';
 import { BILLETTERIE, INSTAGRAM, LINKEDIN, SITE } from '../_site/liens';
-import { Masque } from '../_site/Masque';
 import { PiedDePage } from '../_site/PiedDePage';
 import { JsonLd, PARTAGE_2027, Tete } from '../_site/Tete';
 
@@ -22,39 +21,24 @@ import { JsonLd, PARTAGE_2027, Tete } from '../_site/Tete';
 const SOURCE_DU_VOILE =
   'try { var vm = document.querySelector(".voile-mark--trace"), vh = document.documentElement; if (vm && vh.classList.contains("voile-on") && !vh.classList.contains("voile-court")) { vm.src = vm.getAttribute("data-src") } } catch (e) { }';
 
-// Les deux versants du thème tels qu'ils reviendront le 10 novembre (voir
-// reveal-v4.js). En HTML brut et non en JSX : le navigateur range le contenu
-// d'un <template> à part, React ne l'y retrouverait pas à l'hydratation et
-// referait toute la page, effaçant au passage le voile et la ligne.
-const VERSANT_1 =
-  "<h2 class=\"mom-title\">Décider que la ligne était provisoire</h2> <p class=\"lead\">Le record tombe, le prototype décolle, une voix s'élève là où personne ne parlait. Franchir, c'est regarder la limite en face et passer outre : le mur devient une marche, la frontière un point de départ. C'est le premier versant du thème 2027 : l'audace d'aller de l'autre côté, et ce que ce geste coûte à celles et ceux qui le font.</p>";
-const VERSANT_2 =
-  "<h2 class=\"mom-title\">Ce qui ne se franchit pas</h2> <p class=\"lead\">Le corps compose avec la maladie, la ville avec sa rivière, l'ingénieur avec la matière. S'adapter, c'est faire de la ligne un appui : plier sans rompre, transformer la contrainte en méthode. C'est le second versant du thème : certaines limites ne se dépassent pas, elles s'apprivoisent, et ce renoncement apparent demande autant de courage que le dépassement.</p>";
-
 export default function Accueil() {
   return (
     <>
       <Tete
-        titre={{ masque: 'TEDxUTTroyes 2027, dixième édition', vrai: "TEDxUTTroyes 2027 : Franchir ou s'adapter ?" }}
-        description={{
-          masque: "La dixième édition de TEDxUTTroyes se tiendra au Centre de Congrès de l'Aube, à Troyes, à 18h00. Le thème et la date seront révélés le mardi 10 novembre 2026.",
-          vrai: "La dixième édition de TEDxUTTroyes explore la limite : franchir ou s'adapter ? Jeudi 18 mars 2027, 18h00, Centre de Congrès de l'Aube, Troyes.",
-        }}
+        titre={"TEDxUTTroyes 2027 : Franchir ou s'adapter ?"}
+        description={"La dixième édition de TEDxUTTroyes explore la limite : franchir ou s'adapter ? Jeudi 18 mars 2027, 18h00, Centre de Congrès de l'Aube, Troyes."}
         chemin="/"
         partage={{
           ...PARTAGE_2027,
-          description: {
-            masque: "Le thème et la date de la dixième édition seront révélés le mardi 10 novembre 2026. Centre de Congrès de l'Aube, Troyes.",
-            vrai: "La dixième édition de TEDxUTTroyes explore la limite. Jeudi 18 mars 2027, 18h00, Centre de Congrès de l'Aube, Troyes.",
-          },
+          description: "La dixième édition de TEDxUTTroyes explore la limite. Jeudi 18 mars 2027, 18h00, Centre de Congrès de l'Aube, Troyes.",
         }}
       />
       <JsonLd
         donnees={{
           '@context': 'https://schema.org',
           '@type': 'Event',
-          name: 'TEDxUTTroyes 2027, dixième édition',
-          description: "Dixième édition de TEDxUTTroyes : talks en direct et vidéos de conférences TED au Centre de Congrès de l'Aube, à Troyes.",
+          name: "TEDxUTTroyes 2027 : Franchir ou s'adapter ?",
+          description: "Dixième édition de TEDxUTTroyes autour du thème de la limite : franchir ou s'adapter ? Talks en direct et vidéos de conférences TED au Centre de Congrès de l'Aube, à Troyes.",
           startDate: '2027-03-18T18:00:00+01:00',
           doorTime: '2027-03-18T18:00:00+01:00',
           endDate: '2027-03-19T00:00:00+01:00',
@@ -72,7 +56,7 @@ export default function Accueil() {
             },
             geo: { '@type': 'GeoCoordinates', latitude: 48.298433, longitude: 4.077912 },
           },
-          image: [`${SITE}/assets/img/og/og-2027-v2.jpg`],
+          image: [SITE + PARTAGE_2027.image],
           organizer: { '@type': 'Organization', name: 'TEDxUTTroyes', url: `${SITE}/`, sameAs: [INSTAGRAM, LINKEDIN] },
           offers: { '@type': 'Offer', url: BILLETTERIE, priceCurrency: 'EUR', availability: 'https://schema.org/PreOrder' },
           maximumAttendeeCapacity: 750,
@@ -111,19 +95,19 @@ export default function Accueil() {
           <div className="hero-bg" aria-hidden="true"> <img src="/assets/img/editions/2024/galerie/05.webp" alt="" width="1400" height="933" fetchPriority="high" /> </div>
           <div className="mwrap">
             <p className="cote a a1">Dixième édition</p>
-            <h1 className="hero-title"> <span className="hero-word a a2" aria-hidden="true" data-reveal-unhide="" data-reveal="Franchir">********</span> <span className="hero-sub a a3" aria-hidden="true" data-reveal-unhide="" data-reveal="ou s'adapter ?">** *'*******&nbsp;?</span> <span className="visually-hidden" data-reveal-drop="">Le thème de la dixième édition est sous embargo : il sera révélé le mardi 10 novembre 2026.</span> </h1>
-            <p className="hero-fig a a4" aria-hidden="true" data-reveal-unhide="" data-reveal-html={"<span class=\"fig-id\">La limite </span>: Se franchit ou s'apprivoise mais ne s'ignore jamais."}> <span className="fig-id">** ****** </span>: ** ******** ** *'*********** **** ** *'****** *******. </p>
-            <p className="hero-meta a a5"> <time dateTime="2027-03-18T18:00:00+01:00"><Masque texte="Jeudi 18 mars 2027" /></time> <span className="sep" aria-hidden="true">·</span> <span>18h00</span> <span className="sep" aria-hidden="true">·</span> <span>Centre de Congrès de l'Aube, Troyes</span> </p>
+            <h1 className="hero-title"> <span className="hero-word a a2">Franchir</span> <span className="hero-sub a a3">ou s'adapter&nbsp;?</span> </h1>
+            <p className="hero-fig a a4"> <span className="fig-id">La limite </span>: Se franchit ou s'apprivoise mais ne s'ignore jamais. </p>
+            <p className="hero-meta a a5"> <time dateTime="2027-03-18T18:00:00+01:00">Jeudi 18 mars 2027</time> <span className="sep" aria-hidden="true">·</span> <span>18h00</span> <span className="sep" aria-hidden="true">·</span> <span>Centre de Congrès de l'Aube, Troyes</span> </p>
             <div className="actions a a6"> <a className="btn btn--primary" href="https://www.billetweb.fr/tedxuttroyes-2027-10e-edition" target="_blank" rel="noopener">Réserver ma place</a> <a className="btn btn--ghost" href="/programme/">Voir le programme</a> </div>
-            <p className="visually-hidden" data-reveal="Le compte à rebours est lancé : l'événement commence le jeudi 18 mars 2027 à 18h00.">Le compte à rebours est lancé : la date et le thème de la dixième édition seront révélés le mardi 10 novembre 2026 à 16h00. </p>
-            <div className="ticker a a7" aria-hidden="true"> <span className="ticker-label" data-reveal="Temps restant">Révélation de la date et du thème</span> <span className="ticker-value" id="ticker-value">J-000 · 00:00:00</span> </div>
+            <p className="visually-hidden">Le compte à rebours est lancé : l'événement commence le jeudi 18 mars 2027 à 18h00.</p>
+            <div className="ticker a a7" aria-hidden="true"> <span className="ticker-label">Temps restant</span> <span className="ticker-value" id="ticker-value">J-000 · 00:00:00</span> </div>
             <div className="ticker-cal a a7">
               <details className="cal">
-                <summary className="btn btn--ghost btn--sm" data-reveal="Ajouter la soirée à mon agenda">Ajouter la révélation à mon agenda</summary>
+                <summary className="btn btn--ghost btn--sm">Ajouter la soirée à mon agenda</summary>
                 <ul className="cal-list">
-                  <li><a href={"https://calendar.google.com/calendar/render?action=TEMPLATE&text=TEDxUTTroyes%202027%20%3A%20r%C3%A9v%C3%A9lation%20de%20la%20date%20et%20du%20th%C3%A8me&dates=20261110T150000Z%2F20261110T160000Z&details=La%20dixi%C3%A8me%20%C3%A9dition%20de%20TEDxUTTroyes%20l%C3%A8ve%20le%20voile%20sur%20sa%20date%20et%20son%20th%C3%A8me%20%3A%20rendez-vous%20sur%20https%3A%2F%2Ftedxuttroyes.fr%2F&location=https%3A%2F%2Ftedxuttroyes.fr%2F"} target="_blank" rel="noopener" data-reveal-attr="href" data-reveal={"https://calendar.google.com/calendar/render?action=TEMPLATE&text=TEDxUTTroyes%202027%20%3A%20Franchir%20ou%20s%27adapter%20%3F&dates=20270318T170000Z%2F20270318T230000Z&details=Dixi%C3%A8me%20%C3%A9dition%20de%20TEDxUTTroyes%2C%20autour%20du%20th%C3%A8me%20de%20la%20limite%20%3A%20franchir%20ou%20s%27adapter%20%3F%0A%0A18h00%20%3A%20L%27Avant-Sc%C3%A8ne%2C%20rencontres%20associatives%20et%20professionnelles%0A19h30%20%3A%20ouverture%20de%20la%20soir%C3%A9e%2C%20six%20talks%20en%20deux%20sessions%20et%20un%20entracte%0A22h30%20%3A%20pot%20VIP%2C%20rencontre%20avec%20les%20intervenantes%20et%20intervenants%20jusqu%27%C3%A0%20minuit%0A%0A750%20places%20au%20Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%20%C3%A0%20Troyes.%0AProgramme%20%3A%20https%3A%2F%2Ftedxuttroyes.fr%2Fprogramme%2F%0ABilletterie%20%3A%20https%3A%2F%2Fwww.billetweb.fr%2Ftedxuttroyes-2027-10e-edition&location=Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%202%20rue%20Pierre%20Labonde%2C%2010000%20Troyes"}>Google Agenda<span className="visually-hidden"> (nouvelle fenêtre)</span></a></li>
-                  <li><a href="/assets/agenda/revelation.ics" data-reveal-attr="href" data-reveal="/assets/agenda/tedxuttroyes-2027.ics">Apple Calendrier</a></li>
-                  <li><a href="/assets/agenda/revelation.ics" data-reveal-attr="href" data-reveal="/assets/agenda/tedxuttroyes-2027.ics">Samsung Calendrier</a></li>
+                  <li><a href={"https://calendar.google.com/calendar/render?action=TEMPLATE&text=TEDxUTTroyes%202027%20%3A%20Franchir%20ou%20s%27adapter%20%3F&dates=20270318T170000Z%2F20270318T230000Z&details=Dixi%C3%A8me%20%C3%A9dition%20de%20TEDxUTTroyes%2C%20autour%20du%20th%C3%A8me%20de%20la%20limite%20%3A%20franchir%20ou%20s%27adapter%20%3F%0A%0A18h00%20%3A%20L%27Avant-Sc%C3%A8ne%2C%20rencontres%20associatives%20et%20professionnelles%0A19h30%20%3A%20ouverture%20de%20la%20soir%C3%A9e%2C%20six%20talks%20en%20deux%20sessions%20et%20un%20entracte%0A22h30%20%3A%20pot%20VIP%2C%20rencontre%20avec%20les%20intervenantes%20et%20intervenants%20jusqu%27%C3%A0%20minuit%0A%0A750%20places%20au%20Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%20%C3%A0%20Troyes.%0AProgramme%20%3A%20https%3A%2F%2Ftedxuttroyes.fr%2Fprogramme%2F%0ABilletterie%20%3A%20https%3A%2F%2Fwww.billetweb.fr%2Ftedxuttroyes-2027-10e-edition&location=Centre%20de%20Congr%C3%A8s%20de%20l%27Aube%2C%202%20rue%20Pierre%20Labonde%2C%2010000%20Troyes"} target="_blank" rel="noopener">Google Agenda<span className="visually-hidden"> (nouvelle fenêtre)</span></a></li>
+                  <li><a href="/assets/agenda/tedxuttroyes-2027.ics">Apple Calendrier</a></li>
+                  <li><a href="/assets/agenda/tedxuttroyes-2027.ics">Samsung Calendrier</a></li>
                 </ul>
               </details>
             </div>
@@ -134,14 +118,11 @@ export default function Accueil() {
 
         <section className="mom" id="moment-2" data-line="cross">
           <div className="mwrap">
-            <p className="cote" aria-hidden="true" data-reveal-unhide="" data-reveal="Franchir">********</p>
-            <div className="cross-track" aria-hidden="true"> <span className="cross-word"><Masque texte="Au-delà" masque="*******" /></span> </div>
+            <p className="cote">Franchir</p>
+            <div className="cross-track" aria-hidden="true"> <span className="cross-word">Au-delà</span> </div>
             <div className="mom-duo">
-              <template data-reveal-target="#versant-1" dangerouslySetInnerHTML={{ __html: VERSANT_1 }} />
-              <div className="colL" id="versant-1">
-                <h2 className="mom-title"><span aria-hidden="true"><span className="redact" style={{ width: "7ch" }} /> <span className="redact" style={{ width: "3ch" }} /> <span className="redact" style={{ width: "2ch" }} /> <span className="redact" style={{ width: "5ch" }} /> <span className="redact" style={{ width: "5ch" }} /> <span className="redact" style={{ width: "10ch" }} /></span><span className="visually-hidden">Titre sous embargo</span></h2>
-                <p className="lead" aria-hidden="true"><span className="redact" style={{ display: "block", height: "0.6em", width: "100%" }} /><span className="redact" style={{ display: "block", height: "0.6em", width: "100%", marginTop: "12px" }} /><span className="redact" style={{ display: "block", height: "0.6em", width: "100%", marginTop: "12px" }} /><span className="redact" style={{ display: "block", height: "0.6em", width: "58%", marginTop: "12px" }} /></p>
-                <span className="visually-hidden">Texte sous embargo</span>
+              <div className="colL">
+                <h2 className="mom-title">Décider que la ligne était provisoire</h2> <p className="lead">Le record tombe, le prototype décolle, une voix s'élève là où personne ne parlait. Franchir, c'est regarder la limite en face et passer outre : le mur devient une marche, la frontière un point de départ. C'est le premier versant du thème 2027 : l'audace d'aller de l'autre côté, et ce que ce geste coûte à celles et ceux qui le font.</p>
               </div>
               <figure className="mom-photo"> <img src="/assets/img/2-1600.webp" srcSet="/assets/img/2-800.webp 800w, /assets/img/2-1600.webp 1600w" sizes="(min-width: 1024px) 720px, calc(94vw - 40px)" alt="Le public de TEDxUTTroyes dans l'auditorium du Centre de Congrès de l'Aube" width="1600" height="1066" loading="lazy" /> </figure>
             </div>
@@ -150,15 +131,12 @@ export default function Accueil() {
 
         <section className="mom mom--droite" id="moment-3" data-line="cross" data-cross-dir="rtl">
           <div className="mwrap">
-            <p className="cote" aria-hidden="true" data-reveal-unhide="" data-reveal="S'adapter">*'*******</p>
-            <div className="cross-track cross-track--rtl" aria-hidden="true"> <span className="cross-word"><Masque texte="Jusqu'ici" /></span> </div>
+            <p className="cote">S'adapter</p>
+            <div className="cross-track cross-track--rtl" aria-hidden="true"> <span className="cross-word">Jusqu'ici</span> </div>
             <div className="mom-duo mom-duo--rtl">
               <figure className="mom-photo"> <img src="/assets/img/1-1600.webp" srcSet="/assets/img/1-800.webp 800w, /assets/img/1-1600.webp 1600w" sizes="(min-width: 1024px) 720px, calc(94vw - 40px)" alt="Jamy Gourmaud sur la scène de TEDxUTTroyes, devant les lettres rouges" width="1600" height="900" loading="lazy" /> </figure>
-              <template data-reveal-target="#versant-2" dangerouslySetInnerHTML={{ __html: VERSANT_2 }} />
-              <div className="colR" id="versant-2">
-                <h2 className="mom-title"><span aria-hidden="true"><span className="redact" style={{ width: "2ch" }} /> <span className="redact" style={{ width: "3ch" }} /> <span className="redact" style={{ width: "2ch" }} /> <span className="redact" style={{ width: "2ch" }} /> <span className="redact" style={{ width: "8ch" }} /> <span className="redact" style={{ width: "3ch" }} /></span><span className="visually-hidden">Titre sous embargo</span></h2>
-                <p className="lead" aria-hidden="true"><span className="redact" style={{ display: "block", height: "0.6em", width: "100%" }} /><span className="redact" style={{ display: "block", height: "0.6em", width: "100%", marginTop: "12px" }} /><span className="redact" style={{ display: "block", height: "0.6em", width: "100%", marginTop: "12px" }} /><span className="redact" style={{ display: "block", height: "0.6em", width: "72%", marginTop: "12px" }} /></p>
-                <span className="visually-hidden">Texte sous embargo</span>
+              <div className="colR">
+                <h2 className="mom-title">Ce qui ne se franchit pas</h2> <p className="lead">Le corps compose avec la maladie, la ville avec sa rivière, l'ingénieur avec la matière. S'adapter, c'est faire de la ligne un appui : plier sans rompre, transformer la contrainte en méthode. C'est le second versant du thème : certaines limites ne se dépassent pas, elles s'apprivoisent, et ce renoncement apparent demande autant de courage que le dépassement.</p>
               </div>
             </div>
           </div>
@@ -168,8 +146,8 @@ export default function Accueil() {
           <div className="mwrap">
             <p className="cote">Speakers</p>
             <div className="colL">
-              <h2 className="mom-title" data-reveal="Six noms s'apprêtent à franchir">Six noms s'apprêtent à monter sur scène </h2>
-              <p className="lead" data-reveal="Le 18 mars, six talks racontent la limite depuis la scène troyenne : 18 minutes chacun, pas une de plus. Les annonces tomberont une par une d'ici mars."> Le ** ****, six talks se succèdent sur la scène troyenne : 18 minutes chacun, pas une de plus. Les annonces tomberont une par une d'ici au jour J.</p>
+              <h2 className="mom-title">Six noms s'apprêtent à franchir</h2>
+              <p className="lead">Le 18 mars, six talks racontent la limite depuis la scène troyenne : 18 minutes chacun, pas une de plus. Les annonces tomberont une par une d'ici mars.</p>
             </div>
             <ol className="slist" data-line="avoid" data-line-flank="" data-line-margin="28" data-line-margin-m="14" aria-label="Les six intervenantes et intervenants de 2027, annonces à venir">
               <li className="sl-row"> <span className="sl-photo" aria-hidden="true" /> <span className="sp-id">Intervenant·e 01</span> <span className="sl-name" aria-hidden="true"><span className="redact" style={{ width: "4.5ch" }} /><span className="redact" style={{ width: "7ch" }} /></span> <span className="visually-hidden">Nom sous embargo</span> <span className="sp-status">annonce : à venir</span> </li>
@@ -225,7 +203,7 @@ export default function Accueil() {
               <h2 className="mom-title">La soirée, réglée au quart d'heure</h2>
               <p className="lead">L'Avant-Scène dès 18h00, premier talk à 19h30, dernier talk à 22h30. La feuille de salle tient en 6 temps.</p>
             </div>
-            <ol data-reveal-attr="aria-label" data-reveal="Le déroulé de la soirée du 18 mars 2027" className="tl" aria-label="Le déroulé de la soirée du ** **** ****">
+            <ol className="tl" aria-label="Le déroulé de la soirée du 18 mars 2027">
               <li className="tl-row">
                 <div className="tl-left">
                   <figure className="tl-ph" aria-hidden="true"> <img src="/assets/img/recrutement-980.webp" srcSet="/assets/img/recrutement-600.webp 600w, /assets/img/recrutement-980.webp 980w" sizes="(min-width: 1024px) 300px, 260px" alt="" width="980" height="490" loading="lazy" /> </figure>
@@ -245,7 +223,7 @@ export default function Accueil() {
                 <span className="tl-dot" aria-hidden="true" />
                 <div className="tl-body">
                   <p className="tl-title">Ouverture de la soirée</p>
-                  <p className="tl-desc">Le thème est posé : <Masque texte="franchir ou s'adapter" />&nbsp;?</p>
+                  <p className="tl-desc">Le thème est posé : franchir ou s'adapter&nbsp;?</p>
                 </div>
               </li>
               <li className="tl-row">
@@ -360,7 +338,7 @@ export default function Accueil() {
                 {' '}
                 <span className="alb-lbl"><a href="/editions/edition-2026/"><span className="fr-y">2026</span><span className="fr-t">Un futur à bâtir</span></a></span>
               </li>
-              <li className="alb-item alb-item--end" style={{ "--c": "10", "--th": "0.72" } as React.CSSProperties}> <span className="alb-end-label"> <span className="fr-y">2027</span> <span className="fr-t"><Masque texte="Franchir ou s'adapter" />&nbsp;?</span> <span className="fr-end-note">Dixième édition · <Masque texte="18 mars 2027" /> · vous êtes ici</span> </span> <span className="alb-dot alb-dot--end" data-line="drop" aria-hidden="true" /> </li>
+              <li className="alb-item alb-item--end" style={{ "--c": "10", "--th": "0.72" } as React.CSSProperties}> <span className="alb-end-label"> <span className="fr-y">2027</span> <span className="fr-t">Franchir ou s'adapter&nbsp;?</span> <span className="fr-end-note">Dixième édition · 18 mars 2027 · vous êtes ici</span> </span> <span className="alb-dot alb-dot--end" data-line="drop" aria-hidden="true" /> </li>
             </ol>
             <figure className="arch">
               <ul className="arch-strip">
@@ -376,7 +354,7 @@ export default function Accueil() {
             <ul className="data-lines" data-line="avoid" data-line-margin="28" data-line-margin-m="14" aria-label="La dixième édition en chiffres">
               <li><strong>61</strong><span>talks partagés sur la scène troyenne depuis 2016</span></li>
               <li><strong>2500</strong><span>spectateurs cumulés sur 9 éditions</span></li>
-              <li><strong>750</strong><span>fauteuils le <Masque texte="18 mars 2027" /> pas un de plus</span></li>
+              <li><strong>750</strong><span>fauteuils le 18 mars 2027, pas un de plus</span></li>
             </ul>
             <p className="colL more-row"> <a className="link-more" href="/editions/">Ouvrir le registre des éditions <svg className="icon" viewBox="0 0 24 24" aria-hidden="true"> <path d="M9 18l6-6-6-6" /> </svg> </a> </p>
           </div>

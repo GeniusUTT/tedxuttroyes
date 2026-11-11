@@ -9,7 +9,7 @@ export default function PageCachee() {
   // Le mot de passe s'affiche en mono grasse : sa police part tout de suite.
   preload('/assets/fonts/space-mono-700-latin.woff2', { as: 'font', type: 'font/woff2', crossOrigin: '' });
   return (
-    <Cadre date="claire" invitation={false}>
+    <Cadre invitation={false}>
       <Tete
         titre="Vous l'avez trouvée | TEDxUTTroyes 2027"
         robots="noindex, nofollow"
@@ -36,9 +36,8 @@ export default function PageCachee() {
             <p className="ticker-label">La date</p>
             <p className="ticker-value">Jeudi 18 mars 2027</p>
             <div className="prose" data-line-flank="">
-              <p>18h00, Centre de Congrès de l'Aube, à Troyes. Le reste du site ne dira ni l'un ni l'autre avant le mardi 10 novembre 2026 à 16h00 : partout ailleurs, la date et le thème sont encore cachés 🤫.</p>
+              <p>18h00, Centre de Congrès de l'Aube, à Troyes. Depuis le mardi 10 novembre 2026, tout le site le dit : vous l'aviez su avant tout le monde.</p>
             </div>
-            <p className="notice">Gardez-les pour vous jusqu'à la révélation : la charade doit rester à résoudre pour tout le monde.</p>
           </div>
         </div>
       </section>

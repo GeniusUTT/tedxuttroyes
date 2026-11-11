@@ -7,9 +7,9 @@ export default function Faq() {
     <Cadre actif={{ rubrique: "/faq/", courant: "page" }}>
       <Tete
         titre="FAQ pratique | TEDxUTTroyes 2027"
-        description={{ masque: "Horaires, accès, billetterie, accessibilité : tout ce qu'il faut savoir avant la soirée TEDxUTTroyes du ***** ** **** **** au Centre de Congrès de l'Aube, à Troyes.", vrai: "Horaires, accès, billetterie, accessibilité : tout ce qu'il faut savoir avant la soirée TEDxUTTroyes du jeudi 18 mars 2027 au Centre de Congrès de l'Aube, à Troyes." }}
+        description={"Horaires, accès, billetterie, accessibilité : tout ce qu'il faut savoir avant la soirée TEDxUTTroyes du jeudi 18 mars 2027 au Centre de Congrès de l'Aube, à Troyes."}
         chemin="/faq/"
-        partage={{ ...PARTAGE_2027, description: { masque: "Horaires, accès, billetterie, accessibilité : tout savoir avant la soirée du ** **** ****.", vrai: "Horaires, accès, billetterie, accessibilité : tout savoir avant la soirée du 18 mars 2027." } }}
+        partage={{ ...PARTAGE_2027, description: "Horaires, accès, billetterie, accessibilité : tout savoir avant la soirée du 18 mars 2027." }}
       />
 
       <div className="sec sec--head">

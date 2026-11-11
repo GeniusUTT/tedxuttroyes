@@ -2,7 +2,6 @@ import { EDITIONS } from '../../../contenu/editions';
 import { SPEAKERS, type Speaker } from '../../../contenu/speakers';
 import { Bandeau } from '../../_site/Bandeau';
 import { Cadre } from '../../_site/Cadre';
-import { Masque } from '../../_site/Masque';
 import { PARTAGE_2027, Tete } from '../../_site/Tete';
 
 // Toutes les voix passées sur la scène, année par année, de la plus récente à
@@ -68,7 +67,7 @@ export default function HallOfFame() {
 
       <Bandeau
         titre="Soixante et une voix sont passées par cette scène."
-        lead={<>La dixième édition en ajoutera six, le <Masque texte="18 mars 2027" />, devant 750 personnes.</>}
+        lead={<>La dixième édition en ajoutera six, le 18 mars 2027, devant 750 personnes.</>}
       />
     </Cadre>
   );
