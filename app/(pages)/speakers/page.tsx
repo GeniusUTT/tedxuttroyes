@@ -7,9 +7,9 @@ export default function IndexDesSpeakers() {
     <Cadre actif={{ rubrique: "/speakers/", courant: "page" }}>
       <Tete
         titre="Les speakers | TEDxUTTroyes 2027"
-        description={{ masque: "Six intervenantes et intervenants prendront la parole le ** **** **** pour la dixième édition de TEDxUTTroyes. Les noms sont sous embargo : les annonces arrivent.", vrai: "Six intervenantes et intervenants prendront la parole le 18 mars 2027 pour la dixième édition de TEDxUTTroyes. Les noms sont sous embargo : les annonces arrivent." }}
+        description={"Six intervenantes et intervenants prendront la parole le 18 mars 2027 pour la dixième édition de TEDxUTTroyes. Les noms sont sous embargo : les annonces arrivent."}
         chemin="/speakers/"
-        partage={{ ...PARTAGE_2027, description: { masque: "Six noms sous embargo. Chaque annonce lèvera une barre noire, d'ici au ** **** ****.", vrai: "Six noms sous embargo. Chaque annonce lèvera une barre noire, d'ici au 18 mars 2027." } }}
+        partage={{ ...PARTAGE_2027, description: "Six noms sous embargo. Chaque annonce lèvera une barre noire, d'ici au 18 mars 2027." }}
       />
 
       <div className="sec sec--head">
@@ -17,7 +17,7 @@ export default function IndexDesSpeakers() {
           <p className="cote a a1">La scène 2027</p>
           <div className="sec-body">
             <h1 className="page-title a a2">Speakers</h1>
-            <p className="lead a a3" data-reveal="Six fiches, six limites racontées en dix-huit minutes maximum. Les noms restent sous embargo : chaque annonce lèvera une barre noire, d'ici au printemps 2027.">Six fiches, six idées racontées en dix-huit minutes maximum. Les noms restent sous embargo : chaque annonce lèvera une barre noire, d'ici au jour J.</p>
+            <p className="lead a a3">Six fiches, six limites racontées en dix-huit minutes maximum. Les noms restent sous embargo : chaque annonce lèvera une barre noire, d'ici au printemps 2027.</p>
           </div>
         </div>
       </div>

@@ -13,7 +13,6 @@ export const CONTACT = 'geniusutt@utt.fr';
 // Les scripts du site, en JavaScript pur. Ils sont mis en cache un mois
 // (next.config.ts) : toute retouche passe par un nouveau numéro.
 export const SCRIPTS = {
-  devoilement: '/assets/js/reveal-v4.js',
   principal: '/assets/js/main-v11.js',
   ligne: '/assets/js/line-v10.js',
   carte: '/assets/js/map-v2.js',

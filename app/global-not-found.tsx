@@ -17,7 +17,7 @@ export const viewport: Viewport = { themeColor: '#080808' };
 
 export default function Introuvable() {
   return (
-    <Document corps="parcours" scripts={[SCRIPTS.devoilement, SCRIPTS.principal, SCRIPTS.ligne]}>
+    <Document corps="parcours" scripts={[SCRIPTS.principal, SCRIPTS.ligne]}>
       <Cadre>
         <Tete
           titre="Page introuvable | TEDxUTTroyes"

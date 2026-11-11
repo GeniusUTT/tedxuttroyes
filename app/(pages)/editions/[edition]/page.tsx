@@ -3,7 +3,6 @@ import { EDITIONS, type Edition } from '../../../../contenu/editions';
 import { SPEAKERS } from '../../../../contenu/speakers';
 import { BandeauRegistre } from '../../../_site/Bandeau';
 import { Cadre } from '../../../_site/Cadre';
-import { Masque } from '../../../_site/Masque';
 import { PARTAGE_2027, Tete } from '../../../_site/Tete';
 
 // La fiche d'une édition passée : l'affiche, le récit, les speakers, l'équipe,
@@ -47,7 +46,7 @@ function Voisines({ precedente, suivante }: { precedente?: Edition; suivante?: E
             </a>
           ) : (
             <a className="link-more" href="/">
-              édition 2027 : <Masque texte="Franchir ou s'adapter" />&nbsp;? {SUIVANT}
+              édition 2027 : Franchir ou s'adapter&nbsp;? {SUIVANT}
             </a>
           )}
         </nav>

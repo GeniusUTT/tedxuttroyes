@@ -33,8 +33,8 @@ app/
   _site/                 Ce que les pages partagent : Document (head, polices,
                          feuille, scripts), Cadre (en-tête, menu, filigrane,
                          pied de page), Tete (titre, meta, partage), Bandeau
-                         (bas de page et prise de la ligne), Masque (le voile
-                         du 10 novembre), liens.ts (billetterie, réseaux,
+                         (bas de page et prise de la ligne), liens.ts
+                         (billetterie, réseaux,
                          noms des scripts), ScriptsDuSite
   (espace)/              L'espace connecté
 contenu/
@@ -44,7 +44,8 @@ public/
   robots.txt, sitemap.xml
   assets/
     css/main-v16.css     Feuille unique (sommaire commenté en tête de fichier)
-    js/reveal-v4.js      Le dévoilement automatique du 10 novembre 2026
+    js/reveal-v4.js      Le dévoilement du 10 novembre 2026 : plus chargé
+                         depuis le 2026-11-11, gardé pour les pages en cache
     js/main-v11.js       Script commun (menu, header, téléscripteur, interlude
                          de l'accueil, filigrane, invitation Instagram)
     js/line-v10.js       La ligne continue, sur tout le site. Deux régimes :
@@ -54,7 +55,8 @@ public/
                          dorsale CSS.
     js/map-v2.js         Carte Mapbox du lieu, chargée à l'approche du bloc ;
                          le plan SVG reste la version par défaut
-    agenda/              Les deux rendez-vous en .ics (révélation, puis soirée)
+    agenda/              La soirée en .ics (revelation.ics, plus lié, reste
+                         servi pour les liens déjà distribués)
     fonts/               Bricolage Grotesque, Space Mono 400 et 700, DM Sans,
                          hébergées sur le site
     img/, video/         Logo, marque de la dixième édition, favicons, image de
@@ -72,7 +74,7 @@ Une page du site n'est dans aucun menu, dans aucun pied de page, ni dans `sitema
 
 Modifié le 2026-09-20 : **la place a été gagnée**, et la page le dit. Un encadré `.notice` ouvre la section du mot de passe (« La place a déjà été gagnée... il n'y a plus de place à réclamer ici »), le chapô ne promet plus de place, le texte est passé au passé et le mot de passe reste affiché « pour mémoire ». Le bouton principal ne dit plus « Nous envoyer le mot de passe par e-mail », qui aurait contredit l'encadré : il est devenu « Nous écrire par e-mail », sans corps pré-rempli, et garde son `data-line="plug"`. Le reste de la page ne bouge pas : l'avant-première de la date et du thème reste sa récompense, et la charade de la FAQ reste à résoudre.
 
-La page annonce en outre, en avant-première, la date et le thème de l'édition : « Franchir ou s'adapter ? » et « Jeudi 18 mars 2027 », en clair et sans masquage, alors que le reste du site les remplace par des étoiles jusqu'au 10 novembre 2026 à 16h00. C'est la récompense de la charade, et la seule exception au masquage : elle ne tient que parce que la page est introuvable (hors menu, hors sitemap, `noindex`, sans Open Graph) et parce que son `<title>` reste neutre. Un encadré demande au visiteur de garder la primeur pour lui.
+La page annonce en outre, en avant-première, la date et le thème de l'édition : « Franchir ou s'adapter ? » et « Jeudi 18 mars 2027 », en clair et sans masquage, alors que le reste du site les a remplacés par des étoiles jusqu'au 10 novembre 2026 à 16h00. Depuis la révélation, son texte dit que tout le site les donne. C'est la récompense de la charade, et la seule exception au masquage : elle ne tient que parce que la page est introuvable (hors menu, hors sitemap, `noindex`, sans Open Graph) et parce que son `<title>` reste neutre. Un encadré demande au visiteur de garder la primeur pour lui.
 
 Modifié le 2026-08-28 : l'adresse est passée de `tedx-utt-10ans/` à `tedx-utt-10e/`. Il s'agit de la dixième édition, pas d'un anniversaire de dix ans, et la charade de la FAQ a suivi (le troisième morceau est désormais le rang de l'édition, `10e`). L'ancienne adresse n'est pas redirigée : elle renvoie une 404. Les fichiers de la marque ont été renommés dans le même mouvement (`logo-10ans*.svg` devient `logo-10e*.svg`, idem pour les trois icônes).
 
@@ -86,7 +88,6 @@ On y arrive sans ouvrir le code source ni la console : la charade est posée en 
 - **Pas de balises Open Graph** sur cette page : un lien partagé sur un réseau ne doit pas afficher d'aperçu qui vend la mèche.
 - Si l'adresse change, la charade de la FAQ change avec elle.
 - La page ne définit aucune règle CSS : elle se compose uniquement de classes existantes (`sec`, `cote`, `prose`, `notice`, `ticker-label`, `ticker-value`, `actions`, `btn`). Pas de renommage `main-v16.css` à prévoir de son fait.
-- La page ne porte aucun `.msk` ni `data-reveal` : date et thème y sont écrits en clair, `reveal-v4.js` n'a donc rien à y dévoiler le 10 novembre. En contrepartie, ne jamais lui donner de balise Open Graph et ne jamais la lier depuis une page publique.
 - Le mot de passe est le seul endroit du site qui force `white-space: normal` en style en ligne sur un `.ticker-value` : la classe est en `nowrap` pour le téléscripteur, et la phrase déborderait sous 400 px sans cela.
 
 ## Tester en local
@@ -192,14 +193,11 @@ La procédure est testée à chaque `npm test` : une sauvegarde est restaurée d
 
 | Quoi | Où | Comment |
 |---|---|---|
-| Dévoilement automatique | `assets/js/reveal-v4.js` | le mardi 10 novembre 2026 à 16h00 (cible UTC figée `2026-11-10T15:00:00Z`), le site reprend de lui-même son état d'avant le masquage : plus une étoile, plus une barre de caviardage, titres et descriptions d'origine. Le compte à rebours de l'accueil enchaîne alors sur le jour J. **Si vous modifiez un texte masqué, mettez à jour sa version d'origine dans le même élément** (`data-reveal`, `data-reveal-html`, les deux `VERSANT_` de l'accueil), sinon le dévoilement remettra l'ancienne. Le composant `Masque` fait exception : on ne lui donne que le texte vrai, les étoiles s'en déduisent. La remise en état définitive reste un `git revert` du commit de masquage : le HTML servi redevient alors correct pour Google et les partages sociaux, ce que le dévoilement JavaScript ne fait que pour le visiteur (le JSON-LD de l'accueil, lui, n'est pas rétabli par le script). |
-| Thème (masqué) | toutes les pages | « Franchir ou s'adapter ? » est remplacé par `******** ** *'*******` (une étoile par caractère), « la limite » par `** ******`. Sur l'accueil, les deux sections du diptyque sont sous embargo (barres de caviardage `.redact`, même DA que les fiches speakers). Les titres d'onglet, les metas sociales et le JSON-LD portent un intitulé neutre : « TEDxUTTroyes 2027, dixième édition ». Trois textes ont été reformulés parce qu'ils nommaient le thème : le titre et le chapô du bloc speakers de l'accueil, et le chapô de l'index des speakers. Tout se récupère dans l'historique git (commit précédant le masquage). Même échéance que la date : mardi 10 novembre 2026 à 16h00. |
-| Date du jour J (masquée) | toutes les pages + `assets/js/main-v11.js` | la date est remplacée par des étoiles (`***** ** **** ****` pour « Jeudi 18 mars 2027 », `** **** ****` pour « 18 mars 2027 », `** ****` pour « 18 mars ») et le téléscripteur de l'accueil décompte jusqu'à sa révélation, le mardi 10 novembre 2026 à 16h00, avec un bouton « ajouter à mon agenda » qui ouvre le choix entre Google Agenda (URL d'ajout), Apple Calendrier et Samsung Calendrier (fichiers `assets/agenda/*.ics`, servis en `text/calendar` par un en-tête de `next.config.ts`). Les trois destinations basculent sur la soirée elle-même une fois la date révélée. Le JSON-LD, les attributs `datetime` et la date affichée dans ce README gardent la vraie valeur. |
 | Biographies courtes | 14 fiches speakers 2016 et 2017 | elles ont bien une bio depuis le 2026-08-18, mais courte (180 à 300 caractères) et ouverte sur une phrase de raccord fabriquée (« Sur la scène de TEDxUTTroyes 2016, autour du thème *Shape the future*, X a défendu l'idée « ... » »). Elles n'ont pas non plus de ligne `Domaine :`, contrairement aux quarante-sept autres. À reprendre au fil de l'eau, sur le modèle des fiches 2021 et 2023 : un `<p class="ed-meta">Domaine : ...</p>` en minuscule, puis deux ou trois paragraphes, dans `contenu/speakers.tsx` (champs `domaine` et `bio`). |
 | Playlists YouTube par édition | `app/(pages)/editions/[edition]/page.tsx` | aucune playlist n'existe côté chaîne : les liens pointent vers une recherche YouTube « TEDxUTTroyes + année ». À remplacer le jour où des playlists sont créées. |
 | Jeton Mapbox | `assets/js/map-v2.js` | le jeton public et le style rouge viennent du compte personnel `solene-drnx` (ancien site). Laissé tel quel à la demande de Baptiste le 2026-08-18 ; à basculer un jour sur un compte Mapbox de l'association, restreint au domaine tedxuttroyes.fr. |
 | Déroulé du jour J | `app/(pages)/programme/page.tsx` | horaires type (portes 18h00 avec L'Avant-Scène, talks 19h30, fin vers 22h30) à figer quand le programme sera arrêté. |
-| Image de partage (Open Graph) | `public/assets/img/og/og-2027-v2.jpg` | carte 1200x630 composée le 2026-08-25 autour du X moiré de la dixième édition : elle porte la date masquée et la mention « date et thème révélés le 10 novembre 2026 ». La version d'après le dévoilement est déjà faite, `assets/img/og/og-2027-revele.jpg` (thème et vraie date) : le 10 novembre 2026 à 16h00, il suffit de changer `PARTAGE_2027` dans `app/_site/Tete.tsx` (une ligne : c'est la branche `devoilement-og`, à fusionner ce jour-là), et toutes les pages qui partagent cette image suivent (les 61 fiches speakers ont leur propre portrait). Une image étant statique, `reveal-v4.js` ne peut rien y faire. L'ancienne capture `og-default.jpg` reste sur le serveur pour ne pas casser les partages déjà publiés, mais plus aucune page ne la référence. |
+| Image de partage (Open Graph) | `public/assets/img/og/og-2027-revele.jpg` | carte 1200x630 autour du X moiré de la dixième édition, avec le thème et la vraie date, en service depuis le 2026-11-11 (`PARTAGE_2027` dans `app/_site/Tete.tsx`). `og-2027-v2.jpg`, la version à date masquée, reste sur le serveur pour les partages déjà publiés. |
 
 Réglé le 2026-08-28 : les onze biographies manquantes (les sept fiches 2021, et Karim Hechmi, Léo Techmaker, Marcel Soh et Serge Rohmer pour 2023) ont été fournies par Baptiste et posées avec leur ligne `Domaine :`. Plus aucune fiche ne porte le texte de remplacement « Les archives du site n'ont pas conservé de biographie ».
 

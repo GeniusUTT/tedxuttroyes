@@ -1,7 +1,6 @@
 import { EDITIONS } from '../../../contenu/editions';
 import { Bandeau } from '../../_site/Bandeau';
 import { Cadre } from '../../_site/Cadre';
-import { Masque } from '../../_site/Masque';
 import { PARTAGE_2027, Tete } from '../../_site/Tete';
 
 // Le registre des éditions passées, de la plus récente à la plus ancienne. Une
@@ -12,7 +11,7 @@ export default function RegistreDesEditions() {
     <Cadre actif={{ rubrique: "/editions/", courant: "page" }}>
       <Tete
         titre="Le registre des éditions | TEDxUTTroyes"
-        description={{ masque: "Neuf éditions de TEDxUTTroyes consignées depuis 2016, leurs thèmes et leurs talks en vidéo, en attendant la dixième ligne du registre : le ** **** ****.", vrai: "Neuf éditions de TEDxUTTroyes consignées depuis 2016, leurs thèmes et leurs talks en vidéo, en attendant la dixième ligne du registre : le 18 mars 2027." }}
+        description={"Neuf éditions de TEDxUTTroyes consignées depuis 2016, leurs thèmes et leurs talks en vidéo, en attendant la dixième ligne du registre : le 18 mars 2027."}
         chemin="/editions/"
         partage={{ ...PARTAGE_2027, description: "Neuf éditions consignées depuis 2016 et des dizaines de talks en accès libre." }}
       />
@@ -61,7 +60,7 @@ export default function RegistreDesEditions() {
 
       <Bandeau
         titre="Le registre attend sa dixième ligne."
-        lead={<>Elle s'écrira le <Masque texte="18 mars 2027" />, devant 750 personnes.</>}
+        lead={<>Elle s'écrira le 18 mars 2027, devant 750 personnes.</>}
       />
     </Cadre>
   );

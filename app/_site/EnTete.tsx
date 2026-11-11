@@ -1,5 +1,4 @@
 import { BILLETTERIE, NOS_LIENS } from './liens';
-import { Masque } from './Masque';
 
 // L'en-tête et le menu mobile du site public. main-v11.js les anime (header au
 // défilement, ouverture du menu) : rien ici n'est interactif côté React.
@@ -21,16 +20,13 @@ export type Rubrique = (typeof NAVIGATION)[number]['href'];
 // est plus bas dans la rubrique (une fiche édition sous Éditions).
 export type Actif = { rubrique: Rubrique; courant: 'page' | 'true' };
 
-// La date dans le pied du menu mobile : masquée jusqu'au 10 novembre, en
-// clair sur la page cachée, absente sur quelques pages.
-export type DateDuMenu = 'masquee' | 'claire' | 'aucune';
-
+// La date dans le pied du menu mobile.
 const DATE = 'Jeudi 18 mars 2027';
 const LIEU = " · 18h00 · Centre de Congrès de l'Aube, Troyes";
 
 // L'espace connecté reprend cet en-tête tel quel : « espace » marque alors
 // son bouton comme la rubrique courante.
-export function EnTete({ actif, date = 'masquee', espace = false }: { actif?: Actif; date?: DateDuMenu; espace?: boolean }) {
+export function EnTete({ actif, espace = false }: { actif?: Actif; espace?: boolean }) {
   const courant = (href: string) => (actif?.rubrique === href ? actif.courant : undefined);
   const dansEspace = espace ? 'page' as const : undefined;
   return (
@@ -74,12 +70,10 @@ export function EnTete({ actif, date = 'masquee', espace = false }: { actif?: Ac
           <a className="btn btn--ghost" href={NOS_LIENS} target="_blank" rel="noopener">Nos liens</a>
           <a className="btn btn--ghost" href="/espace/" aria-current={dansEspace}>Espace speakers et équipe</a>
           <a className="btn btn--primary" href={BILLETTERIE} target="_blank" rel="noopener">Réserver ma place</a>
-          {date !== 'aucune' && (
-            <p className="mobile-menu-date">
-              {date === 'masquee' ? <Masque texte={DATE} /> : DATE}
-              {LIEU}
-            </p>
-          )}
+          <p className="mobile-menu-date">
+            {DATE}
+            {LIEU}
+          </p>
         </div>
       </div>
     </>

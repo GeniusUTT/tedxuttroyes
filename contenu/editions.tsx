@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import { Masque } from '../app/_site/Masque';
 
 // Le registre des éditions passées, de la plus ancienne à la plus récente.
 // Extrait le 2026-10-11 des pages HTML écrites à la main ; c'est désormais ici
@@ -87,7 +86,7 @@ export const EDITIONS: Edition[] = [
     date: "2017",
     lieu: "Université de Technologie de Troyes",
     talks: "7 talks",
-    lead: <>Dès la deuxième édition, la question de la limite était posée : « To the Limits and Beyond ». Dix ans plus tard, la dixième édition reprend l'idée mais demande cette fois s'il faut <Masque texte="franchir ou s'adapter" />.</>,
+    lead: <>Dès la deuxième édition, la question de la limite était posée : « To the Limits and Beyond ». Dix ans plus tard, la dixième édition reprend l'idée mais demande cette fois s'il faut franchir ou s'adapter.</>,
     affiche: { src: "/assets/img/editions/2017/visuel.webp", largeur: 840, hauteur: 840, alt: "Visuel d'archive de l'édition 2017", legende: "Document : le visuel d'archive de l'édition 2017" },
     titreFiche: "Le thème",
     recit: [
@@ -398,7 +397,7 @@ export const EDITIONS: Edition[] = [
     date: "Vendredi 20 mars 2026",
     lieu: "Centre de Congrès de l'Aube, Troyes",
     talks: "5 talks",
-    lead: <>Neuvième ligne du registre : « Un futur à bâtir ». Cinq talks pour poser des fondations, un an avant que la dixième édition ne vienne interroger <Masque texte="la limite" />.</>,
+    lead: <>Neuvième ligne du registre : « Un futur à bâtir ». Cinq talks pour poser des fondations, un an avant que la dixième édition ne vienne interroger la limite.</>,
     affiche: { src: "/assets/img/editions/2026/affiche.webp", largeur: 840, hauteur: 1233 },
     recit: [
       "Un explorateur polaire, une chercheuse en mécanique et nanotechnologies, un ancien chef de groupe du GIGN de Cayenne, un entrepreneur et un bâtisseur d'idées : cinq façons de construire ce qui n'existe pas encore.",

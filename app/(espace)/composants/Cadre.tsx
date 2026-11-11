@@ -34,7 +34,7 @@ export function Cadre({ acteur, actif, cote, titre, chapo, avant, children }: {
   return (
     <>
       <a className="skip-link" href="#contenu">Aller au contenu</a>
-      <EnTete espace date="aucune" />
+      <EnTete espace />
       <FondMarque />
       <main id="contenu">
         <div className="sec sec--head">
