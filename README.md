@@ -4,7 +4,7 @@ Site de la dixième édition de TEDxUTTroyes (jeudi 18 mars 2027, portes à 18h0
 
 ## La direction artistique en deux mots
 
-Le site est construit autour d'un concept directeur unique : **la ligne continue**, qui matérialise la limite du thème. Sur l'accueil, un seul trait SVG rouge parcourt toute la page et change de comportement : au seuil, la question du titre se tient à cheval dessus ; juste après, un interlude fixe recouvre l'écran le temps d'un message sur la ligne, puis s'efface ; au moment "franchir", il reste droit et un mot le traverse au défilement ; les moments "s'adapter" et "speakers" le laissent filer droit ; au moment "le lieu", il plie autour du bloc carte + présentation ; puis, après la feuille de salle, il redescend à 2016, tourne à l'horizontale et devient la frise des éditions, forme le 1 du grand 10 en retombant de 2027, se branche dans le bouton Réserver (centré), et file en trait fin souligner la mention de licence TED du footer. Le trait se dessine au fil du défilement (`assets/js/line-v10.js`) : le CSS place les contenus, le script mesure les ancres `data-line` et relie. Les pages intérieures ont elles aussi leur tracé depuis le 2026-08-26 : le même trait, servi par le même script, qui serpente entre le rail de gauche et le milieu de la marge droite et se branche dans le bouton final. **Chaque type de page a sa silhouette**, décidée par les blocs qui portent `data-line-flank` : deux ailes sur une fiche speaker (la fiche, puis les fiches voisines), une seule au centre sur une fiche d'édition (l'équipe), un quinconce sur le registre, un peigne sur le Hall of Fame, une alternance par groupe sur la FAQ, une grille encadrée sur l'index des speakers et sur les partenaires. Le tableau complet est dans CLAUDE.md. Sur ces pages, le trait atteint le bouton d'appel aux deux tiers du défilement : le dernier tiers se lit avec la prise déjà allumée. Deux nuances depuis l'audit du 2026-08-28 : l'accueil en bureau fait exception (son défilement virtuel ne le permet pas, la prise y reste vers 95 %), et sur les quatre pages les plus longues un plafond d'avance retarde la prise jusqu'à 70 à 86 %, pour que la pointe du trait ne sorte jamais par le bas de l'écran et continue d'accompagner la lecture. Mesuré : la pointe reste entre 0,2 et 0,85 hauteur d'écran sur toutes les pages, à toutes les tailles. Marge technique en Space Mono, contenu à sa droite. Sans JavaScript : dorsale verticale statique, comme avant.
+Le site est construit autour d'un concept directeur unique : **la ligne continue**, qui matérialise la limite du thème. Sur l'accueil, un seul trait SVG rouge parcourt toute la page et change de comportement : au seuil, la question du titre se tient à cheval dessus ; juste après, un interlude fixe recouvre l'écran le temps d'un message sur la ligne, puis s'efface ; au moment "franchir", il reste droit et un mot le traverse au défilement ; les moments "s'adapter" et "speakers" le laissent filer droit ; au moment "le lieu", il plie autour du bloc carte + présentation ; puis, après la feuille de salle, il redescend à 2016, tourne à l'horizontale et devient la frise des éditions, forme le 1 du grand 10 en retombant de 2027, se branche dans le bouton Réserver (centré), et file en trait fin souligner la mention de licence TED du footer. Le trait se dessine au fil du défilement (`sources/assets/js/line.js`) : le CSS place les contenus, le script mesure les ancres `data-line` et relie. Les pages intérieures ont elles aussi leur tracé depuis le 2026-08-26 : le même trait, servi par le même script, qui serpente entre le rail de gauche et le milieu de la marge droite et se branche dans le bouton final. **Chaque type de page a sa silhouette**, décidée par les blocs qui portent `data-line-flank` : deux ailes sur une fiche speaker (la fiche, puis les fiches voisines), une seule au centre sur une fiche d'édition (l'équipe), un quinconce sur le registre, un peigne sur le Hall of Fame, une alternance par groupe sur la FAQ, une grille encadrée sur l'index des speakers et sur les partenaires. Le tableau complet est dans CLAUDE.md. Sur ces pages, le trait atteint le bouton d'appel aux deux tiers du défilement : le dernier tiers se lit avec la prise déjà allumée. Deux nuances depuis l'audit du 2026-08-28 : l'accueil en bureau fait exception (son défilement virtuel ne le permet pas, la prise y reste vers 95 %), et sur les quatre pages les plus longues un plafond d'avance retarde la prise jusqu'à 70 à 86 %, pour que la pointe du trait ne sorte jamais par le bas de l'écran et continue d'accompagner la lecture. Mesuré : la pointe reste entre 0,2 et 0,85 hauteur d'écran sur toutes les pages, à toutes les tailles. Marge technique en Space Mono, contenu à sa droite. Sans JavaScript : dorsale verticale statique, comme avant.
 
 À ne pas défaire : les speakers non annoncés sont des **fiches sous embargo** (barres de caviardage), les éditions passées un **registre**, le compte à rebours un **téléscripteur** mono d'une seule ligne.
 
@@ -40,21 +40,29 @@ app/
 contenu/
   speakers.tsx           Les fiches des speakers passés
   editions.tsx           Le registre des éditions (équipes, galeries, faits)
-public/
-  robots.txt, sitemap.xml
-  assets/
-    css/main-v16.css     Feuille unique (sommaire commenté en tête de fichier)
-    js/reveal-v4.js      Le dévoilement du 10 novembre 2026 : plus chargé
+sources/
+  assets/                Les sources commentées de la feuille et des scripts,
+                         jamais servies : c'est ici qu'on les retouche
+    css/main.css         Feuille unique (sommaire commenté en tête de fichier)
+    js/reveal.js         Le dévoilement du 10 novembre 2026 : plus chargé
                          depuis le 2026-11-11, gardé pour les pages en cache
-    js/main-v11.js       Script commun (menu, header, téléscripteur, interlude
+    js/main.js           Script commun (menu, header, téléscripteur, interlude
                          de l'accueil, filigrane, invitation Instagram)
-    js/line-v10.js       La ligne continue, sur tout le site. Deux régimes :
+    js/line.js           La ligne continue, sur tout le site. Deux régimes :
                          l'accueil (body.journey, défilement virtuel en
                          bureau) et les pages intérieures (body.parcours,
                          serpentin entre deux rails en mobile). Sans JS :
                          dorsale CSS.
-    js/map-v2.js         Carte Mapbox du lieu, chargée à l'approche du bloc ;
+    js/map.js            Carte Mapbox du lieu, chargée à l'approche du bloc ;
                          le plan SVG reste la version par défaut
+public/
+  robots.txt, sitemap.xml
+  assets/
+    css/main-v17.css     Les mêmes, sans leurs commentaires, tirés des sources
+    js/main-v12.js       par scripts/epurer-assets.mjs : ne jamais les
+    js/line-v11.js       retoucher à la main
+    js/map-v3.js
+    js/reveal-v4.js
     agenda/              La soirée en .ics (revelation.ics, plus lié, reste
                          servi pour les liens déjà distribués)
     fonts/               Bricolage Grotesque, Space Mono 400 et 700, DM Sans,
@@ -87,7 +95,7 @@ On y arrive sans ouvrir le code source ni la console : la charade est posée en 
 - **Ne pas lier la page**, ne pas l'ajouter au menu, au pied de page ni au `sitemap.xml`, ne rien écrire dans `robots.txt` (un `Disallow` publierait l'adresse à qui lit ce fichier).
 - **Pas de balises Open Graph** sur cette page : un lien partagé sur un réseau ne doit pas afficher d'aperçu qui vend la mèche.
 - Si l'adresse change, la charade de la FAQ change avec elle.
-- La page ne définit aucune règle CSS : elle se compose uniquement de classes existantes (`sec`, `cote`, `prose`, `notice`, `ticker-label`, `ticker-value`, `actions`, `btn`). Pas de renommage `main-v16.css` à prévoir de son fait.
+- La page ne définit aucune règle CSS : elle se compose uniquement de classes existantes (`sec`, `cote`, `prose`, `notice`, `ticker-label`, `ticker-value`, `actions`, `btn`). Pas de renommage de la feuille à prévoir de son fait.
 - Le mot de passe est le seul endroit du site qui force `white-space: normal` en style en ligne sur un `.ticker-value` : la classe est en `nowrap` pour le téléscripteur, et la phrase déborderait sous 400 px sans cela.
 
 ## Tester en local
@@ -109,7 +117,9 @@ Le site est hébergé sur Vercel (équipe `ted-x-uttroyes`, projet `tedxuttroyes
 
 Le build (`npm run build`) applique d'abord les migrations de la base, puis construit Next.js. Les redirections 301, les en-têtes de sécurité et la politique de cache vivent dans `next.config.ts` ; `vercel.json` ne porte que la région et la tâche quotidienne.
 
-**Cache** : la feuille et les scripts sont mis en cache un mois, les images et les polices un an. Après une mise en ligne, une retouche de ces fichiers exige de les renommer (`main-v16.css`, `main-v11.js`, `line-v10.js`, `reveal-v4.js` et `map-v2.js` ; passer au numéro suivant). Leurs noms ne sont écrits qu'à un endroit : `SCRIPTS` dans `app/_site/liens.ts` pour les scripts, `app/_site/Document.tsx` pour la feuille.
+**Feuille et scripts sans commentaires** (depuis le 2026-11-23) : les visiteurs ne lisent plus la documentation du projet. Les sources commentées vivent dans `sources/assets/`, jamais servies ; `node scripts/epurer-assets.mjs` en tire les fichiers servis dans `public/assets/`, identiques au code près, commentaires en moins (rien n'est minifié). Un test unitaire (`tests/unit/assets.test.ts`) échoue si un fichier servi n'est plus à jour de sa source ; `node scripts/epurer-assets.mjs --verifier` fait le même contrôle.
+
+**Cache** : la feuille et les scripts sont mis en cache un mois, les images et les polices un an. Après une mise en ligne, une retouche de la feuille ou d'un script exige de le renommer : retoucher la source dans `sources/assets/`, passer au numéro suivant dans `app/_site/liens.ts` (`FEUILLE` pour la feuille, `SCRIPTS` pour les scripts, seul endroit où leurs noms sont écrits), puis lancer `node scripts/epurer-assets.mjs`, qui écrit le nouveau fichier et retire l'ancien. `reveal-v4.js`, qui n'est plus chargé, garde son nom.
 
 **Ne jamais publier** : `README.md`, `CLAUDE.md`, `migration/` et les fichiers de travail restent hors de `public/`. Tout ce qui est dans `public/` est en ligne.
 
@@ -134,7 +144,7 @@ L'espace (`/espace/`) est dédié au lien avec les speakers (recentré le 2026-1
 
 **Les prestataires** (page Prestataires de l'équipe) : un dossier par structure (régie, traiteur, imprimeur…), créé par l'équipe, puis une ou plusieurs personnes invitées dans ce dossier depuis sa page ; elles partagent ses documents et sa fiche (structure, prestation, contact, adresse de facturation). Dans un sens : devis, facture, contrat ou bon de commande signé, attestation d'assurance, fiche technique, autre document. Dans l'autre : contrat ou bon de commande, cahier des charges, planning, plan et accès, autre document. Versions, retours et notifications fonctionnent comme pour les speakers ; un référent peut être désigné. Une personne qui dépose prévient son référent (à défaut toute l'équipe) et ses collègues ; l'équipe qui dépose prévient toute la structure. Retirer l'accès d'une personne supprime son compte, ses dépôts restent au dossier. Supprimer le prestataire efface les comptes, la fiche et les fichiers, sauf devis, factures et contrats, archivés pour la trésorerie (page Archive). Un dossier est purgé de même douze mois après l'édition.
 
-**DA** : l'espace est une rubrique du site, pas un second site. Il charge `main-v16.css`, l'en-tête, le menu, le filigrane et le pied de page du site public, la structure des pages intérieures (marge technique en mono, dorsale rouge statique) ; il ne charge jamais `line-v10.js`, ni la mesure d'audience. `app/(espace)/espace.css` n'ajoute que ce que la feuille publique n'a pas (champs, tableaux, calendrier), avec ses jetons et préfixé par `.espace`.
+**DA** : l'espace est une rubrique du site, pas un second site. Il charge la feuille du site, l'en-tête, le menu, le filigrane et le pied de page du site public, la structure des pages intérieures (marge technique en mono, dorsale rouge statique) ; il ne charge jamais le script de la ligne, ni la mesure d'audience. `app/(espace)/espace.css` n'ajoute que ce que la feuille publique n'a pas (champs, tableaux, calendrier), avec ses jetons et préfixé par `.espace`.
 
 **Variables d'environnement** (modèle sans valeur dans `.env.example`, valeurs dans les réglages du projet Vercel, jamais dans le dépôt) :
 
@@ -189,13 +199,13 @@ La procédure est testée à chaque `npm test` : une sauvegarde est restaurée d
 
 ## Placeholders à compléter avant mise en ligne
 
-**Ce tableau est la seule liste des points à compléter.** Le HTML servi ne porte aucun commentaire ; les commentaires vivent dans le code (pages, composants, feuille, scripts), dont un `PLACEHOLDER` dans `assets/js/map-v2.js`.
+**Ce tableau est la seule liste des points à compléter.** Rien de ce qui est servi ne porte de commentaire, ni le HTML, ni la feuille, ni les scripts ; les commentaires vivent dans le code (pages, composants, et les sources de `sources/assets/`), dont un `PLACEHOLDER` dans `sources/assets/js/map.js`.
 
 | Quoi | Où | Comment |
 |---|---|---|
 | Biographies courtes | 14 fiches speakers 2016 et 2017 | elles ont bien une bio depuis le 2026-08-18, mais courte (180 à 300 caractères) et ouverte sur une phrase de raccord fabriquée (« Sur la scène de TEDxUTTroyes 2016, autour du thème *Shape the future*, X a défendu l'idée « ... » »). Elles n'ont pas non plus de ligne `Domaine :`, contrairement aux quarante-sept autres. À reprendre au fil de l'eau, sur le modèle des fiches 2021 et 2023 : un `<p class="ed-meta">Domaine : ...</p>` en minuscule, puis deux ou trois paragraphes, dans `contenu/speakers.tsx` (champs `domaine` et `bio`). |
 | Playlists YouTube par édition | `app/(pages)/editions/[edition]/page.tsx` | aucune playlist n'existe côté chaîne : les liens pointent vers une recherche YouTube « TEDxUTTroyes + année ». À remplacer le jour où des playlists sont créées. |
-| Jeton Mapbox | `assets/js/map-v2.js` | le jeton public et le style rouge viennent du compte personnel `solene-drnx` (ancien site). Laissé tel quel à la demande de Baptiste le 2026-08-18 ; à basculer un jour sur un compte Mapbox de l'association, restreint au domaine tedxuttroyes.fr. |
+| Jeton Mapbox | `sources/assets/js/map.js` | le jeton public et le style rouge viennent du compte personnel `solene-drnx` (ancien site). Laissé tel quel à la demande de Baptiste le 2026-08-18 ; à basculer un jour sur un compte Mapbox de l'association, restreint au domaine tedxuttroyes.fr. |
 | Déroulé du jour J | `app/(pages)/programme/page.tsx` | horaires type (portes 18h00 avec L'Avant-Scène, talks 19h30, fin vers 22h30) à figer quand le programme sera arrêté. |
 | Image de partage (Open Graph) | `public/assets/img/og/og-2027-revele.jpg` | carte 1200x630 autour du X moiré de la dixième édition, avec le thème et la vraie date, en service depuis le 2026-11-11 (`PARTAGE_2027` dans `app/_site/Tete.tsx`). `og-2027-v2.jpg`, la version à date masquée, reste sur le serveur pour les partages déjà publiés. |
 

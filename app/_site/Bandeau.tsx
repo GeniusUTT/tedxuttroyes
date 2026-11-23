@@ -2,7 +2,7 @@ import type { ReactNode } from 'react';
 import { BILLETTERIE } from './liens';
 
 // Le bandeau du bas de page. Son bouton porte data-line="plug" : c'est la
-// prise où la ligne vient se brancher (voir line-v10.js).
+// prise où la ligne vient se brancher (voir line-v11.js).
 
 export function Bandeau({
   cote = 'Billetterie',

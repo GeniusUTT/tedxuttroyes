@@ -2,15 +2,15 @@ import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 import { preload } from 'react-dom';
 import { ScriptsDuSite } from '../_site/ScriptsDuSite';
-import { SCRIPTS } from '../_site/liens';
+import { FEUILLE, SCRIPTS } from '../_site/liens';
 import './espace.css';
 
 // L'espace connecté est une rubrique du site, pas un second site : même
-// feuille (main-v16.css), mêmes polices, même en-tête, même filigrane, même
+// feuille (main-v17.css), mêmes polices, même en-tête, même filigrane, même
 // pied de page, même dorsale rouge. espace.css n'ajoute que ce que le site
 // public n'a pas (champs, tableaux, dépôt). Un seul script du site,
-// main-v11.js (en-tête au défilement, menu mobile, filigrane) ; jamais
-// line-v10.js, la dorsale reste la ligne statique du CSS. Pas de mesure
+// main-v12.js (en-tête au défilement, menu mobile, filigrane) ; jamais
+// line-v11.js, la dorsale reste la ligne statique du CSS. Pas de mesure
 // d'audience : ces pages sont privées.
 
 export const dynamic = 'force-dynamic';
@@ -36,7 +36,7 @@ export default function Racine({ children }: { children: ReactNode }) {
   return (
     <html lang="fr" suppressHydrationWarning>
       <head>
-        <link rel="stylesheet" href="/assets/css/main-v16.css" precedence="site" />
+        <link rel="stylesheet" href={FEUILLE} precedence="site" />
         <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.classList.add("js");' }} />
       </head>
       <body className="espace">

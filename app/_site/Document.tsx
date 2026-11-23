@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import { preload } from 'react-dom';
 import { ScriptsDuSite } from './ScriptsDuSite';
+import { FEUILLE } from './liens';
 
 // Le document commun du site public : polices hébergées sur le site, la
 // feuille unique, la classe js posée avant le premier rendu, la mesure
@@ -36,7 +37,7 @@ export function Document({
         <link rel="icon" type="image/svg+xml" href="/assets/img/favicon-10e.svg" />
         <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-10e.png" />
         <link rel="apple-touch-icon" href="/assets/img/webclip-10e.png" />
-        <link rel="stylesheet" href="/assets/css/main-v16.css" />
+        <link rel="stylesheet" href={FEUILLE} />
         <script dangerouslySetInnerHTML={{ __html: 'document.documentElement.classList.add("js");' }} />
         {enTete}
       </head>
