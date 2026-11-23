@@ -6,7 +6,7 @@ import { BILLETTERIE, INSTAGRAM, LINKEDIN, SITE } from '../_site/liens';
 import { PiedDePage } from '../_site/PiedDePage';
 import { JsonLd, PARTAGE_2027, Tete } from '../_site/Tete';
 
-// L'accueil. Un seul trait rouge le parcourt de haut en bas : line-v10.js lit
+// L'accueil. Un seul trait rouge le parcourt de haut en bas : line-v11.js lit
 // les ancres data-line (cross, avoid, turn, drop, plug, finale) et les deux
 // sondes, puis dessine le trait au fil du défilement. Déplacer ou retirer un
 // bloc qui porte data-line change le tracé : vérifier le rendu au défilement

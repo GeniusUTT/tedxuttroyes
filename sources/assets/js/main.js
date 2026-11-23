@@ -3,7 +3,7 @@
    Modules : etat du header, interlude de l'accueil, filigrane de la
    dixieme edition, menu mobile accessible, telescripteur du compte a
    rebours, trace du dixieme baton, invitation Instagram. L'allumage de la feuille de salle de l'accueil est
-   pilote par line-v10.js (la pointe du trait franchit les pastilles). */
+   pilote par line.js (la pointe du trait franchit les pastilles). */
 
 (function () {
   "use strict";

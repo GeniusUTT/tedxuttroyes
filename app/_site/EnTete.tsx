@@ -1,6 +1,6 @@
 import { BILLETTERIE, NOS_LIENS } from './liens';
 
-// L'en-tête et le menu mobile du site public. main-v11.js les anime (header au
+// L'en-tête et le menu mobile du site public. main-v12.js les anime (header au
 // défilement, ouverture du menu) : rien ici n'est interactif côté React.
 
 const NAVIGATION = [

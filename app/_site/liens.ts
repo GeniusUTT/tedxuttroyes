@@ -10,10 +10,15 @@ export const INSTAGRAM_GENIUS = 'https://www.instagram.com/geniusutt/';
 export const LINKEDIN_GENIUS = 'https://www.linkedin.com/company/genius-utt/';
 export const CONTACT = 'geniusutt@utt.fr';
 
-// Les scripts du site, en JavaScript pur. Ils sont mis en cache un mois
-// (next.config.ts) : toute retouche passe par un nouveau numéro.
+// La feuille et les scripts du site, en CSS et JavaScript purs. Ils sont mis
+// en cache un mois (next.config.ts) : toute retouche passe par un nouveau
+// numéro. Leurs sources commentées vivent dans sources/assets/ ; les fichiers
+// servis, sans commentaires, en sont tirés par scripts/epurer-assets.mjs, qui
+// lit les noms ici.
+export const FEUILLE = '/assets/css/main-v17.css';
+
 export const SCRIPTS = {
-  principal: '/assets/js/main-v11.js',
-  ligne: '/assets/js/line-v10.js',
-  carte: '/assets/js/map-v2.js',
+  principal: '/assets/js/main-v12.js',
+  ligne: '/assets/js/line-v11.js',
+  carte: '/assets/js/map-v3.js',
 } as const;
